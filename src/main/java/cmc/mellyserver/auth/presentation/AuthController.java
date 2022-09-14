@@ -18,6 +18,7 @@ public class AuthController {
 
       private final OAuthService oAuthService;
       private final AuthService authService;
+
       @Operation(summary = "소셜 로그인")
       @PostMapping("/social")
       public void socialLogin(@RequestBody AuthRequest authRequest)

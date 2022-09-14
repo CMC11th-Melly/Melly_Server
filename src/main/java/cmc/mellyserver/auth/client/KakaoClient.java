@@ -18,19 +18,25 @@ public class KakaoClient implements Client{
 
     @Override
     public Member getUserData(String accessToken) {
-        KakaoUserResponse kakaoUserResponse = webClient.get()
+        Object kakaoUserResponse = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
-                .bodyToMono(KakaoUserResponse.class)
+                .bodyToMono(Object.class)
                 .block();
 
+//        return Member.builder()
+//                .socialId(String.valueOf(kakaoUserResponse.getId()))
+//                .nickname(kakaoUserResponse.getProperties().getNickname())
+//                .email(kakaoUserResponse.getKakaoAccount().getEmail())
+//                .build();
+        System.out.println("어떤 값 들어있나? " + kakaoUserResponse.toString());
         return Member.builder()
-                .socialId(String.valueOf(kakaoUserResponse.getId()))
-                .nickname(kakaoUserResponse.getProperties().getNickname())
-                .email(kakaoUserResponse.getKakaoAccount().getEmail())
+                .socialId(String.valueOf(1L))
+                .nickname("jemin")
+                .email("jemin03120111@gmail.com")
                 .build();
     }
 }

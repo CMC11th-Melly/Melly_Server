@@ -22,7 +22,5 @@ public class OAuthService {
         Member kakaoMember = kakaoClient.getUserData(authRequest.getAccessToken());
         String socialId = kakaoMember.getSocialId();
         Optional<Member> memberBySocialId = memberRepository.findMemberBySocialId(socialId);
-
-
     }
 }
