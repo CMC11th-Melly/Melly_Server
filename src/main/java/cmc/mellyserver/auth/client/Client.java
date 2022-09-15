@@ -1,8 +1,8 @@
 package cmc.mellyserver.auth.client;
 
-import cmc.mellyserver.member.domain.Member;
+import cmc.mellyserver.user.domain.User;
 
 public interface Client {
 
-    public Member getUserData(String accessToken);
+    public User getUserData(String accessToken);
 }
