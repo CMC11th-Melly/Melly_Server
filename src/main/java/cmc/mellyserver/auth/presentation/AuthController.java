@@ -3,7 +3,7 @@ package cmc.mellyserver.auth.presentation;
 import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.OAuthService;
 import cmc.mellyserver.auth.presentation.dto.*;
-import cmc.mellyserver.member.domain.Member;
+import cmc.mellyserver.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +31,8 @@ public class AuthController {
       @PostMapping("/signup")
       public ResponseEntity<SignupResponse> emailLoginSignup(@RequestBody AuthRequestForSignup authRequestForSignup)
       {
-          Member member = authService.signup(authRequestForSignup.getEmail(), authRequestForSignup.getPassword());
-          return ResponseEntity.ok(new SignupResponse(member.getEmail()));
+          User user = authService.signup(authRequestForSignup.getEmail(), authRequestForSignup.getPassword());
+          return ResponseEntity.ok(new SignupResponse(user.getEmail()));
       }
 
       @Operation(summary = "일반 이메일 로그인")

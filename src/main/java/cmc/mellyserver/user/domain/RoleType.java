@@ -1,4 +1,4 @@
-package cmc.mellyserver.member.domain;
+package cmc.mellyserver.user.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
