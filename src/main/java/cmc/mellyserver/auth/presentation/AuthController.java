@@ -1,6 +1,7 @@
 package cmc.mellyserver.auth.presentation;
 
 import cmc.mellyserver.auth.application.AuthService;
+import cmc.mellyserver.auth.application.OAuthLoginResponseDto;
 import cmc.mellyserver.auth.application.OAuthService;
 import cmc.mellyserver.auth.presentation.dto.*;
 import cmc.mellyserver.user.domain.User;
@@ -21,9 +22,10 @@ public class AuthController {
 
       @Operation(summary = "소셜 로그인")
       @PostMapping("/social")
-      public void socialLogin(@RequestBody AuthRequest authRequest)
+      public ResponseEntity<OAuthLoginResponse> socialLogin(@RequestBody AuthRequest authRequest)
       {
-          oAuthService.login(authRequest);
+          OAuthLoginResponseDto response = oAuthService.login(authRequest);
+          return ResponseEntity.ok(new OAuthLoginResponse(response.getAccessToken(),response.getIsSignup()));
       }
 
       // TODO : 성공했을때 API 정하기!

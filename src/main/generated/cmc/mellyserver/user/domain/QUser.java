@@ -25,8 +25,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final BooleanPath gender = createBoolean("gender");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
@@ -35,7 +33,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
 
-    public final StringPath socialId = createString("socialId");
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
+
+    public final NumberPath<Long> userSeq = createNumber("userSeq", Long.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

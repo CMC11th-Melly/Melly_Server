@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.client;
 
+import cmc.mellyserver.auth.client.dto.KakaoUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,13 @@ public class KakaoClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
-        Object kakaoUserResponse = webClient.get()
+        KakaoUserResponse kakaoUserResponse = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
-                .bodyToMono(Object.class)
+                .bodyToMono(KakaoUserResponse.class)
                 .block();
 
 //        return Member.builder()
@@ -33,9 +34,7 @@ public class KakaoClient implements Client{
 //                .build();
         System.out.println("어떤 값 들어있나? " + kakaoUserResponse.toString());
         return User.builder()
-                .socialId(String.valueOf(1L))
-                .nickname("jemin")
-                .email("jemin03120111@gmail.com")
+                .userId(kakaoUserResponse.getId())
                 .build();
     }
 }
