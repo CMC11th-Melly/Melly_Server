@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger*/**","/api-docs/*");
+        web.ignoring().antMatchers("/swagger*/**");
     }
 
 
@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/auth/**","/api/health").permitAll()
+                .antMatchers("/v3/api-docs/**","/auth/**","/api/health").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
