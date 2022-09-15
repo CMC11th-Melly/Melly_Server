@@ -35,10 +35,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
-    @Embedded
-    private VisitedPlace visitedPlace;
+   // @Embedded
+   // private VisitedPlace visitedPlace;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+   // @ManyToOne
+  //  @JoinColumn(name = "group_id")
+  //  private Group group;
 }

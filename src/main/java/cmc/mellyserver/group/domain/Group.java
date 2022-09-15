@@ -21,8 +21,8 @@ public class Group {
 
     private String inviteLink;
 
-    @OneToMany(mappedBy = "group")
-    private List<User> user = new ArrayList<>();
+   // @OneToMany(mappedBy = "group")
+   // private List<User> user = new ArrayList<>();
 
 
 }
