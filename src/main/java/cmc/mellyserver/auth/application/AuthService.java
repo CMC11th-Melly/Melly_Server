@@ -129,4 +129,25 @@ public class AuthService {
     }
 
 
+    public Boolean checkNicknameDuplicate(String nickname) {
+        Optional<User> member = userRepository.findUserByNickname(nickname);
+
+        // case : 회원가입 시도할때 기존 유저가 존재할 때
+        if(member.isPresent())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean checkEmailDuplicate(String email) {
+        Optional<User> member = userRepository.findUserByEmail(email);
+
+        // case : 회원가입 시도할때 기존 유저가 존재할 때
+        if(member.isPresent())
+        {
+            return true;
+        }
+        return false;
+    }
 }

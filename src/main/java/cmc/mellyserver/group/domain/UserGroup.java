@@ -16,17 +16,19 @@ public class UserGroup extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_group_id")
+    @Column(name = "groups_id")
     private Long id;
+
+    private String groupName;
 
     private String inviteLink;
 
-    // user와 그룹은 별개, 한번 가족이라는 그룹을 설정해놓으면 그 사람들이랑만 공유 가능!
+    // 하나의 메모리는 무조건 하나의 그룹에 속함. 따라서 타입은 grouptype으로 판단하면 될듯!
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
 
     @OneToMany(mappedBy = "group",fetch = FetchType.LAZY)
-    private List<User> user = new ArrayList<>();
+    private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
 
 

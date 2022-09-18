@@ -25,6 +25,10 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final ListPath<GroupAndUser, QGroupAndUser> groupAndUsers = this.<GroupAndUser, QGroupAndUser>createList("groupAndUsers", GroupAndUser.class, QGroupAndUser.class, PathInits.DIRECT2);
+
+    public final StringPath groupName = createString("groupName");
+
     public final EnumPath<GroupType> groupType = createEnum("groupType", GroupType.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -33,8 +37,6 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
-
-    public final ListPath<cmc.mellyserver.user.domain.User, cmc.mellyserver.user.domain.QUser> user = this.<cmc.mellyserver.user.domain.User, cmc.mellyserver.user.domain.QUser>createList("user", cmc.mellyserver.user.domain.User.class, cmc.mellyserver.user.domain.QUser.class, PathInits.DIRECT2);
 
     public QUserGroup(String variable) {
         super(UserGroup.class, forVariable(variable));

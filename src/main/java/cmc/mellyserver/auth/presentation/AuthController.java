@@ -50,10 +50,26 @@ public class AuthController {
           return ResponseEntity.ok(new AccessTokenResponse(accessToken));
       }
 
-      @Operation(summary = "일반 이메일 로그아웃")
-      @DeleteMapping("/logout")
-      public void emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
+      @Operation(summary = "중복 닉네임 체크",description = "닉네임 중복이면 duplicated 값이 true, 중복 아니면 false입니다")
+      @PostMapping("/nickname")
+      public ResponseEntity<CheckDuplicateResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
       {
-          authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
+          Boolean duplicated = authService.checkNicknameDuplicate(checkDuplicateNicknameRequest.getNickname());
+          return ResponseEntity.ok(new CheckDuplicateResponse(duplicated));
       }
+
+      @Operation(summary = "중복 이메일 체크",description = "이메일 중복이면 duplicated 값이 true, 중복 아니면 false입니다")
+      @PostMapping ("/email")
+      public ResponseEntity<CheckDuplicateResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
+      {
+          Boolean duplicated = authService.checkEmailDuplicate(checkDuplicateEmailRequest.getEmail());
+        return ResponseEntity.ok(new CheckDuplicateResponse(duplicated));
+    }
+
+    @Operation(summary = "일반 이메일 로그아웃")
+    @DeleteMapping("/logout")
+    public void emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
+    {
+        authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
+    }
 }

@@ -1,10 +1,12 @@
 package cmc.mellyserver.user.domain;
 
 import cmc.mellyserver.common.util.JpaBaseEntity;
+import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.UserGroup;
 import lombok.*;
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,7 +41,6 @@ public class User extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_group_id")
-    private UserGroup group;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 }
