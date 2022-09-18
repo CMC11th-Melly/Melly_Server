@@ -26,25 +26,25 @@ public class OAuthService {
     public OAuthLoginResponseDto login(AuthRequest authRequest) {
 
         User kakaoUser = kakaoClient.getUserData(authRequest.getAccessToken());
-        String accessToken = getToken(kakaoUser.getUserId());
-        Optional<User> user = userRepository.findUserByUserId(kakaoUser.getUserId());
+        String accessToken = getToken(String.valueOf(kakaoUser.getUserId()));
+        Optional<User> user = userRepository.findUserByUserId(String.valueOf(kakaoUser.getUserId()));
         // 이미 회원가입한 유저라면?
         if(user.isPresent())
         {
-            return new OAuthLoginResponseDto(accessToken,true);
+            return new OAuthLoginResponseDto(accessToken,false);
         }
 
         // 아직 회원가입 하지 않았다면? 새로운 유저니깐 저장부터 해야함
         User findUser = User.builder().userId(kakaoUser.getUserId()).build();
         userRepository.save(findUser);
 
-        return new OAuthLoginResponseDto(accessToken,false);
+        return new OAuthLoginResponseDto(accessToken,true);
 
     }
 
-    private String getToken(Long userId)
+    private String getToken(String userId)
     {
-        AuthToken accessToken = jwtTokenProvider.createToken(String.valueOf(userId), RoleType.USER, "100000000");
+        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, "100000000");
         return accessToken.getToken();
     }
 }

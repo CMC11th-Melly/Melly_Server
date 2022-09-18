@@ -34,7 +34,7 @@ public class KakaoClient implements Client{
 //                .build();
         System.out.println("어떤 값 들어있나? " + kakaoUserResponse.toString());
         return User.builder()
-                .userId(kakaoUserResponse.getId())
+                .userId(String.valueOf(kakaoUserResponse.getId()))
                 .build();
     }
 }

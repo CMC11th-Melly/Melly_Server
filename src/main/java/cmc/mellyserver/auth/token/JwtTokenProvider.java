@@ -60,6 +60,7 @@ public class JwtTokenProvider {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
+            // 여기서 무슨 값 집어넣는지가 중요하구나
             User principal = new User(claims.getSubject(), "", authorities);
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);

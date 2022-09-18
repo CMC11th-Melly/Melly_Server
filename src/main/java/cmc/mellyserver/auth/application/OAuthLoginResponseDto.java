@@ -8,5 +8,5 @@ import lombok.Data;
 public class OAuthLoginResponseDto {
 
     private String accessToken;
-    private Boolean isSignup;
+    private Boolean isNewUser;
 }

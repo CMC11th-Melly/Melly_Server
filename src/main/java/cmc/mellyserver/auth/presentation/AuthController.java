@@ -1,15 +1,20 @@
 package cmc.mellyserver.auth.presentation;
 
+
 import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.OAuthLoginResponseDto;
-import cmc.mellyserver.auth.application.OAuthService;
 import cmc.mellyserver.auth.presentation.dto.*;
+import cmc.mellyserver.auth.util.HeaderUtil;
 import cmc.mellyserver.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import cmc.mellyserver.auth.application.OAuthService;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -20,20 +25,20 @@ public class AuthController {
       private final OAuthService oAuthService;
       private final AuthService authService;
 
-      @Operation(summary = "소셜 로그인")
+      @Operation(summary = "소셜 로그인",description = "소셜 로그인 타입에 따라 로그인 방식을 분기")
       @PostMapping("/social")
       public ResponseEntity<OAuthLoginResponse> socialLogin(@RequestBody AuthRequest authRequest)
       {
           OAuthLoginResponseDto response = oAuthService.login(authRequest);
-          return ResponseEntity.ok(new OAuthLoginResponse(response.getAccessToken(),response.getIsSignup()));
+          return ResponseEntity.ok(new OAuthLoginResponse(response.getAccessToken(),response.getIsNewUser()));
       }
 
       // TODO : 성공했을때 API 정하기!
       @Operation(summary = "일반 이메일 회원가입")
       @PostMapping("/signup")
-      public ResponseEntity<SignupResponse> emailLoginSignup(@RequestBody AuthRequestForSignup authRequestForSignup)
+      public ResponseEntity<SignupResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
       {
-          User user = authService.signup(authRequestForSignup.getEmail(), authRequestForSignup.getPassword());
+          User user = authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
           return ResponseEntity.ok(new SignupResponse(user.getEmail()));
       }
 
@@ -47,8 +52,8 @@ public class AuthController {
 
       @Operation(summary = "일반 이메일 로그아웃")
       @DeleteMapping("/logout")
-      public void emailLogout(@RequestBody LogoutRequest logoutRequest)
+      public void emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
       {
-         authService.logout(logoutRequest.getAccessToken());
+          authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
       }
 }

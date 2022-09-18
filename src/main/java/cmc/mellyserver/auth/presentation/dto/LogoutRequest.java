@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class LogoutRequest {
+
     private String accessToken;
 }
