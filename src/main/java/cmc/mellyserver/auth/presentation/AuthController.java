@@ -34,7 +34,7 @@ public class AuthController {
       }
 
       // TODO : 성공했을때 API 정하기!
-      @Operation(summary = "일반 이메일 회원가입")
+      @Operation(summary = "일반 이메일 회원가입",description = "성별의 경우 true는 남성, false는 여성입니다. 데이터 보내주실때 프로필 사진 고려해서 multipart/formdata 형식으로 보내주세요!")
       @PostMapping("/signup")
       public ResponseEntity<SignupResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
       {
