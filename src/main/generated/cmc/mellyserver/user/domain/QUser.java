@@ -22,9 +22,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
 
-    public final NumberPath<Integer> age = createNumber("age", Integer.class);
-
-    public final StringPath birthday = createString("birthday");
+    public final EnumPath<AgeGroup> ageGroup = createEnum("ageGroup", AgeGroup.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -43,6 +41,8 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath password = createString("password");
 
     public final StringPath profileImage = createString("profileImage");
+
+    public final EnumPath<cmc.mellyserver.auth.presentation.dto.Provider> provider = createEnum("provider", cmc.mellyserver.auth.presentation.dto.Provider.class);
 
     public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
 

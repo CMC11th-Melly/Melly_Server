@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.presentation.dto;
 
+import cmc.mellyserver.user.domain.AgeGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -29,8 +30,8 @@ public class AuthRequestForSignup {
     @Nullable
     private MultipartFile profile_image;
 
-    @Schema(example = "0312 or 03/12")
+    @Schema(example = "ONE")
     @Nullable
-    private String birthday;
+    private AgeGroup ageGroup;
 
 }

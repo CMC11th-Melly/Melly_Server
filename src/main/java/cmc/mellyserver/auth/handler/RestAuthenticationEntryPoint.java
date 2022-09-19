@@ -2,6 +2,7 @@ package cmc.mellyserver.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -25,6 +26,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         final Map<String, Object> body = new HashMap<>();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         // 응답 객체 초기화
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
@@ -33,7 +35,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         final ObjectMapper mapper = new ObjectMapper();
         // response 객체에 응답 객체를 넣어줌
         mapper.writeValue(response.getOutputStream(), body);
-        response.setStatus(HttpServletResponse.SC_OK);
 
     }
 }

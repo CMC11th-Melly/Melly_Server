@@ -4,6 +4,9 @@ import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.auth.exception.DuplicatedUserException;
 import cmc.mellyserver.auth.exception.InvalidEmailException;
 import cmc.mellyserver.auth.exception.InvalidPasswordException;
+import cmc.mellyserver.auth.presentation.dto.AccessTokenResponse;
+import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
+import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
@@ -49,16 +52,17 @@ public class AuthService {
                 .password(passwordEncoder.encode(authRequestForSignupDto.getPassword()))
                 .roleType(RoleType.USER)
                 .profileImage(fileName)
+                .ageGroup(authRequestForSignupDto.getAgeGroup())
                 .gender(authRequestForSignupDto.getGender())
                 .userId(UUID.randomUUID().toString())
-                .birthday(authRequestForSignupDto.getBirthday())
+                .provider(Provider.DEFAULT)
                 .nickname(authRequestForSignupDto.getNickname())
                 .build();
         // 3. 저장한 Member 반환
         return userRepository.save(saveUser);
     }
 
-    public String login(String email, String password)
+    public AccessTokenResponse login(String email, String password)
     {
         // 1. 입력한 이메일로 조회 안되면 invalidEmail 예외 반환
         User user = userRepository.findUserByEmail(email).orElseThrow(InvalidEmailException::new);
@@ -67,8 +71,8 @@ public class AuthService {
         {
             throw new InvalidPasswordException("일치하지 않는 비밀번호입니다.");
         }
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoleType(), "1000000");
-        return accessToken.getToken();
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoleType(), "99999999999999");
+        return AuthAssembler.accessTokenResponse(accessToken.getToken(),user);
     }
 
     // TODO : 사용자 정보 얻어오는 부분 다시 고민해봐야 함!
@@ -149,5 +153,10 @@ public class AuthService {
             return true;
         }
         return false;
+    }
+
+    public User getUserData(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(MemberNotFoundException::new);
+
     }
 }

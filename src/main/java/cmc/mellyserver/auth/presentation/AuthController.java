@@ -46,8 +46,8 @@ public class AuthController {
       @PostMapping("/login")
       public ResponseEntity<AccessTokenResponse> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
       {
-          String accessToken = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
-          return ResponseEntity.ok(new AccessTokenResponse(accessToken));
+          AccessTokenResponse result = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
+          return ResponseEntity.ok(result);
       }
 
       @Operation(summary = "중복 닉네임 체크",description = "닉네임 중복이면 duplicated 값이 true, 중복 아니면 false입니다")
@@ -71,5 +71,13 @@ public class AuthController {
     public void emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
     {
         authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
+    }
+
+    @Operation(summary = "유저 정보 조회")
+    @GetMapping("/me")
+    public ResponseEntity<AuthUserDataResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
+    {
+        User userData = authService.getUserData(user.getUsername());
+        return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
     }
 }

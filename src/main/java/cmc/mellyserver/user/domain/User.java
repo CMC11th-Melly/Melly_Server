@@ -1,8 +1,7 @@
 package cmc.mellyserver.user.domain;
-
+import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.util.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
-import cmc.mellyserver.group.domain.UserGroup;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,11 +31,13 @@ public class User extends JpaBaseEntity {
 
     private String profileImage;
 
-    private String birthday;
-
     private boolean gender;
     // 추천 기능 만들 때 필요
-    private int age;
+
+    private AgeGroup ageGroup;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;

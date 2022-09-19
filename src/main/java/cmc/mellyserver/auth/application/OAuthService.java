@@ -1,6 +1,7 @@
 package cmc.mellyserver.auth.application;
 
 import cmc.mellyserver.auth.client.KakaoClient;
+import cmc.mellyserver.auth.client.NaverClient;
 import cmc.mellyserver.auth.presentation.dto.AuthRequest;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
@@ -20,14 +21,30 @@ public class OAuthService {
 
     private final UserRepository userRepository;
     private final KakaoClient kakaoClient;
+    private final NaverClient naverClient;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public OAuthLoginResponseDto login(AuthRequest authRequest) {
 
-        User kakaoUser = kakaoClient.getUserData(authRequest.getAccessToken());
-        String accessToken = getToken(String.valueOf(kakaoUser.getUserId()));
-        Optional<User> user = userRepository.findUserByUserId(String.valueOf(kakaoUser.getUserId()));
+        User socialUser;
+        switch (authRequest.getProvider()){
+
+                case kakao:
+                    socialUser = kakaoClient.getUserData(authRequest.getAccessToken());
+                    break;
+                case naver:
+                    socialUser = naverClient.getUserData(authRequest.getAccessToken());
+                    break;
+                default:
+                    socialUser = null;
+                    break;
+
+
+        }
+
+        String accessToken = getToken(socialUser.getUserId());
+        Optional<User> user = userRepository.findUserByUserId(socialUser.getUserId());
         // 이미 회원가입한 유저라면?
         if(user.isPresent())
         {
@@ -35,7 +52,7 @@ public class OAuthService {
         }
 
         // 아직 회원가입 하지 않았다면? 새로운 유저니깐 저장부터 해야함
-        User findUser = User.builder().userId(kakaoUser.getUserId()).build();
+        User findUser = User.builder().userId(socialUser.getUserId()).build();
         userRepository.save(findUser);
 
         return new OAuthLoginResponseDto(accessToken,true);

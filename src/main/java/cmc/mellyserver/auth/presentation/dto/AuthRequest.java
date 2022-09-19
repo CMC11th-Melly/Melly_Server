@@ -12,5 +12,5 @@ public class AuthRequest {
     private String accessToken;
 
     @Schema(example = "kakao")
-    private SnsType snsType;
+    private Provider provider;
 }
