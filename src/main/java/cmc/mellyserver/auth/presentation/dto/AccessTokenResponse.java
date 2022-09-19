@@ -10,5 +10,5 @@ public class AccessTokenResponse {
     private int code;
     private String message;
     private AccessTokenUserData user;
-    private String accessToken;
+    private String token;
 }
