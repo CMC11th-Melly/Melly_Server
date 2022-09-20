@@ -38,8 +38,8 @@ public class AuthController {
       @PostMapping("/signup")
       public ResponseEntity<SignupResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
       {
-          User user = authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
-          return ResponseEntity.ok(new SignupResponse(user.getEmail()));
+          authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
+          return ResponseEntity.ok(new SignupResponse(200,"회원가입 완료"));
       }
 
       @Operation(summary = "일반 이메일 로그인")

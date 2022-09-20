@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class SignupResponse {
 
-    @Schema(example = "melly@gmail.com")
-    private String email;
+    private int code;
+    private String message;
 }
