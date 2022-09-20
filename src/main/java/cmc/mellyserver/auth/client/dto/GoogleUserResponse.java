@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GoogleUserResponse {
-    private String hello;
+    private String id;
+    private String email;
+    private String picture;
 }
