@@ -2,6 +2,8 @@ package cmc.mellyserver.auth.client;
 
 import cmc.mellyserver.auth.client.dto.KakaoUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
+import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,14 +29,11 @@ public class KakaoClient implements Client{
                 .bodyToMono(KakaoUserResponse.class)
                 .block();
 
-//        return Member.builder()
-//                .socialId(String.valueOf(kakaoUserResponse.getId()))
-//                .nickname(kakaoUserResponse.getProperties().getNickname())
-//                .email(kakaoUserResponse.getKakaoAccount().getEmail())
-//                .build();
-        System.out.println("어떤 값 들어있나? " + kakaoUserResponse.toString());
         return User.builder()
                 .userId(String.valueOf(kakaoUserResponse.getId()))
+                .provider(Provider.KAKAO)
+                .roleType(RoleType.USER)
+                .password("NO_PASSWORD")
                 .build();
     }
 }

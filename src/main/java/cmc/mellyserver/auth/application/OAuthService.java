@@ -30,10 +30,10 @@ public class OAuthService {
         User socialUser;
         switch (authRequest.getProvider()){
 
-                case kakao:
+            case KAKAO:
                     socialUser = kakaoClient.getUserData(authRequest.getAccessToken());
                     break;
-                case naver:
+            case NAVER:
                     socialUser = naverClient.getUserData(authRequest.getAccessToken());
                     break;
                 default:
@@ -44,18 +44,19 @@ public class OAuthService {
         }
 
         String accessToken = getToken(socialUser.getUserId());
+
         Optional<User> user = userRepository.findUserByUserId(socialUser.getUserId());
         // 이미 회원가입한 유저라면?
         if(user.isPresent())
         {
-            return new OAuthLoginResponseDto(accessToken,false);
+            return new OAuthLoginResponseDto(accessToken,false,user.get());
         }
 
         // 아직 회원가입 하지 않았다면? 새로운 유저니깐 저장부터 해야함
-        User findUser = User.builder().userId(socialUser.getUserId()).build();
-        userRepository.save(findUser);
+      //  User findUser = User.builder().userId(socialUser.getUserId()).build();
+        userRepository.save(socialUser);
 
-        return new OAuthLoginResponseDto(accessToken,true);
+        return new OAuthLoginResponseDto(accessToken,true, socialUser);
 
     }
 

@@ -30,7 +30,7 @@ public class AuthController {
       public ResponseEntity<OAuthLoginResponse> socialLogin(@RequestBody AuthRequest authRequest)
       {
           OAuthLoginResponseDto response = oAuthService.login(authRequest);
-          return ResponseEntity.ok(new OAuthLoginResponse(response.getAccessToken(),response.getIsNewUser()));
+          return ResponseEntity.ok(AuthAssembler.oAuthLoginResponse(response.getAccessToken(),response.getIsNewUser(),response.getUser()));
       }
 
       // TODO : 성공했을때 API 정하기!
@@ -50,20 +50,20 @@ public class AuthController {
           return ResponseEntity.ok(result);
       }
 
-      @Operation(summary = "중복 닉네임 체크",description = "닉네임 중복이면 duplicated 값이 true, 중복 아니면 false입니다")
+      @Operation(summary = "중복 닉네임 체크")
       @PostMapping("/nickname")
-      public ResponseEntity<CheckDuplicateResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
+      public ResponseEntity<CheckDuplicateNicknameResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
       {
           Boolean duplicated = authService.checkNicknameDuplicate(checkDuplicateNicknameRequest.getNickname());
-          return ResponseEntity.ok(new CheckDuplicateResponse(duplicated));
+          return ResponseEntity.ok(AuthAssembler.checkDuplicateNicknameResponse(duplicated));
       }
 
-      @Operation(summary = "중복 이메일 체크",description = "이메일 중복이면 duplicated 값이 true, 중복 아니면 false입니다")
+      @Operation(summary = "중복 이메일 체크")
       @PostMapping ("/email")
-      public ResponseEntity<CheckDuplicateResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
+      public ResponseEntity<CheckDuplicateEmailResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
       {
           Boolean duplicated = authService.checkEmailDuplicate(checkDuplicateEmailRequest.getEmail());
-        return ResponseEntity.ok(new CheckDuplicateResponse(duplicated));
+        return ResponseEntity.ok(AuthAssembler.checkDuplicateEmailResponse(duplicated));
     }
 
     @Operation(summary = "일반 이메일 로그아웃")

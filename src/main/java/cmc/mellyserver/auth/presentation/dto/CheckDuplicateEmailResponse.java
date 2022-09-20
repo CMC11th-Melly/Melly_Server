@@ -1,17 +1,14 @@
 package cmc.mellyserver.auth.presentation.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class OAuthLoginResponse {
+public class CheckDuplicateEmailResponse {
 
     private int code;
     private String message;
-    private AccessTokenUserData user;
-    private String token;
-    private boolean isNewUser;
 
 }
