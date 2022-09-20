@@ -12,6 +12,6 @@ public class AuthExceptionHandler {
     public ResponseEntity<ErrorMessage> authException(AuthException ex)
     {
         String message = ex.getMessage();
-        return ResponseEntity.ok(new ErrorMessage("400",message));
+        return ResponseEntity.ok(new ErrorMessage(400,message));
     }
 }

@@ -17,14 +17,14 @@ public class AuthAssembler {
 
     public static AuthUserDataResponse authUserDataResponse(User user)
     {
-        return new AuthUserDataResponse(user.getUserSeq(),
+        return new AuthUserDataResponse(200,"인증 유저 정보",new AccessTokenUserData(user.getUserSeq(),
                 user.getUserId(),
                 user.getProvider(),
                 user.getEmail(),
                 user.getNickname(),
                 user.getProfileImage(),
                 user.isGender(),
-                user.getAgeGroup()
+                user.getAgeGroup())
                 );
     }
 
