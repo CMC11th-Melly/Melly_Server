@@ -34,13 +34,16 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         res.setContentType("application/json; charset=UTF-8");
 
         final Map<String, Object> body = new HashMap<>();
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
         body.put("message", ex.getMessage());
         body.put("path", req.getServletPath());
+
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(res.getOutputStream(), body);
 
-        res.setStatus(HttpServletResponse.SC_OK);
+
     }
 }

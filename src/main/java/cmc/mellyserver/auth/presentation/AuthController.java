@@ -25,6 +25,14 @@ public class AuthController {
       private final OAuthService oAuthService;
       private final AuthService authService;
 
+
+      @Operation(summary = "소셜 로그인 시 회원가입")
+      @PostMapping("/social/signup")
+      public void socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
+      {
+          oAuthService.signup(authRequestForOAuthSignup);
+      }
+
       @Operation(summary = "소셜 로그인",description = "소셜 로그인 타입에 따라 로그인 방식을 분기")
       @PostMapping("/social")
       public ResponseEntity<OAuthLoginResponse> socialLogin(@RequestBody AuthRequest authRequest)

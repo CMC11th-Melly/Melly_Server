@@ -55,7 +55,7 @@ public class AuthToken {
             log.info("Expired JWT token.");
             throw new JwtException("토큰 기한 만료");
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token.");
+            log.info("지원되지 않는 JWT 토큰");
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
             throw new JwtException("JWT token compact of handler are invalid.");
