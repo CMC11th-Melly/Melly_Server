@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.application;
 
+import cmc.mellyserver.auth.client.GoogleClient;
 import cmc.mellyserver.auth.client.KakaoClient;
 import cmc.mellyserver.auth.client.NaverClient;
 import cmc.mellyserver.auth.presentation.dto.AuthRequest;
@@ -22,6 +23,7 @@ public class OAuthService {
     private final UserRepository userRepository;
     private final KakaoClient kakaoClient;
     private final NaverClient naverClient;
+    private final GoogleClient googleClient;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
@@ -35,6 +37,9 @@ public class OAuthService {
                     break;
             case NAVER:
                     socialUser = naverClient.getUserData(authRequest.getAccessToken());
+                    break;
+            case GOOGLE:
+                    socialUser = googleClient.getUserData(authRequest.getAccessToken());
                     break;
                 default:
                     socialUser = null;
