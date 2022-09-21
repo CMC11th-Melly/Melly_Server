@@ -27,10 +27,10 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         final Map<String, Object> body = new HashMap<>();
 
-        body.put("status", HttpServletResponse.SC_FORBIDDEN);
+        body.put("code", HttpServletResponse.SC_FORBIDDEN);
         body.put("error", "Forbidden");
         body.put("message", accessDeniedException.getMessage());
-        body.put("path", request.getServletPath());
+    //    body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);

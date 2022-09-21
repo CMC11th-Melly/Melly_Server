@@ -17,9 +17,6 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private MemoryType memoryType;
-
     // 1,2,3,4,5
     private int stars;
 
