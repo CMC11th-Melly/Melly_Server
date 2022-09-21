@@ -2,6 +2,7 @@ package cmc.mellyserver.auth.client;
 
 import cmc.mellyserver.auth.client.dto.GoogleUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
+import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class GoogleClient implements Client{
         return User.builder()
                 .userId(googleUserResponse.getId())
                 .email(googleUserResponse.getEmail())
+                .provider(Provider.GOOGLE)
                 .profileImage(googleUserResponse.getPicture())
                 .roleType(RoleType.USER).build();
 

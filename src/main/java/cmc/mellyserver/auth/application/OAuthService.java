@@ -61,7 +61,9 @@ public class OAuthService {
             {
                 return new OAuthLoginResponseDto(accessToken,false,user.get());
             }
-
+            else{
+                return new OAuthLoginResponseDto(accessToken,true,user.get());
+            }
         }
 
         userRepository.save(socialUser);
