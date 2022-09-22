@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.application;
 
+import cmc.mellyserver.auth.client.AppleClient;
 import cmc.mellyserver.auth.client.GoogleClient;
 import cmc.mellyserver.auth.client.KakaoClient;
 import cmc.mellyserver.auth.client.NaverClient;
@@ -36,6 +37,7 @@ public class OAuthService {
     private final KakaoClient kakaoClient;
     private final NaverClient naverClient;
     private final GoogleClient googleClient;
+    private final AppleClient appleClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final AWSS3UploadService uploadService;
 
@@ -54,6 +56,10 @@ public class OAuthService {
             case GOOGLE:
                     socialUser = googleClient.getUserData(authRequest.getAccessToken());
                     break;
+
+            case APPLE:
+                socialUser = appleClient.getUserData(authRequest.getAccessToken());
+                break;
                 default:
                     socialUser = null;
                     break;
