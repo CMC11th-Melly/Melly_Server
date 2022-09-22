@@ -43,16 +43,16 @@ public class AuthController {
           return ResponseEntity.ok(AuthAssembler.oAuthLoginResponse(response.getAccessToken(),response.getIsNewUser(),response.getUser()));
       }
 
-      // TODO : 성공했을때 API 정하기!
-      @Operation(summary = "일반 이메일 회원가입",description = "성별의 경우 true는 남성, false는 여성입니다. <br />" +
-                                                              "데이터 보내주실때 프로필 사진 고려해서 multipart/formdata 형식으로 보내주세요! <br />" +
-                                                              "연령대는 enum으로 처리하기 위해서 10대부터 70대 이상까지 차례대로 ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN 으로 설정했습니다."
+
+      @Operation(summary = "일반 이메일 회원가입",description = "- 성별의 경우 true는 남성, false는 여성입니다." +
+                                                              "\n- 데이터 보내주실때 프로필 사진 고려해서 **multipart/formdata** 형식으로 보내주세요! <br />" +
+                                                              "\n- 연령대는 enum으로 처리하기 위해서 10대부터 70대 이상까지 차례대로 **ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN** 으로 설정했습니다."
       )
       @PostMapping("/signup")
       public ResponseEntity<CommonResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
       {
           authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
-          return new ResponseEntity<>(new CommonResponse(200, "회원가입 완료"), HttpStatus.BAD_REQUEST);
+          return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료"));
       }
 
       @Operation(summary = "일반 이메일 로그인")
