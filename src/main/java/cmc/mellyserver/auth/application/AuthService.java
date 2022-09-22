@@ -76,9 +76,9 @@ public class AuthService {
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 
-    public void logout(String email, String accessToken)
+    public void logout(String userId, String accessToken)
     {
-        User user = userRepository.findUserByEmail(email).orElseThrow(MemberNotFoundException::new);
+        User user = userRepository.findUserByUserId(userId).orElseThrow(MemberNotFoundException::new);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }
 
