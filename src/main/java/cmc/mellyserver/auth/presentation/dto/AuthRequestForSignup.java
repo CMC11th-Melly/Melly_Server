@@ -24,7 +24,7 @@ public class AuthRequestForSignup {
     private String nickname;
 
     @Schema(example = "남성는 true, 여성는 false")
-    private boolean gender;
+    private String gender;
 
     @Schema(example = "프로필 이미지 사진")
     @Nullable

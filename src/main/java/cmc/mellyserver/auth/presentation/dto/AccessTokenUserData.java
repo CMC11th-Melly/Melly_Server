@@ -2,11 +2,13 @@ package cmc.mellyserver.auth.presentation.dto;
 
 import cmc.mellyserver.user.domain.AgeGroup;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class AccessTokenUserData {
     private Long userSeq;
     private String uid;
@@ -14,6 +16,6 @@ public class AccessTokenUserData {
     private String email;
     private String nickname;
     private String profileImage;
-    private boolean gender;
+    private String gender;
     private AgeGroup ageGroup;
 }

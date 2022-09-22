@@ -12,11 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthRequestForOAuthSignup {
 
+    @Schema(example = "소셜 아이디")
+    private String userId;
+
     @Schema(example = "모카")
     private String nickname;
 
     @Schema(example = "남성는 true, 여성는 false")
-    private boolean gender;
+    private String gender;
 
     @Schema(example = "프로필 이미지 사진")
     @Nullable

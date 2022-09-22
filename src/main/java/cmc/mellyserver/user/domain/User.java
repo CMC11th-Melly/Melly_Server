@@ -31,7 +31,7 @@ public class User extends JpaBaseEntity {
 
     private String profileImage;
 
-    private boolean gender;
+    private String gender;
     // 추천 기능 만들 때 필요
 
     private AgeGroup ageGroup;
@@ -44,4 +44,12 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
+
+    public void updateUser(String nickname, String gender, String profileImage, AgeGroup ageGroup)
+    {
+        this.nickname = nickname;
+        this.gender = gender;
+        this.profileImage = profileImage;
+        this.ageGroup = ageGroup;
+    }
 }

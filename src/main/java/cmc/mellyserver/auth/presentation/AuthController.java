@@ -10,7 +10,6 @@ import cmc.mellyserver.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import cmc.mellyserver.auth.application.OAuthService;
@@ -30,16 +29,18 @@ public class AuthController {
 
       @Operation(summary = "소셜 로그인 시 회원가입")
       @PostMapping("/social/signup")
-      public void socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
+      public ResponseEntity<CommonResponse<LoginResponse>> socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
       {
-          oAuthService.signup(authRequestForOAuthSignup);
+          LoginResponse login = oAuthService.signup(authRequestForOAuthSignup);
+          return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
 
       @Operation(summary = "소셜 로그인",description = "소셜 로그인 타입에 따라 로그인 방식을 분기")
       @PostMapping("/social")
-      public ResponseEntity<CommonResponse<OAuthLoginResponse>> socialLogin(@RequestBody AuthRequest authRequest)
+      public ResponseEntity<CommonResponse<?>> socialLogin(@RequestBody AuthRequest authRequest)
       {
           OAuthLoginResponseDto response = oAuthService.login(authRequest);
+
           return ResponseEntity.ok(AuthAssembler.oAuthLoginResponse(response.getAccessToken(),response.getIsNewUser(),response.getUser()));
       }
 
@@ -79,7 +80,9 @@ public class AuthController {
         return ResponseEntity.ok(AuthAssembler.checkDuplicateEmailResponse(duplicated));
     }
 
-    @Operation(summary = "일반 이메일 로그아웃")
+    @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +
+                                                  "- 로그아웃 로직은 로그인한 유저가 사용할 수 있는 기능이므로 Header에 토큰 넣어주세요!" +
+                                                  "- 일반 로그인, 소셜 로그인 공통 사용 가")
     @DeleteMapping("/logout")
     public ResponseEntity<CommonResponse> emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
     {

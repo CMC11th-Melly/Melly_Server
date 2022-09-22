@@ -3,7 +3,6 @@ package cmc.mellyserver.auth.presentation.dto;
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.common.CommonResponse;
 import cmc.mellyserver.user.domain.User;
-import org.springframework.http.ResponseEntity;
 
 public class AuthAssembler {
 
@@ -13,7 +12,7 @@ public class AuthAssembler {
                 authRequestForSignup.getPassword(),
                 authRequestForSignup.getNickname(),
                 authRequestForSignup.getAgeGroup(),
-                authRequestForSignup.isGender(),
+                authRequestForSignup.getGender(),
                 authRequestForSignup.getProfile_image());
     }
 
@@ -25,7 +24,7 @@ public class AuthAssembler {
                 user.getEmail(),
                 user.getNickname(),
                 user.getProfileImage(),
-                user.isGender(),
+                user.getGender(),
                 user.getAgeGroup())
                 );
     }
@@ -38,7 +37,7 @@ public class AuthAssembler {
                 user.getEmail(),
                 user.getNickname(),
                 user.getProfileImage(),
-                user.isGender(),
+                user.getGender(),
                 user.getAgeGroup()),
                 accessToken);
     }
@@ -71,17 +70,9 @@ public class AuthAssembler {
         {
             return new CommonResponse(200,
                     "회원가입이 필요합니다",
-                    new OAuthLoginResponse(new AccessTokenUserData(user.getUserSeq(),
-                            user.getUserId(),
-                            user.getProvider(),
-                            user.getEmail(),
-                            user.getNickname(),
-                            user.getProfileImage(),
-                            user.isGender(),
-                            user.getAgeGroup()),
-                            token,
-                            isNewUser)
-                    );
+                    new OAuthLoginResponse(
+                            isNewUser,AccessTokenUserData.builder().uid(user.getUserId()).build())
+            );
         }
         else{
             return new CommonResponse(200,
@@ -92,7 +83,7 @@ public class AuthAssembler {
                             user.getEmail(),
                             user.getNickname(),
                             user.getProfileImage(),
-                            user.isGender(),
+                            user.getGender(),
                             user.getAgeGroup()),
                             token,
                             isNewUser)

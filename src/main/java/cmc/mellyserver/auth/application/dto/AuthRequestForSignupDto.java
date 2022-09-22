@@ -19,7 +19,7 @@ public class AuthRequestForSignupDto {
 
     private AgeGroup ageGroup;
 
-    private Boolean gender;
+    private String gender;
 
     @Nullable
     private MultipartFile profile_image;

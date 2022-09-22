@@ -72,16 +72,13 @@ public class AuthService {
         {
             throw new InvalidPasswordException("일치하지 않는 비밀번호입니다.");
         }
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoleType(), "99999999999999");
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "99999999999999");
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 
-    // TODO : 사용자 정보 얻어오는 부분 다시 고민해봐야 함!
     public void logout(String email, String accessToken)
     {
-        System.out.println("로그아웃 할때, authentication안에 뭐가 들어있는지 체크! : " + email);
         User user = userRepository.findUserByEmail(email).orElseThrow(MemberNotFoundException::new);
-        userRepository.delete(user);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }
 
@@ -156,8 +153,8 @@ public class AuthService {
         return false;
     }
 
-    public User getUserData(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(MemberNotFoundException::new);
+    public User getUserData(String userId) {
+        return userRepository.findUserByUserId(userId).orElseThrow(MemberNotFoundException::new);
 
     }
 }
