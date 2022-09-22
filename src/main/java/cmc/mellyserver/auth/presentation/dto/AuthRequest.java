@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthRequest {
 
+    @Schema(description = "리소스 서버 접근용 액세스 토큰")
     private String accessToken;
 
-    @Schema(example = "kakao")
+    @Schema(description = "소셜 로그인 서비스 제공자",example = "KAKAO")
     private Provider provider;
 }

@@ -3,6 +3,7 @@ package cmc.mellyserver.auth.presentation.dto;
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.common.CommonResponse;
 import cmc.mellyserver.user.domain.User;
+import org.springframework.http.ResponseEntity;
 
 public class AuthAssembler {
 
