@@ -32,7 +32,6 @@ public class GoogleClient implements Client{
                 .email(googleUserResponse.getEmail())
                 .provider(Provider.GOOGLE)
                 .profileImage(googleUserResponse.getPicture())
-                .userId("1L")
                 .roleType(RoleType.USER).build();
 
     }

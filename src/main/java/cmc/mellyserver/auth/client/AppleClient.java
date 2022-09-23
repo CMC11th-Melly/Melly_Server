@@ -2,6 +2,7 @@ package cmc.mellyserver.auth.client;
 
 import cmc.mellyserver.auth.client.dto.GoogleUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
+import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.user.domain.User;
 import com.amazonaws.auth.policy.Resource;
 import com.nimbusds.jose.shaded.json.JSONObject;
@@ -31,7 +32,10 @@ public class AppleClient implements Client{
         String sub = (String)jsonObject.get("sub");
         String email = (String)jsonObject.get("email");
 
-        return User.builder().userId(sub).email(email).build();
+        return User.builder()
+                .userId(sub)
+                .email(email)
+                .provider(Provider.APPLE).build();
 
     }
     public JSONObject decodeFromIdToken(String id_token) {
