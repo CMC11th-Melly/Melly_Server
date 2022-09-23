@@ -24,7 +24,7 @@ public class AuthRequestForOAuthSignup {
 
     @Schema(example = "프로필 이미지 사진")
     @Nullable
-    private MultipartFile profile_image;
+    private MultipartFile profileImage;
 
     @Schema(example = "ONE")
     @Nullable

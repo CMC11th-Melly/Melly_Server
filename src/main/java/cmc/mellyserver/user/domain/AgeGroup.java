@@ -7,7 +7,8 @@ public enum AgeGroup {
     FOUR(40),
     FIVE(50),
     SIX(60),
-    SEVEN(70);
+    SEVEN(70),
+    DEFAULT(0);
 
     private int ageGroup;
 
