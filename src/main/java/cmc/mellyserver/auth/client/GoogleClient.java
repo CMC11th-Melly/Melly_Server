@@ -19,19 +19,20 @@ public class GoogleClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
-        GoogleUserResponse googleUserResponse = webClient.get()
+        Object googleUserResponse = webClient.get()
                 .uri("https://www.googleapis.com/oauth2/v1/userinfo", builder -> builder.queryParam("access_token", accessToken).build())
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
-                .bodyToMono(GoogleUserResponse.class)
+                .bodyToMono(Object.class)
                 .block();
         System.out.println("결과 " + googleUserResponse.toString());
         return User.builder()
-                .userId(googleUserResponse.getId())
-                .email(googleUserResponse.getEmail())
-                .provider(Provider.GOOGLE)
-                .profileImage(googleUserResponse.getPicture())
+//                .userId(googleUserResponse.getId())
+//                .email(googleUserResponse.getEmail())
+//                .provider(Provider.GOOGLE)
+//                .profileImage(googleUserResponse.getPicture())
+                .userId("1L")
                 .roleType(RoleType.USER).build();
 
     }
