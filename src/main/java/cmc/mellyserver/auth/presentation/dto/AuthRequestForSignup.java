@@ -1,6 +1,7 @@
 package cmc.mellyserver.auth.presentation.dto;
 
 import cmc.mellyserver.user.domain.AgeGroup;
+import cmc.mellyserver.user.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class AuthRequestForSignup {
     private String nickname;
 
     @Schema(example = "남성는 true, 여성는 false")
-    private String gender;
+    private Gender gender;
 
     @Schema(example = "프로필 이미지 사진")
     @Nullable

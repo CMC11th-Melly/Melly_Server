@@ -1,6 +1,7 @@
 package cmc.mellyserver.auth.application.dto;
 
 import cmc.mellyserver.user.domain.AgeGroup;
+import cmc.mellyserver.user.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class AuthRequestForSignupDto {
 
     private AgeGroup ageGroup;
 
-    private String gender;
+    private Gender gender;
 
     @Nullable
     private MultipartFile profile_image;
