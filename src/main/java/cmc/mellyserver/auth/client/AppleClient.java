@@ -28,8 +28,10 @@ public class AppleClient implements Client{
 
         JSONObject jsonObject = decodeFromIdToken(accessToken);
         System.out.println("최종 응답값 : " + jsonObject.toJSONString());
+        String sub = (String)jsonObject.get("sub");
+        String email = (String)jsonObject.get("email");
 
-        return User.builder().userId("1").build();
+        return User.builder().userId(sub).email(email).build();
 
     }
     public JSONObject decodeFromIdToken(String id_token) {
