@@ -8,6 +8,7 @@ import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.common.exception.GlobalServerException;
 import cmc.mellyserver.common.exception.MemberNotFoundException;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
@@ -102,7 +103,7 @@ public class AuthService {
             try(InputStream inputStream = file.getInputStream()) {
                     uploadService.uploadFile(inputStream,objectMetadata,fileName);
                 } catch(IOException e) {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+                    throw new GlobalServerException();
                 }
                 fileNameList = uploadService.getFileUrl(fileName);
 
@@ -137,7 +138,7 @@ public class AuthService {
 
 
     public User getUserData(String userId) {
-        return userRepository.findUserByUserId(userId).orElseThrow(MemberNotFoundException::new);
+        return userRepository.findUserByUserId(userId).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
 
     }
 }

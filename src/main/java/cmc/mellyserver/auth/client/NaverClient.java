@@ -4,6 +4,8 @@ import cmc.mellyserver.auth.client.dto.KakaoUserResponse;
 import cmc.mellyserver.auth.client.dto.NaverUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class NaverClient implements Client{
                 .uri("https://openapi.naver.com/v1/nid/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
+                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.NAVER_ACCESS)))
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
                 .bodyToMono(NaverUserResponse.class)
                 .block();

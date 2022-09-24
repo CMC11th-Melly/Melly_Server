@@ -11,6 +11,7 @@ import cmc.mellyserver.auth.presentation.dto.LoginResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
+import cmc.mellyserver.common.exception.GlobalServerException;
 import cmc.mellyserver.common.exception.MemberNotFoundException;
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
@@ -128,7 +129,7 @@ public class OAuthService {
             try(InputStream inputStream = file.getInputStream()) {
                 uploadService.uploadFile(inputStream,objectMetadata,fileName);
             } catch(IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+                throw new GlobalServerException();
             }
             fileNameList = uploadService.getFileUrl(fileName);
 

@@ -3,6 +3,8 @@ package cmc.mellyserver.auth.client;
 import cmc.mellyserver.auth.client.dto.GoogleUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class GoogleClient implements Client{
         GoogleUserResponse googleUserResponse = webClient.get()
                 .uri("https://www.googleapis.com/oauth2/v1/userinfo", builder -> builder.queryParam("access_token", accessToken).build())
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
+                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.GOOGLE_ACCESS)))
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
                 .bodyToMono(GoogleUserResponse.class)
                 .block();

@@ -20,8 +20,11 @@ public enum ExceptionCodeAndDetails {
     INVALID_PASSWORD("1003","비밀번호가 일치하지 않습니다."),
     NO_SUCH_USER("1004","해당 id의 유저가 없습니다."),
     UNAUTHORIZED_USER("1005", "인증되지 않은 유저입니다."),
-    FORBIDDEN_USER("1006","접근 권한이 없는 유저입니다."),
-    EXPIRED_TOKEN("1007", "JWT 토큰 기한이 만료됐습니다.");
+    KAKAO_ACCESS("1006","카카오 리소스 서버 접근 중 문제가 발생했습니다."),
+    GOOGLE_ACCESS("1007","구글 리소스 서버 접근 중 문제가 발생했습니다."),
+    NAVER_ACCESS("1008","네이버 리소스 서버 접근 중 문제가 발생했습니다."),
+    FORBIDDEN_USER("1009","접근 권한이 없는 유저입니다."),
+    EXPIRED_TOKEN("1010", "JWT 토큰 기한이 만료됐습니다.");
 
 
     private final String code;
