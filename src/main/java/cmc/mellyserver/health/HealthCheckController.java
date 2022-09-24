@@ -33,7 +33,7 @@ public class HealthCheckController {
     @PostMapping("/imageTest")
     public String multipartTest(MultipartTestRequest multipartTestRequest)
     {
-        System.out.println(multipartTestRequest.getImage());
-        return "success";
+        String originalFilename = multipartTestRequest.getImage().getOriginalFilename();
+        return "멀티 파트 파일 전송! " + originalFilename;
     }
 }
