@@ -106,7 +106,7 @@ public class OAuthService {
         // 일단 유저 찾고
         User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUserId()).orElseThrow(MemberNotFoundException::new);
         // 있으면 업데이트 하고
-        user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfile_image()),authRequestForOAuthSignup.getAgeGroup());
+        user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup());
         // 회원가입 완료 됐으니깐 토큰 생성
         String token = getToken(user.getUserId());
         // 반환 해주기

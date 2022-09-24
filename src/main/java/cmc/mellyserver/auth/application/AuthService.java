@@ -1,22 +1,19 @@
 package cmc.mellyserver.auth.application;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
-import cmc.mellyserver.auth.exception.DuplicatedUserException;
-import cmc.mellyserver.auth.exception.InvalidEmailException;
-import cmc.mellyserver.auth.exception.InvalidPasswordException;
-import cmc.mellyserver.auth.presentation.dto.AccessTokenResponse;
 import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.LoginResponse;
-import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.MemberNotFoundException;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
-import cmc.mellyserver.user.domain.RoleType;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,10 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,56 +39,54 @@ public class AuthService {
     private final RedisTemplate redisTemplate;
     private final AWSS3UploadService uploadService;
 
+
     public User signup(AuthRequestForSignupDto authRequestForSignupDto)
     {
-        // 1. 이미 사용자 존재하는지 체크
         checkDuplicatedEmail(authRequestForSignupDto.getEmail());
-        String fileName = getMultipartFileName(authRequestForSignupDto.getProfile_image());
-
-        User saveUser = User.builder()
-                .email(authRequestForSignupDto.getEmail())
-                .password(passwordEncoder.encode(authRequestForSignupDto.getPassword()))
-                .roleType(RoleType.USER)
-                .profileImage(fileName)
-                .ageGroup(authRequestForSignupDto.getAgeGroup())
-                .gender(authRequestForSignupDto.getGender())
-                .userId(UUID.randomUUID().toString())
-                .provider(Provider.DEFAULT)
-                .nickname(authRequestForSignupDto.getNickname())
-                .build();
-        // 3. 저장한 Member 반환
+        String filename = getMultipartFileName(authRequestForSignupDto.getProfile_image());
+        User saveUser = AuthAssembler.createEmailLoginUser(authRequestForSignupDto,passwordEncoder,filename);
         return userRepository.save(saveUser);
     }
 
+
     public LoginResponse login(String email, String password)
     {
-        // 1. 입력한 이메일로 조회 안되면 invalidEmail 예외 반환
-        User user = userRepository.findUserByEmail(email).orElseThrow(InvalidEmailException::new);
-        // 2. 비밀 번호가 일치하지 않는다면
+        User user = userRepository.findUserByEmail(email).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);});
+
         if(!passwordEncoder.matches(password, user.getPassword()))
         {
-            throw new InvalidPasswordException("일치하지 않는 비밀번호입니다.");
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "99999999999999");
+
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "20000");
+
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 
     public void logout(String userId, String accessToken)
     {
-        User user = userRepository.findUserByUserId(userId).orElseThrow(MemberNotFoundException::new);
+        userRepository.findUserByUserId(userId).orElseThrow(
+                ()->{
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+                }
+                );
+
+        // 한번 로그아웃한 JWT는 레디스의 블랙리스트 명단에 집어넣음.
+        // TODO : 차후 TTL 설정해주기
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }
 
 
-    private void checkDuplicatedEmail(String email)
+    public void checkDuplicatedEmail(String email)
     {
         Optional<User> member = userRepository.findUserByEmail(email);
 
         // case : 회원가입 시도할때 기존 유저가 존재할 때
         if(member.isPresent())
         {
-            throw new DuplicatedUserException("이미 존재하는 사용자입니다.");
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_EMAIL);
         }
+
     }
 
     private String getMultipartFileName(MultipartFile file) {
@@ -116,7 +111,7 @@ public class AuthService {
         return null;
     }
 
-    // TODO : 차후에 로그인 회원 정보로 prefix 만들면 될 것 같음!
+
     private String createFileName(String fileName) {
         return "user1/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
@@ -126,32 +121,20 @@ public class AuthService {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("잘못된 형식 입니다.");
+            throw new IllegalArgumentException("잘못된 파일 형식 입니다.");
         }
     }
 
 
-    public Boolean checkNicknameDuplicate(String nickname) {
+    public void checkNicknameDuplicate(String nickname) {
         Optional<User> member = userRepository.findUserByNickname(nickname);
-
         // case : 회원가입 시도할때 기존 유저가 존재할 때
         if(member.isPresent())
         {
-            return true;
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_NICKNAME);
         }
-        return false;
     }
 
-    public Boolean checkEmailDuplicate(String email) {
-        Optional<User> member = userRepository.findUserByEmail(email);
-
-        // case : 회원가입 시도할때 기존 유저가 존재할 때
-        if(member.isPresent())
-        {
-            return true;
-        }
-        return false;
-    }
 
     public User getUserData(String userId) {
         return userRepository.findUserByUserId(userId).orElseThrow(MemberNotFoundException::new);

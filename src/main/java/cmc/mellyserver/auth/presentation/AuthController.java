@@ -68,16 +68,16 @@ public class AuthController {
       @PostMapping("/nickname")
       public ResponseEntity<CommonResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
       {
-          Boolean duplicated = authService.checkNicknameDuplicate(checkDuplicateNicknameRequest.getNickname());
-          return ResponseEntity.ok(AuthAssembler.checkDuplicateNicknameResponse(duplicated));
+          authService.checkNicknameDuplicate(checkDuplicateNicknameRequest.getNickname());
+          return ResponseEntity.ok(new CommonResponse(200,"사용해도 좋은 닉네임입니다."));
       }
 
       @Operation(summary = "중복 이메일 체크")
       @PostMapping ("/email")
       public ResponseEntity<CommonResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
       {
-          Boolean duplicated = authService.checkEmailDuplicate(checkDuplicateEmailRequest.getEmail());
-        return ResponseEntity.ok(AuthAssembler.checkDuplicateEmailResponse(duplicated));
+          authService.checkDuplicatedEmail(checkDuplicateEmailRequest.getEmail());
+          return ResponseEntity.ok(new CommonResponse(200,"사용해도 좋은 이메일입니다."));
     }
 
     @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +

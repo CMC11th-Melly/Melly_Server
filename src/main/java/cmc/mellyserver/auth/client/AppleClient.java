@@ -1,29 +1,24 @@
 package cmc.mellyserver.auth.client;
 
-import cmc.mellyserver.auth.client.dto.GoogleUserResponse;
-import cmc.mellyserver.auth.exception.TokenValidFailedException;
+
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.user.domain.User;
-import com.amazonaws.auth.policy.Resource;
+
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.io.FileReader;
-import java.util.HashMap;
+
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class AppleClient implements Client{
 
-    private final WebClient webClient;
+
     @Override
     public User getUserData(String accessToken) {
 

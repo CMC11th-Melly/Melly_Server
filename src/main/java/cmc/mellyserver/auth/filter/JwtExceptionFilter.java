@@ -29,20 +29,17 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         }
     }
 
-    public void setErrorResponse(HttpServletRequest req, HttpServletResponse res, Throwable ex) throws IOException {
-
-        res.setContentType("application/json; charset=UTF-8");
+    public void setErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex) throws IOException {
 
         final Map<String, Object> body = new HashMap<>();
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        body.put("code", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
+        response.setContentType("application/json; charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("code", "1007");
         body.put("message", ex.getMessage());
-      //  body.put("path", req.getServletPath());
+
 
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(res.getOutputStream(), body);
+        mapper.writeValue(response.getOutputStream(), body);
 
 
     }

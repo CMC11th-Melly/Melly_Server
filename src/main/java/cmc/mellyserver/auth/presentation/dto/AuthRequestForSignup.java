@@ -24,14 +24,14 @@ public class AuthRequestForSignup {
     @Schema(example = "모카")
     private String nickname;
 
-    @Schema(example = "남성는 true, 여성는 false")
+    @Schema(example = "남성는 MALE, 여성는 FEMALE")
     private Gender gender;
 
     @Schema(example = "프로필 이미지 사진")
     @Nullable
     private MultipartFile profileImage;
 
-    @Schema(example = "ONE")
+    @Schema(example = "ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,DEFAULT")
     @Nullable
     private AgeGroup ageGroup;
 

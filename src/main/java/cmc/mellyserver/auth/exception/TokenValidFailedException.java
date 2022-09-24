@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.exception;
 
-public class TokenValidFailedException extends AuthException{
+public class TokenValidFailedException extends RuntimeException {
 
     public TokenValidFailedException()
     {

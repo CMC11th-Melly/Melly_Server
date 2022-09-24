@@ -47,15 +47,15 @@ public class AuthToken {
                     .getBody();
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
-            throw new JwtException("잘못된 JWT 시그니처");
+            throw new JwtException("잘못된 JWT 시그니처입니다.");
         } catch (MalformedJwtException e) {
             log.info("Invalid JWT token.");
-            throw new JwtException("유효하지 않은 JWT 토큰");
+            throw new JwtException("유효하지 않은 JWT 토큰입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
-            throw new JwtException("토큰 기한 만료");
+            throw new JwtException("JWT 토큰 기한이 만료됐습니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰");
+            log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
             throw new JwtException("JWT token compact of handler are invalid.");

@@ -2,6 +2,7 @@ package cmc.mellyserver.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -25,12 +26,11 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         final Map<String, Object> body = new HashMap<>();
 
-        body.put("code", HttpServletResponse.SC_FORBIDDEN);
-        body.put("error", "Forbidden");
-        body.put("message", accessDeniedException.getMessage());
-    //    body.put("path", request.getServletPath());
+        body.put("code", "1006");
+        body.put("message", "접근 권한이 없는 유저입니다.");
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);

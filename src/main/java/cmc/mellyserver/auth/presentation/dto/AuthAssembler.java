@@ -2,9 +2,29 @@ package cmc.mellyserver.auth.presentation.dto;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.common.CommonResponse;
+import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.UUID;
 
 public class AuthAssembler {
+
+   public static User createEmailLoginUser(AuthRequestForSignupDto authRequestForSignupDto, PasswordEncoder passwordEncoder, String filename)
+   {
+       return User.builder()
+               .email(authRequestForSignupDto.getEmail())
+               .password(passwordEncoder.encode(authRequestForSignupDto.getPassword()))
+               .roleType(RoleType.USER)
+               .profileImage(filename)
+               .ageGroup(authRequestForSignupDto.getAgeGroup())
+               .gender(authRequestForSignupDto.getGender())
+               .userId(UUID.randomUUID().toString())
+               .provider(Provider.DEFAULT)
+               .nickname(authRequestForSignupDto.getNickname())
+               .build();
+   }
+
 
    public static AuthRequestForSignupDto authRequestForSignupDto(AuthRequestForSignup authRequestForSignup)
     {
@@ -13,7 +33,7 @@ public class AuthAssembler {
                 authRequestForSignup.getNickname(),
                 authRequestForSignup.getAgeGroup(),
                 authRequestForSignup.getGender(),
-                authRequestForSignup.getProfile_image());
+                authRequestForSignup.getProfileImage());
     }
 
     public static CommonResponse authUserDataResponse(User user)
@@ -42,27 +62,6 @@ public class AuthAssembler {
                 accessToken);
     }
 
-    public static CommonResponse checkDuplicateEmailResponse(boolean isDuplicated)
-    {
-        if(isDuplicated == true)
-        {
-            return new CommonResponse(400,"이미 존재하는 이메일입니다");
-        }
-        else{
-            return new CommonResponse(200,"사용해도 좋은 이메일입니다");
-        }
-    }
-
-    public static CommonResponse checkDuplicateNicknameResponse(boolean isDuplicated)
-    {
-        if(isDuplicated == true)
-        {
-            return new CommonResponse(400,"이미 존재하는 닉네임입니다");
-        }
-        else{
-            return new CommonResponse(200,"사용해도 좋은 닉네임입니다");
-        }
-    }
 
     public static CommonResponse oAuthLoginResponse(String token, boolean isNewUser, User user)
     {
