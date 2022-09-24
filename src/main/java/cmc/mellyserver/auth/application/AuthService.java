@@ -59,7 +59,7 @@ public class AuthService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }
 
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "20000");
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "99999999999");
 
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
