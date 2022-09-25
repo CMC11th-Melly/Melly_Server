@@ -2,7 +2,7 @@ package cmc.mellyserver.auth.presentation;
 
 
 import cmc.mellyserver.auth.application.AuthService;
-import cmc.mellyserver.auth.application.OAuthLoginResponseDto;
+import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
 import cmc.mellyserver.auth.presentation.dto.*;
 import cmc.mellyserver.auth.util.HeaderUtil;
 import cmc.mellyserver.common.CommonResponse;
@@ -52,8 +52,8 @@ public class AuthController {
       @PostMapping("/signup")
       public ResponseEntity<CommonResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
       {
-          authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
-          return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료"));
+          SignupResponse signup = authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
+          return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료",signup));
       }
 
       @Operation(summary = "일반 이메일 로그인")

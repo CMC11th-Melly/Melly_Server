@@ -46,7 +46,7 @@ public class QMemoryImage extends EntityPathBase<MemoryImage> {
 
     public QMemoryImage(Class<? extends MemoryImage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.memory = inits.isInitialized("memory") ? new QMemory(forProperty("memory")) : null;
+        this.memory = inits.isInitialized("memory") ? new QMemory(forProperty("memory"), inits.get("memory")) : null;
     }
 
 }

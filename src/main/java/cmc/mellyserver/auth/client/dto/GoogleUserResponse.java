@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GoogleUserResponse {
+
     private String id;
     private String email;
     @Nullable

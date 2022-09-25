@@ -2,6 +2,8 @@ package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.util.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
+import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.place.domain.Scrap;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,9 +33,10 @@ public class User extends JpaBaseEntity {
 
     private String profileImage;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
-    // 추천 기능 만들 때 필요
 
+    @Enumerated(EnumType.STRING)
     private AgeGroup ageGroup;
 
     @Enumerated(EnumType.STRING)
@@ -42,8 +45,20 @@ public class User extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
+    @Embedded
+    private Recommend recommend;
+
+    @Column(name = "store_capacity")
+    private Double storeCapacity;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Memory> memories = new ArrayList<>();
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Scrap> scraps = new ArrayList<>();
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup)
     {

@@ -1,4 +1,4 @@
-package cmc.mellyserver.auth.application;
+package cmc.mellyserver.auth.application.dto;
 
 import cmc.mellyserver.user.domain.User;
 import lombok.AllArgsConstructor;

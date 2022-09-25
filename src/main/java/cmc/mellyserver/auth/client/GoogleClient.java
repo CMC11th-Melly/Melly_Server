@@ -28,7 +28,7 @@ public class GoogleClient implements Client{
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
                 .bodyToMono(GoogleUserResponse.class)
                 .block();
-        System.out.println("결과 " + googleUserResponse.toString());
+
         return User.builder()
                 .userId(googleUserResponse.getId())
                 .email(googleUserResponse.getEmail())

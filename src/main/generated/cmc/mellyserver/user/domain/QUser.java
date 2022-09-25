@@ -18,6 +18,8 @@ public class QUser extends EntityPathBase<User> {
 
     private static final long serialVersionUID = 815555985L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QUser user = new QUser("user");
 
     public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
@@ -36,6 +38,8 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
+
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
@@ -44,22 +48,37 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<cmc.mellyserver.auth.presentation.dto.Provider> provider = createEnum("provider", cmc.mellyserver.auth.presentation.dto.Provider.class);
 
+    public final QRecommend recommend;
+
     public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
+
+    public final ListPath<cmc.mellyserver.place.domain.Scrap, cmc.mellyserver.place.domain.QScrap> scraps = this.<cmc.mellyserver.place.domain.Scrap, cmc.mellyserver.place.domain.QScrap>createList("scraps", cmc.mellyserver.place.domain.Scrap.class, cmc.mellyserver.place.domain.QScrap.class, PathInits.DIRECT2);
+
+    public final NumberPath<Double> storeCapacity = createNumber("storeCapacity", Double.class);
 
     public final StringPath userId = createString("userId");
 
     public final NumberPath<Long> userSeq = createNumber("userSeq", Long.class);
 
     public QUser(String variable) {
-        super(User.class, forVariable(variable));
+        this(User.class, forVariable(variable), INITS);
     }
 
     public QUser(Path<? extends User> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUser(PathMetadata metadata, PathInits inits) {
+        this(User.class, metadata, inits);
+    }
+
+    public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.recommend = inits.isInitialized("recommend") ? new QRecommend(forProperty("recommend")) : null;
     }
 
 }

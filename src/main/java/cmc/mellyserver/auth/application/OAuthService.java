@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.application;
 
+import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
 import cmc.mellyserver.auth.client.AppleClient;
 import cmc.mellyserver.auth.client.GoogleClient;
 import cmc.mellyserver.auth.client.KakaoClient;
@@ -11,18 +12,18 @@ import cmc.mellyserver.auth.presentation.dto.LoginResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
-import cmc.mellyserver.common.exception.MemberNotFoundException;
+
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,10 +66,12 @@ public class OAuthService {
                     socialUser = null;
                     break;
 
-
         }
 
-   //     String accessToken = getToken(socialUser.getUserId());
+        if(socialUser == null)
+        {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.APPLE_ACCESS);
+        }
 
         Optional<User> user = userRepository.findUserByUserId(socialUser.getUserId());
         // 이미 회원가입한 유저라면?
@@ -105,7 +108,7 @@ public class OAuthService {
     public LoginResponse signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
         // 일단 유저 찾고
-        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUserId()).orElseThrow(MemberNotFoundException::new);
+        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUserId()).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
         // 있으면 업데이트 하고
         user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup());
         // 회원가입 완료 됐으니깐 토큰 생성

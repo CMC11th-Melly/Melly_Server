@@ -3,26 +3,23 @@ package cmc.mellyserver.auth.application;
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.LoginResponse;
+import cmc.mellyserver.auth.presentation.dto.SignupResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.AWSS3UploadService;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
-import cmc.mellyserver.common.exception.MemberNotFoundException;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -41,12 +38,14 @@ public class AuthService {
     private final AWSS3UploadService uploadService;
 
 
-    public User signup(AuthRequestForSignupDto authRequestForSignupDto)
+    public SignupResponse signup(AuthRequestForSignupDto authRequestForSignupDto)
     {
         checkDuplicatedEmail(authRequestForSignupDto.getEmail());
         String filename = getMultipartFileName(authRequestForSignupDto.getProfile_image());
         User saveUser = AuthAssembler.createEmailLoginUser(authRequestForSignupDto,passwordEncoder,filename);
-        return userRepository.save(saveUser);
+        userRepository.save(saveUser);
+        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserId(), saveUser.getRoleType(), "99999999999");
+        return AuthAssembler.signupResponse(accessToken.getToken(),saveUser);
     }
 
 

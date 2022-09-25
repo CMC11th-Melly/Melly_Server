@@ -34,6 +34,8 @@ public class QScrap extends EntityPathBase<Scrap> {
 
     public final QPlace place;
 
+    public final EnumPath<ScrapType> scrapType = createEnum("scrapType", ScrapType.class);
+
     public final cmc.mellyserver.user.domain.QUser user;
 
     public QScrap(String variable) {
@@ -54,8 +56,8 @@ public class QScrap extends EntityPathBase<Scrap> {
 
     public QScrap(Class<? extends Scrap> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.place = inits.isInitialized("place") ? new QPlace(forProperty("place")) : null;
-        this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user")) : null;
+        this.place = inits.isInitialized("place") ? new QPlace(forProperty("place"), inits.get("place")) : null;
+        this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

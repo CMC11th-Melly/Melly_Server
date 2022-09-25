@@ -47,7 +47,7 @@ public class QGroupAndUser extends EntityPathBase<GroupAndUser> {
     public QGroupAndUser(Class<? extends GroupAndUser> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.group = inits.isInitialized("group") ? new QUserGroup(forProperty("group")) : null;
-        this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

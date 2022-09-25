@@ -23,8 +23,9 @@ public enum ExceptionCodeAndDetails {
     KAKAO_ACCESS("1006","카카오 리소스 서버 접근 중 문제가 발생했습니다."),
     GOOGLE_ACCESS("1007","구글 리소스 서버 접근 중 문제가 발생했습니다."),
     NAVER_ACCESS("1008","네이버 리소스 서버 접근 중 문제가 발생했습니다."),
-    FORBIDDEN_USER("1009","접근 권한이 없는 유저입니다."),
-    EXPIRED_TOKEN("1010", "JWT 토큰 기한이 만료됐습니다.");
+    APPLE_ACCESS("1009","애플 로그인 중 문제가 발생했습니다."),
+    FORBIDDEN_USER("1010","접근 권한이 없는 유저입니다."),
+    EXPIRED_TOKEN("1011", "JWT 토큰 기한이 만료됐습니다.");
 
 
     private final String code;

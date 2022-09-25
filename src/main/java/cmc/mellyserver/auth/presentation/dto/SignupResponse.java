@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class SignupResponse {
 
-    private int code;
-    private String message;
+    private AccessTokenUserData user;
+    private String token;
 }

@@ -62,6 +62,19 @@ public class AuthAssembler {
                 accessToken);
     }
 
+    public static  SignupResponse signupResponse(String accessToken,User user)
+    {
+        return new SignupResponse(new AccessTokenUserData(user.getUserSeq(),
+                user.getUserId(),
+                user.getProvider(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getProfileImage(),
+                user.getGender(),
+                user.getAgeGroup()),
+                accessToken);
+    }
+
 
     public static CommonResponse oAuthLoginResponse(String token, boolean isNewUser, User user)
     {

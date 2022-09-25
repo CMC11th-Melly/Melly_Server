@@ -4,5 +4,6 @@ public enum GroupType {
     FAMILY,
     COMPANY,
     COUPLE,
-    FRIEND
+    FRIEND,
+    DEFAULT
 }

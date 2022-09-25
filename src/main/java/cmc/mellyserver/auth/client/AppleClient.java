@@ -16,6 +16,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,6 +31,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AppleClient implements Client{
@@ -43,8 +45,8 @@ public class AppleClient implements Client{
         ApplePublicKeyResponse response = webClient.get()
                 .uri("https://appleid.apple.com/auth/keys")
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.KAKAO_ACCESS)))
-                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
+                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.APPLE_ACCESS)))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new GlobalServerException()))
                 .bodyToMono(ApplePublicKeyResponse.class)
                 .block();
 
@@ -52,7 +54,8 @@ public class AppleClient implements Client{
             // jwt header 값 가져오고
             String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
-            Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), "UTF-8"), Map.class);
+            Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken),
+                                                          "UTF-8"), Map.class);
 
             // 지금 받아온 공개키 중에서 내가 가져온 id_token의 kid와 alg과 같은게 있다면 그 키를 사용
             ApplePublicKeyResponse.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
@@ -68,9 +71,12 @@ public class AppleClient implements Client{
             KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
+            log.info("애플 로그인 id_token 파싱성공");
             Claims body = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
 
-            System.out.println(body);
+
+            log.info("claim = {}",body);
+
             String sub = body.getSubject();
             String email = (String)body.get("email");
 
@@ -98,7 +104,8 @@ public class AppleClient implements Client{
         catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("apple 로그인 유저 없음!");
+
+        log.info("애플 인증 유저 없음!");
         return null;
 
     }

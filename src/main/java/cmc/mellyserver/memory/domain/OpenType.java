@@ -1,5 +1,10 @@
 package cmc.mellyserver.memory.domain;
 
 public enum OpenType {
-    ALL, GROUP
+    ALL,
+    FRIEND,
+    FAMILY,
+    COMPANY,
+    COUPLE,
+    DEFAULT
 }

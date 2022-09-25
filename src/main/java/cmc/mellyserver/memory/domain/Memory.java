@@ -1,6 +1,10 @@
 package cmc.mellyserver.memory.domain;
 
 import cmc.mellyserver.common.util.JpaBaseEntity;
+import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +24,24 @@ public class Memory extends JpaBaseEntity {
     // 1,2,3,4,5
     private int stars;
 
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
 
-//    @Enumerated(EnumType.STRING)
-//    private OpenType openType;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//
-//    @OneToMany(mappedBy = "memory")
-//    private List<MemoryImage> memoryImages = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_seq")
+    private User user;
+
+    private String keyword;
+
+    @Embedded
+    GroupInfo groupInfo;
+
+    private String title;
+    // TODO : 차후에 길이 지정
+    private String content;
+
+
+
+
 }
