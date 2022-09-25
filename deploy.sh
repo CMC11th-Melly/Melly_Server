@@ -20,5 +20,7 @@ fi
 
 echo "> $JAR_PATH 배포"
 nohup java -jar -Dspring.config.location=/home/ubuntu/melly/src/main/resources/application.yml $JAR_PATH > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -Dserver.tomcat.accesslog.enabled=true -Dserver.tomcat.basedir=/home/ubuntu -Dspring.config.location=/home/ubuntu/melly/src/main/resources/application.yml $JAR_PATH > /home/ubuntu/nohup.out 2>&1 --logging.file.path=/home/ubuntu/ &
+
 echo "> finished"
 exit 0
