@@ -18,9 +18,4 @@ public class Recommend {
     @Enumerated(EnumType.STRING)
     private RecommendPeople recommandPeople;
 
-    @Enumerated(EnumType.STRING)
-    private RecommendActivity recommandActivity;
-
-    @Enumerated(EnumType.STRING)
-    private  RecommendPlace recommendPlace;
 }
