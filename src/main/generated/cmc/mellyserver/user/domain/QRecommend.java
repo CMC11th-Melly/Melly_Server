@@ -19,11 +19,7 @@ public class QRecommend extends BeanPath<Recommend> {
 
     public static final QRecommend recommend = new QRecommend("recommend");
 
-    public final EnumPath<RecommendActivity> recommandActivity = createEnum("recommandActivity", RecommendActivity.class);
-
     public final EnumPath<RecommendPeople> recommandPeople = createEnum("recommandPeople", RecommendPeople.class);
-
-    public final EnumPath<RecommendPlace> recommendPlace = createEnum("recommendPlace", RecommendPlace.class);
 
     public QRecommend(String variable) {
         super(Recommend.class, forVariable(variable));
