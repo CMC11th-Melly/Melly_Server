@@ -41,7 +41,6 @@ public class AppleClient implements Client{
     @Override
     public User getUserData(String accessToken) {
 
-        // response를 가져오는 과정
         ApplePublicKeyResponse response = webClient.get()
                 .uri("https://appleid.apple.com/auth/keys")
                 .retrieve()
@@ -78,11 +77,9 @@ public class AppleClient implements Client{
             log.info("claim = {}",body);
 
             String sub = body.getSubject();
-            String email = (String)body.get("email");
 
             return User.builder()
                         .userId(sub)
-                         .email(email)
                         .provider(Provider.APPLE).build();
         }
         catch (NoSuchAlgorithmException e) {

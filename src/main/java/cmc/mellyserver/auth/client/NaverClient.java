@@ -22,12 +22,13 @@ public class NaverClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
+
         NaverUserResponse naverUserResponse = webClient.get()
                 .uri("https://openapi.naver.com/v1/nid/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.NAVER_ACCESS)))
-                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Internal Server error")))
                 .bodyToMono(NaverUserResponse.class)
                 .block();
 
@@ -36,6 +37,7 @@ public class NaverClient implements Client{
                 .provider(Provider.NAVER)
                 .nickname(naverUserResponse.getResponse().getNickname())
                 .roleType(RoleType.USER)
+                .password("NO_PASSWORD")
                 .email(naverUserResponse.getResponse().getEmail())
                 .build();
     }

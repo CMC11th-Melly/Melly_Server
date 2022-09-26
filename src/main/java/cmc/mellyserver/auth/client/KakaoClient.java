@@ -22,12 +22,13 @@ public class KakaoClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
+
         KakaoUserResponse kakaoUserResponse = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.KAKAO_ACCESS)))
-                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Initail Server error")))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new TokenValidFailedException("Internal Server error")))
                 .bodyToMono(KakaoUserResponse.class)
                 .block();
 

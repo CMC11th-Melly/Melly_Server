@@ -23,23 +23,22 @@ public class GoogleClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
+
         GoogleUserResponse googleUserResponse = webClient.get()
-
-
-
                 .uri("https://oauth2.googleapis.com/tokeninfo", builder -> builder.queryParam("id_token", accessToken).build())
-
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.GOOGLE_ACCESS)))
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
                 .bodyToMono(GoogleUserResponse.class)
                 .block();
+
         System.out.println("제발 " +googleUserResponse.getSub());
 
         return User.builder()
                 .userId(googleUserResponse.getSub())
                 .email(googleUserResponse.getEmail())
                 .provider(Provider.GOOGLE)
+                .password("NO_PASSWORD")
                 .roleType(RoleType.USER).build();
 
 
