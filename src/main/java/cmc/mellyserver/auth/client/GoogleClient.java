@@ -23,7 +23,7 @@ public class GoogleClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
-        Object googleUserResponse = webClient.get()
+        GoogleUserResponse googleUserResponse = webClient.get()
 
 
 
@@ -32,26 +32,17 @@ public class GoogleClient implements Client{
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.GOOGLE_ACCESS)))
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
-                .bodyToMono(Object.class)
+                .bodyToMono(GoogleUserResponse.class)
                 .block();
-        System.out.println(googleUserResponse);
-<<<<<<< HEAD
+        System.out.println("제발 " +googleUserResponse.getSub());
 
-//        return User.builder()
-=======
-//        return User.builder()
-    //    https://www.googleapis.com/oauth2/v1/userinfo
->>>>>>> feature/home
-//                .userId(googleUserResponse.getId())
-//                .email(googleUserResponse.getEmail())
-//                .provider(Provider.GOOGLE)
-//                .profileImage(googleUserResponse.getPicture())
-//                .roleType(RoleType.USER).build();
-<<<<<<< HEAD
-            return User.builder().userId("1L")
-                    .build();
-=======
-             return User.builder().userId("1L").build();
->>>>>>> feature/home
+        return User.builder()
+                .userId(googleUserResponse.getSub())
+                .email(googleUserResponse.getEmail())
+                .provider(Provider.GOOGLE)
+                .roleType(RoleType.USER).build();
+
+
+
     }
 }

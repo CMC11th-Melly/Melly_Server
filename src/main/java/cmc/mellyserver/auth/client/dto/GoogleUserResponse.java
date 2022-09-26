@@ -11,17 +11,8 @@ import org.springframework.lang.Nullable;
 @AllArgsConstructor
 public class GoogleUserResponse {
 
-    private String id;
+    private String sub;
     private String email;
-    @Nullable
-    private Boolean verified_email;
-    @Nullable
-    private String name;
-    @Nullable
-    private String given_name;
-    @Nullable
-    private String family_name;
-    private String picture;
-    @Nullable
-    private String locale;
+    private Boolean email_verified;
+
 }
