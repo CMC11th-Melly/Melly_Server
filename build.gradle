@@ -42,6 +42,9 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-security', version: '1.6.9'
 
+
+    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.10.Final'
+
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 

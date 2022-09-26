@@ -31,7 +31,7 @@ public class PlaceController {
     @GetMapping("/place/{placeId}")
     public void getDetailPlace(@PathVariable Long placeId, @AuthenticationPrincipal User user)
     {
-
+         placeService.getPlaceInfo(placeId,user);
     }
 
     /*

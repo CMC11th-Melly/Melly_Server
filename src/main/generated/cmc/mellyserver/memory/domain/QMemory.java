@@ -38,6 +38,10 @@ public class QMemory extends EntityPathBase<Memory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
+
+    public final EnumPath<OpenType> openType = createEnum("openType", OpenType.class);
+
     public final cmc.mellyserver.place.domain.QPlace place;
 
     public final NumberPath<Integer> stars = createNumber("stars", Integer.class);
@@ -65,7 +69,7 @@ public class QMemory extends EntityPathBase<Memory> {
     public QMemory(Class<? extends Memory> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.groupInfo = inits.isInitialized("groupInfo") ? new QGroupInfo(forProperty("groupInfo")) : null;
-        this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place"), inits.get("place")) : null;
+        this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

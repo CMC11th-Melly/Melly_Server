@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -37,9 +38,15 @@ public class Memory extends JpaBaseEntity {
     @Embedded
     GroupInfo groupInfo;
 
+    @Enumerated(EnumType.STRING)
+    private OpenType openType;
+
     private String title;
     // TODO : 차후에 길이 지정
     private String content;
+
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    private List<MemoryImage> memoryImages;
 
 
 
