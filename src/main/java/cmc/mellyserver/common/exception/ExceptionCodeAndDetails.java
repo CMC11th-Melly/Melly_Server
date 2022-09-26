@@ -31,7 +31,9 @@ public enum ExceptionCodeAndDetails {
     EXPIRED_TOKEN("1010", "JWT 토큰 기한이 만료됐습니다."),
 
     // HTTP Status : 403 Forbidden
-    FORBIDDEN_USER("1011","접근 권한이 없는 유저입니다.");
+    FORBIDDEN_USER("1011","접근 권한이 없는 유저입니다."),
+
+    NO_SUCH_PLACE("2000","해당하는 장소가 없습니다.");
 
 
     private final String code;
