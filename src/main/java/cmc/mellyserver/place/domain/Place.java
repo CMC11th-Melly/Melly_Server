@@ -5,6 +5,8 @@ import cmc.mellyserver.memory.domain.Memory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +22,17 @@ public class Place extends JpaBaseEntity {
     @Column(name = "place_id")
     private Long id;
 
-    @Embedded
-    @Column(name = "place_position")
-    private Position position;
+//    @Embedded
+//    @Column(name = "place_position")
+//    private Position position;
+
+    @Column
+    private Point location;
 
     @Column(name = "place_name")
     private String name;
 
+    private String placeImage;
     /*
     하나의 메모리에는 하나의 장소 설정 가능
     하나의 장소에는 여러 메모리들이 존재 가능

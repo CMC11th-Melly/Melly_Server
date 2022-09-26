@@ -18,8 +18,6 @@ public class QPlace extends EntityPathBase<Place> {
 
     private static final long serialVersionUID = 1889656163L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QPlace place = new QPlace("place");
 
     public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
@@ -32,31 +30,24 @@ public class QPlace extends EntityPathBase<Place> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final ComparablePath<org.locationtech.jts.geom.Point> location = createComparable("location", org.locationtech.jts.geom.Point.class);
+
     public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
 
-    public final QPosition position;
+    public final StringPath placeImage = createString("placeImage");
 
     public QPlace(String variable) {
-        this(Place.class, forVariable(variable), INITS);
+        super(Place.class, forVariable(variable));
     }
 
     public QPlace(Path<? extends Place> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QPlace(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QPlace(PathMetadata metadata, PathInits inits) {
-        this(Place.class, metadata, inits);
-    }
-
-    public QPlace(Class<? extends Place> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.position = inits.isInitialized("position") ? new QPosition(forProperty("position")) : null;
+        super(Place.class, metadata);
     }
 
 }
