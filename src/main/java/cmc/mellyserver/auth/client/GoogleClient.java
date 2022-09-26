@@ -8,12 +8,14 @@ import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class GoogleClient implements Client{
 
@@ -21,20 +23,22 @@ public class GoogleClient implements Client{
 
     @Override
     public User getUserData(String accessToken) {
-        GoogleUserResponse googleUserResponse = webClient.get()
+        Object googleUserResponse = webClient.get()
                 .uri("https://www.googleapis.com/oauth2/v1/userinfo", builder -> builder.queryParam("access_token", accessToken).build())
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new GlobalBadRequestException(ExceptionCodeAndDetails.GOOGLE_ACCESS)))
                 .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
-                .bodyToMono(GoogleUserResponse.class)
+                .bodyToMono(Object.class)
                 .block();
+        System.out.println(googleUserResponse);
 
-        return User.builder()
-                .userId(googleUserResponse.getId())
-                .email(googleUserResponse.getEmail())
-                .provider(Provider.GOOGLE)
-                .profileImage(googleUserResponse.getPicture())
-                .roleType(RoleType.USER).build();
-
+//        return User.builder()
+//                .userId(googleUserResponse.getId())
+//                .email(googleUserResponse.getEmail())
+//                .provider(Provider.GOOGLE)
+//                .profileImage(googleUserResponse.getPicture())
+//                .roleType(RoleType.USER).build();
+            return User.builder().userId("1L")
+                    .build();
     }
 }
