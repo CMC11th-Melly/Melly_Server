@@ -110,9 +110,9 @@ public class OAuthService {
     @Transactional
     public LoginResponse signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
-        log.info("보자 = {}",authRequestForOAuthSignup.getUserId());
+        log.info("보자 = {}",authRequestForOAuthSignup.getUid());
         // 일단 유저 찾고
-        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUserId()).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
+        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUid()).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
         // 있으면 업데이트 하고
         user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup());
         // 회원가입 완료 됐으니깐 토큰 생성
