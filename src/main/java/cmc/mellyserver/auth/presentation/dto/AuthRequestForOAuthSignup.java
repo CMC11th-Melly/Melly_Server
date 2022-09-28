@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuthRequestForOAuthSignup {
 
     @Schema(example = "소셜 아이디")
-    private String userId;
+    private String uid;
 
     @Schema(example = "모카")
     private String nickname;

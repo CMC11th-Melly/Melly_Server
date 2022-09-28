@@ -69,7 +69,7 @@ public class QMemory extends EntityPathBase<Memory> {
     public QMemory(Class<? extends Memory> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.groupInfo = inits.isInitialized("groupInfo") ? new QGroupInfo(forProperty("groupInfo")) : null;
-        this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place")) : null;
+        this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place"), inits.get("place")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

@@ -21,6 +21,7 @@ import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OAuthService {
@@ -62,9 +64,10 @@ public class OAuthService {
             case APPLE:
                 socialUser = appleClient.getUserData(authRequest.getAccessToken());
                 break;
-                default:
-                    socialUser = null;
-                    break;
+
+            default:
+                socialUser = null;
+                break;
 
         }
 
@@ -100,13 +103,14 @@ public class OAuthService {
 
     private String getToken(String userId)
     {
-        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, "100000000");
+        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, "20000");
         return accessToken.getToken();
     }
 
     @Transactional
     public LoginResponse signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
+        log.info("보자 = {}",authRequestForOAuthSignup.getUserId());
         // 일단 유저 찾고
         User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUserId()).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
         // 있으면 업데이트 하고

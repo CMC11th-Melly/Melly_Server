@@ -22,12 +22,12 @@ public class Place extends JpaBaseEntity {
     @Column(name = "place_id")
     private Long id;
 
-//    @Embedded
-//    @Column(name = "place_position")
-//    private Position position;
+    @Embedded
+    @Column(name = "place_position")
+    private Position position;
 
-    @Column
-    private Point location;
+//    @Column
+//    private Point location;
 
     @Column(name = "place_name")
     private String name;
