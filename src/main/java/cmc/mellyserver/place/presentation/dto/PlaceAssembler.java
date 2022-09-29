@@ -21,7 +21,7 @@ public class PlaceAssembler {
                 p.getId(),
                 p.getMemories().stream().filter(pm -> {
 
-                    if(groupType == null)
+                    if(groupType.equals(GroupType.ALL))
                     {
                         return pm.getUser().getUserId().equals(userId);
                     }

@@ -26,10 +26,10 @@ public class PlaceController {
     현재 지도 범위 내의 장소 데이터를 모두 불러옴
      */
     @GetMapping("/place/list")
-    public ResponseEntity<List<PlaceListReponseDto>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") String groupType)
+    public ResponseEntity<List<PlaceListReponseDto>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType)
     {
-        log.info("{}",user.getUsername());
-        List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), Enum.valueOf(GroupType.class,groupType));
+        log.info("인증 유저 id = {}",user.getUsername());
+        List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), groupType);
         return ResponseEntity.ok(placeList);
     }
 

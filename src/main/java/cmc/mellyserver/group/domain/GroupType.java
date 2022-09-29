@@ -5,5 +5,5 @@ public enum GroupType {
     COMPANY,
     COUPLE,
     FRIEND,
-    DEFAULT
+    ALL
 }
