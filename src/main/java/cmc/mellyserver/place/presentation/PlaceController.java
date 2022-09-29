@@ -1,5 +1,6 @@
 package cmc.mellyserver.place.presentation;
 
+import cmc.mellyserver.common.CommonResponse;
 import cmc.mellyserver.group.domain.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
 import cmc.mellyserver.place.domain.service.GetPlaceInfoDto;
@@ -26,11 +27,11 @@ public class PlaceController {
     현재 지도 범위 내의 장소 데이터를 모두 불러옴
      */
     @GetMapping("/place/list")
-    public ResponseEntity<List<PlaceListReponseDto>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType)
+    public ResponseEntity<CommonResponse<List<PlaceListReponseDto>>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType)
     {
         log.info("인증 유저 id = {}",user.getUsername());
         List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), groupType);
-        return ResponseEntity.ok(placeList);
+        return ResponseEntity.ok(new CommonResponse<>(200,"유저가 메모리 작성한 장소 조회",placeList));
     }
 
     // TODO : 처음에 전체 데이터를 땡겨오는게 좋은 지 아니면 매번 가져오는게 좋은지 판단 필요
