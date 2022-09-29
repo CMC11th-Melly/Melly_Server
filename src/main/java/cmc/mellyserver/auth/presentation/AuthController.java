@@ -92,7 +92,7 @@ public class AuthController {
 
     @Operation(summary = "유저 정보 조회")
     @GetMapping("/me")
-    public ResponseEntity<CommonResponse<AuthUserDataResponse>> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
+    public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
     {
         User userData = authService.getUserData(user.getUsername());
         return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
