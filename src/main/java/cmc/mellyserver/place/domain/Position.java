@@ -1,9 +1,6 @@
 package cmc.mellyserver.place.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
@@ -11,6 +8,7 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@EqualsAndHashCode
 public class Position {
 
     private Double lat;

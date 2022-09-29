@@ -7,7 +7,9 @@ import cmc.mellyserver.place.domain.Scrap;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,6 +34,13 @@ public class User extends JpaBaseEntity {
     private String nickname;
 
     private String profileImage;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "visited_place_table",
+            joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "visited_place") // 컬럼명 지정 (예외)
+    private Set<Long> visitedPlace = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

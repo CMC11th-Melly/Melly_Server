@@ -5,9 +5,8 @@ import cmc.mellyserver.group.domain.GroupType;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -15,6 +14,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
+@AllArgsConstructor
 public class Memory extends JpaBaseEntity {
 
     @Id
@@ -48,7 +49,15 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
     private List<MemoryImage> memoryImages;
 
-
+    public void setPlaceForMemory(Place place)
+    {
+        this.place = place;
+    }
+    public void setUser(User user)
+    {
+        this.user=  user;
+        user.getMemories().add(this);
+    }
 
 
 }

@@ -50,8 +50,7 @@ dependencies {
 
     // AWS
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
-    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
-    implementation 'org.codehaus.janino:janino:3.1.7'
+    implementation "ca.pjer:logback-awslogs-appender:1.6.0"
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

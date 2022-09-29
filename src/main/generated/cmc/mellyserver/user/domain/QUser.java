@@ -60,6 +60,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> userSeq = createNumber("userSeq", Long.class);
 
+    public final SetPath<Long, NumberPath<Long>> visitedPlace = this.<Long, NumberPath<Long>>createSet("visitedPlace", Long.class, NumberPath.class, PathInits.DIRECT2);
+
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);
     }

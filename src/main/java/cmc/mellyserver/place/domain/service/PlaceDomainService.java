@@ -56,10 +56,10 @@ public class PlaceDomainService {
                         ml.getKeyword(),
                         ml.getCreatedDate().toString()))
                 .collect(Collectors.toList());
-
+        //m.getOpenType().equals(OpenType.ALL)
         List<OtherMemoryDto> otherMemoryDtos = place.getMemories()
                 .stream()
-                .filter(m -> (!m.getUser().getUserId().equals(user.getUserId()) & m.getOpenType().equals(OpenType.ALL)))
+                .filter(m -> (!m.getUser().getUserId().equals(user.getUserId()) ))
                 .map(ml -> new OtherMemoryDto(ml.getGroupInfo().getGroupType(),
                         ml.getMemoryImages().stream().map(mi ->
                                 new MemoryImageDto(mi.getId(),

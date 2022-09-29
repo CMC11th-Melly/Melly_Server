@@ -2,9 +2,7 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.common.util.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
@@ -15,6 +13,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
+@AllArgsConstructor
 public class Place extends JpaBaseEntity {
 
     @Id
