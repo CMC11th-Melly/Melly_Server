@@ -38,7 +38,7 @@ public class AuthAssembler {
 
     public static CommonResponse authUserDataResponse(User user)
     {
-        return new CommonResponse(200,"인증 유저 정보",new AccessTokenUserData(user.getUserSeq(),
+        return new CommonResponse(200,"인증 유저 정보",new AuthmeWrappingDto(new AccessTokenUserData(user.getUserSeq(),
                 user.getUserId(),
                 user.getProvider(),
                 user.getEmail(),
@@ -46,7 +46,7 @@ public class AuthAssembler {
                 user.getProfileImage(),
                 user.getGender(),
                 user.getAgeGroup())
-                );
+                ));
     }
 
     public static  LoginResponse loginResponse(String accessToken,User user)
