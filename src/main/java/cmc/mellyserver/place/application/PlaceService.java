@@ -2,6 +2,7 @@ package cmc.mellyserver.place.application;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.group.domain.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
@@ -40,13 +41,13 @@ public class PlaceService {
      * 1. 일정 범위의 장소를 다 가져옴
      * 2. 여기서 중요한건 내가 쓴 메모리가 들어있는 장소만 가져오기
      */
-    public List<PlaceListReponseDto> getPlaceList(String userId, PlaceGroupCond placeGroupCond)
+    public List<PlaceListReponseDto> getPlaceList(String userId, GroupType groupType)
     {
         cmc.mellyserver.user.domain.User user = userRepository.findUserByUserId(userId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
         });
         List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(user);
-        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, placeGroupCond, userId);
+        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, userId);
     }
 
 //    @Transactional(readOnly = true)

@@ -1,5 +1,6 @@
 package cmc.mellyserver.place.presentation;
 
+import cmc.mellyserver.group.domain.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
 import cmc.mellyserver.place.domain.service.GetPlaceInfoDto;
 import cmc.mellyserver.place.presentation.dto.PlaceGroupCond;
@@ -9,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,9 +26,10 @@ public class PlaceController {
     현재 지도 범위 내의 장소 데이터를 모두 불러옴
      */
     @GetMapping("/place/list")
-    public ResponseEntity<List<PlaceListReponseDto>> getPlaceList(@AuthenticationPrincipal User user, PlaceGroupCond placeGroupCond)
+    public ResponseEntity<List<PlaceListReponseDto>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") String groupType)
     {
-        List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), placeGroupCond);
+        log.info("{}",user.getUsername());
+        List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), Enum.valueOf(GroupType.class,groupType));
         return ResponseEntity.ok(placeList);
     }
 
