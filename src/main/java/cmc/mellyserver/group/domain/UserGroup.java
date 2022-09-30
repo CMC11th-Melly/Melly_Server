@@ -1,7 +1,7 @@
 package cmc.mellyserver.group.domain;
 
-import cmc.mellyserver.common.util.JpaBaseEntity;
-import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import lombok.*;
 
 import javax.persistence.*;

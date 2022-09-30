@@ -2,12 +2,11 @@ package cmc.mellyserver.auth.client;
 
 
 import cmc.mellyserver.auth.client.dto.ApplePublicKeyResponse;
-import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
-import cmc.mellyserver.user.domain.RoleType;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -51,13 +50,12 @@ public class AppleClient implements Client{
                 .block();
 
         try {
-            // jwt header 값 가져오고
+
             String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
             Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken),
                                                           "UTF-8"), Map.class);
 
-            // 지금 받아온 공개키 중에서 내가 가져온 id_token의 kid와 alg과 같은게 있다면 그 키를 사용
             ApplePublicKeyResponse.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
                     .orElseThrow(() -> new GlobalServerException());
 
@@ -100,7 +98,6 @@ public class AppleClient implements Client{
             e.printStackTrace();
         }
 
-        log.info("애플 인증 유저 없음!");
         return null;
 
     }

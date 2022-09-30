@@ -1,4 +1,4 @@
-package cmc.mellyserver.memory.domain;
+package cmc.mellyserver.memory.domain.enums;
 
 public enum OpenType {
     ALL,

@@ -2,10 +2,6 @@ package cmc.mellyserver.user.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import cmc.mellyserver.scrap.domain.Scrap;
-import cmc.mellyserver.user.domain.enums.AgeGroup;
-import cmc.mellyserver.user.domain.enums.Gender;
-import cmc.mellyserver.user.domain.enums.RoleType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -26,16 +22,16 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
 
-    public final EnumPath<AgeGroup> ageGroup = createEnum("ageGroup", AgeGroup.class);
+    public final EnumPath<cmc.mellyserver.user.domain.enums.AgeGroup> ageGroup = createEnum("ageGroup", cmc.mellyserver.user.domain.enums.AgeGroup.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final StringPath email = createString("email");
 
-    public final EnumPath<Gender> gender = createEnum("gender", Gender.class);
+    public final EnumPath<cmc.mellyserver.user.domain.enums.Gender> gender = createEnum("gender", cmc.mellyserver.user.domain.enums.Gender.class);
 
     public final ListPath<cmc.mellyserver.group.domain.GroupAndUser, cmc.mellyserver.group.domain.QGroupAndUser> groupAndUsers = this.<cmc.mellyserver.group.domain.GroupAndUser, cmc.mellyserver.group.domain.QGroupAndUser>createList("groupAndUsers", cmc.mellyserver.group.domain.GroupAndUser.class, cmc.mellyserver.group.domain.QGroupAndUser.class, PathInits.DIRECT2);
 
@@ -54,9 +50,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final QRecommend recommend;
 
-    public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
+    public final EnumPath<cmc.mellyserver.user.domain.enums.RoleType> roleType = createEnum("roleType", cmc.mellyserver.user.domain.enums.RoleType.class);
 
-    public final ListPath<Scrap, cmc.mellyserver.place.domain.QScrap> scraps = this.<Scrap, cmc.mellyserver.place.domain.QScrap>createList("scraps", Scrap.class, cmc.mellyserver.place.domain.QScrap.class, PathInits.DIRECT2);
+    public final ListPath<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap> scraps = this.<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap>createList("scraps", cmc.mellyserver.scrap.domain.Scrap.class, cmc.mellyserver.scrap.domain.QScrap.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> storeCapacity = createNumber("storeCapacity", Double.class);
 

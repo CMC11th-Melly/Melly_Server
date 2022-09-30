@@ -1,6 +1,6 @@
 package cmc.mellyserver.memory.domain;
 
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

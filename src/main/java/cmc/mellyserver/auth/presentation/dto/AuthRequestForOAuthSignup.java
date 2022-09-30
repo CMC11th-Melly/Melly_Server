@@ -1,7 +1,7 @@
 package cmc.mellyserver.auth.presentation.dto;
 
-import cmc.mellyserver.user.domain.AgeGroup;
-import cmc.mellyserver.user.domain.Gender;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package cmc.mellyserver.place.domain;
+package cmc.mellyserver.scrap.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,13 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QScrap extends EntityPathBase<Scrap> {
 
-    private static final long serialVersionUID = 1892174893L;
+    private static final long serialVersionUID = -469387869L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QScrap scrap = new QScrap("scrap");
 
-    public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -32,9 +32,9 @@ public class QScrap extends EntityPathBase<Scrap> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final QPlace place;
+    public final cmc.mellyserver.place.domain.QPlace place;
 
-    public final EnumPath<ScrapType> scrapType = createEnum("scrapType", ScrapType.class);
+    public final EnumPath<cmc.mellyserver.place.domain.enums.ScrapType> scrapType = createEnum("scrapType", cmc.mellyserver.place.domain.enums.ScrapType.class);
 
     public final cmc.mellyserver.user.domain.QUser user;
 
@@ -56,7 +56,7 @@ public class QScrap extends EntityPathBase<Scrap> {
 
     public QScrap(Class<? extends Scrap> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.place = inits.isInitialized("place") ? new QPlace(forProperty("place"), inits.get("place")) : null;
+        this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place"), inits.get("place")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

@@ -16,14 +16,11 @@ import java.util.Map;
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
-    /*
-    인증 오류가 아닌, JWT 관련 오류는 이 필터에서 따로 잡아낸다.
-    이를 통해 JWT 만료 에러와 인증 에러를 따로 잡아낼 수 있다.
-     */
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
-            chain.doFilter(request, response); // go to 'JwtAuthenticationFilter'
+            chain.doFilter(request, response);
         } catch (JwtException ex) {
             setErrorResponse(request, response, ex);
         }
@@ -34,9 +31,9 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         final Map<String, Object> body = new HashMap<>();
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
         body.put("code", "1007");
         body.put("message", ex.getMessage());
-
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);

@@ -21,7 +21,7 @@ public class QGroupInfo extends BeanPath<GroupInfo> {
 
     public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
 
-    public final EnumPath<cmc.mellyserver.group.domain.GroupType> groupType = createEnum("groupType", cmc.mellyserver.group.domain.GroupType.class);
+    public final EnumPath<cmc.mellyserver.group.domain.enums.GroupType> groupType = createEnum("groupType", cmc.mellyserver.group.domain.enums.GroupType.class);
 
     public QGroupInfo(String variable) {
         super(GroupInfo.class, forVariable(variable));

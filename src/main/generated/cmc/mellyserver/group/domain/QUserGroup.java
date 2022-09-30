@@ -2,7 +2,6 @@ package cmc.mellyserver.group.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -21,7 +20,7 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public static final QUserGroup userGroup = new QUserGroup("userGroup");
 
-    public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -30,7 +29,7 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final StringPath groupName = createString("groupName");
 
-    public final EnumPath<GroupType> groupType = createEnum("groupType", GroupType.class);
+    public final EnumPath<cmc.mellyserver.group.domain.enums.GroupType> groupType = createEnum("groupType", cmc.mellyserver.group.domain.enums.GroupType.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

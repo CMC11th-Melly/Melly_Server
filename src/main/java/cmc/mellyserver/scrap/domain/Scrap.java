@@ -1,9 +1,10 @@
-package cmc.mellyserver.place.domain;
+package cmc.mellyserver.scrap.domain;
 
-import cmc.mellyserver.common.util.JpaBaseEntity;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

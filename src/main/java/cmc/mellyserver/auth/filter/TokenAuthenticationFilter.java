@@ -27,9 +27,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain)  throws ServletException, IOException {
 
+        // 1. Header에서 Authorization Token 값 파싱
         String tokenStr = HeaderUtil.getAccessToken(request);
 
-        // 클라이언트가 보낸 access Token 존재
         if(tokenStr != null)
         {
             // 레디스에 토큰 값 없음 -> 로그아웃 되지 않는 토큰
@@ -43,7 +43,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
             else{
-                log.info("로그아웃 된 엑세스 토큰!");
+                log.info("로그아웃 된 엑세스 토큰입니다.");
             }
         }
 

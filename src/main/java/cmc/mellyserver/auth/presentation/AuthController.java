@@ -5,7 +5,7 @@ import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
 import cmc.mellyserver.auth.presentation.dto.*;
 import cmc.mellyserver.auth.util.HeaderUtil;
-import cmc.mellyserver.common.CommonResponse;
+import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +82,7 @@ public class AuthController {
 
     @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +
                                                   "- 로그아웃 로직은 로그인한 유저가 사용할 수 있는 기능이므로 Header에 토큰 넣어주세요!" +
-                                                  "- 일반 로그인, 소셜 로그인 공통 사용 가")
+                                                  "- 일반 로그인, 소셜 로그인 공통 사용 가능")
     @DeleteMapping("/logout")
     public ResponseEntity<CommonResponse> emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
     {

@@ -1,4 +1,4 @@
-package cmc.mellyserver.place.domain.service;
+package cmc.mellyserver.place.domain.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -36,9 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/swagger*/**");
     }
 
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.util;
+package cmc.mellyserver.common.util.jpa;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

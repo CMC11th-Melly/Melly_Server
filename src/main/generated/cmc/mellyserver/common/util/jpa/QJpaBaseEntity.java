@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.util;
+package cmc.mellyserver.common.util.jpa;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QJpaBaseEntity extends EntityPathBase<JpaBaseEntity> {
 
-    private static final long serialVersionUID = -1160014169L;
+    private static final long serialVersionUID = -949742124L;
 
     public static final QJpaBaseEntity jpaBaseEntity = new QJpaBaseEntity("jpaBaseEntity");
 

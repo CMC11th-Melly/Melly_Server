@@ -6,7 +6,7 @@ import cmc.mellyserver.auth.presentation.dto.LoginResponse;
 import cmc.mellyserver.auth.presentation.dto.SignupResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
-import cmc.mellyserver.common.AWSS3UploadService;
+import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;

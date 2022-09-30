@@ -1,19 +1,22 @@
-package cmc.mellyserver.common.data;
+package cmc.mellyserver.common.dataload;
 
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.GroupRepository;
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.MemoryRepository;
-import cmc.mellyserver.memory.domain.OpenType;
+import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.domain.*;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

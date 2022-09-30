@@ -8,6 +8,6 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class TrendResponseWrapper {
+public class TrendPlaceResponseWrapper {
     private List<TrendResponseDto> trend;
 }

@@ -1,9 +1,8 @@
 package cmc.mellyserver.place.domain;
 
-import cmc.mellyserver.common.util.JpaBaseEntity;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
 import lombok.*;
-import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 import java.util.ArrayList;

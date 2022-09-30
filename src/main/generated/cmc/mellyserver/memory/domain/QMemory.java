@@ -2,7 +2,6 @@ package cmc.mellyserver.memory.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import cmc.mellyserver.memory.domain.enums.OpenType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -23,7 +22,7 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public static final QMemory memory = new QMemory("memory");
 
-    public final cmc.mellyserver.common.util.QJpaBaseEntity _super = new cmc.mellyserver.common.util.QJpaBaseEntity(this);
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
 
     public final StringPath content = createString("content");
 
@@ -41,7 +40,7 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 
-    public final EnumPath<OpenType> openType = createEnum("openType", OpenType.class);
+    public final EnumPath<cmc.mellyserver.memory.domain.enums.OpenType> openType = createEnum("openType", cmc.mellyserver.memory.domain.enums.OpenType.class);
 
     public final cmc.mellyserver.place.domain.QPlace place;
 

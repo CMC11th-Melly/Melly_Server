@@ -27,6 +27,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+
         final Map<String, Object> body = new HashMap<>();
 
         body.put("code", "1006");

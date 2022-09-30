@@ -1,4 +1,4 @@
-package cmc.mellyserver.health.dto;
+package cmc.mellyserver.healthcheck.dto;
 
 import lombok.AccessLevel;
 import lombok.Data;

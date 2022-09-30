@@ -1,11 +1,10 @@
 package cmc.mellyserver.auth.presentation.dto;
 
-import cmc.mellyserver.user.domain.AgeGroup;
-import cmc.mellyserver.user.domain.Gender;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

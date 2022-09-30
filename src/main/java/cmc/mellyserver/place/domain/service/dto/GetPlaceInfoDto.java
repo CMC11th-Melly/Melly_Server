@@ -1,6 +1,5 @@
-package cmc.mellyserver.place.domain.service;
+package cmc.mellyserver.place.domain.service.dto;
 
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

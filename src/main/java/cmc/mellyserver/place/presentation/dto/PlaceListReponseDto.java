@@ -1,6 +1,6 @@
 package cmc.mellyserver.place.presentation.dto;
 
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,7 +3,7 @@ package cmc.mellyserver.memory.application;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
-import cmc.mellyserver.place.domain.PlaceInfoRequest;
+import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
