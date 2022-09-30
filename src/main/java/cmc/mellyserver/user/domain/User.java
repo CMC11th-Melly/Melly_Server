@@ -1,9 +1,12 @@
 package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
-import cmc.mellyserver.common.util.JpaBaseEntity;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.place.domain.Scrap;
+import cmc.mellyserver.scrap.domain.Scrap;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;

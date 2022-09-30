@@ -1,8 +1,7 @@
 package cmc.mellyserver.auth.application.dto;
 
-import cmc.mellyserver.user.domain.AgeGroup;
-import cmc.mellyserver.user.domain.Gender;
-import io.swagger.v3.oas.annotations.media.Schema;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.lang.Nullable;

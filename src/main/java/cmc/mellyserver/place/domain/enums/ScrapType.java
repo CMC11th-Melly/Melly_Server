@@ -1,4 +1,4 @@
-package cmc.mellyserver.place.domain;
+package cmc.mellyserver.place.domain.enums;
 
 public enum ScrapType {
     FRIEND,

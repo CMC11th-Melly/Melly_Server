@@ -1,12 +1,11 @@
 package cmc.mellyserver.auth.client;
 
-import cmc.mellyserver.auth.client.dto.KakaoUserResponse;
 import cmc.mellyserver.auth.client.dto.NaverUserResponse;
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
-import cmc.mellyserver.user.domain.RoleType;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

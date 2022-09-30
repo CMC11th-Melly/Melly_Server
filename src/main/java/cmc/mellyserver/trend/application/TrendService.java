@@ -1,6 +1,6 @@
 package cmc.mellyserver.trend.application;
 
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;

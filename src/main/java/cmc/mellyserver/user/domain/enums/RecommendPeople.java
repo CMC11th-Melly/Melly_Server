@@ -1,4 +1,4 @@
-package cmc.mellyserver.user.domain;
+package cmc.mellyserver.user.domain.enums;
 
 public enum RecommendPeople {
     FAMILY,

@@ -1,16 +1,11 @@
 package cmc.mellyserver.recommend.presentation;
 
-import cmc.mellyserver.common.CommonResponse;
+import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.recommend.application.RecommendService;
 import cmc.mellyserver.recommend.application.dto.RecommendResponseDto;
 import cmc.mellyserver.recommend.presentation.dto.RecommendResponseWrapper;
-import cmc.mellyserver.trend.application.TrendService;
-import cmc.mellyserver.trend.application.dto.TrendResponseDto;
-import cmc.mellyserver.trend.presentation.dto.TrendResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

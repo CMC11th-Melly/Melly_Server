@@ -1,6 +1,5 @@
 package cmc.mellyserver.auth.presentation.dto;
 
-import cmc.mellyserver.user.domain.AgeGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

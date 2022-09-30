@@ -1,7 +1,7 @@
 package cmc.mellyserver.auth.token;
 
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
-import cmc.mellyserver.user.domain.RoleType;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +38,6 @@ public class JwtTokenProvider {
         return new AuthToken(id, roleType, expiryDate, key);
     }
 
-    public AuthToken createUserAppToken(String id) {
-        return createToken(id, RoleType.USER, expiry);
-    }
-
     public AuthToken convertAuthToken(String token) {
         return new AuthToken(token, key);
     }
@@ -60,7 +56,7 @@ public class JwtTokenProvider {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
-            // 여기서 무슨 값 집어넣는지가 중요하구나
+            // TODO : 현재 USER 판별은 UID로 진행
             User principal = new User(claims.getSubject(), "", authorities);
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);

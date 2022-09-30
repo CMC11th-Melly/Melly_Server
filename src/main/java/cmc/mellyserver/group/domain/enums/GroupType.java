@@ -1,4 +1,4 @@
-package cmc.mellyserver.group.domain;
+package cmc.mellyserver.group.domain.enums;
 
 public enum GroupType {
     FAMILY,

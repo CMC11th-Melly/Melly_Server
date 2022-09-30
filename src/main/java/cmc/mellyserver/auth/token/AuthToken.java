@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.token;
 
-import cmc.mellyserver.user.domain.RoleType;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

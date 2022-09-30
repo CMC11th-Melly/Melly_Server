@@ -1,4 +1,4 @@
-package cmc.mellyserver.common;
+package cmc.mellyserver.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

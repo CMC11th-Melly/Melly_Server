@@ -1,10 +1,9 @@
 package cmc.mellyserver.place.presentation;
 
-import cmc.mellyserver.common.CommonResponse;
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.common.response.CommonResponse;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
 import cmc.mellyserver.place.domain.service.GetPlaceInfoDto;
-import cmc.mellyserver.place.presentation.dto.PlaceGroupCond;
 import cmc.mellyserver.place.presentation.dto.PlaceListReponseDto;
 import cmc.mellyserver.place.presentation.dto.PlaceListWrappingDto;
 import lombok.RequiredArgsConstructor;

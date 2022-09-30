@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.data;
+package cmc.mellyserver.common.dataload;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

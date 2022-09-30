@@ -1,8 +1,7 @@
 package cmc.mellyserver.memory.domain;
 
-import cmc.mellyserver.common.util.JpaBaseEntity;
-import cmc.mellyserver.group.domain.GroupType;
-import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
 import lombok.*;

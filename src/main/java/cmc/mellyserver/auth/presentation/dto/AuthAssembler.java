@@ -1,8 +1,8 @@
 package cmc.mellyserver.auth.presentation.dto;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
-import cmc.mellyserver.common.CommonResponse;
-import cmc.mellyserver.user.domain.RoleType;
+import cmc.mellyserver.common.response.CommonResponse;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,6 +1,6 @@
-package cmc.mellyserver.health;
+package cmc.mellyserver.healthcheck;
 
-import cmc.mellyserver.health.dto.MultipartTestRequest;
+import cmc.mellyserver.healthcheck.dto.MultipartTestRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -2,14 +2,12 @@ package cmc.mellyserver.place.application;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
-import cmc.mellyserver.group.domain.GroupType;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
-import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.service.GetPlaceInfoDto;
 import cmc.mellyserver.place.domain.service.PlaceDomainService;
 import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
-import cmc.mellyserver.place.presentation.dto.PlaceGroupCond;
 import cmc.mellyserver.place.presentation.dto.PlaceListReponseDto;
 import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 
 @Service

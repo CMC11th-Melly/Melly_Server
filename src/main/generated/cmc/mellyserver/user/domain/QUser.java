@@ -2,6 +2,10 @@ package cmc.mellyserver.user.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import cmc.mellyserver.scrap.domain.Scrap;
+import cmc.mellyserver.user.domain.enums.AgeGroup;
+import cmc.mellyserver.user.domain.enums.Gender;
+import cmc.mellyserver.user.domain.enums.RoleType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -52,7 +56,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
 
-    public final ListPath<cmc.mellyserver.place.domain.Scrap, cmc.mellyserver.place.domain.QScrap> scraps = this.<cmc.mellyserver.place.domain.Scrap, cmc.mellyserver.place.domain.QScrap>createList("scraps", cmc.mellyserver.place.domain.Scrap.class, cmc.mellyserver.place.domain.QScrap.class, PathInits.DIRECT2);
+    public final ListPath<Scrap, cmc.mellyserver.place.domain.QScrap> scraps = this.<Scrap, cmc.mellyserver.place.domain.QScrap>createList("scraps", Scrap.class, cmc.mellyserver.place.domain.QScrap.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> storeCapacity = createNumber("storeCapacity", Double.class);
 

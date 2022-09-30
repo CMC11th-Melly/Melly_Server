@@ -1,4 +1,4 @@
-package cmc.mellyserver.auth.client;
+package cmc.mellyserver.auth.client.key;
 
 public class Key {
 

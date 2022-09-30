@@ -1,11 +1,8 @@
 package cmc.mellyserver.recommend.application.dto;
 
-import cmc.mellyserver.group.domain.GroupType;
-import cmc.mellyserver.trend.presentation.dto.TrendPlaceResponse;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.geolatte.geom.M;
-import org.springframework.security.core.parameters.P;
 
 import java.io.Serializable;
 

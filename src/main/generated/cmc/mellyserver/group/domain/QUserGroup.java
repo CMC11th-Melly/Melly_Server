@@ -2,6 +2,7 @@ package cmc.mellyserver.group.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import cmc.mellyserver.group.domain.enums.GroupType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
