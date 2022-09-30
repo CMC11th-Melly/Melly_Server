@@ -17,7 +17,16 @@ public class MemoryService {
     private final MemoryDomainService memoryDomainService;
     public Memory createMemory(String userId, PlaceInfoRequest placeInfoRequest)
     {
-        return memoryDomainService.createMemory(userId,placeInfoRequest.getLat(),placeInfoRequest.getLng(),placeInfoRequest.getTitle(),placeInfoRequest.getGroupType());
+        return memoryDomainService.createMemory(userId,
+                placeInfoRequest.getLat(),
+                placeInfoRequest.getLng(),
+                placeInfoRequest.getTitle(),
+                placeInfoRequest.getGroupType(),
+                placeInfoRequest.getContent(),
+                placeInfoRequest.getStar(),
+                placeInfoRequest.getOpenType(),
+                placeInfoRequest.getGroupId(),
+                placeInfoRequest.getKeyword());
     }
 
 }

@@ -1,17 +1,13 @@
-package cmc.mellyserver.place.presentation.dto;
+package cmc.mellyserver.auth.presentation.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlaceListWrappingDto
-{
-    private List<PlaceListReponseDto> place;
+public class AuthmeWrappingDto {
+    private AccessTokenUserData user;
 }

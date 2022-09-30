@@ -21,4 +21,14 @@ public class MemoryImage {
     @ManyToOne
     @JoinColumn(name = "memory_id")
     private Memory memory;
+
+    public void setMemory(Memory memory)
+    {
+        this.memory = memory;
+    }
+
+    public MemoryImage(String imagePath)
+    {
+        this.imagePath = imagePath;
+    }
 }

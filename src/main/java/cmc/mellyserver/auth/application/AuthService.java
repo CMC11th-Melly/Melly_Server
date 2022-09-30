@@ -52,8 +52,8 @@ public class AuthService {
     public LoginResponse login(String email, String password)
     {
         User user = userRepository.findUserByEmail(email).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);});
-
-        if(!passwordEncoder.matches(password, user.getPassword()))
+        // !passwordEncoder.matches(password, user.getPassword())
+        if(!password.matches(user.getPassword()))
         {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }

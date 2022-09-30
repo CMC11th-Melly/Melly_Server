@@ -2,9 +2,8 @@ package cmc.mellyserver.group.domain;
 
 import cmc.mellyserver.common.util.JpaBaseEntity;
 import cmc.mellyserver.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@AllArgsConstructor
 public class UserGroup extends JpaBaseEntity {
 
     @Id
@@ -27,9 +27,23 @@ public class UserGroup extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
 
-    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
+    @Builder
+    public UserGroup(String groupName, String inviteLink,GroupType groupType)
+    {
+        this.groupName = groupName;
+        this.inviteLink = inviteLink;
+        this.groupType =groupType;
+    }
+
+
+    public void setGroupUser(GroupAndUser groupUser)
+    {
+        groupAndUsers.add(groupUser);
+        groupUser.setGroup(this);
+    }
 
 
 

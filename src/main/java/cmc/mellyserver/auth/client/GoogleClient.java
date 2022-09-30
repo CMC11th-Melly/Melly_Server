@@ -32,11 +32,8 @@ public class GoogleClient implements Client{
                 .bodyToMono(GoogleUserResponse.class)
                 .block();
 
-        System.out.println("제발 " +googleUserResponse.getSub());
-
         return User.builder()
-                .userId(googleUserResponse.getSub())
-                .email(googleUserResponse.getEmail())
+                .uid(googleUserResponse.getSub())
                 .provider(Provider.GOOGLE)
                 .password("NO_PASSWORD")
                 .roleType(RoleType.USER).build();

@@ -7,6 +7,7 @@ import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
+import cmc.mellyserver.user.domain.RoleType;
 import cmc.mellyserver.user.domain.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -70,17 +71,14 @@ public class AppleClient implements Client{
             KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            log.info("애플 로그인 id_token 파싱성공");
             Claims body = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
 
-
-            log.info("claim = {}",body);
-
-            String sub = body.getSubject();
-
             return User.builder()
-                        .userId(sub)
-                        .provider(Provider.APPLE).build();
+                        .uid(body.getSubject())
+                        .password("NO_PASSWORD")
+                        .provider(Provider.APPLE)
+                        .roleType(RoleType.USER)
+                        .build();
         }
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace(); }

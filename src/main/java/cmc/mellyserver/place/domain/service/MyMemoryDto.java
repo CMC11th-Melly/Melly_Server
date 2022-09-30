@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyMemoryDto {
+    private Long memoryId;
     private GroupType groupType;
     private List<MemoryImageDto> memoryImages;
     private String title;

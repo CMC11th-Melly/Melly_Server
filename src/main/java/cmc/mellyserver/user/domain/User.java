@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
 @AllArgsConstructor
 public class User extends JpaBaseEntity {
 
@@ -75,5 +74,28 @@ public class User extends JpaBaseEntity {
         this.gender = gender;
         this.profileImage = profileImage;
         this.ageGroup = ageGroup;
+    }
+
+
+    public User(String uid, Provider provider,RoleType roleType,String password)
+    {
+        this.userId  = uid;
+        this.provider = provider;
+        this.roleType = roleType;
+        this.password = password;
+    }
+
+    @Builder
+    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String uid,Provider provider,String nickname)
+    {
+        this.email = email;
+        this.password = password;
+        this.roleType = roleType;
+        this.profileImage = profileImage;
+        this.ageGroup = ageGroup;
+        this.gender =gender;
+        this.userId = uid;
+        this.provider = provider;
+        this.nickname = nickname;
     }
 }

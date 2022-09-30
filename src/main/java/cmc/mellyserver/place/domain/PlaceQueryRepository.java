@@ -25,6 +25,22 @@ public class PlaceQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
+    public List<Place> getTrendingPlace(List<Long> placeIds)
+    {
+        return query.select(place)
+                .from(place)
+                .where(place.id.in(placeIds))
+                .fetch();
+    }
+
+    public List<Place> getRecommendPlace(List<Long> placeIds)
+    {
+        return query.select(place)
+                .from(place)
+                .where(place.id.in(placeIds))
+                .fetch();
+    }
+
 
     // 그 유저의 메모리가 하나라도 있는 장소
     public List<Place> getPlaceUserMemoryExist(User user)
