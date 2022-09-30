@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class OtherMemoryDto {
+    private Long memoryId;
     private GroupType groupType;
     private List<MemoryImageDto> memoryImages;
     private String title;

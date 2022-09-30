@@ -8,13 +8,13 @@ import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
 @AllArgsConstructor
 public class Memory extends JpaBaseEntity {
 
@@ -46,8 +46,8 @@ public class Memory extends JpaBaseEntity {
     // TODO : 차후에 길이 지정
     private String content;
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
-    private List<MemoryImage> memoryImages;
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    private List<MemoryImage> memoryImages = new ArrayList<>();
 
     public void setPlaceForMemory(Place place)
     {
@@ -59,5 +59,19 @@ public class Memory extends JpaBaseEntity {
         user.getMemories().add(this);
     }
 
+    public void setMemoryImages(MemoryImage memoryImages)
+    {
+        this.memoryImages.add(memoryImages);
+        memoryImages.setMemory(this);
+    }
 
+    @Builder
+    public Memory(int stars, String keyword, GroupInfo groupInfo, OpenType openType, String title, String content) {
+        this.stars = stars;
+        this.keyword = keyword;
+        this.groupInfo = groupInfo;
+        this.openType = openType;
+        this.title = title;
+        this.content = content;
+    }
 }

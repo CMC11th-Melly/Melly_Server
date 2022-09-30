@@ -35,20 +35,10 @@ public class PlaceController {
         return ResponseEntity.ok(new CommonResponse<>(200,"유저가 메모리 작성한 장소 조회",new PlaceListWrappingDto(placeList)));
     }
 
-    // TODO : 처음에 전체 데이터를 땡겨오는게 좋은 지 아니면 매번 가져오는게 좋은지 판단 필요
     @GetMapping("/place/{placeId}")
     public ResponseEntity<GetPlaceInfoDto> getDetailPlace(@PathVariable Long placeId, @AuthenticationPrincipal User user)
     {
          return ResponseEntity.ok(placeService.getPlaceInfo(placeId,user));
-    }
-
-    /*
-    넓은 범위 내의 장소 위도 경도 값과 ID 값을 불러옴
-     */
-    @GetMapping("/place")
-    public void getPlaceInBoundary()
-    {
-
     }
 
 

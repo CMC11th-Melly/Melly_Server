@@ -1,14 +1,12 @@
 package cmc.mellyserver.group.domain;
 
 import cmc.mellyserver.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class GroupAndUser {
 
@@ -24,4 +22,15 @@ public class GroupAndUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groups_id")
     private UserGroup group;
+
+    public void setGroup(UserGroup group)
+    {
+        this.group = group;
+    }
+
+    public void setUser(User user)
+    {
+        this.user= user;
+        user.getGroupAndUsers().add(this);
+    }
 }

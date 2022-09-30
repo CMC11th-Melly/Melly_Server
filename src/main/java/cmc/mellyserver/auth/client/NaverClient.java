@@ -33,12 +33,10 @@ public class NaverClient implements Client{
                 .block();
 
         return User.builder()
-                .userId(naverUserResponse.getResponse().getId())
+                .uid(naverUserResponse.getResponse().getId())
                 .provider(Provider.NAVER)
-                .nickname(naverUserResponse.getResponse().getNickname())
                 .roleType(RoleType.USER)
                 .password("NO_PASSWORD")
-                .email(naverUserResponse.getResponse().getEmail())
                 .build();
     }
 }

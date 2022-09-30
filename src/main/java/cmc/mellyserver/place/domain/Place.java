@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
 @AllArgsConstructor
 public class Place extends JpaBaseEntity {
 
@@ -40,4 +39,11 @@ public class Place extends JpaBaseEntity {
      */
     @OneToMany(mappedBy = "place")
     private List<Memory> memories = new ArrayList<>();
+
+    @Builder
+    public Place(Position position, String name, String placeImage) {
+        this.position = position;
+        this.name = name;
+        this.placeImage = placeImage;
+    }
 }

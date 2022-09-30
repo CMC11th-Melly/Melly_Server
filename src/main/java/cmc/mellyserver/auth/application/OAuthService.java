@@ -88,7 +88,7 @@ public class OAuthService {
                 return new OAuthLoginResponseDto(accessToken,false,user.get());
             }
             else{
-                return OAuthLoginResponseDto.builder().isNewUser(true).user(User.builder().userId(socialUser.getUserId()).build()).build();
+                return OAuthLoginResponseDto.builder().isNewUser(true).user(User.builder().uid(socialUser.getUserId()).build()).build();
             }
         }
        // 새로운 유저라면 아직 추가정보 기입 안한 상태 -> isNewUser가 true라면, 딴거 다 필요없고 isNewUser만 있으면 됨
@@ -97,7 +97,7 @@ public class OAuthService {
 
         userRepository.save(socialUser);
 
-        return OAuthLoginResponseDto.builder().isNewUser(true).user(User.builder().userId(socialUser.getUserId()).build()).build();
+        return OAuthLoginResponseDto.builder().isNewUser(true).user(User.builder().uid(socialUser.getUserId()).build()).build();
 
     }
 

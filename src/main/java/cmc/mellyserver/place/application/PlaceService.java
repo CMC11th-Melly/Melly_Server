@@ -27,9 +27,7 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceQueryRepository placeQueryRepository;
-    private final PlaceRepository placeRepository;
     private final PlaceDomainService placeDomainService;
-    private final EntityManager em;
     private final UserRepository userRepository;
 
     public GetPlaceInfoDto getPlaceInfo(Long placeId, User user)
@@ -37,10 +35,7 @@ public class PlaceService {
         return placeDomainService.getPlaceInfo(placeId, user.getUsername());
     }
 
-    /**
-     * 1. 일정 범위의 장소를 다 가져옴
-     * 2. 여기서 중요한건 내가 쓴 메모리가 들어있는 장소만 가져오기
-     */
+
     public List<PlaceListReponseDto> getPlaceList(String userId, GroupType groupType)
     {
         cmc.mellyserver.user.domain.User user = userRepository.findUserByUserId(userId).orElseThrow(() -> {
@@ -49,6 +44,12 @@ public class PlaceService {
         List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(user);
         return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, userId);
     }
+
+
+
+
+
+
 
 //    @Transactional(readOnly = true)
 //    public List<Place> getPlaceList(Double wlatitude, Double wlongitude, Double elatitude, Double elongitude)

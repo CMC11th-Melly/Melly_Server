@@ -33,7 +33,7 @@ public class KakaoClient implements Client{
                 .block();
 
         return User.builder()
-                .userId(String.valueOf(kakaoUserResponse.getId()))
+                .uid(String.valueOf(kakaoUserResponse.getId()))
                 .provider(Provider.KAKAO)
                 .roleType(RoleType.USER)
                 .password("NO_PASSWORD")
