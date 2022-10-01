@@ -1,4 +1,4 @@
-name: Melly BE CI
+name: KIYO CI
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
   pull_request:
     branches:
       - 'develop'
-
 env:
   S3_BUCKET_NAME: melly
   PROJECT_NAME: melly
@@ -31,12 +30,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-              ${{ runner.os }}-gradle-
-
+            ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
@@ -51,34 +49,12 @@ jobs:
         id: current-time
         with:
           format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"
+          utcOffset: "+9:00"
 
 
       - name: Show Current Time
         run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
         shell: bash
-
-#      - name: Generate deployment package
-#        run: |
-#          mkdir -p deploy
-#          cp build/libs/mellyServer-0.0.1-SNAPSHOT.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
-#          cp Procfile deploy/Procfile
-#          cp -r .ebextensions deploy/.ebextensions
-#          cp -r .platform deploy/.platform
-#          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
-#
-#      - name: Beanstalk Deploy
-#        uses: einaregilsson/beanstalk-deploy@v20
-#        with:
-#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          application_name: melly
-#          environment_name: Melly-env
-#          version_label: Github Action-${{steps.current-time.outputs.formattedTime}}
-#          region: ap-northeast-2
-#          deployment_package: deploy/deploy.zip
-#          use_existing_version_if_available: true
-
 
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip .
@@ -96,4 +72,3 @@ jobs:
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name melly-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name melly-develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
-
