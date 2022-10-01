@@ -53,7 +53,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 시에 닉네임 중복이 있는지 체크한다.")
+    @DisplayName("회원가입 시에 닉네임 중복이 있는지 체크한다")
     void checkDuplicatedNickname()
     {
         given(userRepository.findUserByNickname(any())).willReturn(Optional.of(User.builder().build()));
