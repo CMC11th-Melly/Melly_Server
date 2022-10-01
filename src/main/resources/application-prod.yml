@@ -7,7 +7,7 @@ spring:
     host: 127.0.0.1
     port: 6379
   datasource:
-    url: jdbc:mysql://${rds.host}/${rds.db}?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://${rds.hostname}/${rds.database}?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: ${rds.username}
     password: ${rds.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -47,5 +47,5 @@ cloud:
     s3:
       bucket: mellyimagestorage
     credentials:
-      access-key: ${s3.accesskey}
-      secret-key: ${s3.secretkey}
+      access-key: ${s3.access}
+      secret-key: ${s3.secret}
