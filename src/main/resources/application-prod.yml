@@ -46,7 +46,7 @@ cloud:
     stack:
       auto: false
     s3:
-      bucket: mellyimage
+      bucket: mellyimagestorage
     credentials:
       access-key: ${s3.accesskey}
       secret-key: ${s3.secretkey}
