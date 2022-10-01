@@ -9,6 +9,9 @@ on:
     branches:
       - 'develop'
 
+env:
+  S3_BUCKET_NAME: melly
+  PROJECT_NAME: melly
 
 jobs:
   build:
