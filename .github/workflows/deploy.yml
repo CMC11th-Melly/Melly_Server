@@ -24,15 +24,15 @@ jobs:
         with:
           java-version: 11
 
-#      - name: Gradle Caching
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#              ~/.gradle/caches
-#              ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#          restore-keys: |
-#              ${{ runner.os }}-gradle-
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -47,8 +47,8 @@ jobs:
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+9:00"
+          format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능(MomentJS format syntax)
+          utcOffset: "+09:00" # 한국 시간에 맞추기 위함
 
 
       - name: Show Current Time
@@ -57,12 +57,12 @@ jobs:
 
       - name: Generate deployment package
         run: |
-            mkdir -p deploy
-            cp build/libs/mellyServer-0.0.1-SNAPSHOT.jar deploy/application.jar
-            cp Procfile deploy/Procfile
-            cp -r .ebextensions deploy/.ebextensions
-            cp -r .platform deploy/.platform
-            cd deploy && zip -r deploy.zip .
+          mkdir -p deploy
+          cp build/libs/mellyServer-0.0.1-SNAPSHOT.jar deploy/application.jar # 빌드 완료 시 jar 파일명을 application.jar로 변경
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
 
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v20
@@ -71,7 +71,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: melly
           environment_name: Melly-env
-          version_label: github-action-$
+          version_label: Github Action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           use_existing_version_if_available: true
