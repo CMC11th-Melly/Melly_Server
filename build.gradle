@@ -15,6 +15,10 @@ configurations {
     }
 }
 
+jar {
+    enabled = false
+}
+
 jacoco {
     // JaCoCo 버전
     toolVersion = '0.8.5'
