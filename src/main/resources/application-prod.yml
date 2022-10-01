@@ -12,7 +12,6 @@ spring:
     password: ${rds.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
     hibernate:
       ddl-auto: create-drop
     properties:
