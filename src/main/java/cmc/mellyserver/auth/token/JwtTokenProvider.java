@@ -4,6 +4,8 @@ import cmc.mellyserver.auth.exception.TokenValidFailedException;
 import cmc.mellyserver.user.domain.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;

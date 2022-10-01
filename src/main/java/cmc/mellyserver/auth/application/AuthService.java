@@ -37,7 +37,6 @@ public class AuthService {
     private final RedisTemplate redisTemplate;
     private final AWSS3UploadService uploadService;
 
-
     public SignupResponse signup(AuthRequestForSignupDto authRequestForSignupDto)
     {
         checkDuplicatedEmail(authRequestForSignupDto.getEmail());

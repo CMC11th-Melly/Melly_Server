@@ -111,6 +111,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //테스트에서 lombok 사용
     testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }

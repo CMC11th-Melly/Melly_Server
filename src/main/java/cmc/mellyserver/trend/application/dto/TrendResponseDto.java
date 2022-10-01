@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class TrendResponseDto implements Serializable {
     public TrendResponseDto(Long placeId,String placeImage, GroupType placeCategory,Boolean isScraped,String placeName,Long memoryId,String memoryImage, String title, String content)
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,isScraped,placeName);
-        this.memoryInfo = new MemoryInfo(memoryId,memoryImage, title,content);
+        this.memoryInfo = new MemoryInfo(memoryId,memoryImage, title,content,5,List.of("keyword1","keyword2"));
     }
 
     @Data
@@ -42,13 +43,17 @@ public class TrendResponseDto implements Serializable {
         private String memoryImage;
         private String title;
         private String content;
+        private Integer stars;
+        private List<String> keywords;
 
-        public MemoryInfo(Long memoryId,String memoryImage, String title, String content)
+        public MemoryInfo(Long memoryId,String memoryImage, String title, String content,Integer stars, List<String> keywords)
         {
             this.memoryId = memoryId;
             this.memoryImage = memoryImage;
             this.title = title;
             this.content = content;
+            this.stars =stars;
+            this.keywords = keywords;
         }
     }
 
