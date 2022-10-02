@@ -13,10 +13,10 @@ public class TrendResponseDto implements Serializable {
     private PlaceInfo placeInfo;
     private MemoryInfo memoryInfo;
 
-    public TrendResponseDto(Long placeId,String placeImage, GroupType placeCategory,Boolean isScraped,String placeName,Long memoryId,String memoryImage, String title, String content,String groupName,Integer stars)
+    public TrendResponseDto(Long placeId,String placeImage, GroupType placeCategory,Boolean isScraped,String placeName,Long memoryId,List<String> memoryImages, String title, String content,String groupName,Integer stars)
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,isScraped,placeName);
-        this.memoryInfo = new MemoryInfo(memoryId,memoryImage, title,content,groupName,stars,List.of("최고에요","재밌어요"));
+        this.memoryInfo = new MemoryInfo(memoryId,memoryImages, title,content,groupName,stars,List.of("최고에요","재밌어요"));
     }
 
     @Data
@@ -40,17 +40,17 @@ public class TrendResponseDto implements Serializable {
     @Data
     static class MemoryInfo implements Serializable{
         private Long memoryId;
-        private String memoryImage;
+        private List<String> memoryImages;
         private String title;
         private String content;
         private String groupName;
         private Integer stars;
         private List<String> keywords;
 
-        public MemoryInfo(Long memoryId,String memoryImage, String title, String content,String groupName,Integer stars, List<String> keywords)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Integer stars, List<String> keywords)
         {
             this.memoryId = memoryId;
-            this.memoryImage = memoryImage;
+            this.memoryImages = memoryImages;
             this.title = title;
             this.content = content;
             this.groupName = groupName;

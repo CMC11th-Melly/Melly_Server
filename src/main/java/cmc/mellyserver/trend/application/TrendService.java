@@ -30,7 +30,7 @@ public class TrendService {
                         false,
                         t.getName(),
                         t.getMemories().get(0).getId(),
-                        t.getMemories().get(0).getMemoryImages().get(0).getImagePath(),
+                        t.getMemories().get(0).getMemoryImages().stream().map(tm -> tm.getImagePath()).collect(Collectors.toList()),
                         t.getMemories().get(0).getTitle(),
                         t.getMemories().get(0).getContent(),
                         groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName(),
