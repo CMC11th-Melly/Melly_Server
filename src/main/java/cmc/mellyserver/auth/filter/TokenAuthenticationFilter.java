@@ -27,7 +27,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain)  throws ServletException, IOException {
 
-        // 1. Header에서 Authorization Token 값 파싱
+
         String tokenStr = HeaderUtil.getAccessToken(request);
 
         if(tokenStr != null)
