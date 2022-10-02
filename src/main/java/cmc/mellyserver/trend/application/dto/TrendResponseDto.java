@@ -13,10 +13,10 @@ public class TrendResponseDto implements Serializable {
     private PlaceInfo placeInfo;
     private MemoryInfo memoryInfo;
 
-    public TrendResponseDto(Long placeId,String placeImage, GroupType placeCategory,Boolean isScraped,String placeName,Long memoryId,String memoryImage, String title, String content)
+    public TrendResponseDto(Long placeId,String placeImage, GroupType placeCategory,Boolean isScraped,String placeName,Long memoryId,String memoryImage, String title, String content,String groupName,Integer stars)
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,isScraped,placeName);
-        this.memoryInfo = new MemoryInfo(memoryId,memoryImage, title,content,5,List.of("keyword1","keyword2"));
+        this.memoryInfo = new MemoryInfo(memoryId,memoryImage, title,content,groupName,stars,List.of("최고에요","재밌어요"));
     }
 
     @Data
@@ -43,15 +43,17 @@ public class TrendResponseDto implements Serializable {
         private String memoryImage;
         private String title;
         private String content;
+        private String groupName;
         private Integer stars;
         private List<String> keywords;
 
-        public MemoryInfo(Long memoryId,String memoryImage, String title, String content,Integer stars, List<String> keywords)
+        public MemoryInfo(Long memoryId,String memoryImage, String title, String content,String groupName,Integer stars, List<String> keywords)
         {
             this.memoryId = memoryId;
             this.memoryImage = memoryImage;
             this.title = title;
             this.content = content;
+            this.groupName = groupName;
             this.stars =stars;
             this.keywords = keywords;
         }

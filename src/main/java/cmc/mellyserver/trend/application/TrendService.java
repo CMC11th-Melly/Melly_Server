@@ -1,5 +1,6 @@
 package cmc.mellyserver.trend.application;
 
+import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class TrendService {
 
     private final PlaceRepository placeRepository;
+    private final GroupRepository groupRepository;
     private final PlaceQueryRepository placeQueryRepository;
     public List<TrendResponseDto> getTrend()
     {
@@ -30,7 +32,9 @@ public class TrendService {
                         t.getMemories().get(0).getId(),
                         t.getMemories().get(0).getMemoryImages().get(0).getImagePath(),
                         t.getMemories().get(0).getTitle(),
-                        t.getMemories().get(0).getContent()))
+                        t.getMemories().get(0).getContent(),
+                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName(),
+                        t.getMemories().get(0).getStars()))
                 .collect(Collectors.toList());
     }
 }
