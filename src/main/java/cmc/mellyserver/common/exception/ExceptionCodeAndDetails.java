@@ -33,8 +33,9 @@ public enum ExceptionCodeAndDetails {
     // HTTP Status : 403 Forbidden
     FORBIDDEN_USER("1011","접근 권한이 없는 유저입니다."),
 
-    NO_SUCH_PLACE("2000","해당하는 장소가 없습니다.");
-
+    NO_SUCH_PLACE("2000","해당하는 장소가 없습니다."),
+    DUPLICATE_SCRAP("2001","중복 스크랩 할 수 없습니다."),
+    NOT_EXIST_SCRAP("2002","스크랩 취소할 수 없습니다.");
 
     private final String code;
     private final String message;

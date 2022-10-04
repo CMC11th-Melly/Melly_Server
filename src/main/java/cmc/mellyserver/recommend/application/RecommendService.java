@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecommendService {
 
-    private final PlaceRepository placeRepository;
+
     private final GroupRepository groupRepository;
     private final PlaceQueryRepository placeQueryRepository;
     public List<RecommendResponseDto> getRecommend()

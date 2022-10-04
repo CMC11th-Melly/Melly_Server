@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemoryService {
 
-    private final MemoryRepository memoryRepository;
+
     private final MemoryDomainService memoryDomainService;
     public Memory createMemory(String userId, PlaceInfoRequest placeInfoRequest)
     {
