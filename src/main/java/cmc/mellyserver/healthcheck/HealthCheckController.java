@@ -1,17 +1,33 @@
 package cmc.mellyserver.healthcheck;
 
+import cmc.mellyserver.common.exception.GlobalServerException;
+import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.healthcheck.dto.MultipartTestRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class HealthCheckController {
+
+    private final AWSS3UploadService uploadService;
+
 
     @Operation(summary = "헬스 체크용 API")
     @GetMapping("/health")
@@ -29,11 +45,51 @@ public class HealthCheckController {
 
     }
 
+
+
     @Operation(summary = "멀티파트 통신 테스트")
     @PostMapping("/imageTest")
-    public String multipartTest(MultipartTestRequest multipartTestRequest)
+    public ResponseEntity<List<String>> multipartTest(MultipartTestRequest multipartTestRequest)
     {
-        String originalFilename = multipartTestRequest.getImage().getOriginalFilename();
-        return "멀티 파트 파일 전송! " + originalFilename;
+        List<String> multipartFileNames = getMultipartFileNames(multipartTestRequest.getImage());
+        return ResponseEntity.ok(multipartFileNames);
     }
+
+    private List<String> getMultipartFileNames(List<MultipartFile> multipartFiles) {
+
+        if(multipartFiles != null)
+        {
+            List<String> fileNameList = new ArrayList<>();
+
+            multipartFiles.forEach(file->{
+                String fileName = createFileName(file.getOriginalFilename());
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(file.getSize());
+                objectMetadata.setContentType(file.getContentType());
+
+                try(InputStream inputStream = file.getInputStream()) {
+                    uploadService.uploadFile(inputStream,objectMetadata,fileName);
+                } catch(IOException e) {
+                    throw new GlobalServerException();
+                }
+                fileNameList.add(uploadService.getFileUrl(fileName));
+            });
+            return fileNameList;
+        }
+        return null;
+    }
+
+    private String createFileName(String fileName) {
+        return "user1/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
+    // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
+    private String getFileExtension(String fileName) {
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("잘못된 형식 입니다.");
+        }
+    }
+
 }
