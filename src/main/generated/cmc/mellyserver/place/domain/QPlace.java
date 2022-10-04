@@ -40,6 +40,8 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final QPosition position;
 
+    public final ListPath<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap> scraps = this.<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap>createList("scraps", cmc.mellyserver.scrap.domain.Scrap.class, cmc.mellyserver.scrap.domain.QScrap.class, PathInits.DIRECT2);
+
     public QPlace(String variable) {
         this(Place.class, forVariable(variable), INITS);
     }

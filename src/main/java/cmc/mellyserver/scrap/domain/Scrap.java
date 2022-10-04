@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,15 +23,48 @@ public class Scrap extends JpaBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")
-    private User user;  // 누가
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
-    private Place place; // 어떤 장소를 스크랩?
+    private Place place;
 
     @Enumerated(EnumType.STRING)
     private ScrapType scrapType;
 
-    // TODO : 장소와 관련된 사진을 추가할 수 있는지 확인하기
+    public Scrap(ScrapType scrapType)
+    {
+        this.scrapType = scrapType;
+    }
 
+    public Scrap(User user, Place place)
+    {
+        this.user = user;
+        this.place = place;
+    }
+
+    public void setUser(User user)
+    {
+        this.user= user;
+        user.getScraps().add(this);
+    }
+
+    public void setPlace(Place place)
+    {
+        this.place = place;
+        place.getScraps().add(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Scrap scrap = (Scrap) o;
+        return user.equals(scrap.user) && place.equals(scrap.place);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, place);
+    }
 }

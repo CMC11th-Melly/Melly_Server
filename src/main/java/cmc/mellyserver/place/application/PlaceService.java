@@ -2,6 +2,7 @@ package cmc.mellyserver.place.application;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.common.util.AuthenticatedUserChecker;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
@@ -25,7 +26,7 @@ public class PlaceService {
 
     private final PlaceQueryRepository placeQueryRepository;
     private final PlaceDomainService placeDomainService;
-    private final UserRepository userRepository;
+    private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
     public GetPlaceInfoDto getPlaceInfo(Long placeId, String uid)
@@ -34,13 +35,11 @@ public class PlaceService {
     }
 
 
-    public List<PlaceListReponseDto> getPlaceList(String userId, GroupType groupType)
+    public List<PlaceListReponseDto> getPlaceList(String uid, GroupType groupType)
     {
-        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
-        });
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(user);
-        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, userId);
+        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, uid);
     }
 
 }
