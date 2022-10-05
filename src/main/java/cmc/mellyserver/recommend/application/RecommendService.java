@@ -27,6 +27,7 @@ public class RecommendService {
         List<Place> recommendPlace = placeQueryRepository.getRecommendPlace(List.of(1L, 2L, 3L));
         return recommendPlace.stream().map
                 (t -> new RecommendResponseDto(t.getId(),t.getPlaceImage(),
+                        "카페/디저트",
                         GroupType.FRIEND,
                         false,
                         t.getName(),

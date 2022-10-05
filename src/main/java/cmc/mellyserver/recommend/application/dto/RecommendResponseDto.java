@@ -4,6 +4,7 @@ import cmc.mellyserver.group.domain.enums.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,9 +14,9 @@ public class RecommendResponseDto implements Serializable {
     private PlaceInfo placeInfo;
     private MemoryInfo memoryInfo;
 
-    public RecommendResponseDto(Long placeId, String placeImage, GroupType placeCategory, Boolean isScraped, String placeName, Long memoryId, List<String> memoryImages, String title, String content, String groupName, Integer stars)
+    public RecommendResponseDto(Long placeId, String placeImage, String placeCategory,GroupType recommendType, Boolean isScraped, String placeName, Long memoryId, List<String> memoryImages, String title, String content, String groupName, Integer stars)
     {
-        this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,isScraped,placeName);
+        this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,recommendType,isScraped,placeName);
         this.memoryInfo = new MemoryInfo(memoryId,memoryImages, title,content,groupName,stars,List.of("최고에요","재밌어요"));
     }
 
@@ -23,15 +24,17 @@ public class RecommendResponseDto implements Serializable {
     static class PlaceInfo implements Serializable{
         private Long placeId;
         private String placeImage;
-        private GroupType placeCategory;
+        private String placeCategory;
+        private GroupType recommendType;
         private Boolean isScraped;
         private String placeName;
 
-        public PlaceInfo(Long placeId, String placeImage, GroupType placeCategory,Boolean isScraped,String placeName)
+        public PlaceInfo(Long placeId, String placeImage, String placeCategory,GroupType recommendType,Boolean isScraped,String placeName)
         {
             this.placeId = placeId;
             this.placeImage = placeImage;
             this.placeCategory = placeCategory;
+            this.recommendType = recommendType;
             this.isScraped = isScraped;
             this.placeName = placeName;
         }

@@ -25,7 +25,7 @@ public class TrendService {
     {
         List<Place> trendingPlace = placeQueryRepository.getTrendingPlace(List.of(1L, 2L, 3L));
         return trendingPlace.stream().map
-                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),
+                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),"카페/디저트",
                         GroupType.FRIEND,
                         false,
                         t.getName(),
