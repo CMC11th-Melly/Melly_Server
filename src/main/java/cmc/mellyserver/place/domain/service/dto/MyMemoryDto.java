@@ -16,6 +16,6 @@ public class MyMemoryDto {
     private GroupType groupType;
     private List<MemoryImageDto> memoryImages;
     private String title;
-    private String keyword;
+    private List<String> keyword;
     private String createdDate;
 }

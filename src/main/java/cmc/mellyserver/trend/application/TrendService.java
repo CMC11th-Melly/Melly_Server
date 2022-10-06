@@ -5,6 +5,7 @@ import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
+import cmc.mellyserver.recommend.application.dto.RecommendResponseDto;
 import cmc.mellyserver.trend.application.dto.TrendResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,13 @@ public class TrendService {
     {
         List<Place> trendingPlace = placeQueryRepository.getTrendingPlace(List.of(1L, 2L, 3L));
         return trendingPlace.stream().map
-                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),"카페, 디저트",
+                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),
+                        "카페, 디저트",
                         GroupType.FRIEND,
                         false,
-                        t.getName(),
-                        t.getMemories().get(0).getId(),
-                        t.getMemories().get(0).getMemoryImages().stream().map(tm -> tm.getImagePath()).collect(Collectors.toList()),
-                        t.getMemories().get(0).getTitle(),
-                        t.getMemories().get(0).getContent(),
-                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName(),
-                        t.getMemories().get(0).getStars()))
+                        t.getName(),t.getMemories(),
+                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
+                ))
                 .collect(Collectors.toList());
     }
 }

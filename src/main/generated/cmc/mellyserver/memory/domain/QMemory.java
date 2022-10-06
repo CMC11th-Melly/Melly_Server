@@ -33,7 +33,7 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath keyword = createString("keyword");
+    public final ListPath<String, StringPath> keyword = this.<String, StringPath>createList("keyword", String.class, StringPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
@@ -44,7 +44,7 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final cmc.mellyserver.place.domain.QPlace place;
 
-    public final NumberPath<Integer> stars = createNumber("stars", Integer.class);
+    public final NumberPath<Long> stars = createNumber("stars", Long.class);
 
     public final StringPath title = createString("title");
 

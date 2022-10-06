@@ -55,6 +55,15 @@ public class Scrap extends JpaBaseEntity {
         place.getScraps().add(this);
     }
 
+    public static Scrap createScrap(User user, Place place, ScrapType scrapType)
+    {
+        Scrap scrap = new Scrap(scrapType);
+        scrap.setPlace(place);
+        scrap.setUser(user);
+        return scrap;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

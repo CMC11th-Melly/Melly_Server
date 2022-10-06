@@ -33,9 +33,9 @@ public class ScrapService {
     }
 
     @Transactional
-    public void removeScrap(String uid,Long placeId)
+    public void removeScrap(String uid,Double lat, Double lng)
     {
-        scrapDomainService.removeScrap(uid,placeId);
+        scrapDomainService.removeScrap(uid,lat,lng);
     }
 
 }

@@ -3,10 +3,6 @@ package cmc.mellyserver.scrap.domain;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.AuthenticatedUserChecker;
-import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.domain.GroupInfo;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
@@ -28,7 +24,6 @@ import java.util.stream.Collectors;
 public class ScrapDomainService {
 
     private final PlaceRepository placeRepository;
-    private final UserRepository userRepository;
     private final ScrapRepository scrapRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
@@ -55,27 +50,22 @@ public class ScrapDomainService {
         if(placeOpt.isEmpty())
         {
             Place savePlace = placeRepository.save(Place.builder().position(new Position(lat, lng)).build());
-            Scrap scrap = new Scrap(scrapType);
-            savePlace.addScrap(user);
-            scrapRepository.save(scrap);
+            scrapRepository.save(Scrap.createScrap(user,savePlace,scrapType));
         }
         else{
-            Scrap scrap = new Scrap(scrapType);
-            scrap.setPlace(placeOpt.get());
-            scrap.setUser(user);
-            scrapRepository.save(scrap);
+            scrapRepository.save(Scrap.createScrap(user,placeOpt.get(),scrapType));
         }
 
     }
 
     @Transactional
-    public void removeScrap(String uid, Long placeId)
+    public void removeScrap(String uid, Double lat, Double lng)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        checkExistScrap(placeId, user.getUserSeq());
+        checkExistScrap(user.getUserSeq(),lat,lng );
 
-        scrapRepository.deleteByUserUserSeqAndPlaceId(user.getUserSeq(),placeId);
+        scrapRepository.deleteByUserUserSeqAndPlacePosition(user.getUserSeq(),new Position(lat,lng));
     }
 
 
@@ -85,8 +75,8 @@ public class ScrapDomainService {
                 .ifPresent(x -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_SCRAP);});
     }
 
-    private void checkExistScrap(Long placeId, Long userSeq) {
-        scrapRepository.findByPlaceIdAndUserUserSeq(placeId,userSeq)
+    private void checkExistScrap(Long userSeq, Double lat, Double lng) {
+        scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
                 .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
     }
 

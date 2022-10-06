@@ -24,19 +24,16 @@ public class RecommendService {
     private final PlaceQueryRepository placeQueryRepository;
     public List<RecommendResponseDto> getRecommend()
     {
+
         List<Place> recommendPlace = placeQueryRepository.getRecommendPlace(List.of(1L, 2L, 3L));
         return recommendPlace.stream().map
                 (t -> new RecommendResponseDto(t.getId(),t.getPlaceImage(),
                         "카페, 디저트",
                         GroupType.FRIEND,
                         false,
-                        t.getName(),
-                        t.getMemories().get(0).getId(),
-                        t.getMemories().get(0).getMemoryImages().stream().map(tm -> tm.getImagePath()).collect(Collectors.toList()),
-                        t.getMemories().get(0).getTitle(),
-                        t.getMemories().get(0).getContent(),
-                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName(),
-                        t.getMemories().get(0).getStars()))
+                        t.getName(),t.getMemories(),
+                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
+                        ))
                 .collect(Collectors.toList());
     }
 }

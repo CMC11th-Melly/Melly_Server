@@ -3,6 +3,7 @@ package cmc.mellyserver.scrap.presentation;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.scrap.application.ScrapService;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.scrap.presentation.dto.ScrapCancelRequest;
 import cmc.mellyserver.scrap.presentation.dto.ScrapRequest;
 import cmc.mellyserver.scrap.presentation.dto.ScrapResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,9 +40,9 @@ public class ScrapController {
     }
 
     @Operation(summary = "유저가 스크랩한 장소 취소")
-    @DeleteMapping("/place/{placeId}/scrap")
-    public ResponseEntity<CommonResponse> removeScrap(@AuthenticationPrincipal User user,@PathVariable Long placeId){
-        scrapService.removeScrap(user.getUsername(),placeId);
+    @DeleteMapping("/place/scrap")
+    public ResponseEntity<CommonResponse> removeScrap(@AuthenticationPrincipal User user,@RequestBody ScrapCancelRequest scrapCancelRequest){
+        scrapService.removeScrap(user.getUsername(), scrapCancelRequest.getLat(),scrapCancelRequest.getLng());
         return ResponseEntity.ok(new CommonResponse(200,"스크랩 삭제 완료"));
         }
 }

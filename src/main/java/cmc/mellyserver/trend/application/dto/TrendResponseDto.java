@@ -1,22 +1,35 @@
 package cmc.mellyserver.trend.application.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.recommend.application.dto.RecommendResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 public class TrendResponseDto implements Serializable {
     private PlaceInfo placeInfo;
-    private MemoryInfo memoryInfo;
+    private List<MemoryInfo> memoryInfo;
 
-    public TrendResponseDto(Long placeId,String placeImage, String placeCategory,GroupType recommendType,Boolean isScraped,String placeName,Long memoryId,List<String> memoryImages, String title, String content,String groupName,Integer stars)
+    public TrendResponseDto(Long placeId, String placeImage, String placeCategory, GroupType recommendType, Boolean isScraped, String placeName, List<Memory> memories, String groupName)
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,recommendType,isScraped,placeName);
-        this.memoryInfo = new MemoryInfo(memoryId,memoryImages, title,content,groupName,stars,List.of("최고에요","재밌어요"));
+        this.memoryInfo = memories.stream().map(m ->
+                new MemoryInfo(m.getId(),
+                        m.getMemoryImages().stream().
+                                map(tm -> tm.getImagePath()).collect(Collectors.toList()),
+                        m.getTitle(),
+                        m.getContent(),
+                        groupName,
+                        m.getStars(),
+                        m.getKeyword()))
+                .collect(Collectors.toList());
+
     }
 
     @Data
@@ -46,10 +59,10 @@ public class TrendResponseDto implements Serializable {
         private String title;
         private String content;
         private String groupName;
-        private Integer stars;
+        private Long stars;
         private List<String> keywords;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Integer stars, List<String> keywords)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Long stars, List<String> keywords)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;

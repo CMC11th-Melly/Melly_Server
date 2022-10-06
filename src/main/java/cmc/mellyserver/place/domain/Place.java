@@ -32,7 +32,12 @@ public class Place extends JpaBaseEntity {
     @Column(name = "place_name")
     private String name;
 
+    private Boolean isScraped = false;
     private String placeImage;
+
+    public void setScraped(boolean scrap)
+    {this.isScraped = scrap;}
+
     /*
     하나의 메모리에는 하나의 장소 설정 가능
     하나의 장소에는 여러 메모리들이 존재 가능

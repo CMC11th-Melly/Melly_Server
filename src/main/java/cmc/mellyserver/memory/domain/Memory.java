@@ -22,8 +22,8 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long id;
 
-    // 1,2,3,4,5
-    private int stars;
+    // 1, 1.5 , 2 , 2.5 .... 5
+    private Long stars;
 
     @ManyToOne
     @JoinColumn(name = "place_id")
@@ -33,10 +33,17 @@ public class Memory extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-    private String keyword;
+    @ElementCollection
+    @CollectionTable(
+            name = "keywords_table",
+            joinColumns = @JoinColumn(name = "memory_id"))
+    @Column(name = "keyword") // 컬럼명 지정 (예외)
+    private List<String> keyword = new ArrayList<>();
 
     @Embedded
     GroupInfo groupInfo;
+
+
 
     @Enumerated(EnumType.STRING)
     private OpenType openType;
@@ -58,19 +65,26 @@ public class Memory extends JpaBaseEntity {
         user.getMemories().add(this);
     }
 
-    public void setMemoryImages(MemoryImage memoryImages)
+    public void setMemoryImages(List<MemoryImage> memoryImages)
     {
-        this.memoryImages.add(memoryImages);
-        memoryImages.setMemory(this);
+        this.memoryImages = memoryImages;
+        for (MemoryImage memoryImage : memoryImages) {
+            memoryImage.setMemory(this);
+        }
+    }
+
+    public void setKeyword(List<String> keywords)
+    {
+        // 값 타입처럼 아예 대체해버리기
+        this.keyword = keywords;
     }
 
     @Builder
-    public Memory(int stars, String keyword, GroupInfo groupInfo, OpenType openType, String title, String content) {
+    public Memory(Long stars, GroupInfo groupInfo, String title, String content,OpenType openType) {
         this.stars = stars;
-        this.keyword = keyword;
         this.groupInfo = groupInfo;
-        this.openType = openType;
         this.title = title;
         this.content = content;
+        this.openType = openType;
     }
 }

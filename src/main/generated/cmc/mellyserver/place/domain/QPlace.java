@@ -29,6 +29,8 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isScraped = createBoolean("isScraped");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 

@@ -6,6 +6,7 @@ import cmc.mellyserver.common.util.AuthenticatedUserChecker;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceQueryRepository;
+import cmc.mellyserver.place.domain.service.dto.GetPlaceInfo;
 import cmc.mellyserver.place.domain.service.dto.GetPlaceInfoDto;
 import cmc.mellyserver.place.domain.service.PlaceDomainService;
 import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
@@ -29,10 +30,17 @@ public class PlaceService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
-    public GetPlaceInfoDto getPlaceInfo(Long placeId, String uid)
+//    public GetPlaceInfoDto getPlaceInfo(Long placeId, String uid)
+//    {
+//        return placeDomainService.getPlaceInfo(placeId, uid);
+//    }
+
+    public GetPlaceInfo getPlaceInfo(String uid, Double lat, Double lng)
     {
-        return placeDomainService.getPlaceInfo(placeId, uid);
+        return placeDomainService.getPlace(uid, lat, lng);
     }
+
+
 
 
     public List<PlaceListReponseDto> getPlaceList(String uid, GroupType groupType)

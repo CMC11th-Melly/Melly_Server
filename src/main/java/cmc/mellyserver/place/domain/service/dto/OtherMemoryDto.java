@@ -13,6 +13,6 @@ public class OtherMemoryDto {
     private GroupType groupType;
     private List<MemoryImageDto> memoryImages;
     private String title;
-    private String keyword;
+    private List<String> keyword;
     private String createdDate;
 }
