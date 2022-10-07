@@ -33,9 +33,6 @@ public class Scrap extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private ScrapType scrapType;
 
-    @Embedded
-    private Position position;
-
 
     public Scrap(ScrapType scrapType)
     {
