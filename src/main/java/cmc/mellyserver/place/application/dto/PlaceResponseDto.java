@@ -10,14 +10,14 @@ import org.springframework.security.core.parameters.P;
 @AllArgsConstructor
 public class PlaceResponseDto {
 
-    private Long placeId;
+    private Long placeId = -1L;
     private Position position;
     private Long myMemoryCount;
     private Long otherMemoryCount;
     private Boolean isScraped;
-    private String PlaceCategory;
-    private String placeName;
-    private GroupType recommendType;
+    private String PlaceCategory = "";
+    private String placeName = "";
+    private GroupType recommendType = GroupType.ALL;
     private String placeImage;
 
     public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped)
@@ -27,6 +27,7 @@ public class PlaceResponseDto {
     }
 
     private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped) {
+
         this.position = position;
         this.myMemoryCount = myMemoryCount;
         this.otherMemoryCount = otherMemoryCount;
