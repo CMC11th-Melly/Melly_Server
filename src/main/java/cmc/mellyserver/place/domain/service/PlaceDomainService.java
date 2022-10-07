@@ -3,6 +3,7 @@ package cmc.mellyserver.place.domain.service;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.AuthenticatedUserChecker;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
@@ -112,7 +113,7 @@ public class PlaceDomainService {
                 .filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) )
                 .count();
 
-        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getName(),null,place.getPlaceImage());
+        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getName(), GroupType.ALL,place.getPlaceImage());
 
 
     }
