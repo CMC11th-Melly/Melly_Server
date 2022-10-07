@@ -35,6 +35,8 @@ public class Place extends JpaBaseEntity {
     private Boolean isScraped = false;
     private String placeImage;
 
+    private String placeCategory;
+
     public void setScraped(boolean scrap)
     {this.isScraped = scrap;}
 
@@ -49,10 +51,11 @@ public class Place extends JpaBaseEntity {
     @OneToMany(mappedBy = "place",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Scrap> scraps = new ArrayList<>();
     @Builder
-    public Place(Position position, String name, String placeImage) {
+    public Place(Position position, String name, String placeImage,String placeCategory) {
         this.position = position;
         this.name = name;
         this.placeImage = placeImage;
+        this.placeCategory = placeCategory;
     }
 
     public void removeScrap(User user)

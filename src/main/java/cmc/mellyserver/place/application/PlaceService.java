@@ -59,7 +59,8 @@ public class PlaceService {
                         filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
                 p.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
                 p.getIsScraped(),
-                "카페, 디저트", p.getName(),
+                p.getPlaceCategory(),
+                p.getName(),
                 null,
                 p.getPlaceImage()
         )).collect(Collectors.toList());

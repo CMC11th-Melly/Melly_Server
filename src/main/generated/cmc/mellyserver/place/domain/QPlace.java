@@ -38,6 +38,8 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final StringPath name = createString("name");
 
+    public final StringPath placeCategory = createString("placeCategory");
+
     public final StringPath placeImage = createString("placeImage");
 
     public final QPosition position;

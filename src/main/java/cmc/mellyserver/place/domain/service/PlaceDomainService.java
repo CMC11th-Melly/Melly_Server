@@ -112,7 +112,7 @@ public class PlaceDomainService {
                 .filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) )
                 .count();
 
-        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),null, place.getName(),null,place.getPlaceImage());
+        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getName(),null,place.getPlaceImage());
 
 
     }
