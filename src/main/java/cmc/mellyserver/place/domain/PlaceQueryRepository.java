@@ -1,15 +1,19 @@
 package cmc.mellyserver.place.domain;
 
+import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.memory.domain.QMemory;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
 
+import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.*;
 
 @Repository
@@ -41,6 +45,16 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
+    public List<Place> getPlaceByMemory(Long placeId)
+    {
+        return  query.select(place)
+                .from(memory)
+                .innerJoin(memory.place,place)
+                .where(place.id.eq(placeId))
+                .distinct()
+                .fetch();
+    }
+
 
     // 그 유저의 메모리가 하나라도 있는 장소
     public List<Place> getPlaceUserMemoryExist(User user)
@@ -54,30 +68,7 @@ public class PlaceQueryRepository {
 
     }
 
-//    // 그 장소에 들어있는 메
-//
-//    private BooleanBuilder eqAddress(List<String> addresses)
-//    {
-//        if(addresses == null || addresses.isEmpty())
-//        {
-//            return null;
-//        }
-//
-//        BooleanBuilder booleanBuilder = new BooleanBuilder();
-//
-//        for (String address : addresses) {
-//            booleanBuilder.or(store.address.eq(address));
-//        }
-//        return booleanBuilder;
-//    }
-//
-//    private BooleanExpression isKidZone(Boolean isKids) {
-//        if (isKids == null) {
-//            return null;
-//        }
-//
-//        return store.isKids.eq(isKids);
-//    }
+
 
 
 

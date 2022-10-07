@@ -3,10 +3,9 @@ package cmc.mellyserver.place.presentation;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
-import cmc.mellyserver.place.presentation.dto.PlaceDetailResponseWrapper;
-import cmc.mellyserver.place.presentation.dto.PlaceListReponseDto;
-import cmc.mellyserver.place.presentation.dto.PlaceListResponseWrapper;
-import cmc.mellyserver.place.presentation.dto.PlaceSimpleRequest;
+import cmc.mellyserver.place.application.dto.PlaceResponseDto;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -33,12 +33,24 @@ public class PlaceController {
         return ResponseEntity.ok(new CommonResponse<>(200,"유저가 메모리 작성한 장소 조회",new PlaceListResponseWrapper(placeList)));
     }
 
+
+    @Operation(summary = "특정 메모리가 포함된 장소 검색")
+    @GetMapping("/place/{placeId}/search")
+    public ResponseEntity<CommonResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user,@PathVariable Long placeId)
+    {
+        List<PlaceResponseDto> placeResponseDtos = placeService.placeSearchByMemory(user.getUsername(), placeId);
+
+        return ResponseEntity.ok(new CommonResponse(200,"메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDtos)));
+    }
+
     @Operation(summary = "특정 장소 조회",description = "특정 장소를 클릭하면 스크랩 여부, 내 메모리 개수, 타인이 전체 공개한 메모리 개수가 보입니다.")
     @GetMapping("/place")
     public ResponseEntity<CommonResponse> getDetailPlace(@AuthenticationPrincipal User user, PlaceSimpleRequest placeSimpleRequest)
     {
-         return ResponseEntity.ok(new CommonResponse(200,"장소 상세 조회",placeService.getPlaceInfo(user.getUsername(),placeSimpleRequest.getLat(),placeSimpleRequest.getLng())));
+         return ResponseEntity.ok(new CommonResponse(200,"장소 상세 조회",placeService.getPlaceByPosition(user.getUsername(),placeSimpleRequest.getLat(),placeSimpleRequest.getLng())));
     }
+
+
 
 
 

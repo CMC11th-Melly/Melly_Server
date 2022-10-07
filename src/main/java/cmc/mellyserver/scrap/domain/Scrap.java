@@ -2,6 +2,7 @@ package cmc.mellyserver.scrap.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
@@ -32,10 +33,16 @@ public class Scrap extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private ScrapType scrapType;
 
+    @Embedded
+    private Position position;
+
+
     public Scrap(ScrapType scrapType)
     {
         this.scrapType = scrapType;
     }
+
+
 
     public Scrap(User user, Place place)
     {

@@ -5,6 +5,7 @@ import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemoryRepository;
+import cmc.mellyserver.memory.domain.MemorySearchDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
@@ -12,6 +13,7 @@ import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ public class MemoryService {
     private final MemoryQueryRepository memoryQueryRepository;
 
     @Transactional
-    public Memory createMemory(String userId, PlaceInfoRequest placeInfoRequest,List<String> keyword)
+    public Memory createMemory(String userId, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
     {
         return memoryDomainService.createMemory(userId,
                 placeInfoRequest.getLat(),
@@ -37,8 +39,8 @@ public class MemoryService {
                 placeInfoRequest.getStar(),
                 placeInfoRequest.getGroupId(),
                 placeInfoRequest.getGroupType(),
-                keyword,
-                placeInfoRequest.getImages());
+                placeInfoRequest.getKeyword(),
+                images);
     }
 
     /*
@@ -59,6 +61,12 @@ public class MemoryService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<Memory> result = memoryQueryRepository.searchMember(user.getUserSeq(), title);
 
+    }
+
+    public List<MemorySearchDto> searchMemory(String uid, String memoryName)
+    {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return memoryQueryRepository.searchMemoryName(user.getUserSeq(),memoryName);
     }
 
 

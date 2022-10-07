@@ -13,4 +13,5 @@ public class PlaceListReponseDto {
     private GroupType groupType;
     private Long placeId;
     private Long memoryCount;
+
 }

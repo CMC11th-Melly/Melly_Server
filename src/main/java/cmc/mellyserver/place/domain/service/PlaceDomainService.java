@@ -4,6 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
@@ -12,6 +13,7 @@ import cmc.mellyserver.scrap.domain.Scrap;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,19 +71,18 @@ public class PlaceDomainService {
         return new GetPlaceInfoDto(place.getName(),false,place.getPlaceImage(),myMemoryDtos,otherMemoryDtos);
     }
 
-    /*
-    CASE 1 : 아직 아무도 스크랩도 안하고 메모리 저장도 안함.
-    CASE 2 : 그 장소에 대한 데이터는 존재!
-     */
 
-    public GetPlaceInfo getPlace(String uid, Double lat, Double lng)
+    public PlaceResponseDto getPlace(String uid, Double lat, Double lng)
     {
-        // 먼저 그 장소가 존재하는지 체크
+
+        // 1. 위도 경도로 데이터 가져오기
         Optional<Place> placeByPosition = placeRepository.findPlaceByPosition(new Position(lat, lng));
+        // 2. 만약 아무도 데이터 저장 안했다면?
         if(placeByPosition.isEmpty())
         {
-            return new GetPlaceInfo(false,0L,0L);
+            return PlaceResponseDto.PlaceNotCreated(new Position(lat,lng),0L,0L,false);
         }
+        // 3. 만약 장소가 존재하면?
         Place place = placeByPosition.get();
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<Scrap> scraps = user.getScraps();
@@ -111,7 +112,7 @@ public class PlaceDomainService {
                 .filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) )
                 .count();
 
-        return new GetPlaceInfo(place.getIsScraped(),myMemoryCount,otherMemoryCount);
+        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),null, place.getName(),null,place.getPlaceImage());
 
 
     }

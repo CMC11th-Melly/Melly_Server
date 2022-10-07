@@ -101,7 +101,7 @@ public class DataLoader {
         save.setPlaceForMemory(place1);
 
         // memory 2
-        Memory memory1_2 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
+        Memory memory1_2 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회1").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory1_2.setUser(user);
         memory1_2.setKeyword(List.of("최고에요","맛있어요"));
@@ -109,7 +109,7 @@ public class DataLoader {
         save_2.setPlaceForMemory(place1);
 
         // memory 3
-        Memory memory1_3 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
+        Memory memory1_3 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회2").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_3.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory1_3.setUser(user);
         memory1_3.setKeyword(List.of("최고에요","맛있어요"));

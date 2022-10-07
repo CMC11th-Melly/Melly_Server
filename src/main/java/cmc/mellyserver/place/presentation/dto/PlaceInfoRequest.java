@@ -23,8 +23,8 @@ public class PlaceInfoRequest {
     private String title;
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
     private String content;
-    @Schema(example = "melly.png, cmc11th.jpg")
-    private List<MultipartFile> images;
+    @Schema(example = "좋아요,슬퍼요")
+    private List<String> keyword;
     @Schema(example = "1")
     private Long groupId;
     private GroupType groupType;

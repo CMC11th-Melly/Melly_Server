@@ -2,6 +2,7 @@ package cmc.mellyserver.memory.domain;
 
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,13 @@ public class MemoryQueryRepository {
                     .from(memory)
                     .where(memory.user.userSeq.eq(userSeq), memory.title.contains(title))
                     .fetch();
+        }
+
+        public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName)
+        {
+            return query.select(Projections.constructor(MemorySearchDto.class,memory.place.id,memory.title))
+                    .from(memory)
+                    .where(memory.user.userSeq.eq(userSeq),memory.title.contains(memoryName)).distinct().fetch();
         }
 
 
