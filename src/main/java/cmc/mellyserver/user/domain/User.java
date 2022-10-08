@@ -62,6 +62,8 @@ public class User extends JpaBaseEntity {
     @Column(name = "store_capacity")
     private Double storeCapacity;
 
+    private String fcmToken;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Memory> memories = new ArrayList<>();
 

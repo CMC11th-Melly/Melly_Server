@@ -30,7 +30,7 @@ public class TrendService {
                         "카페, 디저트",
                         GroupType.FRIEND,
                         false,
-                        t.getName(),t.getMemories(),
+                        t.getPlaceName(),t.getMemories(),
                         groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
                 ))
                 .collect(Collectors.toList());

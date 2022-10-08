@@ -2,14 +2,13 @@ package cmc.mellyserver.scrap.domain;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
-import cmc.mellyserver.common.util.AuthenticatedUserChecker;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +31,7 @@ public class ScrapDomainService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
         return user.getScraps().stream().map(s -> new ScrapedPlaceResponseDto(s.getPlace().getId(),
-                s.getPlace().getName(),
+                s.getPlace().getPlaceName(),
                 s.getPlace().getPlaceImage())).collect(Collectors.toList());
     }
 

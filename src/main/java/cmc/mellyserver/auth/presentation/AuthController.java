@@ -6,6 +6,7 @@ import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
 import cmc.mellyserver.auth.presentation.dto.*;
 import cmc.mellyserver.auth.util.HeaderUtil;
 import cmc.mellyserver.common.response.CommonResponse;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class AuthController {
 
       private final OAuthService oAuthService;
       private final AuthService authService;
-
+      private final AuthenticatedUserChecker authenticatedUserChecker;
 
       @Operation(summary = "소셜 로그인 시 회원가입")
       @PostMapping("/social/signup")
@@ -94,7 +95,7 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
     {
-        User userData = authService.getUserData(user.getUsername());
+        User userData = authenticatedUserChecker.checkAuthenticatedUserExist(user.getUsername());
         return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
     }
 }

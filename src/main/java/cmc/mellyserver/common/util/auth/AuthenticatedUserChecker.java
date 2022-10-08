@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.util;
+package cmc.mellyserver.common.util.auth;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;

@@ -36,11 +36,11 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
 
-    public final StringPath name = createString("name");
-
     public final StringPath placeCategory = createString("placeCategory");
 
     public final StringPath placeImage = createString("placeImage");
+
+    public final StringPath placeName = createString("placeName");
 
     public final QPosition position;
 

@@ -1,8 +1,6 @@
 package cmc.mellyserver.group.application;
 
-import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
-import cmc.mellyserver.common.exception.GlobalBadRequestException;
-import cmc.mellyserver.common.util.AuthenticatedUserChecker;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.UserGroup;

@@ -30,7 +30,7 @@ public class Place extends JpaBaseEntity {
 //    private Point location;
 
     @Column(name = "place_name")
-    private String name;
+    private String placeName;
 
     private Boolean isScraped = false;
     private String placeImage;
@@ -51,9 +51,9 @@ public class Place extends JpaBaseEntity {
     @OneToMany(mappedBy = "place",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Scrap> scraps = new ArrayList<>();
     @Builder
-    public Place(Position position, String name, String placeImage,String placeCategory) {
+    public Place(Position position,String placeImage,String placeCategory,String placeName) {
         this.position = position;
-        this.name = name;
+        this.placeName = placeName;
         this.placeImage = placeImage;
         this.placeCategory = placeCategory;
     }

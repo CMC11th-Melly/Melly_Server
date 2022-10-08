@@ -4,7 +4,6 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
-import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -29,7 +27,7 @@ public class PlaceController {
     @GetMapping("/place/list")
     public ResponseEntity<CommonResponse<PlaceListResponseWrapper>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType)
     {
-        List<PlaceListReponseDto> placeList = placeService.getPlaceList(user.getUsername(), groupType);
+        List<PlaceListReponseDto> placeList = placeService.getMarkerPosition(user.getUsername(), groupType);
         return ResponseEntity.ok(new CommonResponse<>(200,"유저가 메모리 작성한 장소 조회",new PlaceListResponseWrapper(placeList)));
     }
 

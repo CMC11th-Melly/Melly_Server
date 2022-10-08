@@ -19,6 +19,10 @@ public class PlaceInfoRequest {
     private Double lat;
     @Schema(example = "127.0454544")
     private Double lng;
+    @Schema(example = "용용선생")
+    private String placeName;
+    @Schema(example = "주류")
+    private String placeCategory;
     @Schema(example = "진짜 인생 술집")
     private String title;
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")

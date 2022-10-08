@@ -91,7 +91,7 @@ public class DataLoader {
         userGroup3.setGroupUser(groupAndUser3);
         groupRepository.save(userGroup3);
 
-        Place place1 = Place.builder().position(new Position(37.503837, 127.041793)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0888.JPG.jpg").name("무명요리사").placeCategory("일식").build();
+        Place place1 = Place.builder().position(new Position(37.503837, 127.041793)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0888.JPG.jpg").placeName("무명요리사").placeCategory("일식").build();
         // memory 1
         Memory memory1 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
@@ -117,7 +117,7 @@ public class DataLoader {
         save_3.setPlaceForMemory(place1);
         placeRepository.save(place1);
 
-        Place place2 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/20210710%EF%BC%BF122523.jpg").name("쿠오레 에스프레소").placeCategory("카페, 디저트").build();
+        Place place2 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/20210710%EF%BC%BF122523.jpg").placeName("쿠오레 에스프레소").placeCategory("카페, 디저트").build();
 
         // memory 1
         Memory memory2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
@@ -143,7 +143,7 @@ public class DataLoader {
         placeRepository.save(place2);
 
 
-        Place place3 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(1).png").name("파인포레스트").placeCategory("글램핑").build();
+        Place place3 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(1).png").placeName("파인포레스트").placeCategory("글램핑").build();
 
         // memory 1
         Memory memory3 = Memory.builder().stars(3L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
@@ -184,7 +184,7 @@ public class DataLoader {
          */
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -192,7 +192,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -200,7 +200,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -208,7 +208,7 @@ public class DataLoader {
 
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -216,7 +216,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -224,7 +224,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -232,7 +232,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -240,7 +240,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -248,7 +248,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -256,7 +256,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -264,7 +264,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -272,7 +272,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -280,7 +280,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -288,7 +288,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -297,7 +297,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -305,7 +305,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -313,7 +313,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -321,7 +321,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -329,7 +329,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -337,7 +337,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -345,7 +345,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -353,7 +353,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -361,7 +361,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -369,7 +369,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -377,7 +377,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -385,7 +385,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -393,7 +393,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -401,7 +401,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -409,7 +409,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -417,7 +417,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -425,7 +425,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FAMILY,
                 List.of("최고에요","기뻐요"),
@@ -433,7 +433,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -441,7 +441,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -449,7 +449,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -457,7 +457,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.FRIEND,
                 List.of("최고에요","기뻐요"),
@@ -465,7 +465,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -473,7 +473,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -481,7 +481,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -489,7 +489,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -497,7 +497,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -505,7 +505,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COUPLE,
                 List.of("최고에요","기뻐요"),
@@ -513,7 +513,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),
@@ -521,7 +521,7 @@ public class DataLoader {
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.503861,127.024144,
-                "안녕하세요!","다음에 또 올래요~",4L,
+                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
                 GroupType.COMPANY,
                 List.of("최고에요","기뻐요"),

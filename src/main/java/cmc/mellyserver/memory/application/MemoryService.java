@@ -1,15 +1,13 @@
 package cmc.mellyserver.memory.application;
 
-import cmc.mellyserver.common.util.AuthenticatedUserChecker;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
-import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.memory.domain.MemorySearchDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +33,8 @@ public class MemoryService {
                 placeInfoRequest.getLat(),
                 placeInfoRequest.getLng(),
                 placeInfoRequest.getTitle(),
+                placeInfoRequest.getPlaceName(),
+                placeInfoRequest.getPlaceCategory(),
                 placeInfoRequest.getContent(),
                 placeInfoRequest.getStar(),
                 placeInfoRequest.getGroupId(),
