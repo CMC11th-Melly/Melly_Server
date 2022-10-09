@@ -41,8 +41,7 @@ class PlaceDomainServiceTest {
     {
         // given
         BDDMockito.given(placeRepository.findPlaceByPosition(BDDMockito.any()))
-                .willReturn(Optional.of(new Place(new Position(37.0001,127.0001),
-                        "한양대학교",null,"카페, 디저트")));
+                .willReturn(Optional.of(new Place(new Position(37.0001,127.0001), null,"카페, 디저트","한양대학교")));
         BDDMockito.given(authenticatedUserChecker.checkAuthenticatedUserExist(BDDMockito.anyString())).willReturn(new User("1", Provider.DEFAULT, RoleType.USER,"asdfasdf"));
 
         // when
