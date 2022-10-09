@@ -47,7 +47,7 @@ class PlaceDomainServiceTest {
         // when
         PlaceResponseDto place = placeDomainService.getPlace("1", 37.0001, 127.0001);
 
-
+        // then
         Assertions.assertThat(place.getPlaceId()).isNull();
         Assertions.assertThat(place.getPlaceImage()).isNull();
         Assertions.assertThat(place.getMyMemoryCount()).isEqualTo(0);
