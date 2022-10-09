@@ -38,9 +38,15 @@ public class MemoryController {
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
     @PostMapping("/memory")
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false) List<MultipartFile> images,@RequestPart(name = "memoryRequest") PlaceInfoRequest placeInfoRequest)
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user,PlaceInfoRequest placeInfoRequest)
     {
-        memoryService.createMemory(user.getUsername(),images,placeInfoRequest);
+        //  @RequestPart(name = "images",required = false) List<MultipartFile> images,
+        System.out.println(placeInfoRequest.getKeyword());
+        for(String k : placeInfoRequest.getKeyword())
+        {
+            System.out.println(k);
+        }
+        memoryService.createMemory(user.getUsername(),placeInfoRequest.getImages(),placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
 

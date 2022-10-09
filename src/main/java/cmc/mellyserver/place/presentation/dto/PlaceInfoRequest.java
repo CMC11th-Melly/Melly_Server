@@ -23,6 +23,7 @@ public class PlaceInfoRequest {
     private String placeName;
     @Schema(example = "주류")
     private String placeCategory;
+    List<MultipartFile> images;
     @Schema(example = "진짜 인생 술집")
     private String title;
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
