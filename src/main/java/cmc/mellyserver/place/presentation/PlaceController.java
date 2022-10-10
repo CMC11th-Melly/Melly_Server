@@ -36,9 +36,9 @@ public class PlaceController {
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<CommonResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user,@PathVariable Long placeId)
     {
-        List<PlaceResponseDto> placeResponseDtos = placeService.placeSearchByMemory(user.getUsername(), placeId);
+        PlaceResponseDto placeResponseDto = placeService.placeSearchByMemory(user.getUsername(), placeId);
 
-        return ResponseEntity.ok(new CommonResponse(200,"메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDtos)));
+        return ResponseEntity.ok(new CommonResponse(200,"메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDto)));
     }
 
     @Operation(summary = "특정 장소 조회",description = "특정 장소를 클릭하면 스크랩 여부, 내 메모리 개수, 타인이 전체 공개한 메모리 개수가 보입니다.")

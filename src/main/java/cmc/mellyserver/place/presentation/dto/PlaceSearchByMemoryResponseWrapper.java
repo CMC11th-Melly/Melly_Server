@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PlaceSearchByMemoryResponseWrapper {
-    private List<PlaceResponseDto> placeInfo;
+    private PlaceResponseDto placeInfo;
 }

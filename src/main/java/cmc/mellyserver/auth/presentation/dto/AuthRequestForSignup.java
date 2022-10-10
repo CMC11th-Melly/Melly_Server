@@ -4,10 +4,13 @@ import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,4 +36,13 @@ public class AuthRequestForSignup {
     @Nullable
     private AgeGroup ageGroup;
 
+    @Builder
+    public AuthRequestForSignup(String email, String password, String nickname, Gender gender, @Nullable MultipartFile profileImage, @Nullable AgeGroup ageGroup) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.profileImage = profileImage;
+        this.ageGroup = ageGroup;
+    }
 }

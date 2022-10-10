@@ -45,14 +45,14 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
-    public List<Place> getPlaceByMemory(Long placeId)
+    public Place getPlaceByMemory(Long placeId)
     {
         return  query.select(place)
                 .from(memory)
                 .innerJoin(memory.place,place)
                 .where(place.id.eq(placeId))
                 .distinct()
-                .fetch();
+                .fetchOne();
     }
 
 

@@ -35,19 +35,29 @@ public class PlaceAssembler {
                 )).collect(Collectors.toList());
     }
 
-    public static List<PlaceResponseDto> placeResponseDto(List<Place> places, User user)
+    public static PlaceResponseDto placeResponseDto(Place place, User user)
     {
-        return places.stream().map(p -> new PlaceResponseDto(p.getId(),p.getPosition(),
-                p.getMemories().
-                        stream().
-                        filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
-                p.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
-                p.getIsScraped(),
-                p.getPlaceCategory(),
-                p.getPlaceName(),
+        return new PlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
+                stream().
+                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
+                place.getIsScraped(),
+                place.getPlaceCategory(),
+                place.getPlaceName(),
                 GroupType.ALL,
-                p.getPlaceImage()
-        )).collect(Collectors.toList());
+                place.getPlaceImage()
+                );
+
+//        return places.stream().map(p -> new PlaceResponseDto(p.getId(),p.getPosition(),
+//                p.getMemories().
+//                        stream().
+//                        filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
+//                p.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
+//                p.getIsScraped(),
+//                p.getPlaceCategory(),
+//                p.getPlaceName(),
+//                GroupType.ALL,
+//                p.getPlaceImage()
+//        )).collect(Collectors.toList());
     }
 
 

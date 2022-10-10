@@ -47,10 +47,10 @@ public class PlaceService {
     /**
      * PlaceId로 특정 장소 검색
      */
-    public List<PlaceResponseDto> placeSearchByMemory(String uid,Long placeId) {
+    public PlaceResponseDto placeSearchByMemory(String uid,Long placeId) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        List<Place> placeByMemory = placeQueryRepository.getPlaceByMemory(placeId);
+        Place placeByMemory = placeQueryRepository.getPlaceByMemory(placeId);
         return PlaceAssembler.placeResponseDto(placeByMemory,user);
 
     }

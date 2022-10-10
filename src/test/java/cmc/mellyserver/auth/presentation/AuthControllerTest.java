@@ -21,12 +21,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.io.FileInputStream;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
@@ -109,6 +113,7 @@ class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("message").value("사용해도 좋은 이메일입니다."));
     }
 
+
     @Test
     @DisplayName("중복 닉네임이 들어오면 400 예외 발생")
     @WithMockUser
@@ -149,7 +154,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("로그아웃 테스트 성공")
-    @WithMockUser(username = "loginUserUUID")
+    @WithMockUser
     void logout() throws Exception {
 
         String uid = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -160,12 +165,53 @@ class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("message").value("로그아웃 완료"));
     }
 
+    @Test
+    @DisplayName("DB에 인증 사용자 정보가 없으면 예외 발생")
+    @WithMockUser(username = "mellyLoginUser")
+    void logout_not_exist_user() throws Exception {
+
+        BDDMockito.doThrow(new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER)).when(authService).logout(BDDMockito.anyString(),BDDMockito.anyString());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/auth/logout").with(csrf()).header("Authorization","Bearer accessToken"))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value("1004"));
+    }
+
+    @Test
+    @DisplayName("일반 이메일 회원가입 성공")
+    @WithMockUser
+    void signup() throws Exception {
+
+        final String fileName = "testimage";
+        final String contentType = "jpg";
+        final String filePath = "src/test/resources/image/"+fileName+"."+contentType;
+        FileInputStream fileInputStream = new FileInputStream(filePath);
+
+        MockMultipartFile image1 = new MockMultipartFile(
+                "images", //name
+                fileName + "." + contentType,
+                contentType,
+                fileInputStream
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+                .file(image1)
+                .param("nickname","모카")
+                .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
 
 
 
 
-   private AuthResponseForLogin createResponseForEmailLogin()
+    }
+
+
+
+
+
+
+
+    private AuthResponseForLogin createResponseForEmailLogin()
    {
        return AuthResponseForLogin.builder().token("access_token")
                .user(new AccessTokenUserData(1L,
