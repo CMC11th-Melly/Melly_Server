@@ -41,7 +41,7 @@ public class MemoryController {
                               GetUserMemoryCond getUserMemoryCond)
     {
         List<Memory> result = memoryService.getUserMemory(user.getUsername(), placeId, getUserMemoryCond);
-        return ResponseEntity.ok(new CommonResponse(200, "특정 장소의 메모리 반환",
+        return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
                 new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
 
@@ -56,7 +56,7 @@ public class MemoryController {
         List<Memory> result = memoryService.getOtherMemory(user.getUsername(),
                 placeId,
                 getOtherMemoryCond);
-        return ResponseEntity.ok(new CommonResponse(200, "특정 장소의 메모리 반환",
+        return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
                 new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
 
