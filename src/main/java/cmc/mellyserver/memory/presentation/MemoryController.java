@@ -42,7 +42,7 @@ public class MemoryController {
     {
         List<Memory> result = memoryService.getUserMemory(user.getUsername(), placeId, getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
-                new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
+                new GetMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
 
 
@@ -57,7 +57,7 @@ public class MemoryController {
                 placeId,
                 getOtherMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
-                new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
+                new GetMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
 
 

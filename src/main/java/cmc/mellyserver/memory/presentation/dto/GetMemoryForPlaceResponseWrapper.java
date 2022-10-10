@@ -8,5 +8,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class GetMemoryForPlaceResponseWrapper {
+    private Long memoryCount;
     private List<GetMemoryForPlaceResponse> memoryList;
 }
