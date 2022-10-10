@@ -5,9 +5,7 @@ import cmc.mellyserver.memory.application.MemoryService;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemorySearchDto;
-import cmc.mellyserver.memory.presentation.dto.KeywordRequest;
-import cmc.mellyserver.memory.presentation.dto.MemoryFormGroupResponseWrapper;
-import cmc.mellyserver.memory.presentation.dto.SearchMemoryNameResponseWrapper;
+import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.place.domain.service.dto.MyMemoryDto;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +33,31 @@ public class MemoryController {
         return ResponseEntity.ok(new CommonResponse(200,"메모리 작성 위한 그룹 정보 전달",new MemoryFormGroupResponseWrapper(userGroup)));
     }
 
+    @Operation(summary = "내가 작성한 메모리 조회",description = "키워드, 메모리 생성 날짜, 그룹으로 필터링")
+    @GetMapping("/memory/user/place/{placeId}")
+    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
+                              @PathVariable Long placeId,
+                              GetUserMemoryCond getUserMemoryCond)
+    {
+        List<Memory> result = memoryService.getUserMemory(user.getUsername(), placeId, getUserMemoryCond);
+        return ResponseEntity.ok(new CommonResponse(200, "특정 장소의 메모리 반환",
+                new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
+    }
+
+
+    @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회")
+    @GetMapping("/memory/other/place/{placeId}")
+    public ResponseEntity<CommonResponse> getOtherMemory(@AuthenticationPrincipal User user,
+                               @PathVariable Long placeId,
+                               GetOtherMemoryCond getOtherMemoryCond)
+    {
+        List<Memory> result = memoryService.getOtherMemory(user.getUsername(),
+                placeId,
+                getOtherMemoryCond);
+        return ResponseEntity.ok(new CommonResponse(200, "특정 장소의 메모리 반환",
+                new GetMemoryForPlaceResponseWrapper(MemoryAssembler.getMemoryForPlaceResponse(result))));
+    }
+
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
     @PostMapping("/memory")
@@ -49,13 +72,6 @@ public class MemoryController {
         memoryService.createMemory(user.getUsername(),placeInfoRequest.getImages(),placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
-
-//    @Operation(summary = "메모리 검색")
-//    @GetMapping("/memory/search")
-//    public void memorySearch(@AuthenticationPrincipal User user, @RequestParam String title)
-//    {
-//        memoryService.search(user.getUsername(),title);
-//    }
 
 
     @Operation(summary = "메모리 검색")

@@ -7,6 +7,7 @@ import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,5 +87,10 @@ public class Memory extends JpaBaseEntity {
         this.title = title;
         this.content = content;
         this.openType = openType;
+    }
+
+    public String getLocalDate()
+    {
+        return this.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

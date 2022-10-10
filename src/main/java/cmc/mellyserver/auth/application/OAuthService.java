@@ -8,7 +8,7 @@ import cmc.mellyserver.auth.client.NaverClient;
 import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.AuthRequest;
 import cmc.mellyserver.auth.presentation.dto.AuthRequestForOAuthSignup;
-import cmc.mellyserver.auth.presentation.dto.LoginResponse;
+import cmc.mellyserver.auth.presentation.dto.AuthResponseForLogin;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
@@ -108,7 +108,7 @@ public class OAuthService {
     }
 
     @Transactional
-    public LoginResponse signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
+    public AuthResponseForLogin signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
         log.info("보자 = {}",authRequestForOAuthSignup.getUid());
         // 일단 유저 찾고

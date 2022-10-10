@@ -2,7 +2,7 @@ package cmc.mellyserver.auth.application;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
-import cmc.mellyserver.auth.presentation.dto.LoginResponse;
+import cmc.mellyserver.auth.presentation.dto.AuthResponseForLogin;
 import cmc.mellyserver.auth.presentation.dto.SignupResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
@@ -45,7 +45,7 @@ public class AuthService {
     }
 
 
-    public LoginResponse login(String email, String password)
+    public AuthResponseForLogin login(String email, String password)
     {
         User user = userRepository.findUserByEmail(email).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);});
         // !passwordEncoder.matches(password, user.getPassword())

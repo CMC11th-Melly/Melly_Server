@@ -30,9 +30,9 @@ public class AuthController {
 
       @Operation(summary = "소셜 로그인 시 회원가입")
       @PostMapping("/social/signup")
-      public ResponseEntity<CommonResponse<LoginResponse>> socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
+      public ResponseEntity<CommonResponse<AuthResponseForLogin>> socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
       {
-          LoginResponse login = oAuthService.signup(authRequestForOAuthSignup);
+          AuthResponseForLogin login = oAuthService.signup(authRequestForOAuthSignup);
           return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
 
@@ -59,9 +59,9 @@ public class AuthController {
 
       @Operation(summary = "일반 이메일 로그인")
       @PostMapping("/login")
-      public ResponseEntity<CommonResponse<LoginResponse>> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
+      public ResponseEntity<CommonResponse<AuthResponseForLogin>> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
       {
-          LoginResponse login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
+          AuthResponseForLogin login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
           return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
 

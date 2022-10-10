@@ -8,4 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CheckDuplicateNicknameRequest {
     private String nickname;
+
+    public CheckDuplicateNicknameRequest(String nickname) {
+        this.nickname = nickname;
+    }
 }

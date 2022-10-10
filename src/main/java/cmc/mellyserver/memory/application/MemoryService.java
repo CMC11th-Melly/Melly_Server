@@ -6,6 +6,8 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemorySearchDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
+import cmc.mellyserver.memory.presentation.dto.GetOtherMemoryCond;
+import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,4 +75,23 @@ public class MemoryService {
     }
 
 
+    public List<Memory> getUserMemory(String uid,Long placeId, GetUserMemoryCond getUserMemoryCond) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
+                placeId,
+                getUserMemoryCond.getKeyword(),
+                getUserMemoryCond.getGroupType(),
+                getUserMemoryCond.getCreatedDate()
+        );
+
+
+    }
+
+    public List<Memory> getOtherMemory(String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return memoryQueryRepository.searchMemoryOtherCreate(user.getUserSeq(),
+                placeId,
+                getOtherMemoryCond.getKeyword(),
+                getOtherMemoryCond.getCreatedDate());
+    }
 }

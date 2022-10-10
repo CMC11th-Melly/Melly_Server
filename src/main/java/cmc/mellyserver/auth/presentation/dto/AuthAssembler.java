@@ -51,9 +51,9 @@ public class AuthAssembler {
                 ));
     }
 
-    public static  LoginResponse loginResponse(String accessToken,User user)
+    public static AuthResponseForLogin loginResponse(String accessToken, User user)
     {
-        return new LoginResponse(new AccessTokenUserData(user.getUserSeq(),
+        return new AuthResponseForLogin(new AccessTokenUserData(user.getUserSeq(),
                 user.getUserId(),
                 user.getProvider(),
                 user.getEmail(),
