@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetUserMemoryCond {
 
-    @Schema(example = "좋아요")
+    @Schema(example = "최고에요")
     private String keyword;
-    @Schema(example = "10월 9일")
+    @Schema(example = "20221010")
     private LocalDate createdDate;
     @Schema(example = "FRIEND")
     private GroupType groupType;
