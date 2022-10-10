@@ -7,6 +7,7 @@ import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,6 @@ public class Memory extends JpaBaseEntity {
     @Embedded
     GroupInfo groupInfo;
 
-
-
     @Enumerated(EnumType.STRING)
     private OpenType openType;
 
@@ -55,6 +54,7 @@ public class Memory extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private List<MemoryImage> memoryImages = new ArrayList<>();
+
 
     public void setPlaceForMemory(Place place)
     {
@@ -89,8 +89,8 @@ public class Memory extends JpaBaseEntity {
         this.openType = openType;
     }
 
-    public String getLocalDate()
+    public LocalDate getLocalDate()
     {
-        return this.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return  this.getCreatedDate().toLocalDate();
     }
 }

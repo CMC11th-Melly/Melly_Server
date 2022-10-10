@@ -1,9 +1,11 @@
 package cmc.mellyserver.memory.presentation.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,6 +20,7 @@ public class GetMemoryForPlaceResponse {
     private String groupName;
     private Long stars;
     private List<String> keywords;
-    private String createdDate;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="MM월 dd일")
+    private LocalDateTime createdDate;
 
 }

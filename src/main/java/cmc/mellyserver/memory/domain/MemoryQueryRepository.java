@@ -4,8 +4,10 @@ import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
@@ -105,13 +109,19 @@ public class MemoryQueryRepository {
     //  TODO : LocalDateTime을 LocalDate로 변환해주는 get 함수 필요!
     private BooleanExpression eqCreatedDate(LocalDate createdDate)
     {
+
         if(createdDate == null)
         {
             return null;
         }
 
-        return null;
+        return memory.createdDate.between(
+                createdDate.atStartOfDay(),
+                LocalDateTime.of(createdDate, LocalTime.of(23,59,59)));
+
+
     }
+
 
 
 

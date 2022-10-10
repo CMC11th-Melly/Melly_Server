@@ -33,7 +33,8 @@ public class MemoryController {
         return ResponseEntity.ok(new CommonResponse(200,"메모리 작성 위한 그룹 정보 전달",new MemoryFormGroupResponseWrapper(userGroup)));
     }
 
-    @Operation(summary = "내가 작성한 메모리 조회",description = "키워드, 메모리 생성 날짜, 그룹으로 필터링")
+    @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
+                                                             "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/memory/user/place/{placeId}")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
                               @PathVariable Long placeId,
@@ -45,7 +46,8 @@ public class MemoryController {
     }
 
 
-    @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회")
+    @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회", description = "- 메모리 생성 날짜(연월일), 키워드로 필터링 가능" +
+            "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/memory/other/place/{placeId}")
     public ResponseEntity<CommonResponse> getOtherMemory(@AuthenticationPrincipal User user,
                                @PathVariable Long placeId,
