@@ -32,7 +32,7 @@ public class PlaceController {
     }
 
 
-    @Operation(summary = "특정 메모리가 포함된 장소 검색")
+    @Operation(summary = "검색창에서 메모리 제목 검색 후, 메모리가 포함된 장소로 이동")
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<CommonResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user,@PathVariable Long placeId)
     {

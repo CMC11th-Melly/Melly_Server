@@ -74,7 +74,7 @@ public class MemoryController {
     }
 
 
-    @Operation(summary = "메모리 검색")
+    @Operation(summary = "검색창에서 메모리 제목으로 검색")
     @GetMapping("/memory/search")
     public ResponseEntity<CommonResponse> memorySearch(@AuthenticationPrincipal User user, @RequestParam String memoryName)
     {
