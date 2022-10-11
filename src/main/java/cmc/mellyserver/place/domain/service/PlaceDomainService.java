@@ -23,48 +23,6 @@ public class PlaceDomainService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
-    // 1. 장소 클릭
-    // 2. 아무도 메모리를 작성하지 않은 장소
-    // 3. 가게 이름 뜨고, 개수 0개, 스크랩 여부 x
-//    public GetPlaceInfoDto getPlaceInfo(Long placeId, String userId)
-//    {
-//
-//        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> {
-//            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
-//        });
-//
-//        Place place = placeRepository.findById(placeId).orElseThrow(() -> {
-//            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_PLACE);
-//        });
-//
-//        List<MyMemoryDto> myMemoryDtos = place.getMemories()
-//                .stream()
-//                .filter(m -> m.getUser().getUserId().equals(user.getUserId()))
-//                .map(ml -> new MyMemoryDto(ml.getId(),ml.getGroupInfo().getGroupType(),
-//                        ml.getMemoryImages().stream().map(mi ->
-//                                new MemoryImageDto(mi.getId(),
-//                                        mi.getImagePath()))
-//                                .collect(Collectors.toList()),
-//                        ml.getTitle(),
-//                        ml.getKeyword(),
-//                        ml.getCreatedDate().toString()))
-//                .collect(Collectors.toList());
-//
-//        List<OtherMemoryDto> otherMemoryDtos = place.getMemories()
-//                .stream()
-//                .filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) )
-//                .map(ml -> new OtherMemoryDto(ml.getId(),ml.getGroupInfo().getGroupType(),
-//                        ml.getMemoryImages().stream().map(mi ->
-//                                new MemoryImageDto(mi.getId(),
-//                                        mi.getImagePath()))
-//                                .collect(Collectors.toList()),
-//                        ml.getTitle(),
-//                        ml.getKeyword(),
-//                        ml.getCreatedDate().toString()))
-//                .collect(Collectors.toList());
-//
-//        return new GetPlaceInfoDto(place.getName(),false,place.getPlaceImage(),myMemoryDtos,otherMemoryDtos);
-//    }
 
     public PlaceResponseDto getPlace(String uid, Double lat, Double lng)
     {
@@ -79,23 +37,8 @@ public class PlaceDomainService {
         // 3. 만약 장소가 존재하면?
         Place place = placeByPosition.get();
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        List<Scrap> scraps = user.getScraps();
-        boolean flag = false;
-        if(!scraps.isEmpty())
-        {
-            // 유저가 가지고 있던 scrap
-            for(Scrap scrap : scraps)
-            {
-                Long placeId = scrap.getPlace().getId();
-                if(place.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(placeId)))
-                {
-                    place.setScraped(true);
-                    System.out.println("일치함!");
-                    break;
-                }
-            }
+        place.setScraped(checkIsScraped(user,place));
 
-        }
         long myMemoryCount = place.getMemories()
                 .stream()
                 .filter(m -> m.getUser().getUserId().equals(user.getUserId()))
@@ -110,6 +53,9 @@ public class PlaceDomainService {
 
 
     }
-
+    private boolean checkIsScraped(User user, Place place)
+    {
+        return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
+    }
 
 }

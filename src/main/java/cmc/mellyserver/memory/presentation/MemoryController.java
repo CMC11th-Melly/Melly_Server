@@ -57,7 +57,7 @@ public class MemoryController {
                 placeId,
                 getOtherMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
-                new GetMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
+                new GetOtherMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getOtherMemoryForPlaceResponses(result))));
     }
 
 

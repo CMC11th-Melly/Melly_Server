@@ -32,6 +32,8 @@ public class PlaceInfoRequest {
     private List<String> keyword;
     @Schema(example = "1")
     private Long groupId;
+    @Schema(example = "떡잎마을 방범대")
+    private String groupName;
     private GroupType groupType;
     @Schema(example = "5",description = "4.5같이 소수점도 필요하기 때문에 int 대신 Long 사용")
     private Long star;

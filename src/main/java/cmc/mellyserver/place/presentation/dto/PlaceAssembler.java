@@ -47,17 +47,7 @@ public class PlaceAssembler {
                 place.getPlaceImage()
                 );
 
-//        return places.stream().map(p -> new PlaceResponseDto(p.getId(),p.getPosition(),
-//                p.getMemories().
-//                        stream().
-//                        filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
-//                p.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
-//                p.getIsScraped(),
-//                p.getPlaceCategory(),
-//                p.getPlaceName(),
-//                GroupType.ALL,
-//                p.getPlaceImage()
-//        )).collect(Collectors.toList());
+
     }
 
 

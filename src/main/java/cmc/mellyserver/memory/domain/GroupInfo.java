@@ -13,6 +13,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupInfo {
+    private String groupName;
     private GroupType groupType;
     private Long groupId;
 }

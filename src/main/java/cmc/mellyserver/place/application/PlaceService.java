@@ -51,7 +51,13 @@ public class PlaceService {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         Place placeByMemory = placeQueryRepository.getPlaceByMemory(placeId);
+        placeByMemory.setScraped(checkIsScraped(user,placeByMemory));
         return PlaceAssembler.placeResponseDto(placeByMemory,user);
 
+    }
+
+    private boolean checkIsScraped(User user, Place place)
+    {
+       return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
     }
 }

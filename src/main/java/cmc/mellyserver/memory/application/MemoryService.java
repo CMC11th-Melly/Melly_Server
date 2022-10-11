@@ -44,6 +44,7 @@ public class MemoryService {
                 placeInfoRequest.getStar(),
                 placeInfoRequest.getGroupId(),
                 placeInfoRequest.getGroupType(),
+                placeInfoRequest.getGroupName(),
                 placeInfoRequest.getKeyword(),
                 images);
     }

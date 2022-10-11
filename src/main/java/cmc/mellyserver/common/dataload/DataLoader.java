@@ -92,7 +92,7 @@ public class DataLoader {
 
         Place place1 = Place.builder().position(new Position(37.503837, 127.041793)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0888.JPG.jpg").placeName("무명요리사").placeCategory("일식").build();
         // memory 1
-        Memory memory1 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
+        Memory memory1 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory1.setUser(user);
         memory1.setKeyword(List.of("최고에요","맛있어요"));
@@ -100,7 +100,7 @@ public class DataLoader {
         save.setPlaceForMemory(place1);
 
         // memory 2
-        Memory memory1_2 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회1").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
+        Memory memory1_2 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회1").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory1_2.setUser(user);
         memory1_2.setKeyword(List.of("최고에요","맛있어요"));
@@ -108,7 +108,7 @@ public class DataLoader {
         save_2.setPlaceForMemory(place1);
 
         // memory 3
-        Memory memory1_3 = Memory.builder().stars(5L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회2").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
+        Memory memory1_3 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회2").content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_3.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory1_3.setUser(user);
         memory1_3.setKeyword(List.of("최고에요","맛있어요"));
@@ -119,21 +119,21 @@ public class DataLoader {
         Place place2 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/20210710%EF%BC%BF122523.jpg").placeName("쿠오레 에스프레소").placeCategory("카페, 디저트").build();
 
         // memory 1
-        Memory memory2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
+        Memory memory2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory2.setUser(user);
         memory2.setKeyword(List.of("행복해요","좋아요"));
         Memory save1_1 = memoryRepository.save(memory2);
         save1_1.setPlaceForMemory(place2);
 
-        Memory memory2_1 = Memory.builder().stars(4L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
+        Memory memory2_1 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2_1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory2_1.setUser(user);
         memory2_1.setKeyword(List.of("행복해요","좋아요"));
         Memory save1_2 = memoryRepository.save(memory2_1);
         save1_2.setPlaceForMemory(place2);
 
-        Memory memory2_2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
+        Memory memory2_2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory2_2.setUser(user);
         memory2_2.setKeyword(List.of("행복해요","좋아요"));
@@ -145,21 +145,21 @@ public class DataLoader {
         Place place3 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(1).png").placeName("파인포레스트").placeCategory("글램핑").build();
 
         // memory 1
-        Memory memory3 = Memory.builder().stars(3L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
+        Memory memory3 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory3.setUser(user);
         memory3.setKeyword(List.of("기뻐요","슬퍼요"));
         Memory save2 = memoryRepository.save(memory3);
         save2.setPlaceForMemory(place3);
 
-        Memory memory3_1 = Memory.builder().stars(3L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
+        Memory memory3_1 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3_1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory3_1.setUser(user);
         memory3_1.setKeyword(List.of("기뻐요","슬퍼요"));
         Memory save2_1 = memoryRepository.save(memory3_1);
         save2_1.setPlaceForMemory(place3);
 
-        Memory memory3_2 = Memory.builder().stars(3L).groupInfo(new GroupInfo(GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
+        Memory memory3_2 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory3_2.setUser(user);
         memory3_2.setKeyword(List.of("기뻐요","슬퍼요"));
@@ -185,7 +185,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -193,7 +193,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -201,7 +201,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 
@@ -209,7 +209,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -217,7 +217,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -225,7 +225,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -233,7 +233,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -241,7 +241,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -249,7 +249,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -257,7 +257,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -265,7 +265,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -273,7 +273,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -281,7 +281,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -289,7 +289,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -298,7 +298,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -306,7 +306,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -314,7 +314,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -322,7 +322,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -330,7 +330,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -338,7 +338,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -346,7 +346,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -354,7 +354,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -362,7 +362,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -370,7 +370,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -378,7 +378,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -386,7 +386,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -394,7 +394,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -402,7 +402,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -410,7 +410,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -418,7 +418,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -426,7 +426,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FAMILY,
+                GroupType.FAMILY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -434,7 +434,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -442,7 +442,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -450,7 +450,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -458,7 +458,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.FRIEND,
+                GroupType.FRIEND,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -466,7 +466,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -474,7 +474,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -482,7 +482,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -490,7 +490,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -498,7 +498,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -506,7 +506,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COUPLE,
+                GroupType.COUPLE,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -514,7 +514,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 //
@@ -522,7 +522,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 1L,
-                GroupType.COMPANY,
+                GroupType.COMPANY,userGroup.getGroupName(),
                 List.of("최고에요","기뻐요"),
                 List.of());
 

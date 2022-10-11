@@ -35,7 +35,7 @@ public class MemoryDomainService {
     /**
      * 메모리 생성
      */
-    public Memory createMemory(String uid,Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,List<String> keyword, List<MultipartFile> multipartFiles)
+    public Memory createMemory(String uid,Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, List<String> keyword, List<MultipartFile> multipartFiles)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(multipartFiles);
@@ -46,7 +46,7 @@ public class MemoryDomainService {
             Place savePlace = placeRepository.save(Place.builder().position(new Position(lat, lng)).placeCategory(placeCategory).placeName(placeName).build());
 
             Memory memory = (groupId == null) ? Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build() :
-                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
+                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupName,groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
 
             // user 세팅
             memory.setUser(user);
@@ -63,7 +63,7 @@ public class MemoryDomainService {
         else{
 
             Memory memory = (groupId == null) ? Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build() :
-                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
+                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupName,groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
             memory.setUser(user);
 
             if(multipartFileNames != null)
