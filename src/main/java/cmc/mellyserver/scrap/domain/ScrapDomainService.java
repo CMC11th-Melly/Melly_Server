@@ -37,7 +37,7 @@ public class ScrapDomainService {
 
 
     @Transactional
-    public void createScrap(String uid, Double lat, Double lng, ScrapType scrapType)
+    public void createScrap(String uid, Double lat, Double lng, ScrapType scrapType,String placeName,String placeCategory)
     {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
@@ -48,7 +48,7 @@ public class ScrapDomainService {
 
         if(placeOpt.isEmpty())
         {
-            Place savePlace = placeRepository.save(Place.builder().position(new Position(lat, lng)).build());
+            Place savePlace = placeRepository.save(Place.builder().placeName(placeName).placeCategory(placeCategory).position(new Position(lat, lng)).build());
             scrapRepository.save(Scrap.createScrap(user,savePlace,scrapType));
         }
         else{

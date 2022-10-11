@@ -16,4 +16,8 @@ public class ScrapRequest {
     private Double lng;
     @Schema(example = "COUPLE")
     private ScrapType scrapType;
+    @Schema(example = "한양대학교")
+    private String placeName;
+    @Schema(example = "학교")
+    private String placeCategory;
 }

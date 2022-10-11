@@ -24,7 +24,7 @@ public class ScrapService {
         scrapDomainService.createScrap(uid,
                                             scrapRequest.getLat(),
                                             scrapRequest.getLng(),
-                                            scrapRequest.getScrapType());
+                                            scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
     }
 
     public List<ScrapedPlaceResponseDto> getScrapedPlace(String uid)
