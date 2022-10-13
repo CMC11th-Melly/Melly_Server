@@ -1,8 +1,12 @@
 package cmc.mellyserver.memory.domain.service;
 
 
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
+import cmc.mellyserver.group.domain.GroupRepository;
+import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.GroupInfo;
 import cmc.mellyserver.memory.domain.Memory;
@@ -31,12 +35,14 @@ public class MemoryDomainService {
     private final PlaceRepository placeRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final S3FileLoader s3FileLoader;
+    private final GroupRepository groupRepository;
 
     /**
      * 메모리 생성
      */
     public Memory createMemory(String uid,Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, List<String> keyword, List<MultipartFile> multipartFiles)
     {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(multipartFiles);
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
@@ -45,9 +51,18 @@ public class MemoryDomainService {
         {
             Place savePlace = placeRepository.save(Place.builder().position(new Position(lat, lng)).placeCategory(placeCategory).placeName(placeName).build());
 
-            Memory memory = (groupId == null) ? Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build() :
-                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupName,groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
-
+            Memory memory;
+            // 1. 만약 그룹이 없다면?
+            if(groupId == null)
+            {
+               memory  = Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build();
+            }
+            else{
+                UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+                });
+                memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(OpenType.GROUP).stars(star).build();
+            }
             // user 세팅
             memory.setUser(user);
             // memoryImage 세팅
@@ -61,12 +76,18 @@ public class MemoryDomainService {
             return memoryRepository.save(memory);
         }
         else{
+            Memory memory;
+            if(groupId == null)
+            {
+              memory =   Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,null,null)).openType(OpenType.ALL).stars(star).build();
+            }
+            else{
+                UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+                });
+               memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(OpenType.GROUP).stars(star).build();
+            }
 
-            // 만약에 전체 공개로 선택했다면, groupId는 따로 보내지 않기! 그걸로 분기하자.
-            Memory memory = (groupId == null) ?
-                    // 만약에 전체 공개로 들어오면 OpenType.ALL로 설정
-                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,null,null)).openType(OpenType.ALL).stars(star).build() :
-                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupName,groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
             memory.setUser(user);
 
             if(multipartFileNames != null)

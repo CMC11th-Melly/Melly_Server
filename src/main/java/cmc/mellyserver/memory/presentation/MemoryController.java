@@ -57,6 +57,7 @@ public class MemoryController {
                                @PathVariable Long placeId,
                                GetOtherMemoryCond getOtherMemoryCond)
     {
+
         List<Memory> result = memoryService.getOtherMemory(user.getUsername(),
                 placeId,
                 getOtherMemoryCond);
@@ -67,10 +68,11 @@ public class MemoryController {
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
     @PostMapping("/memory")
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user,PlaceInfoRequest placeInfoRequest)
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images") List<MultipartFile> images,
+                                               @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
         memoryService.createMemory(user.getUsername(),
-                                    placeInfoRequest.getImages(),
+                                    images,
                                     placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }

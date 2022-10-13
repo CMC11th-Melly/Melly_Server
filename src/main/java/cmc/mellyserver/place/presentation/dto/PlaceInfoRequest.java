@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class PlaceInfoRequest {
     private String placeName;
     @Schema(example = "주류")
     private String placeCategory;
-    List<MultipartFile> images;
+//    List<MultipartFile> images;
     @Schema(example = "진짜 인생 술집")
     private String title;
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
@@ -31,6 +32,7 @@ public class PlaceInfoRequest {
     @Schema(example = "좋아요,슬퍼요")
     private List<String> keyword;
     @Schema(example = "1")
+    @Nullable
     private Long groupId;
     @Schema(example = "떡잎마을 방범대")
     private String groupName;
