@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TrendService {
 
-    private final PlaceRepository placeRepository;
     private final GroupRepository groupRepository;
     private final PlaceQueryRepository placeQueryRepository;
     public List<TrendResponseDto> getTrend()
