@@ -21,13 +21,15 @@ public class UserGroup extends JpaBaseEntity {
 
     private String groupName;
 
+    private String groupIcon;
+
     private String inviteLink;
 
     // 하나의 메모리는 무조건 하나의 그룹에 속함. 따라서 타입은 grouptype으로 판단하면 될듯!
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
 
-    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @Builder

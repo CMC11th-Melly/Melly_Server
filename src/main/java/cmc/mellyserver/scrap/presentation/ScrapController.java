@@ -31,13 +31,6 @@ public class ScrapController {
 
     }
 
-    @Operation(summary = "유저가 스크랩한 장소 조회")
-    @GetMapping("/place/scrap")
-    public ResponseEntity<CommonResponse> getUserScrap(@AuthenticationPrincipal User user)
-    {
-        List<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"유저가 스크랩한 장소 목록",new ScrapResponseWrapper(scrapedPlace)));
-    }
 
     @Operation(summary = "유저가 스크랩한 장소 취소")
     @DeleteMapping("/place/scrap")

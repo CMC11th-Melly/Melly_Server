@@ -62,7 +62,10 @@ public class MemoryDomainService {
         }
         else{
 
-            Memory memory = (groupId == null) ? Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build() :
+            // 만약에 전체 공개로 선택했다면, groupId는 따로 보내지 않기! 그걸로 분기하자.
+            Memory memory = (groupId == null) ?
+                    // 만약에 전체 공개로 들어오면 OpenType.ALL로 설정
+                    Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,null,null)).openType(OpenType.ALL).stars(star).build() :
                     Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupName,groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
             memory.setUser(user);
 

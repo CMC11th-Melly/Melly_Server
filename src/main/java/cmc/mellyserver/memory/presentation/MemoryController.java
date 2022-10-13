@@ -25,6 +25,10 @@ public class MemoryController {
 
     private final MemoryService memoryService;
 
+
+
+
+
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
     @GetMapping("/memory/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
@@ -65,13 +69,9 @@ public class MemoryController {
     @PostMapping("/memory")
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user,PlaceInfoRequest placeInfoRequest)
     {
-        //  @RequestPart(name = "images",required = false) List<MultipartFile> images,
-        System.out.println(placeInfoRequest.getKeyword());
-        for(String k : placeInfoRequest.getKeyword())
-        {
-            System.out.println(k);
-        }
-        memoryService.createMemory(user.getUsername(),placeInfoRequest.getImages(),placeInfoRequest);
+        memoryService.createMemory(user.getUsername(),
+                                    placeInfoRequest.getImages(),
+                                    placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
 
@@ -82,6 +82,13 @@ public class MemoryController {
     {
         List<MemorySearchDto> result = memoryService.searchMemory(user.getUsername(), memoryName);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 제목 검색",new SearchMemoryNameResponseWrapper(result)));
+    }
+
+    @Operation(summary = "메모리 상세 조회")
+    @GetMapping("/memory/{memoryId}/detail")
+    public void getMemoryDetail(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
+    {
+//        memoryService.getMemoryDetail();
     }
 
 

@@ -79,6 +79,7 @@ public class MemoryQueryRepository {
                         // 2. 지금 로그인한 유저의 메모리가 아니고,
                         memory.user.userSeq.ne(userSeq),
                         // 3. 이 메모리는 전체 공개로 공개가 됐다.
+                        // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
                         memory.openType.eq(OpenType.ALL),
                         eqKeyword(keyword),
                         eqCreatedDate(createdDate)

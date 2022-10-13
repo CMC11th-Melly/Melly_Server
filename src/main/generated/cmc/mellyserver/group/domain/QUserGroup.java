@@ -27,6 +27,8 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final ListPath<GroupAndUser, QGroupAndUser> groupAndUsers = this.<GroupAndUser, QGroupAndUser>createList("groupAndUsers", GroupAndUser.class, QGroupAndUser.class, PathInits.DIRECT2);
 
+    public final StringPath groupIcon = createString("groupIcon");
+
     public final StringPath groupName = createString("groupName");
 
     public final EnumPath<cmc.mellyserver.group.domain.enums.GroupType> groupType = createEnum("groupType", cmc.mellyserver.group.domain.enums.GroupType.class);

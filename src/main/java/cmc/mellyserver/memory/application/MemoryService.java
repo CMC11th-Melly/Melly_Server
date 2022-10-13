@@ -89,10 +89,15 @@ public class MemoryService {
     }
 
     public List<Memory> getOtherMemory(String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
+
+        // 1. 사용자 데이터 받아오기
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+
         return memoryQueryRepository.searchMemoryOtherCreate(user.getUserSeq(),
                 placeId,
                 getOtherMemoryCond.getKeyword(),
                 getOtherMemoryCond.getCreatedDate());
     }
+
 }

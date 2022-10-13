@@ -7,7 +7,9 @@ import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
+import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.scrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,9 +32,11 @@ public class ScrapDomainService {
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return user.getScraps().stream().map(s -> new ScrapedPlaceResponseDto(s.getPlace().getId(),
-                s.getPlace().getPlaceName(),
-                s.getPlace().getPlaceImage())).collect(Collectors.toList());
+        return user.getScraps().stream().map(s -> {
+            Place place = s.getPlace();
+            place.setScraped(checkIsScraped(user,place));
+            return ScrapAssembler.scrapedPlaceResponseDto(place,user);
+        }).collect(Collectors.toList());
     }
 
 
@@ -79,4 +83,8 @@ public class ScrapDomainService {
                 .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
     }
 
+    private boolean checkIsScraped(User user, Place place)
+    {
+        return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
+    }
 }
