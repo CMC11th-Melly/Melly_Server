@@ -16,6 +16,7 @@ import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
+import cmc.mellyserver.trend.infrastructure.TrendAnalyzer;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class MemoryDomainService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final S3FileLoader s3FileLoader;
     private final GroupRepository groupRepository;
+    private final TrendAnalyzer trendAnalyzer;
+
 
     /**
      * 메모리 생성
@@ -73,6 +76,7 @@ public class MemoryDomainService {
             memory.setKeyword(keyword);
             // 사용자가 방문한 장소 세팅
             user.getVisitedPlace().add(savePlace.getId());
+            trendAnalyzer.addKeywordToRedis(savePlace.getPlaceName());
             return memoryRepository.save(memory);
         }
         else{
@@ -98,6 +102,7 @@ public class MemoryDomainService {
             memory.setPlaceForMemory(placeOpt.get());
             memory.setKeyword(keyword);
             user.getVisitedPlace().add(placeOpt.get().getId());
+            trendAnalyzer.addKeywordToRedis(placeOpt.get().getPlaceName());
             return memoryRepository.save(memory);
         }
 
