@@ -26,7 +26,7 @@ public class TrendAnalyzer {
 
      public void addKeywordToRedis(String keyword) {
         try {
-
+            System.out.println("랭킹 집어넣을 예정!");
             String keyForRanking = "ranking";
             redisTemplate.opsForZSet().incrementScore(keyForRanking, keyword,1);
 
