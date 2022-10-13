@@ -24,7 +24,7 @@ public class TrendController {
     @GetMapping("/trend")
     public  ResponseEntity<CommonResponse<TrendPlaceResponseWrapper>> trendPlace(@AuthenticationPrincipal User user)
     {
-        List<TrendResponseDto> trend = trendService.getTrend();
+        List<TrendResponseDto> trend = trendService.getTrend(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,"핫한 장소",new TrendPlaceResponseWrapper(trend)));
     }
 }
