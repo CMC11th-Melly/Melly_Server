@@ -28,18 +28,18 @@ public class TrendService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     public List<TrendResponseDto> getTrend(String uid) {
-        //   List<Place> trendingPlace = placeQueryRepository.getTrendingPlace(List.of(1L, 2L, 3L));
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return trendAnalyzer.findKeywordSortedByRank(user);
-//        return trendingPlace.stream().map
-//                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),
-//                        "카페, 디저트",
-//                        GroupType.FRIEND,
-//                        false,
-//                        t.getPlaceName(),t.getMemories(),
-//                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
-//                ))
-//                .collect(Collectors.toList());
-//    }
+           List<Place> trendingPlace = placeQueryRepository.getTrendingPlace(List.of(1L, 2L, 3L));
+//        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+//        return trendAnalyzer.findKeywordSortedByRank(user);
+        return trendingPlace.stream().map
+                (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),
+                        "카페, 디저트",
+                        GroupType.FRIEND,
+                        false,
+                        t.getPlaceName(),t.getMemories(),
+                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
+                ))
+                .collect(Collectors.toList());
     }
+
 }

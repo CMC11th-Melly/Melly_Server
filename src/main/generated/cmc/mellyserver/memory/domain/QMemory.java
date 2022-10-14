@@ -50,6 +50,8 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final cmc.mellyserver.user.domain.QUser user;
 
+    public final DateTimePath<java.time.LocalDateTime> visitedDate = createDateTime("visitedDate", java.time.LocalDateTime.class);
+
     public QMemory(String variable) {
         this(Memory.class, forVariable(variable), INITS);
     }

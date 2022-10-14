@@ -1,24 +1,9 @@
 package cmc.mellyserver.group.domain;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.MemorySearchDto;
-import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-
-import static cmc.mellyserver.group.domain.QUserGroup.*;
-import static cmc.mellyserver.memory.domain.QMemory.memory;
 
 @Repository
 public class UserGroupQueryRepository {

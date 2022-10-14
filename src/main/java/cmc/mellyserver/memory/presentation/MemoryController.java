@@ -4,9 +4,8 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.memory.application.MemoryService;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.MemorySearchDto;
+import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.*;
-import cmc.mellyserver.place.domain.service.dto.MyMemoryDto;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,6 @@ public class MemoryController {
     private final MemoryService memoryService;
 
 
-
-
-
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
     @GetMapping("/memory/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
@@ -36,6 +32,7 @@ public class MemoryController {
         List<MemoryFormGroupResponse> userGroup = memoryService.getUserGroup(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,"메모리 작성 위한 그룹 정보 전달",new MemoryFormGroupResponseWrapper(userGroup)));
     }
+
 
     @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
                                                              "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
@@ -71,6 +68,8 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images") List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
+        System.out.println("localdatetime : " + placeInfoRequest.getVisitedDate());
+        System.out.println("type : " + placeInfoRequest.getVisitedDate().getClass());
         memoryService.createMemory(user.getUsername(),
                                     images,
                                     placeInfoRequest);

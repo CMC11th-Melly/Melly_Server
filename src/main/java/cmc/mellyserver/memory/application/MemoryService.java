@@ -4,7 +4,7 @@ import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
-import cmc.mellyserver.memory.domain.MemorySearchDto;
+import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.memory.presentation.dto.GetOtherMemoryCond;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +43,7 @@ public class MemoryService {
                 placeInfoRequest.getGroupType(),
                 placeInfoRequest.getGroupName(),
                 placeInfoRequest.getKeyword(),
+                placeInfoRequest.getVisitedDate(),
                 images);
     }
 
@@ -82,7 +80,7 @@ public class MemoryService {
                 placeId,
                 getUserMemoryCond.getKeyword(),
                 getUserMemoryCond.getGroupType(),
-                getUserMemoryCond.getCreatedDate()
+                getUserMemoryCond.getVisitedDate()
         );
 
 
@@ -97,7 +95,7 @@ public class MemoryService {
         return memoryQueryRepository.searchMemoryOtherCreate(user.getUserSeq(),
                 placeId,
                 getOtherMemoryCond.getKeyword(),
-                getOtherMemoryCond.getCreatedDate());
+                getOtherMemoryCond.getVisitedDate());
     }
 
 }

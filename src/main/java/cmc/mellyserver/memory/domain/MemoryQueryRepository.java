@@ -2,27 +2,19 @@ package cmc.mellyserver.memory.domain;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.BooleanBuilder;
+import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
-import static cmc.mellyserver.place.domain.QPlace.place;
 
 @Repository
 public class MemoryQueryRepository {
@@ -116,7 +108,7 @@ public class MemoryQueryRepository {
             return null;
         }
 
-        return memory.createdDate.between(
+        return memory.visitedDate.between(
                 createdDate.atStartOfDay(),
                 LocalDateTime.of(createdDate, LocalTime.of(23,59,59)));
 

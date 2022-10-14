@@ -1,4 +1,4 @@
-package cmc.mellyserver.memory.domain;
+package cmc.mellyserver.memory.presentation.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

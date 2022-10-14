@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,11 @@ public class Memory extends JpaBaseEntity {
     // TODO : 차후에 길이 지정
     private String content;
 
+    private LocalDateTime visitedDate;
+
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private List<MemoryImage> memoryImages = new ArrayList<>();
+
 
 
     public void setPlaceForMemory(Place place)
@@ -81,12 +85,13 @@ public class Memory extends JpaBaseEntity {
     }
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, String title, String content,OpenType openType) {
+    public Memory(Long stars, GroupInfo groupInfo, String title, String content,OpenType openType,LocalDateTime visitedDate) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;
         this.content = content;
         this.openType = openType;
+        this.visitedDate = visitedDate;
     }
 
     public LocalDate getLocalDate()

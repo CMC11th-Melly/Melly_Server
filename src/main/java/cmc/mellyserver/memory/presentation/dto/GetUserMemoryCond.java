@@ -15,7 +15,7 @@ public class GetUserMemoryCond {
     @Schema(example = "최고에요")
     private String keyword;
     @Schema(example = "20221010")
-    private LocalDate createdDate;
+    private LocalDate visitedDate;
     @Schema(example = "FRIEND")
     private GroupType groupType;
 }
