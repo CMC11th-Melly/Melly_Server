@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,34 +46,27 @@ public class MemoryService {
                 images);
     }
 
-    /*
-    TODO : 그룹의 ID , 그룹 이름, 그룹 타입 반환
-     */
-    public List<MemoryFormGroupResponse> getUserGroup(String uid)
+
+    public List<MemoryFormGroupResponse> getUserGroupForMemoryForm(String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
         return user.getGroupAndUsers().stream().map(ug ->
                 new MemoryFormGroupResponse(ug.getGroup().getId(),
                         ug.getGroup().getGroupName(),
                         ug.getGroup().getGroupType())).collect(Collectors.toList());
-
     }
 
-    public void search(String uid,String title)
-    {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        List<Memory> result = memoryQueryRepository.searchMember(user.getUserSeq(), title);
 
-    }
-
-    public List<MemorySearchDto> searchMemory(String uid, String memoryName)
+    public List<MemorySearchDto> searchPlaceByMemoryTitle(String uid, String memoryName)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return memoryQueryRepository.searchMemoryName(user.getUserSeq(),memoryName);
     }
 
 
-    public List<Memory> getUserMemory(String uid,Long placeId, GetUserMemoryCond getUserMemoryCond) {
+    public List<Memory> getUserMemory(String uid,Long placeId, GetUserMemoryCond getUserMemoryCond)
+    {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
                 placeId,
@@ -82,8 +74,6 @@ public class MemoryService {
                 getUserMemoryCond.getGroupType(),
                 getUserMemoryCond.getVisitedDate()
         );
-
-
     }
 
     public List<Memory> getOtherMemory(String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
@@ -97,5 +87,6 @@ public class MemoryService {
                 getOtherMemoryCond.getKeyword(),
                 getOtherMemoryCond.getVisitedDate());
     }
+
 
 }

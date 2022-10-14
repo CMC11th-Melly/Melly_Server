@@ -27,9 +27,9 @@ public class MemoryController {
 
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
     @GetMapping("/memory/group")
-    public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
+    public ResponseEntity<CommonResponse> getUserGroupForMemoryForm(@AuthenticationPrincipal User user)
     {
-        List<MemoryFormGroupResponse> userGroup = memoryService.getUserGroup(user.getUsername());
+        List<MemoryFormGroupResponse> userGroup = memoryService.getUserGroupForMemoryForm(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,"메모리 작성 위한 그룹 정보 전달",new MemoryFormGroupResponseWrapper(userGroup)));
     }
 
@@ -79,17 +79,10 @@ public class MemoryController {
 
     @Operation(summary = "검색창에서 메모리 제목으로 검색")
     @GetMapping("/memory/search")
-    public ResponseEntity<CommonResponse> memorySearch(@AuthenticationPrincipal User user, @RequestParam String memoryName)
+    public ResponseEntity<CommonResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName)
     {
-        List<MemorySearchDto> result = memoryService.searchMemory(user.getUsername(), memoryName);
+        List<MemorySearchDto> result = memoryService.searchPlaceByMemoryTitle(user.getUsername(), memoryName);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 제목 검색",new SearchMemoryNameResponseWrapper(result)));
-    }
-
-    @Operation(summary = "메모리 상세 조회")
-    @GetMapping("/memory/{memoryId}/detail")
-    public void getMemoryDetail(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
-    {
-//        memoryService.getMemoryDetail();
     }
 
 

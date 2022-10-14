@@ -29,8 +29,8 @@ public class GetMemoryForPlaceResponse {
     private Long stars;
     @Schema(example = "[최고에요,맛있어요]")
     private List<String> keywords;
-    @Schema(example = "10월 10일")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="MM월 dd일")
-    private LocalDateTime createdDate;
+    @Schema(example = "20221014")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
+    private LocalDateTime visitedDate;
 
 }
