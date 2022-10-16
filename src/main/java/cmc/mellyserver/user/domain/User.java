@@ -64,13 +64,13 @@ public class User extends JpaBaseEntity {
 
     private String fcmToken;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Memory> memories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Scrap> scraps = new ArrayList<>();
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup)

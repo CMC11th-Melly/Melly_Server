@@ -23,20 +23,12 @@ public class MemoryQueryRepository {
         private final EntityManager em;
         private final JPAQueryFactory query;
 
-        // 인텔리제이 인식 오류, 무시하고 진행하면 된다.
         public MemoryQueryRepository(EntityManager em)
         {
             this.em = em;
             this.query = new JPAQueryFactory(em);
         }
 
-        public List<Memory> searchMember(Long userSeq, String title)
-        {
-            return query.select(memory)
-                    .from(memory)
-                    .where(memory.user.userSeq.eq(userSeq), memory.title.contains(title))
-                    .fetch();
-        }
 
         public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName)
         {
@@ -45,22 +37,29 @@ public class MemoryQueryRepository {
                     .where(memory.user.userSeq.eq(userSeq),memory.title.contains(memoryName)).distinct().fetch();
         }
 
-        public List<Memory> searchMemoryUserCreate(Long userSeq,Long placeId,String keyword, GroupType groupType, LocalDate createdDate){
+    /**
+     *
+     * @param userSeq 유저 식별값
+     * @param placeId 장소 아이디
+     * @param keyword 메모리 작성시 설정한 키워드
+     * @param groupType 메모리가 속한 그룹의 타입
+     * @param visitiedDate 메모리의 장소에 방문한 날짜
+     */
+        public List<Memory> searchMemoryUserCreate(Long userSeq,Long placeId,String keyword, GroupType groupType, LocalDate visitiedDate){
+
             return query.select(memory)
                     .from(memory)
-
                     .where(
                             memory.place.id.eq(placeId),
                             memory.user.userSeq.eq(userSeq),
                             eqKeyword(keyword),
                             eqGroup(groupType),
-                            eqCreatedDate(createdDate)
-
+                            eqVisitiedDate(visitiedDate)
                             )
                     .fetch();
         }
 
-        public List<Memory> searchMemoryOtherCreate(Long userSeq,Long placeId,String keyword, LocalDate createdDate){
+        public List<Memory> searchMemoryOtherCreate(Long userSeq,Long placeId,String keyword, LocalDate visitiedDate){
 
             return query.select(memory)
                 .from(memory)
@@ -74,7 +73,7 @@ public class MemoryQueryRepository {
                         // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
                         memory.openType.eq(OpenType.ALL),
                         eqKeyword(keyword),
-                        eqCreatedDate(createdDate)
+                        eqVisitiedDate(visitiedDate)
                 )
                 .fetch();
     }
@@ -100,17 +99,17 @@ public class MemoryQueryRepository {
     }
 
     //  TODO : LocalDateTime을 LocalDate로 변환해주는 get 함수 필요!
-    private BooleanExpression eqCreatedDate(LocalDate createdDate)
+    private BooleanExpression eqVisitiedDate(LocalDate visitiedDate)
     {
 
-        if(createdDate == null)
+        if(visitiedDate == null)
         {
             return null;
         }
 
         return memory.visitedDate.between(
-                createdDate.atStartOfDay(),
-                LocalDateTime.of(createdDate, LocalTime.of(23,59,59)));
+                visitiedDate.atStartOfDay(),
+                LocalDateTime.of(visitiedDate, LocalTime.of(23,59,59)));
 
 
     }

@@ -55,7 +55,7 @@ public class Memory extends JpaBaseEntity {
 
     private LocalDateTime visitedDate;
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
 

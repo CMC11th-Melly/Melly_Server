@@ -85,10 +85,18 @@ public class AuthController {
                                                   "- 로그아웃 로직은 로그인한 유저가 사용할 수 있는 기능이므로 Header에 토큰 넣어주세요!" +
                                                   "- 일반 로그인, 소셜 로그인 공통 사용 가능")
     @DeleteMapping("/logout")
-    public ResponseEntity<CommonResponse> emailLogout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
+    public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
     {
         authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
         return ResponseEntity.ok(new CommonResponse(200,"로그아웃 완료"));
+    }
+
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<CommonResponse> withdraw(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
+    {
+        authService.withdraw(user.getUsername(),HeaderUtil.getAccessToken(request));
+        return ResponseEntity.ok(new CommonResponse(200,"회원탈퇴 완료"));
     }
 
     @Operation(summary = "유저 정보 조회")
@@ -98,4 +106,6 @@ public class AuthController {
         User userData = authenticatedUserChecker.checkAuthenticatedUserExist(user.getUsername());
         return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
     }
+
+
 }

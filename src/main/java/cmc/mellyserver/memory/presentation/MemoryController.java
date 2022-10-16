@@ -54,7 +54,6 @@ public class MemoryController {
                                @PathVariable Long placeId,
                                GetOtherMemoryCond getOtherMemoryCond)
     {
-
         List<Memory> result = memoryService.getOtherMemory(user.getUsername(),
                 placeId,
                 getOtherMemoryCond);

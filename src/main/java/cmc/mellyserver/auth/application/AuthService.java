@@ -82,4 +82,14 @@ public class AuthService {
         }
     }
 
+    /**
+     * 1. DB에서 유저 삭제
+     * 2. redis에 지금 로그인한 토큰 블랙리스트 설정
+     */
+    public void withdraw(String uid,String accessToken) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        userRepository.delete(user);
+        redisTemplate.opsForValue().set(accessToken,"blackList");
+    }
 }

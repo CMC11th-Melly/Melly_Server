@@ -68,12 +68,12 @@ public class MemoryService {
     public List<Memory> getUserMemory(String uid,Long placeId, GetUserMemoryCond getUserMemoryCond)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
         return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
-                placeId,
-                getUserMemoryCond.getKeyword(),
-                getUserMemoryCond.getGroupType(),
-                getUserMemoryCond.getVisitedDate()
-        );
+                                                            placeId,
+                                                            getUserMemoryCond.getKeyword(),
+                                                            getUserMemoryCond.getGroupType(),
+                                                            getUserMemoryCond.getVisitedDate());
     }
 
     public List<Memory> getOtherMemory(String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
