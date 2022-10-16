@@ -45,11 +45,11 @@ public class MemoryDomainService {
     /**
      * 메모리 생성
      */
-    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType, String groupName, List<String> keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
+    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, List<String> keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(multipartFiles);
+        List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(uid,multipartFiles);
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
 
         if(placeOpt.isEmpty())
@@ -85,14 +85,13 @@ public class MemoryDomainService {
             Memory memory;
             if(groupId == null)
             {
-                System.out.println("여기로 진입! ");
-              memory =   Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,GroupType.ALL,null)).openType(OpenType.ALL).stars(star).visitedDate(visitedDate).build();
+              memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,GroupType.ALL,null)).openType(OpenType.ALL).stars(star).visitedDate(visitedDate).build();
             }
             else{
                 UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
                     throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
                 });
-               memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(OpenType.GROUP).stars(star).visitedDate(visitedDate).build();
+               memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(OpenType.GROUP).stars(star).visitedDate(visitedDate).build();
             }
 
             memory.setUser(user);

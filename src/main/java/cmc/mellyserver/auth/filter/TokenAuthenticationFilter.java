@@ -30,7 +30,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String tokenStr = HeaderUtil.getAccessToken(request);
 
-        if(tokenStr != null)
+        if(tokenStr == "" || tokenStr != null )
         {
             // 레디스에 토큰 값 없음 -> 로그아웃 되지 않는 토큰
             if(redisTemplate.opsForValue().get(tokenStr) == null)

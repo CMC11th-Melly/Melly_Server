@@ -8,10 +8,7 @@ import cmc.mellyserver.scrap.application.ScrapService;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.scrap.presentation.dto.ScrapResponseWrapper;
 import cmc.mellyserver.user.application.UserService;
-import cmc.mellyserver.user.presentation.dto.GetUserGroupResponseWrapper;
-import cmc.mellyserver.user.presentation.dto.GetUserMemoryResponseWrapper;
-import cmc.mellyserver.user.presentation.dto.ParticipateGroupRequest;
-import cmc.mellyserver.user.presentation.dto.UserAssembler;
+import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,7 @@ public class UserController {
 
     private final ScrapService scrapService;
     private final UserService userService;
+
 
     @Operation(summary = "유저가 스크랩한 장소 조회")
     @GetMapping("/scrap")
@@ -49,9 +47,10 @@ public class UserController {
 
     @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
-    public void getUserImageVolume(@AuthenticationPrincipal User user)
+    public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
     {
-
+        double volume = userService.checkUserImageVolume(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"유저가 저장한 사진 총 용량",new UserImageVolumeWrapper(volume)));
     }
 
     @Operation(summary = "유저가 속해있는 그룹 조회")

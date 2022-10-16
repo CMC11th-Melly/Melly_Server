@@ -17,14 +17,14 @@ import java.util.UUID;
 public class S3FileLoader {
     private final AWSS3UploadService uploadService;
 
-    public List<String> getMultipartFileNames(List<MultipartFile> multipartFiles) {
+    public List<String> getMultipartFileNames(String uid, List<MultipartFile> multipartFiles) {
 
         if(multipartFiles != null)
         {
             List<String> fileNameList = new ArrayList<>();
 
             multipartFiles.forEach(file->{
-                String fileName = createFileName(file.getOriginalFilename());
+                String fileName = createFileNames(uid , file.getOriginalFilename());
                 ObjectMetadata objectMetadata = new ObjectMetadata();
                 objectMetadata.setContentLength(file.getSize());
                 objectMetadata.setContentType(file.getContentType());
@@ -63,8 +63,14 @@ public class S3FileLoader {
         return null;
     }
 
+
+
+    private String createFileNames(String uid, String fileName) {
+        return uid + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
     private String createFileName(String fileName) {
-        return "user1/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
+        return  "profile/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.

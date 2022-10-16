@@ -28,6 +28,7 @@ public class AuthController {
       private final AuthService authService;
       private final AuthenticatedUserChecker authenticatedUserChecker;
 
+
       @Operation(summary = "소셜 로그인 시 회원가입")
       @PostMapping("/social/signup")
       public ResponseEntity<CommonResponse<AuthResponseForLogin>> socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
@@ -35,6 +36,7 @@ public class AuthController {
           AuthResponseForLogin login = oAuthService.signup(authRequestForOAuthSignup);
           return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
+
 
       @Operation(summary = "소셜 로그인",description = "소셜 로그인 타입에 따라 로그인 방식을 분기")
       @PostMapping("/social")
@@ -57,6 +59,7 @@ public class AuthController {
           return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료",signup));
       }
 
+
       @Operation(summary = "일반 이메일 로그인")
       @PostMapping("/login")
       public ResponseEntity<CommonResponse<AuthResponseForLogin>> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
@@ -64,6 +67,7 @@ public class AuthController {
           AuthResponseForLogin login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
           return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
+
 
       @Operation(summary = "중복 닉네임 체크")
       @PostMapping("/nickname")
@@ -73,39 +77,45 @@ public class AuthController {
           return ResponseEntity.ok(new CommonResponse(200,"사용해도 좋은 닉네임입니다."));
       }
 
+
       @Operation(summary = "중복 이메일 체크")
       @PostMapping ("/email")
       public ResponseEntity<CommonResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
       {
           authService.checkDuplicatedEmail(checkDuplicateEmailRequest.getEmail());
           return ResponseEntity.ok(new CommonResponse(200,"사용해도 좋은 이메일입니다."));
-    }
+      }
 
-    @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +
+
+      @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +
                                                   "- 로그아웃 로직은 로그인한 유저가 사용할 수 있는 기능이므로 Header에 토큰 넣어주세요!" +
                                                   "- 일반 로그인, 소셜 로그인 공통 사용 가능")
-    @DeleteMapping("/logout")
-    public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
-    {
-        authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
-        return ResponseEntity.ok(new CommonResponse(200,"로그아웃 완료"));
-    }
+      @DeleteMapping("/logout")
+      public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                                   HttpServletRequest request)
+      {
+          authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
+          return ResponseEntity.ok(new CommonResponse(200,"로그아웃 완료"));
+      }
 
-    @Operation(summary = "회원탈퇴")
-    @DeleteMapping("/withdraw")
-    public ResponseEntity<CommonResponse> withdraw(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, HttpServletRequest request)
-    {
-        authService.withdraw(user.getUsername(),HeaderUtil.getAccessToken(request));
-        return ResponseEntity.ok(new CommonResponse(200,"회원탈퇴 완료"));
-    }
 
-    @Operation(summary = "유저 정보 조회")
-    @GetMapping("/me")
-    public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
-    {
-        User userData = authenticatedUserChecker.checkAuthenticatedUserExist(user.getUsername());
-        return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
-    }
+      @Operation(summary = "회원 탈퇴")
+      @DeleteMapping("/withdraw")
+      public ResponseEntity<CommonResponse> withdraw(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                                     HttpServletRequest request)
+      {
+          authService.withdraw(user.getUsername(),HeaderUtil.getAccessToken(request));
+          return ResponseEntity.ok(new CommonResponse(200,"회원탈퇴 완료"));
+      }
+
+
+      @Operation(summary = "유저 정보 조회")
+      @GetMapping("/me")
+      public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
+      {
+          User userData = authenticatedUserChecker.checkAuthenticatedUserExist(user.getUsername());
+          return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
+      }
 
 
 }
