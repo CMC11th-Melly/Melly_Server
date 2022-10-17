@@ -58,9 +58,11 @@ public class MemoryController {
     @GetMapping("/memory/other/place/{placeId}")
     public ResponseEntity<CommonResponse> getOtherMemory(@AuthenticationPrincipal User user,
                                @PathVariable Long placeId,
+                                                         @RequestParam(name = "lastId",required = false) Long lastId,
+                                                         Pageable pageable,
                                GetOtherMemoryCond getOtherMemoryCond)
     {
-        List<Memory> result = memoryService.getOtherMemory(user.getUsername(),
+        Slice<Memory> result = memoryService.getOtherMemory(lastId, pageable, user.getUsername(),
                 placeId,
                 getOtherMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",

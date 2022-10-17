@@ -2,6 +2,7 @@ package cmc.mellyserver.memory.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 public class GetOtherMemoryForPlaceResponseWrapper {
     private Long memoryCount;
-    private List<GetOtherMemoryForPlaceResponse> memoryList;
+    private Slice<GetOtherMemoryForPlaceResponse> memoryList;
 }

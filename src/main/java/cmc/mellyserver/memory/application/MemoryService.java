@@ -78,13 +78,13 @@ public class MemoryService {
                                                             getUserMemoryCond.getVisitedDate());
     }
 
-    public List<Memory> getOtherMemory(String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
+    public Slice<Memory> getOtherMemory(Long lastId, Pageable pageable, String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
 
         // 1. 사용자 데이터 받아오기
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
 
-        return memoryQueryRepository.searchMemoryOtherCreate(user.getUserSeq(),
+        return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
                 placeId,
                 getOtherMemoryCond.getKeyword(),
                 getOtherMemoryCond.getVisitedDate());

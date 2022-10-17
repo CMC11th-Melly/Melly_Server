@@ -115,23 +115,27 @@ public class MemoryQueryRepository {
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
-        public List<Memory> searchMemoryOtherCreate(Long userSeq,Long placeId,String keyword, LocalDate visitiedDate){
+        public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq,Long placeId,String keyword, LocalDate visitiedDate){
 
-            return query.select(memory)
-                .from(memory)
+            List<Memory> results = query.select(memory)
+                    .from(memory)
 
-                .where(
-                        // 1. 그 장소에 메모리가 존재하는지 체크
-                        memory.place.id.eq(placeId),
-                        // 2. 지금 로그인한 유저의 메모리가 아니고,
-                        memory.user.userSeq.ne(userSeq),
-                        // 3. 이 메모리는 전체 공개로 공개가 됐다.
-                        // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
-                        memory.openType.eq(OpenType.ALL),
-                        eqKeyword(keyword),
-                        eqVisitiedDate(visitiedDate)
-                )
-                .fetch();
+                    .where(
+                            ltMemoryId(lastId),
+                            // 1. 그 장소에 메모리가 존재하는지 체크
+                            memory.place.id.eq(placeId),
+                            // 2. 지금 로그인한 유저의 메모리가 아니고,
+                            memory.user.userSeq.ne(userSeq),
+                            // 3. 이 메모리는 전체 공개로 공개가 됐다.
+                            // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
+                            memory.openType.eq(OpenType.ALL),
+                            eqKeyword(keyword),
+                            eqVisitiedDate(visitiedDate)
+                    ).orderBy(memory.id.desc())
+                    .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
+                    .fetch();
+
+            return checkLastPage(pageable, results);
     }
 
     private BooleanExpression eqKeyword(String keyword)
