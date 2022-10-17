@@ -27,7 +27,6 @@ public class User extends JpaBaseEntity {
     @Column(name = "user_seq")
     private Long userSeq;
 
-    // SocialId or 일반 로그인 시 UUID 추가
     @Column(name = "user_id",nullable = false)
     private String userId;
 

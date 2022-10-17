@@ -4,6 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
@@ -12,6 +13,7 @@ import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.scrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class ScrapDomainService {
 
     private final PlaceRepository placeRepository;
+    private final PlaceQueryRepository placeQueryRepository;
     private final ScrapRepository scrapRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 

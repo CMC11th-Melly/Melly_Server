@@ -6,6 +6,7 @@ import cmc.mellyserver.scrap.domain.ScrapDomainService;
 import cmc.mellyserver.scrap.domain.ScrapRepository;
 import cmc.mellyserver.scrap.presentation.dto.ScrapRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

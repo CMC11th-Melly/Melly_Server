@@ -36,7 +36,10 @@ public class UserController {
      */
     @Operation(summary = "유저가 작성한 메모리 조회")
     @GetMapping("/memory")
-    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user, @RequestParam(name = "lastId",required = false) Long lastId, Pageable pageable, GetUserMemoryCond getUserMemoryCond)
+    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
+                                                        @RequestParam(name = "lastId",required = false) Long lastId,
+                                                        Pageable pageable,
+                                                        GetUserMemoryCond getUserMemoryCond)
     {
         Slice<Memory> userMemory = userService.getUserMemory(lastId, pageable,user.getUsername(),getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200,
@@ -52,7 +55,7 @@ public class UserController {
     @GetMapping("/scrap")
     public ResponseEntity<CommonResponse> getUserScrap(@AuthenticationPrincipal User user)
     {
-        List<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace(user.getUsername());
+        List<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace( user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,"유저가 스크랩한 장소 목록",new ScrapResponseWrapper(scrapedPlace)));
     }
 
@@ -89,6 +92,7 @@ public class UserController {
         userService.participateToGroup(user.getUsername(),participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(200,"그룹에 추가 완료"));
     }
+
 
     @Operation(summary = "프로필 정보 수정 기능")
     @PutMapping("/profile")

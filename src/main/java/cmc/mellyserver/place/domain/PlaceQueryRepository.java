@@ -6,6 +6,7 @@ import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
@@ -67,7 +68,6 @@ public class PlaceQueryRepository {
                 .fetch();
 
     }
-
 
 
 
