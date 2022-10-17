@@ -11,4 +11,5 @@ public interface ScrapRepository extends JpaRepository<Scrap,Long> {
     Optional<Scrap> findByUserUserSeqAndPlacePosition(Long userSeq, Position position);
     Optional<Scrap> findByPlaceIdAndUserUserSeq(Long placeId,Long userSeq);
     void deleteByUserUserSeqAndPlacePosition(Long userSeq,Position position);
+
 }

@@ -1,10 +1,14 @@
 package cmc.mellyserver.user.application;
 
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.memory.domain.MemoryQueryRepository;
+import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.presentation.dto.ProfileUpdateRequest;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -25,12 +29,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
+    private final MemoryQueryRepository memoryQueryRepository;
     private final GroupService groupService;
     private final AmazonS3Client amazonS3Client;
-    /**
-     * TODO : 유저가 속해있는 그룹
-     * TODO : 유저가 작성한 메모리, 그룹 + 전체공개
-     */
+    private final S3FileLoader s3FileLoader;
+
 
     public List<UserGroup> getUserGroup(String uid)
     {
@@ -38,10 +41,17 @@ public class UserService {
         return user.getGroupAndUsers().stream().map(gu -> gu.getGroup()).collect(Collectors.toList());
     }
 
-    public List<Memory> getUserMemory(String uid)
+    public List<Memory> getUserMemory(String uid, GetUserMemoryCond getUserMemoryCond)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return user.getMemories();
+
+        return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
+                null,
+                getUserMemoryCond.getKeyword(),
+                getUserMemoryCond.getGroupType(),
+                getUserMemoryCond.getVisitedDate());
+
+
     }
 
     @Transactional
@@ -56,5 +66,13 @@ public class UserService {
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
         double sum = (double) objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
         return Math.round(((sum/1000.0)/1024.0) * 100) / 100.0;
+    }
+
+    @Transactional
+    public void updateProfile(String uid, ProfileUpdateRequest profileUpdateRequest) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getImage());
+        user.updateProfile(profileUpdateRequest.getNickname(),multipartFileName);
     }
 }

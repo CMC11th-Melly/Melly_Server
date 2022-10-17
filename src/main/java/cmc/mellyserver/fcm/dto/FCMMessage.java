@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class FCMMessage {
     private boolean validateOnly;
     private Message message;

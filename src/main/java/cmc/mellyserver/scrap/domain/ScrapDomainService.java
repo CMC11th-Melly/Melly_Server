@@ -35,7 +35,7 @@ public class ScrapDomainService {
         return user.getScraps().stream().map(s -> {
             Place place = s.getPlace();
             place.setScraped(checkIsScraped(user,place));
-            return ScrapAssembler.scrapedPlaceResponseDto(place,user);
+            return ScrapAssembler.scrapedPlaceResponseDto(place,user,s.getCreatedDate());
         }).collect(Collectors.toList());
     }
 

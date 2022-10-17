@@ -50,7 +50,7 @@ public class MemoryQueryRepository {
             return query.select(memory)
                     .from(memory)
                     .where(
-                            memory.place.id.eq(placeId),
+                            eqPlace(placeId),
                             memory.user.userSeq.eq(userSeq),
                             eqKeyword(keyword),
                             eqGroup(groupType),
@@ -113,6 +113,16 @@ public class MemoryQueryRepository {
 
 
     }
+
+    private BooleanExpression eqPlace(Long placeId)
+    {
+        if(placeId == null)
+        {
+            return null;
+        }
+        return memory.place.id.eq(placeId);
+    }
+
 
 
 

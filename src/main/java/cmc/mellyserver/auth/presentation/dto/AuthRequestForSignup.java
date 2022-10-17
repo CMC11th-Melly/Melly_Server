@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ public class AuthRequestForSignup {
     private String email;
 
     @Schema(example = "cmc11th")
+    @Length(min = 8)
     private String password;
 
     @Schema(example = "모카")

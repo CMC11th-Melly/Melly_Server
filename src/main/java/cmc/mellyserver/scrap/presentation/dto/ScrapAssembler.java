@@ -10,10 +10,12 @@ import cmc.mellyserver.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 
 public class ScrapAssembler {
 
-    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(Place place, User user)
+    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(Place place, User user, LocalDateTime createdDate)
     {
         return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
                 stream().
@@ -22,8 +24,8 @@ public class ScrapAssembler {
                 place.getPlaceName(),
                 GroupType.ALL,
                 place.getPlaceImage(),
-                place.getPlaceCategory()
-
+                place.getPlaceCategory(),
+                createdDate
         );
 
 

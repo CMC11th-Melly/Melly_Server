@@ -8,6 +8,8 @@ import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
 import cmc.mellyserver.user.domain.enums.RoleType;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -102,5 +104,17 @@ public class User extends JpaBaseEntity {
         this.userId = uid;
         this.provider = provider;
         this.nickname = nickname;
+    }
+
+    public void updateProfile(String nickname, String image) {
+       if(nickname != null)
+       {
+           this.nickname = nickname;
+       }
+
+       if(image != null)
+       {
+           this.profileImage = image;
+       }
     }
 }
