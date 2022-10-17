@@ -12,7 +12,10 @@ import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +36,9 @@ public class UserController {
      */
     @Operation(summary = "유저가 작성한 메모리 조회")
     @GetMapping("/memory")
-    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user, GetUserMemoryCond getUserMemoryCond)
+    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user, @RequestParam(name = "lastId",required = false) Long lastId, Pageable pageable, GetUserMemoryCond getUserMemoryCond)
     {
-        List<Memory> userMemory = userService.getUserMemory(user.getUsername(),getUserMemoryCond);
+        Slice<Memory> userMemory = userService.getUserMemory(lastId, pageable,user.getUsername(),getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200,
                 "유저가 작성한 메모리 조회",new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))
         ));

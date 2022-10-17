@@ -2,17 +2,18 @@ package cmc.mellyserver.user.presentation.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserAssembler {
 
-    public static List<GetUserMemoryResponse> getUserMemoryResponses(List<Memory> memories)
+    public static Slice<GetUserMemoryResponse> getUserMemoryResponses(Slice<Memory> memories)
     {
-        return memories.stream().map(m -> new GetUserMemoryResponse(m.getId(),m.getMemoryImages().stream().map(mi -> mi.getImagePath()).collect(Collectors.toList()),
+        return memories.map(m -> new GetUserMemoryResponse(m.getId(),m.getMemoryImages().stream().map(mi -> mi.getImagePath()).collect(Collectors.toList()),
                 m.getTitle(),m.getContent(),m.getGroupInfo().getGroupType(),m.getGroupInfo().getGroupName(),m.getStars(),m.getKeyword(),m.getVisitedDate()
-                )).collect(Collectors.toList());
+                ));
     }
 
     public static List<GetUserGroupResponse> getUserGroupResponses(List<UserGroup> userGroups)

@@ -11,6 +11,8 @@ import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,11 +67,11 @@ public class MemoryService {
     }
 
 
-    public List<Memory> getUserMemory(String uid,Long placeId, GetUserMemoryCond getUserMemoryCond)
+    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, Long placeId, GetUserMemoryCond getUserMemoryCond)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
+        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId,pageable,user.getUserSeq(),
                                                             placeId,
                                                             getUserMemoryCond.getKeyword(),
                                                             getUserMemoryCond.getGroupType(),

@@ -7,8 +7,11 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -39,12 +42,15 @@ public class MemoryController {
     @GetMapping("/memory/user/place/{placeId}")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
                               @PathVariable Long placeId,
+                              @RequestParam(name = "lastId",required = false) Long lastId,
+                              Pageable pageable,
                               GetUserMemoryCond getUserMemoryCond)
     {
-        List<Memory> result = memoryService.getUserMemory(user.getUsername(), placeId, getUserMemoryCond);
+        Slice<Memory> result = memoryService.getUserMemory(lastId,pageable,user.getUsername(), placeId, getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
-                new GetMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
+                new GetMemoryForPlaceResponseWrapper(result.getContent().stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
+
 
 
     @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회", description = "- 메모리 생성 날짜(연월일), 키워드로 필터링 가능" +

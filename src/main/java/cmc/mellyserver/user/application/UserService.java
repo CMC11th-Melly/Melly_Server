@@ -16,6 +16,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,11 +43,11 @@ public class UserService {
         return user.getGroupAndUsers().stream().map(gu -> gu.getGroup()).collect(Collectors.toList());
     }
 
-    public List<Memory> getUserMemory(String uid, GetUserMemoryCond getUserMemoryCond)
+    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, GetUserMemoryCond getUserMemoryCond)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(user.getUserSeq(),
+        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId,pageable, user.getUserSeq(),
                 null,
                 getUserMemoryCond.getKeyword(),
                 getUserMemoryCond.getGroupType(),
