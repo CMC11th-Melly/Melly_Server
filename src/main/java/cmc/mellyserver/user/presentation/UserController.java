@@ -66,7 +66,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user) {
         List<UserGroup> userGroup = userService.getUserGroup(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,
-                "유저가 작성한 메모리 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup))
+                "유저가 속해있는 그룹 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup))
         ));
     }
 
