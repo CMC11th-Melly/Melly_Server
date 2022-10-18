@@ -100,6 +100,10 @@ public class MemoryQueryRepository {
         if (groupType == null) {
             return null;
         }
+        if(groupType == GroupType.ALL)
+        {
+            return null;
+        }
 
         return memory.groupInfo.groupType.eq(groupType);
     }
