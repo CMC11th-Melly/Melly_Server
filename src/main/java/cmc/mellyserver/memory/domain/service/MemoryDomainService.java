@@ -42,9 +42,6 @@ public class MemoryDomainService {
     private final TrendAnalyzer trendAnalyzer;
 
 
-    /**
-     * 메모리 생성
-     */
     public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 
@@ -112,38 +109,3 @@ public class MemoryDomainService {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//            if(groupId == null)
-//            {
-//             memory = Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build();
-//            }
-//            else{
-//                memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
-//            }
-
-
-
-
-//          if(groupId == null)
-//            {
-//
-//                memory = Memory.builder().title(title).content(content).openType(OpenType.ALL).stars(star).build();
-//            }
-//            else{
-//                memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(groupType,groupId)).openType(OpenType.GROUP).stars(star).build();
-//            }

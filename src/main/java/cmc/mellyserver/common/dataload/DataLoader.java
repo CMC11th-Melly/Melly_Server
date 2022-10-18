@@ -19,6 +19,7 @@ import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
 import cmc.mellyserver.user.domain.enums.RoleType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,7 @@ public class DataLoader {
     private final MemoryRepository memoryRepository;
     private final MemoryDomainService memoryDomainService;
 
-    // TODO : Builder 사용시 엔티티 초기화 되지 않는 문제
+
     @Transactional
     public void loadData()
     {

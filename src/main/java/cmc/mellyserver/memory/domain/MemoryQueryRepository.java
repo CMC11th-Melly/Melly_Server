@@ -51,14 +51,14 @@ public class MemoryQueryRepository {
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .where(
-                        ltMemoryId(lastMemoryId),
-                        eqPlace(placeId),
-                        memory.user.userSeq.eq(userSeq),
-                        eqKeyword(keyword),
-                        eqGroup(groupType),
-                        eqVisitiedDate(visitiedDate)
-                ).orderBy(memory.id.desc())
-                .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
+                        ltMemoryId(lastMemoryId),  // 메모리 id를 커서로 사용해서 페이징 -> 인덱스 사용
+                        eqPlace(placeId),          // 특정 장소에 대한 메모리를 가져옴
+                        eqUserSeq(userSeq),  // 특정 장소에 대한 메모리들 중 유저가 작성한 메모리 가져옴
+                        eqKeyword(keyword),      // 해당 키워드가 필요한 메모리
+                        eqGroup(groupType),      // 특정 groupType에 포함되는 메모리
+                        eqVisitiedDate(visitiedDate)  // 특정 날짜에 속하는 메모리
+                ).orderBy(memory.id.desc())          // memoryId 순서로 내림차순
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
     }
@@ -70,17 +70,13 @@ public class MemoryQueryRepository {
 
                 .where(
                         ltMemoryId(lastId),
-                        // 1. 그 장소에 메모리가 존재하는지 체크
-                        memory.place.id.eq(placeId),
-                        // 2. 지금 로그인한 유저의 메모리가 아니고,
-                        memory.user.userSeq.ne(userSeq),
-                        // 3. 이 메모리는 전체 공개로 공개가 됐다.
-                        // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
-                        memory.openType.eq(OpenType.ALL),
+                        eqPlace(placeId),
+                        neUserSeq(userSeq),
+                        memory.openType.eq(OpenType.ALL), // 다른 사람이 작성한 메모리 중 OpenType이 ALL인 녀석들만 참고!
                         eqKeyword(keyword),
                         eqVisitiedDate(visitiedDate)
                 ).orderBy(memory.id.desc())
-                .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         return checkLastPage(pageable, results);
@@ -88,22 +84,20 @@ public class MemoryQueryRepository {
 
 
     private BooleanExpression eqKeyword(String keyword) {
-        if (keyword == null || keyword.isEmpty()) {
+        if (keyword == null) {
             return null;
         }
 
-        return memory.keyword.contains(keyword);
+        return memory.keyword.eq(keyword);
     }
 
 
     private BooleanExpression eqGroup(GroupType groupType) {
-        if (groupType == null) {
+
+        if (groupType == null || groupType == GroupType.ALL) {
             return null;
         }
-        if(groupType == GroupType.ALL)
-        {
-            return null;
-        }
+
 
         return memory.groupInfo.groupType.eq(groupType);
     }
@@ -128,6 +122,24 @@ public class MemoryQueryRepository {
             return null;
         }
         return memory.place.id.eq(placeId);
+    }
+
+    private BooleanExpression eqUserSeq(Long userSeq)
+    {
+        if(userSeq == null)
+        {
+            return null;
+        }
+        return memory.user.userSeq.eq(userSeq);
+    }
+
+    private BooleanExpression neUserSeq(Long userSeq)
+    {
+        if(userSeq == null)
+        {
+            return null;
+        }
+        return memory.user.userSeq.ne(userSeq);
     }
 
 

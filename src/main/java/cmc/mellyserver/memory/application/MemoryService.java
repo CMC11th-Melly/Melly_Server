@@ -30,9 +30,9 @@ public class MemoryService {
     private final MemoryQueryRepository memoryQueryRepository;
 
     @Transactional
-    public Memory createMemory(String userId, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
+    public Memory createMemory(String uid, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
     {
-        return memoryDomainService.createMemory(userId,
+        return memoryDomainService.createMemory(uid,
                 placeInfoRequest.getLat(),
                 placeInfoRequest.getLng(),
                 placeInfoRequest.getTitle(),
@@ -80,10 +80,7 @@ public class MemoryService {
 
     public Slice<Memory> getOtherMemory(Long lastId, Pageable pageable, String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
 
-        // 1. 사용자 데이터 받아오기
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-
         return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
                 placeId,
                 getOtherMemoryCond.getKeyword(),

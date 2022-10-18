@@ -75,11 +75,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images") List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
-        System.out.println("localdatetime : " + placeInfoRequest.getVisitedDate());
-        System.out.println("type : " + placeInfoRequest.getVisitedDate().getClass());
-        memoryService.createMemory(user.getUsername(),
-                                    images,
-                                    placeInfoRequest);
+        memoryService.createMemory(user.getUsername(), images, placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
 
