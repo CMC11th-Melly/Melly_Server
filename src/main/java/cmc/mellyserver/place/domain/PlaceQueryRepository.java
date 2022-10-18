@@ -2,16 +2,21 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.QMemory;
+import cmc.mellyserver.scrap.domain.QScrap;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.*;
@@ -29,6 +34,7 @@ public class PlaceQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
+
     public List<Place> getTrendingPlace(List<Long> placeIds)
     {
         return query.select(place)
@@ -37,6 +43,7 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
+
     public List<Place> getRecommendPlace(List<Long> placeIds)
     {
         return query.select(place)
@@ -44,6 +51,7 @@ public class PlaceQueryRepository {
                 .where(place.id.in(placeIds))
                 .fetch();
     }
+
 
     public Place getPlaceByMemory(Long placeId)
     {
@@ -56,21 +64,47 @@ public class PlaceQueryRepository {
     }
 
 
-    // 그 유저의 메모리가 하나라도 있는 장소
     public List<Place> getPlaceUserMemoryExist(User user)
     {
-        // 1. 메모리를 저장할때 마다 유저가 방문한 장소를 set으로 id값만 저장한다.
-        // 2. 같은 장소에 메모리를 써도 만약 장소 id가 같다면 중복으로 기록 안됨
         return query.select(place)
                 .from(place)
                 .where(place.id.in(user.getVisitedPlace()))
                 .fetch();
-
     }
 
 
+    public Slice<Place> getScrapedPlace(Long lastId, Pageable pageable, User user)
+    {
+        List<Place> results = query.select(place)
+                .from(place)
+                .where(
+                        ltPlaceId(lastId),
+                        place.id.in(user.getScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList()))
+                ).orderBy(place.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+        return checkLastPage(pageable, results);
+    }
 
 
+    private BooleanExpression ltPlaceId(Long placeId) {
+        if (placeId == null) {
+            return null;
+        }
 
+        return place.id.lt(placeId);
+    }
+
+    private Slice<Place> checkLastPage(Pageable pageable, List<Place> results) {
+
+        boolean hasNext = false;
+
+        if (results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
 
 }

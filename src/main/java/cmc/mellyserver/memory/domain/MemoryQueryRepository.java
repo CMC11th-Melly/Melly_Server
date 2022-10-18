@@ -24,68 +24,109 @@ import static cmc.mellyserver.memory.domain.QMemory.*;
 public class MemoryQueryRepository {
 
 
-        private final EntityManager em;
-        private final JPAQueryFactory query;
+    private final EntityManager em;
+    private final JPAQueryFactory query;
 
-        public MemoryQueryRepository(EntityManager em)
-        {
-            this.em = em;
-            this.query = new JPAQueryFactory(em);
-        }
+    public MemoryQueryRepository(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
 
-        public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName)
-        {
-            return query.select(Projections.constructor(MemorySearchDto.class,memory.place.id,memory.title))
-                    .from(memory)
-                    .where(memory.user.userSeq.eq(userSeq),memory.title.contains(memoryName)).distinct().fetch();
-        }
+    public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName) {
+        return query.select(Projections.constructor(MemorySearchDto.class, memory.place.id, memory.title))
+                .from(memory)
+                .where(memory.user.userSeq.eq(userSeq), memory.title.contains(memoryName)).distinct().fetch();
+    }
 
     /**
-     *
-     * @param userSeq 유저 식별값
-     * @param placeId 장소 아이디
-     * @param keyword 메모리 작성시 설정한 키워드
-     * @param groupType 메모리가 속한 그룹의 타입
+     * @param userSeq      유저 식별값
+     * @param placeId      장소 아이디
+     * @param keyword      메모리 작성시 설정한 키워드
+     * @param groupType    메모리가 속한 그룹의 타입
      * @param visitiedDate 메모리의 장소에 방문한 날짜
      */
-        public Slice<Memory> searchMemoryUserCreate(Long lastMemoryId ,Pageable pageable, Long userSeq, Long placeId, String keyword, GroupType groupType, LocalDate visitiedDate){
+    public Slice<Memory> searchMemoryUserCreate(Long lastMemoryId, Pageable pageable, Long userSeq, Long placeId, String keyword, GroupType groupType, LocalDate visitiedDate) {
 
-            List<Memory> results = query.select(memory)
-                    .from(memory)
-                    .where(
-                            ltMemoryId(lastMemoryId),
-                            eqPlace(placeId),
-                            memory.user.userSeq.eq(userSeq),
-                            eqKeyword(keyword),
-                            eqGroup(groupType),
-                            eqVisitiedDate(visitiedDate)
-                    ).orderBy(memory.id.desc())
-                    .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
-                    .fetch();
-            return checkLastPage(pageable, results);
+        List<Memory> results = query.select(memory)
+                .from(memory)
+                .where(
+                        ltMemoryId(lastMemoryId),
+                        eqPlace(placeId),
+                        memory.user.userSeq.eq(userSeq),
+                        eqKeyword(keyword),
+                        eqGroup(groupType),
+                        eqVisitiedDate(visitiedDate)
+                ).orderBy(memory.id.desc())
+                .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
+                .fetch();
+        return checkLastPage(pageable, results);
+    }
+
+    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId, String keyword, LocalDate visitiedDate) {
+
+        List<Memory> results = query.select(memory)
+                .from(memory)
+
+                .where(
+                        ltMemoryId(lastId),
+                        // 1. 그 장소에 메모리가 존재하는지 체크
+                        memory.place.id.eq(placeId),
+                        // 2. 지금 로그인한 유저의 메모리가 아니고,
+                        memory.user.userSeq.ne(userSeq),
+                        // 3. 이 메모리는 전체 공개로 공개가 됐다.
+                        // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
+                        memory.openType.eq(OpenType.ALL),
+                        eqKeyword(keyword),
+                        eqVisitiedDate(visitiedDate)
+                ).orderBy(memory.id.desc())
+                .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
+                .fetch();
+
+        return checkLastPage(pageable, results);
+    }
+
+
+    private BooleanExpression eqKeyword(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return null;
         }
 
-    //    public Slice<Store> searchBySlice(Long lastStoreId, StoreSearchCond condition, Pageable pageable,String address)
-//    {
-//        List<Store> results = query.selectFrom(store)
-//                .where(
-//                        // 관리자가 승인한 가게만 보여야 한다.
-//                        ltStoreId(lastStoreId),
-//                        store.address.eq("성동구 왕십리"),
-//                        store.isAssigned.eq(true),
-//                        // no-offset 페이징 처리
-//                        // Category 중복 필터링
-//                        eqCategory(condition.getCategoryIds()),
-//                        // Convenience 중복 필터링
-//                        eqConvenience(condition.getConvenienceIds())
-//                )
-//                .orderBy(store.id.desc())
-//                .limit(pageable.getPageSize()+1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
-//                .fetch();
-//
-//        return checkLastPage(pageable, results);
-//    }
+        return memory.keyword.contains(keyword);
+    }
+
+
+    private BooleanExpression eqGroup(GroupType groupType) {
+        if (groupType == null) {
+            return null;
+        }
+
+        return memory.groupInfo.groupType.eq(groupType);
+    }
+
+
+    private BooleanExpression eqVisitiedDate(LocalDate visitiedDate) {
+
+        if (visitiedDate == null) {
+            return null;
+        }
+
+        return memory.visitedDate.between(
+                visitiedDate.atStartOfDay(),
+                LocalDateTime.of(visitiedDate, LocalTime.of(23, 59, 59)));
+
+
+    }
+
+
+    private BooleanExpression eqPlace(Long placeId) {
+        if (placeId == null) {
+            return null;
+        }
+        return memory.place.id.eq(placeId);
+    }
+
+
     private BooleanExpression ltMemoryId(Long memoryId) {
         if (memoryId == null) {
             return null;
@@ -93,14 +134,7 @@ public class MemoryQueryRepository {
 
         return memory.id.lt(memoryId);
     }
-//
-//    private BooleanExpression findByName(String name) {
-//        if (name == null) {
-//            return null;
-//        }
-//
-//        return store.name.contains(name);
-//    }
+
 
     private Slice<Memory> checkLastPage(Pageable pageable, List<Memory> results) {
 
@@ -114,79 +148,6 @@ public class MemoryQueryRepository {
 
         return new SliceImpl<>(results, pageable, hasNext);
     }
-
-        public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq,Long placeId,String keyword, LocalDate visitiedDate){
-
-            List<Memory> results = query.select(memory)
-                    .from(memory)
-
-                    .where(
-                            ltMemoryId(lastId),
-                            // 1. 그 장소에 메모리가 존재하는지 체크
-                            memory.place.id.eq(placeId),
-                            // 2. 지금 로그인한 유저의 메모리가 아니고,
-                            memory.user.userSeq.ne(userSeq),
-                            // 3. 이 메모리는 전체 공개로 공개가 됐다.
-                            // 4. 만약 그룹을 하나라도 선택했으면 OpenType.GROUP으로 설정
-                            memory.openType.eq(OpenType.ALL),
-                            eqKeyword(keyword),
-                            eqVisitiedDate(visitiedDate)
-                    ).orderBy(memory.id.desc())
-                    .limit(pageable.getPageSize() + 1) // 나는 5개 요청해도 쿼리상 +시켜서 6개 들고 오게 함
-                    .fetch();
-
-            return checkLastPage(pageable, results);
-    }
-
-    private BooleanExpression eqKeyword(String keyword)
-    {
-        if(keyword == null || keyword.isEmpty())
-        {
-            return null;
-        }
-
-        return memory.keyword.contains(keyword);
-    }
-
-    private BooleanExpression eqGroup(GroupType groupType)
-    {
-        if(groupType == null)
-        {
-            return null;
-        }
-
-        return memory.groupInfo.groupType.eq(groupType);
-    }
-
-    //  TODO : LocalDateTime을 LocalDate로 변환해주는 get 함수 필요!
-    private BooleanExpression eqVisitiedDate(LocalDate visitiedDate)
-    {
-
-        if(visitiedDate == null)
-        {
-            return null;
-        }
-
-        return memory.visitedDate.between(
-                visitiedDate.atStartOfDay(),
-                LocalDateTime.of(visitiedDate, LocalTime.of(23,59,59)));
-
-
-    }
-
-    private BooleanExpression eqPlace(Long placeId)
-    {
-        if(placeId == null)
-        {
-            return null;
-        }
-        return memory.place.id.eq(placeId);
-    }
-
-
-
-
-
 
 
 }

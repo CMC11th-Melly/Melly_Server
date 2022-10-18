@@ -4,6 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
@@ -12,6 +13,8 @@ import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.scrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +28,17 @@ import java.util.stream.Collectors;
 public class ScrapDomainService {
 
     private final PlaceRepository placeRepository;
+    private final PlaceQueryRepository placeQueryRepository;
     private final ScrapRepository scrapRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
-    public List<ScrapedPlaceResponseDto> getScrapPlace(String uid)
+
+    public Slice<ScrapedPlaceResponseDto> getScrapPlace(Long lastId, Pageable pageable, String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return user.getScraps().stream().map(s -> {
-            Place place = s.getPlace();
-            place.setScraped(checkIsScraped(user,place));
-            return ScrapAssembler.scrapedPlaceResponseDto(place,user,s.getCreatedDate());
-        }).collect(Collectors.toList());
+        Slice<Place> result = placeQueryRepository.getScrapedPlace(lastId, pageable, user);
+        return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p,user,p.getCreatedDate()));
     }
 
 
@@ -61,6 +63,7 @@ public class ScrapDomainService {
 
     }
 
+
     @Transactional
     public void removeScrap(String uid, Double lat, Double lng)
     {
@@ -72,19 +75,15 @@ public class ScrapDomainService {
     }
 
 
-
     private void checkDuplicatedScrap(Long userSeq, Double lat, Double lng) {
         scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
                 .ifPresent(x -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_SCRAP);});
     }
+
 
     private void checkExistScrap(Long userSeq, Double lat, Double lng) {
         scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
                 .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
     }
 
-    private boolean checkIsScraped(User user, Place place)
-    {
-        return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
-    }
 }

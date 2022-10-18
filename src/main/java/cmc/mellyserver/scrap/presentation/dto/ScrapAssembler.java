@@ -20,7 +20,7 @@ public class ScrapAssembler {
         return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
                 stream().
                 filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
-                place.getIsScraped(),
+                true,
                 place.getPlaceName(),
                 GroupType.ALL,
                 place.getPlaceImage(),

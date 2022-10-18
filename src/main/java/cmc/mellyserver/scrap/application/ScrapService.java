@@ -6,6 +6,8 @@ import cmc.mellyserver.scrap.domain.ScrapDomainService;
 import cmc.mellyserver.scrap.domain.ScrapRepository;
 import cmc.mellyserver.scrap.presentation.dto.ScrapRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +23,13 @@ public class ScrapService {
     @Transactional
     public void createScrap(String uid, ScrapRequest scrapRequest)
     {
-        scrapDomainService.createScrap(uid,
-                                            scrapRequest.getLat(),
-                                            scrapRequest.getLng(),
+        scrapDomainService.createScrap(uid, scrapRequest.getLat(), scrapRequest.getLng(),
                                             scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
     }
 
-    public List<ScrapedPlaceResponseDto> getScrapedPlace(String uid)
+    public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Long lastId, Pageable pageable, String uid)
     {
-        return scrapDomainService.getScrapPlace(uid);
+        return scrapDomainService.getScrapPlace(lastId, pageable, uid);
     }
 
     @Transactional
