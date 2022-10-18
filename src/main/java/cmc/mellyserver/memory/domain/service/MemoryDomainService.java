@@ -45,7 +45,7 @@ public class MemoryDomainService {
     /**
      * 메모리 생성
      */
-    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, List<String> keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
+    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);

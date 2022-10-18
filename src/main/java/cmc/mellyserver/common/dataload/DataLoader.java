@@ -96,7 +96,7 @@ public class DataLoader {
         Memory memory1 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회").visitedDate(LocalDateTime.now()).content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory1.setUser(user);
-        memory1.setKeyword(List.of("최고에요","맛있어요"));
+        memory1.setKeyword("재밌어요");
         Memory save = memoryRepository.save(memory1);
         save.setPlaceForMemory(place1);
 
@@ -104,7 +104,7 @@ public class DataLoader {
         Memory memory1_2 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회1").visitedDate(LocalDateTime.now()).content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory1_2.setUser(user);
-        memory1_2.setKeyword(List.of("최고에요","맛있어요"));
+        memory1_2.setKeyword("재밌어요");
         Memory save_2 = memoryRepository.save(memory1_2);
         save_2.setPlaceForMemory(place1);
 
@@ -112,7 +112,7 @@ public class DataLoader {
         Memory memory1_3 = Memory.builder().stars(5L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("제주도보다 맛있는 고등어회2").visitedDate(LocalDateTime.now()).content("친구 추천 받아서 갔는데 정말 맛있었다. 가게는 작고 아담한데 4명 이하로 오면 딱 좋을 느낌! 다음에 또 가장!").build();
         memory1_3.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory1_3.setUser(user);
-        memory1_3.setKeyword(List.of("최고에요","맛있어요"));
+        memory1_3.setKeyword("재밌어요");
         Memory save_3 = memoryRepository.save(memory1_3);
         save_3.setPlaceForMemory(place1);
         placeRepository.save(place1);
@@ -123,21 +123,21 @@ public class DataLoader {
         Memory memory2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory2.setUser(user);
-        memory2.setKeyword(List.of("행복해요","좋아요"));
+        memory2.setKeyword("재밌어요");
         Memory save1_1 = memoryRepository.save(memory2);
         save1_1.setPlaceForMemory(place2);
 
         Memory memory2_1 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2_1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory2_1.setUser(user);
-        memory2_1.setKeyword(List.of("행복해요","좋아요"));
+        memory2_1.setKeyword("재밌어요");
         Memory save1_2 = memoryRepository.save(memory2_1);
         save1_2.setPlaceForMemory(place2);
 
         Memory memory2_2 = Memory.builder().stars(4L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("거의 반년만에 만나는 느낌..!! 오늘 너무 즐거웠어욤 담엔 또 언제 볼 수 있으려나ㅠㅠ 좋은 곳 데려가준 강남잘알 oo이 너무 고마워^-^").build();
         memory2_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory2_2.setUser(user);
-        memory2_2.setKeyword(List.of("행복해요","좋아요"));
+        memory2_2.setKeyword("재밌어요");
         Memory save1_3 = memoryRepository.save(memory2_2);
         save1_3.setPlaceForMemory(place2);
         placeRepository.save(place2);
@@ -149,21 +149,21 @@ public class DataLoader {
         Memory memory3 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png")));
         memory3.setUser(user);
-        memory3.setKeyword(List.of("기뻐요","슬퍼요"));
+        memory3.setKeyword("그냥 그래요");
         Memory save2 = memoryRepository.save(memory3);
         save2.setPlaceForMemory(place3);
 
         Memory memory3_1 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3_1.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg")));
         memory3_1.setUser(user);
-        memory3_1.setKeyword(List.of("기뻐요","슬퍼요"));
+        memory3_1.setKeyword("그냥 그래요");
         Memory save2_1 = memoryRepository.save(memory3_1);
         save2_1.setPlaceForMemory(place3);
 
         Memory memory3_2 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
         memory3_2.setMemoryImages(List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png")));
         memory3_2.setUser(user);
-        memory3_2.setKeyword(List.of("기뻐요","슬퍼요"));
+        memory3_2.setKeyword("그냥 그래요");
         Memory save2_2 = memoryRepository.save(memory3_2);
         save2_2.setPlaceForMemory(place3);
         placeRepository.save(place3);
@@ -174,7 +174,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "그냥 그래요", LocalDateTime.now(),
             List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -182,7 +182,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"),
+                "그냥 그래요",
                 LocalDateTime.now(),
                 List.of());
 //
@@ -191,7 +191,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"),
+                "그냥 그래요",
                 LocalDateTime.now(),
                 List.of());
 
@@ -200,7 +200,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "그냥 그래요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -208,7 +208,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "그냥 그래요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -216,7 +216,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -224,7 +224,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -232,7 +232,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -240,7 +240,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -248,7 +248,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -256,7 +256,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -264,7 +264,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -272,7 +272,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -280,7 +280,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -288,7 +288,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "기뻐요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -296,7 +296,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -304,7 +304,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -312,7 +312,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -320,7 +320,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -328,7 +328,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
                 userGroup.getGroupType(),userGroup.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -336,7 +336,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -344,7 +344,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -352,7 +352,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -360,7 +360,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -368,7 +368,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -376,7 +376,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -384,7 +384,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -392,7 +392,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -400,7 +400,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -408,7 +408,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -416,7 +416,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -424,7 +424,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -432,7 +432,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -440,7 +440,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -448,7 +448,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -456,7 +456,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -464,7 +464,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -472,7 +472,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -480,7 +480,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -488,7 +488,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -496,7 +496,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -504,7 +504,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -512,7 +512,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -520,7 +520,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "좋아요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -528,7 +528,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+               "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -536,7 +536,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -544,7 +544,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -552,7 +552,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -560,7 +560,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -568,7 +568,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -576,7 +576,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -584,7 +584,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -592,7 +592,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -600,7 +600,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -608,7 +608,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -616,7 +616,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -624,7 +624,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -632,7 +632,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -640,7 +640,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -648,7 +648,7 @@ public class DataLoader {
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("맛있어요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
 
@@ -658,7 +658,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -666,7 +666,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -674,7 +674,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -682,7 +682,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -690,7 +690,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -698,7 +698,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -706,7 +706,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -714,7 +714,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -722,7 +722,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -730,7 +730,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -738,7 +738,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -746,7 +746,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -754,7 +754,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -762,7 +762,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -770,7 +770,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -778,7 +778,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -786,7 +786,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -794,7 +794,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -802,7 +802,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -810,7 +810,7 @@ public class DataLoader {
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
                 userGroup2.getGroupType(),userGroup2.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -818,7 +818,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -826,7 +826,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -834,7 +834,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -842,7 +842,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -850,7 +850,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -858,7 +858,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -866,7 +866,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -874,7 +874,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -882,7 +882,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -890,7 +890,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -898,7 +898,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -906,7 +906,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -914,7 +914,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -922,7 +922,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 //
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -930,7 +930,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -938,7 +938,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -946,7 +946,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -954,7 +954,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -962,7 +962,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser.getUserId(),
@@ -970,7 +970,7 @@ public class DataLoader {
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
                 userGroup3.getGroupType(),userGroup3.getGroupName(),
-                List.of("최고에요","기뻐요"), LocalDateTime.now(),
+                "재밌어요", LocalDateTime.now(),
                 List.of());
 
     }

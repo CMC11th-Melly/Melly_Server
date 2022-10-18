@@ -37,7 +37,7 @@ public class PlaceInfoRequest {
     private String content;
 
     @Schema(example = "좋아요,슬퍼요")
-    private List<String> keyword;
+    private String keyword;
 
     @Schema(example = "1")
     private Long groupId;

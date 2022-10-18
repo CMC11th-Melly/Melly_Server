@@ -60,9 +60,9 @@ public class TrendResponseDto implements Serializable {
         private String content;
         private String groupName;
         private Long stars;
-        private List<String> keywords;
+        private String keyword;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Long stars, List<String> keywords)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Long stars, String keyword)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;
@@ -70,7 +70,7 @@ public class TrendResponseDto implements Serializable {
             this.content = content;
             this.groupName = groupName;
             this.stars =stars;
-            this.keywords = keywords;
+            this.keyword = keyword;
         }
     }
 

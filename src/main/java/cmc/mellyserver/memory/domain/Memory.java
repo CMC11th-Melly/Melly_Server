@@ -36,12 +36,13 @@ public class Memory extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "keywords_table",
-            joinColumns = @JoinColumn(name = "memory_id"))
-    @Column(name = "keyword") // 컬럼명 지정 (예외)
-    private List<String> keyword = new ArrayList<>();
+//    @ElementCollection
+//    @CollectionTable(
+//            name = "keywords_table",
+//            joinColumns = @JoinColumn(name = "memory_id"))
+//    @Column(name = "keyword") // 컬럼명 지정 (예외)
+//    private List<String> keyword = new ArrayList<>();
+    private String keyword;
 
     @Embedded
     GroupInfo groupInfo;
@@ -78,10 +79,10 @@ public class Memory extends JpaBaseEntity {
         }
     }
 
-    public void setKeyword(List<String> keywords)
+    public void setKeyword(String keyword)
     {
         // 값 타입처럼 아예 대체해버리기
-        this.keyword = keywords;
+        this.keyword = keyword;
     }
 
     @Builder
