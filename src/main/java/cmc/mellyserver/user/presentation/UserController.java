@@ -37,13 +37,12 @@ public class UserController {
     @Operation(summary = "유저가 작성한 메모리 조회")
     @GetMapping("/memory")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
-                                                        @RequestParam(name = "lastId",required = false) Long lastId,
+                                                        @RequestParam(name = "lastId", required = false) Long lastId,
                                                         Pageable pageable,
-                                                        GetUserMemoryCond getUserMemoryCond)
-    {
-        Slice<Memory> userMemory = userService.getUserMemory(lastId, pageable,user.getUsername(),getUserMemoryCond);
+                                                        GetUserMemoryCond getUserMemoryCond) {
+        Slice<Memory> userMemory = userService.getUserMemory(lastId, pageable, user.getUsername(), getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200,
-                "유저가 작성한 메모리 조회",new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))
+                "유저가 작성한 메모리 조회", new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))
         ));
     }
 
@@ -53,55 +52,47 @@ public class UserController {
      */
     @Operation(summary = "유저가 스크랩한 장소 조회")
     @GetMapping("/scrap")
-    public ResponseEntity<CommonResponse> getUserScrap(@AuthenticationPrincipal User user)
-    {
-        List<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace( user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"유저가 스크랩한 장소 목록",new ScrapResponseWrapper(scrapedPlace)));
+    public ResponseEntity<CommonResponse> getUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
+        Slice<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace(lastId, pageable, user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 장소 목록", new ScrapResponseWrapper(scrapedPlace)));
     }
 
 
     /**
-     *  그룹 정보 보여줄때도 날짜 함께 보내주기
+     * 그룹 정보 보여줄때도 날짜 함께 보내주기
      */
     @Operation(summary = "유저가 속해있는 그룹 조회")
     @GetMapping("/group")
-    public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
-    {
+    public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user) {
         List<UserGroup> userGroup = userService.getUserGroup(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,
-                "유저가 작성한 메모리 조회",new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup))
+                "유저가 작성한 메모리 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup))
         ));
     }
 
 
-
     @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
-    public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
-    {
+    public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user) {
         double volume = userService.checkUserImageVolume(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"유저가 저장한 사진 총 용량",new UserImageVolumeWrapper(volume)));
+        return ResponseEntity.ok(new CommonResponse(200, "유저가 저장한 사진 총 용량", new UserImageVolumeWrapper(volume)));
     }
-
 
 
     @Operation(summary = "초대링크를 받은 후 그룹에 참여")
     @PostMapping("/group")
-    public ResponseEntity<CommonResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest)
-    {
-        userService.participateToGroup(user.getUsername(),participateGroupRequest.getGroupId());
-        return ResponseEntity.ok(new CommonResponse(200,"그룹에 추가 완료"));
+    public ResponseEntity<CommonResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest) {
+        userService.participateToGroup(user.getUsername(), participateGroupRequest.getGroupId());
+        return ResponseEntity.ok(new CommonResponse(200, "그룹에 추가 완료"));
     }
 
 
     @Operation(summary = "프로필 정보 수정 기능")
     @PutMapping("/profile")
-    public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest)
-    {
-        userService.updateProfile(user.getUsername(),profileUpdateRequest);
-        return ResponseEntity.ok(new CommonResponse(200,"프로필 수정 완료"));
+    public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest) {
+        userService.updateProfile(user.getUsername(), profileUpdateRequest);
+        return ResponseEntity.ok(new CommonResponse(200, "프로필 수정 완료"));
     }
-
 
 
 }

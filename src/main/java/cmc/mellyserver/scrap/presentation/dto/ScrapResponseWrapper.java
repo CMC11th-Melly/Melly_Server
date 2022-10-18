@@ -3,6 +3,7 @@ package cmc.mellyserver.scrap.presentation.dto;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ import java.util.List;
 @Data
 public class ScrapResponseWrapper {
 
-    private List<ScrapedPlaceResponseDto> scrapedPlace;
+    private Slice<ScrapedPlaceResponseDto> scrapedPlace;
 }

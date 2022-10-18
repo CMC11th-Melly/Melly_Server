@@ -37,17 +37,15 @@ public class UserService {
     private final S3FileLoader s3FileLoader;
 
 
-    public List<UserGroup> getUserGroup(String uid)
-    {
+    public List<UserGroup> getUserGroup(String uid) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return user.getGroupAndUsers().stream().map(gu -> gu.getGroup()).collect(Collectors.toList());
     }
 
-    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, GetUserMemoryCond getUserMemoryCond)
-    {
+    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, GetUserMemoryCond getUserMemoryCond) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId,pageable, user.getUserSeq(),
+        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId, pageable, user.getUserSeq(),
                 null,
                 getUserMemoryCond.getKeyword(),
                 getUserMemoryCond.getGroupType(),
@@ -57,17 +55,16 @@ public class UserService {
     }
 
     @Transactional
-    public void participateToGroup(String uid,Long groupId) {
-        groupService.participateToGroup(uid,groupId);
+    public void participateToGroup(String uid, Long groupId) {
+        groupService.participateToGroup(uid, groupId);
     }
 
     public double checkUserImageVolume(String username) {
 
-        System.out.println(username);
         ObjectListing mellyimage = amazonS3Client.listObjects("mellyimage", username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
         double sum = (double) objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
-        return Math.round(((sum/1000.0)/1024.0) * 100) / 100.0;
+        return Math.round(((sum / 1000.0) / 1024.0) * 100) / 100.0;
     }
 
     @Transactional
@@ -75,6 +72,6 @@ public class UserService {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getImage());
-        user.updateProfile(profileUpdateRequest.getNickname(),multipartFileName);
+        user.updateProfile(profileUpdateRequest.getNickname(), multipartFileName);
     }
 }
