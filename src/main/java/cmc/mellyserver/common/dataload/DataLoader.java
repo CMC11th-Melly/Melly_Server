@@ -174,7 +174,6 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
                 "그냥 그래요", LocalDateTime.now(),
             List.of());
 //
@@ -182,7 +181,6 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
                 "그냥 그래요",
                 LocalDateTime.now(),
                 List.of());
@@ -191,7 +189,6 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
                 "그냥 그래요",
                 LocalDateTime.now(),
                 List.of());
@@ -200,7 +197,6 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
                 "그냥 그래요", LocalDateTime.now(),
                 List.of());
 //
@@ -208,7 +204,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "그냥 그래요", LocalDateTime.now(),
                 List.of());
 //
@@ -216,7 +212,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -224,7 +220,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -232,7 +228,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -240,7 +236,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -248,7 +244,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -256,7 +252,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -264,7 +260,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -272,7 +268,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 //
@@ -280,7 +276,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 
@@ -288,7 +284,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "기뻐요", LocalDateTime.now(),
                 List.of());
 
@@ -296,7 +292,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -304,7 +300,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -312,7 +308,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -320,7 +316,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -328,7 +324,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup.getId(),
-                userGroup.getGroupType(),userGroup.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -336,7 +332,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -344,7 +340,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -352,7 +348,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -360,7 +356,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -368,7 +364,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -376,7 +372,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -384,7 +380,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -392,7 +388,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -400,7 +396,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -408,7 +404,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -416,7 +412,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -424,7 +420,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -432,7 +428,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -440,7 +436,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -448,7 +444,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -456,7 +452,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -464,7 +460,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -472,7 +468,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -480,7 +476,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -488,7 +484,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup2.getId(),
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -496,7 +492,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -504,7 +500,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -512,7 +508,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -520,7 +516,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "좋아요", LocalDateTime.now(),
                 List.of());
 
@@ -528,7 +524,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -536,7 +532,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -544,7 +540,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -552,7 +548,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -560,7 +556,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -568,7 +564,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -576,7 +572,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -584,7 +580,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -592,7 +588,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -600,7 +596,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -608,7 +604,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -616,7 +612,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -624,7 +620,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -632,7 +628,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -640,7 +636,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -648,7 +644,7 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -658,7 +654,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -666,7 +662,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -674,7 +670,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -682,7 +678,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -690,7 +686,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -698,7 +694,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -706,7 +702,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -714,7 +710,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -722,7 +718,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -730,7 +726,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -738,7 +734,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -746,7 +742,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -754,7 +750,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -762,7 +758,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -770,7 +766,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -778,7 +774,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -786,7 +782,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -794,7 +790,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -802,7 +798,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -810,7 +806,7 @@ public class DataLoader {
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,
                 2L,
-                userGroup2.getGroupType(),userGroup2.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -818,7 +814,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -826,7 +822,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -834,7 +830,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -842,7 +838,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -850,7 +846,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -858,7 +854,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -866,7 +862,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -874,7 +870,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -882,7 +878,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -890,7 +886,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -898,7 +894,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -906,7 +902,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -914,7 +910,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -922,7 +918,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 //
@@ -930,7 +926,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -938,7 +934,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -946,7 +942,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -954,7 +950,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -962,7 +958,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 
@@ -970,7 +966,7 @@ public class DataLoader {
                 37.503861,127.024144,
                 "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
                 userGroup3.getId(),
-                userGroup3.getGroupType(),userGroup3.getGroupName(),
+
                 "재밌어요", LocalDateTime.now(),
                 List.of());
 

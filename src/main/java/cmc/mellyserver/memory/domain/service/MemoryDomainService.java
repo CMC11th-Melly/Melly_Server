@@ -42,12 +42,13 @@ public class MemoryDomainService {
     private final TrendAnalyzer trendAnalyzer;
 
 
-    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, GroupType groupType,String groupName, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
+    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(uid,multipartFiles);
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
+
 
         if(placeOpt.isEmpty())
         {

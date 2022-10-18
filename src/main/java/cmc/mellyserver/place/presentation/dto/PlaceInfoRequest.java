@@ -4,10 +4,12 @@ import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleTagPredicate;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.api.client.util.DateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,14 +44,14 @@ public class PlaceInfoRequest {
     @Schema(example = "1")
     private Long groupId;
 
-    @Schema(example = "떡잎마을 방범대")
-    private String groupName;
+//    @Schema(example = "떡잎마을 방범대")
+//    private String groupName;
 
     @JsonFormat(pattern = "yyyyMMddHHmm")
     private LocalDateTime visitedDate;
 
-    @Schema(example = "FRIEND")
-    private GroupType groupType;
+//    @Schema(example = "FRIEND")
+//    private GroupType groupType;
 
     @Schema(example = "5")
     private Long star;
