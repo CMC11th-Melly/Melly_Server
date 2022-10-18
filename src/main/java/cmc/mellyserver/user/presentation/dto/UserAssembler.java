@@ -21,7 +21,9 @@ public class UserAssembler {
         return userGroups.stream().map(ug -> new GetUserGroupResponse(ug.getId(),
                 ug.getGroupIcon(),
                 ug.getGroupName(),
-                ug.getGroupType(),ug.getCreatedDate(),
+                ug.getGroupType(),
+                ug.getInviteLink(),
+                ug.getCreatedDate(),
                 ug.getGroupAndUsers().stream().map(gu -> new UserResponseDto(gu.getUser().getUserId(),gu.getUser().getProfileImage(),gu.getUser().getNickname())).collect(Collectors.toList())
                 )).collect(Collectors.toList());
     }

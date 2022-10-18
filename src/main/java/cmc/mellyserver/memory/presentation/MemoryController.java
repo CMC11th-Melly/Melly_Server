@@ -7,7 +7,6 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +21,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/memory")
 public class MemoryController {
 
     private final MemoryService memoryService;
 
 
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
-    @GetMapping("/memory/group")
+    @GetMapping("/group")
     public ResponseEntity<CommonResponse> getUserGroupForMemoryForm(@AuthenticationPrincipal User user)
     {
         List<MemoryFormGroupResponse> userGroup = memoryService.getUserGroupForMemoryForm(user.getUsername());
@@ -39,7 +38,7 @@ public class MemoryController {
 
     @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
                                                              "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
-    @GetMapping("/memory/user/place/{placeId}")
+    @GetMapping("/user/place/{placeId}")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
                               @PathVariable Long placeId,
                               @RequestParam(name = "lastId",required = false) Long lastId,
@@ -55,23 +54,24 @@ public class MemoryController {
 
     @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회", description = "- 메모리 생성 날짜(연월일), 키워드로 필터링 가능" +
             "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
-    @GetMapping("/memory/other/place/{placeId}")
-    public ResponseEntity<CommonResponse> getOtherMemory(@AuthenticationPrincipal User user,
-                               @PathVariable Long placeId,
-                                                         @RequestParam(name = "lastId",required = false) Long lastId,
-                                                         Pageable pageable,
-                               GetOtherMemoryCond getOtherMemoryCond)
+    @GetMapping("/other/place/{placeId}")
+    public ResponseEntity<CommonResponse> getOtherMemory(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long placeId,
+            @RequestParam(name = "lastId", required = false) Long lastId,
+            Pageable pageable,
+            GetOtherMemoryCond getOtherMemoryCond
+    )
     {
-        Slice<Memory> result = memoryService.getOtherMemory(lastId, pageable, user.getUsername(),
-                placeId,
-                getOtherMemoryCond);
+        Slice<Memory> result = memoryService.getOtherMemory(lastId, pageable, user.getUsername(), placeId, getOtherMemoryCond);
+
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
                 new GetOtherMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getOtherMemoryForPlaceResponses(result))));
     }
 
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
-    @PostMapping("/memory")
+    @PostMapping
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images") List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
@@ -85,7 +85,7 @@ public class MemoryController {
 
 
     @Operation(summary = "검색창에서 메모리 제목으로 검색")
-    @GetMapping("/memory/search")
+    @GetMapping("/search")
     public ResponseEntity<CommonResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName)
     {
         List<MemorySearchDto> result = memoryService.searchPlaceByMemoryTitle(user.getUsername(), memoryName);
