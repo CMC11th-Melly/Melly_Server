@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
@@ -45,8 +46,9 @@ public class MemoryQueryRepository {
      * @param keyword      메모리 작성시 설정한 키워드
      * @param groupType    메모리가 속한 그룹의 타입
      * @param visitiedDate 메모리의 장소에 방문한 날짜
+     * 만약 groupType이 null이나 ALL로 들어가면 조건 아예 없어버림. size만 처음에 10 넣고, 다음부터 마지막 데이터 가져오기
      */
-    public Slice<Memory> searchMemoryUserCreate(Long lastMemoryId, Pageable pageable, Long userSeq, Long placeId, String keyword, GroupType groupType, LocalDate visitiedDate) {
+    public Slice<Memory> searchMemoryUserCreate(Long lastMemoryId, Pageable pageable, Long userSeq, Long placeId, String keyword, GroupType groupType, String visitiedDate) {
 
         List<Memory> results = query.select(memory)
                 .from(memory)
@@ -63,7 +65,7 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
-    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId, String keyword, LocalDate visitiedDate) {
+    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId, String keyword, String visitiedDate) {
 
         List<Memory> results = query.select(memory)
                 .from(memory)
@@ -84,7 +86,9 @@ public class MemoryQueryRepository {
 
 
     private BooleanExpression eqKeyword(String keyword) {
-        if (keyword == null) {
+
+        System.out.println("keyword = " + keyword);
+        if (keyword == null || keyword.isEmpty()) {
             return null;
         }
 
@@ -103,15 +107,18 @@ public class MemoryQueryRepository {
     }
 
 
-    private BooleanExpression eqVisitiedDate(LocalDate visitiedDate) {
+    private BooleanExpression eqVisitiedDate(String visitiedDate) {
 
-        if (visitiedDate == null) {
+        if (visitiedDate == null || visitiedDate.isEmpty()) {
             return null;
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        LocalDate visited = LocalDate.parse(visitiedDate, formatter);
+
         return memory.visitedDate.between(
-                visitiedDate.atStartOfDay(),
-                LocalDateTime.of(visitiedDate, LocalTime.of(23, 59, 59)));
+                visited.atStartOfDay(),
+                LocalDateTime.of(visited, LocalTime.of(23, 59, 59)));
 
 
     }
@@ -144,7 +151,8 @@ public class MemoryQueryRepository {
 
 
     private BooleanExpression ltMemoryId(Long memoryId) {
-        if (memoryId == null) {
+
+        if (memoryId == null || memoryId == -1) {
             return null;
         }
 

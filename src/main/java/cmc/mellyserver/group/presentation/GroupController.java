@@ -27,9 +27,4 @@ public class GroupController {
         return ResponseEntity.ok(new GroupCreateResponse(userGroup.getId(),userGroup.getGroupName()));
     }
 
-
-
-
-
-
 }
