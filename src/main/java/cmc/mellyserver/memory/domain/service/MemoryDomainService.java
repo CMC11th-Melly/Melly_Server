@@ -57,7 +57,7 @@ public class MemoryDomainService {
             Memory memory;
 
             // 1. 만약 그룹이 없다면?
-            if(groupId == null)
+            if(groupId == null || groupId == -1L)
             {
                memory  = Memory.builder().title(title).content(content).openType(OpenType.ALL).groupInfo(new GroupInfo("그룹 미설정",GroupType.ALL,-1L)).openType(openType).stars(star).visitedDate(visitedDate).build();
             }
@@ -82,7 +82,7 @@ public class MemoryDomainService {
         }
         else{
             Memory memory;
-            if(groupId == null)
+            if(groupId == null || groupId == -1L)
             {
               memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo("그룹 미설정",GroupType.ALL,-1L)).openType(openType).stars(star).visitedDate(visitedDate).build();
             }
