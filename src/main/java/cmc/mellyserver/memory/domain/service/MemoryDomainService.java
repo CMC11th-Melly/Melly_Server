@@ -42,29 +42,30 @@ public class MemoryDomainService {
     private final TrendAnalyzer trendAnalyzer;
 
 
-    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
+    public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, OpenType openType, String keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(uid,multipartFiles);
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
 
-
+        // 만약 아직 장소가 없다면?
         if(placeOpt.isEmpty())
         {
             Place savePlace = placeRepository.save(Place.builder().position(new Position(lat, lng)).placeCategory(placeCategory).placeName(placeName).build());
 
             Memory memory;
+
             // 1. 만약 그룹이 없다면?
             if(groupId == null)
             {
-               memory  = Memory.builder().title(title).content(content).openType(OpenType.ALL).groupInfo(new GroupInfo(null,null,null)).stars(star).visitedDate(visitedDate).build();
+               memory  = Memory.builder().title(title).content(content).openType(OpenType.ALL).groupInfo(new GroupInfo("그룹 미설정",GroupType.ALL,-1L)).openType(openType).stars(star).visitedDate(visitedDate).build();
             }
             else{
                 UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
                     throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
                 });
-                memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).visitedDate(visitedDate).openType(OpenType.GROUP).stars(star).build();
+                memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).visitedDate(visitedDate).openType(openType).stars(star).build();
             }
             // user 세팅
             memory.setUser(user);
@@ -83,13 +84,13 @@ public class MemoryDomainService {
             Memory memory;
             if(groupId == null)
             {
-              memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo(null,GroupType.ALL,null)).openType(OpenType.ALL).stars(star).visitedDate(visitedDate).build();
+              memory =  Memory.builder().title(title).content(content).groupInfo(new GroupInfo("그룹 미설정",GroupType.ALL,-1L)).openType(openType).stars(star).visitedDate(visitedDate).build();
             }
             else{
                 UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
                     throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
                 });
-               memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(OpenType.GROUP).stars(star).visitedDate(visitedDate).build();
+               memory = Memory.builder().title(title).content(content).groupInfo(new GroupInfo(userGroup.getGroupName(),userGroup.getGroupType(),groupId)).openType(openType).stars(star).visitedDate(visitedDate).build();
             }
 
             memory.setUser(user);

@@ -41,6 +41,7 @@ public class MemoryService {
                 placeInfoRequest.getContent(),
                 placeInfoRequest.getStar(),
                 placeInfoRequest.getGroupId(),
+                placeInfoRequest.getOpenType(),
                 placeInfoRequest.getKeyword(),
                 placeInfoRequest.getVisitedDate(),
                 images);

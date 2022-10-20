@@ -74,7 +74,8 @@ public class MemoryQueryRepository {
                         ltMemoryId(lastId),
                         eqPlace(placeId),
                         neUserSeq(userSeq),
-                        memory.openType.eq(OpenType.ALL), // 다른 사람이 작성한 메모리 중 OpenType이 ALL인 녀석들만 참고!
+                        // 상대방 메모리 중에 전체 공개인것만 가져오기
+                        memory.openType.eq(OpenType.ALL),
                         eqKeyword(keyword),
                         eqVisitiedDate(visitiedDate)
                 ).orderBy(memory.id.desc())

@@ -1,5 +1,6 @@
 package cmc.mellyserver.place.presentation.dto;
 
+import cmc.mellyserver.memory.domain.enums.OpenType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -36,6 +37,9 @@ public class PlaceInfoRequest {
 
     @Schema(example = "1")
     private Long groupId;
+
+    @Schema(example = "GROUP")
+    private OpenType openType;
 
     @JsonFormat(pattern = "yyyyMMddHHmm")
     private LocalDateTime visitedDate;
