@@ -1,7 +1,6 @@
 package cmc.mellyserver.user.presentation;
 
 import cmc.mellyserver.common.response.CommonResponse;
-import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
