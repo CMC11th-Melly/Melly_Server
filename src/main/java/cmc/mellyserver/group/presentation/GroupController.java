@@ -21,7 +21,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping("/group")
-    private ResponseEntity<GroupCreateResponse> addGroup(@AuthenticationPrincipal User user, @RequestBody GroupCreateRequest groupCreateRequest)
+    private ResponseEntity<GroupCreateResponse> addGroup(@AuthenticationPrincipal User user,GroupCreateRequest groupCreateRequest)
     {
         UserGroup userGroup = groupService.saveGroup(user.getUsername(), groupCreateRequest);
         return ResponseEntity.ok(new GroupCreateResponse(userGroup.getId(),userGroup.getGroupName()));

@@ -74,6 +74,7 @@ public class MemoryQueryRepository {
                         ltMemoryId(lastId),
                         eqPlace(placeId),
                         neUserSeq(userSeq),
+
                         // 상대방 메모리 중에 전체 공개인것만 가져오기
                         memory.openType.eq(OpenType.ALL),
                         eqKeyword(keyword),

@@ -33,11 +33,12 @@ public class UserGroup extends JpaBaseEntity {
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @Builder
-    public UserGroup(String groupName, String inviteLink,GroupType groupType)
+    public UserGroup(String groupName, String inviteLink,GroupType groupType,String groupIcon)
     {
         this.groupName = groupName;
         this.inviteLink = inviteLink;
         this.groupType =groupType;
+        this.groupIcon = groupIcon;
     }
 
 

@@ -3,6 +3,7 @@ package cmc.mellyserver.group.application;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.UserGroup;
@@ -20,13 +21,14 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
-
+    private final S3FileLoader s3FileLoader;
 
     @Transactional
     public UserGroup saveGroup(String uid, GroupCreateRequest groupCreateRequest)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType());
+        String multipartFileName = s3FileLoader.getMultipartFileName(groupCreateRequest.getGroupIcon());
+        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType(),multipartFileName);
         GroupAndUser groupAndUser = new GroupAndUser();
         groupAndUser.setUser(user);
         userGroup.setGroupUser(groupAndUser);
