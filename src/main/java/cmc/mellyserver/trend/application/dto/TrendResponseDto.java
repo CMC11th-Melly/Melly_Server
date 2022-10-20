@@ -3,10 +3,12 @@ package cmc.mellyserver.trend.application.dto;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.recommend.application.dto.RecommendResponseDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,9 +27,11 @@ public class TrendResponseDto implements Serializable {
                                 map(tm -> tm.getImagePath()).collect(Collectors.toList()),
                         m.getTitle(),
                         m.getContent(),
-                        groupName,
+                        m.getGroupInfo().getGroupType(),
+                        m.getGroupInfo().getGroupName(),
                         m.getStars(),
-                        m.getKeyword()))
+                        m.getKeyword(),
+                m.getVisitedDate()))
                 .collect(Collectors.toList());
 
     }
@@ -58,19 +62,24 @@ public class TrendResponseDto implements Serializable {
         private List<String> memoryImages;
         private String title;
         private String content;
+        private GroupType groupType;
         private String groupName;
         private Long stars;
         private String keyword;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
+        private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,String groupName,Long stars, String keyword)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType, String groupName,Long stars, String keyword,LocalDateTime visitedDate)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;
             this.title = title;
             this.content = content;
+            this.groupType = groupType;
             this.groupName = groupName;
             this.stars =stars;
             this.keyword = keyword;
+            this.visitedDate = visitedDate;
         }
     }
 
