@@ -18,6 +18,6 @@ public class MemoryAssembler {
     public static Slice<GetOtherMemoryForPlaceResponse> getOtherMemoryForPlaceResponses(Slice<Memory> memories)
     {
         return memories.map(m -> new GetOtherMemoryForPlaceResponse(m.getId(),m.getMemoryImages().stream().map(mi -> mi.getImagePath()).collect(Collectors.toList()),
-                m.getTitle(),m.getContent(),m.getStars(),m.getKeyword(),m.getVisitedDate()));
+                m.getTitle(),m.getContent(),m.getGroupInfo().getGroupType(),m.getGroupInfo().getGroupName(),m.getStars(),m.getKeyword(),m.getVisitedDate()));
     }
 }

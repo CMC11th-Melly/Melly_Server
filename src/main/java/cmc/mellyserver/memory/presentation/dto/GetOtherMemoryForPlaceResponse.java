@@ -22,9 +22,13 @@ public class GetOtherMemoryForPlaceResponse {
     private String title;
     @Schema(example = "다음에 친구들 데리고 다시 와야지!")
     private String content;
+    @Schema(example = "FRIEND")
+    private GroupType groupType;
+    @Schema(example = "떡잎마을방범대")
+    private String groupName;
     @Schema(example = "4.5")
     private Long stars;
-    @Schema(example = "[최고에요,맛있어요]")
+    @Schema(example = "최고에요")
     private String keyword;
     @Schema(example = "20221014")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")

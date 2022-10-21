@@ -30,7 +30,7 @@ public class GetUserMemoryResponse {
     private Long stars;
     @Schema(example = "최고에요")
     private String keyword;
-    @Schema(example = "10월 10일")
+    @Schema(example = "20221014")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
-    private LocalDateTime visitiedDate;
+    private LocalDateTime visitedDate;
 }

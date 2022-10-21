@@ -814,7 +814,7 @@ public class DataLoader {
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.ALL,
+                1L,OpenType.ALL,
                 "행복해요"
                 , LocalDateTime.now(),
                 List.of());
@@ -822,14 +822,14 @@ public class DataLoader {
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.ALL,
+                1L,OpenType.ALL,
                 "행복해요", LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.ALL,
+                1L,OpenType.ALL,
                 "행복해요", LocalDateTime.now(),
                 List.of());
 

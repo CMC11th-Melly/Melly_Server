@@ -115,7 +115,7 @@ public class MemoryQueryRepository {
             return null;
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate visited = LocalDate.parse(visitiedDate, formatter);
 
         return memory.visitedDate.between(
