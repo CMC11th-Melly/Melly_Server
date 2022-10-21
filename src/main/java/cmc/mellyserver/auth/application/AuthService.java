@@ -14,6 +14,7 @@ import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class AuthService {
     private final RedisTemplate redisTemplate;
     private final S3FileLoader s3FileLoader;
     private final AuthenticatedUserChecker authenticatedUserChecker;
+    @Value("${app.auth.tokenExpiry}")
+    private String expiry;
 
     public SignupResponse signup(AuthRequestForSignupDto authRequestForSignupDto)
     {
@@ -40,7 +43,7 @@ public class AuthService {
         String filename = s3FileLoader.getMultipartFileName(authRequestForSignupDto.getProfile_image());
         User saveUser = AuthAssembler.createEmailLoginUser(authRequestForSignupDto,passwordEncoder,filename);
         userRepository.save(saveUser);
-        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserId(), saveUser.getRoleType(), "99999999999");
+        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserId(), saveUser.getRoleType(), expiry);
         return AuthAssembler.signupResponse(accessToken.getToken(),saveUser);
     }
 
@@ -53,7 +56,7 @@ public class AuthService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }
 
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), "99999999999");
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), expiry);
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 

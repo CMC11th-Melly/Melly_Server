@@ -1,6 +1,7 @@
 package cmc.mellyserver.healthcheck;
 
 import cmc.mellyserver.common.exception.GlobalServerException;
+import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.healthcheck.dto.MultipartTestRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -38,10 +39,10 @@ public class HealthCheckController {
 
     @Operation(summary = "액세스 토큰 Authorization Header에 추가 시 인증 통과 테스트")
     @GetMapping("/authTest")
-    public String authCheck()
+    public ResponseEntity<CommonResponse> authCheck()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName() + " 정상적으로 JWT 인증됐습니다.";
+        return ResponseEntity.ok(new CommonResponse(200,"정상적으로 인증되었습니다"));
 
     }
 

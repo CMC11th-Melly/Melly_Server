@@ -22,6 +22,7 @@ import cmc.mellyserver.user.domain.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,8 @@ public class OAuthService {
     private final AppleClient appleClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final AWSS3UploadService uploadService;
+    @Value("${app.auth.tokenExpiry}")
+    private String expiry;
 
     @Transactional
     public OAuthLoginResponseDto login(AuthRequest authRequest) {
@@ -103,7 +106,7 @@ public class OAuthService {
 
     private String getToken(String userId)
     {
-        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, "20000");
+        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, expiry);
         return accessToken.getToken();
     }
 

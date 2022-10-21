@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.auth.tokenExpiry}")
-    private String expiry;
 
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
