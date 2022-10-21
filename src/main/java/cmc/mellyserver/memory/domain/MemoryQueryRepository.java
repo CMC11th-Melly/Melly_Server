@@ -65,19 +65,25 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
-    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId, String keyword, String visitiedDate) {
+    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId,GroupType groupType, String keyword, String visitiedDate) {
 
         List<Memory> results = query.select(memory)
                 .from(memory)
 
                 .where(
+                        // 커서 기반 페이징 용
                         ltMemoryId(lastId),
+                        // 특정 장소의 메모리 가져오기
                         eqPlace(placeId),
+                        // 내가 작성하지 않은 메모리만 가져오기
                         neUserSeq(userSeq),
-
+                        // 내가 설정한 groupType으로 카테고리 필터링
+                        eqGroup(groupType),
                         // 상대방 메모리 중에 전체 공개인것만 가져오기
                         memory.openType.eq(OpenType.ALL),
+                        // 키워드만 필터링
                         eqKeyword(keyword),
+                        // 날짜로 필터링
                         eqVisitiedDate(visitiedDate)
                 ).orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)

@@ -1,5 +1,6 @@
 package cmc.mellyserver.memory.presentation.dto;
 
+import cmc.mellyserver.group.domain.enums.GroupType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,6 +12,9 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetOtherMemoryCond {
 
+
+    @Schema(example = "FRIEND")
+    private GroupType groupType;
     @Schema(example = "최고에요")
     private String keyword;
     @Schema(example = "20221010")

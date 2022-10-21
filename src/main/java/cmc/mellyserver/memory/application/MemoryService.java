@@ -82,6 +82,7 @@ public class MemoryService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
                 placeId,
+                getOtherMemoryCond.getGroupType(),
                 getOtherMemoryCond.getKeyword(),
                 getOtherMemoryCond.getVisitedDate());
     }
