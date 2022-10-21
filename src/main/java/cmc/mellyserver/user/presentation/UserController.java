@@ -72,7 +72,7 @@ public class UserController {
     @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user) {
-        double volume = userService.checkUserImageVolume(user.getUsername());
+        int volume = userService.checkUserImageVolume(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200, "유저가 저장한 사진 총 용량", new UserImageVolumeWrapper(volume)));
     }
 

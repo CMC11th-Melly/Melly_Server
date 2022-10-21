@@ -59,12 +59,12 @@ public class UserService {
         groupService.participateToGroup(uid, groupId);
     }
 
-    public double checkUserImageVolume(String username) {
+    public int checkUserImageVolume(String username) {
 
         ObjectListing mellyimage = amazonS3Client.listObjects("mellyimage", username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
-        double sum = (double) objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
-        return Math.round(((sum / 1000.0) / 1024.0) * 100) / 100.0;
+        Long sum = objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
+        return  sum.intValue();
     }
 
     @Transactional

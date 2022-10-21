@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserImageVolumeWrapper {
-    private Double volume;
+    private int volume;
 }
