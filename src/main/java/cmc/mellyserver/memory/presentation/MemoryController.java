@@ -9,6 +9,7 @@ import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +40,10 @@ public class MemoryController {
     @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
                                                              "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/user/place/{placeId}")
-    public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
-                              @PathVariable Long placeId,
-                              @RequestParam(name = "lastId",required = false) Long lastId,
-                              Pageable pageable,
-                              GetUserMemoryCond getUserMemoryCond)
+    public ResponseEntity<CommonResponse> getUserMemory(@ParameterObject Pageable pageable, @AuthenticationPrincipal User user,
+                                                        @PathVariable Long placeId,
+                                                        @RequestParam(name = "lastId",required = false) Long lastId,
+                                                        @ParameterObject GetUserMemoryCond getUserMemoryCond)
     {
         Slice<Memory> result = memoryService.getUserMemory(lastId,pageable,user.getUsername(), placeId, getUserMemoryCond);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
@@ -59,8 +59,8 @@ public class MemoryController {
             @AuthenticationPrincipal User user,
             @PathVariable Long placeId,
             @RequestParam(name = "lastId", required = false) Long lastId,
-            Pageable pageable,
-            GetOtherMemoryCond getOtherMemoryCond
+            @ParameterObject Pageable pageable,
+            @ParameterObject GetOtherMemoryCond getOtherMemoryCond
     )
     {
         Slice<Memory> result = memoryService.getOtherMemory(lastId, pageable, user.getUsername(), placeId, getOtherMemoryCond);
@@ -72,7 +72,7 @@ public class MemoryController {
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
     @PostMapping
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images") List<MultipartFile> images,
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images")  List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
         System.out.println("hello" + LocalDateTime.now());

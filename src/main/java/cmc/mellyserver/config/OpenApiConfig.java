@@ -33,6 +33,8 @@ public class OpenApiConfig {
 
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
+
+
         Server server1 = new Server();
         server1.setUrl("https://api.melly.kr");
 

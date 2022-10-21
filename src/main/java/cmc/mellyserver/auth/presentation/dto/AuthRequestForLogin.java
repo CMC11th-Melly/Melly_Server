@@ -12,6 +12,7 @@ public class AuthRequestForLogin {
 
     @Schema(example = "melly@gmail.com")
     private String email;
+    @Schema(example = "asdfasdf")
     private String password;
 
     @Builder
