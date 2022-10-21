@@ -26,7 +26,7 @@ public class AuthRequestForOAuthSignup {
     @Nullable
     private MultipartFile profileImage;
 
-    @Schema(example = "ONE")
+    @Schema(example = "TWO")
     @Nullable
     private AgeGroup ageGroup;
 }
