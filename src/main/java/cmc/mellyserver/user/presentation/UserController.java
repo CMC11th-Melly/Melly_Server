@@ -8,6 +8,7 @@ import cmc.mellyserver.scrap.application.ScrapService;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.scrap.presentation.dto.ScrapResponseWrapper;
 import cmc.mellyserver.user.application.UserService;
+import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +86,15 @@ public class UserController {
     }
 
 
-    @Operation(summary = "프로필 정보 수정 기능")
+    @Operation(summary = "프로필 수정 폼에 필요한 유저 정보 조회")
+    @GetMapping("/profile")
+    public ResponseEntity<CommonResponse> updateProfileFormData(@AuthenticationPrincipal User user)
+    {
+        ProfileUpdateFormResponse profileDataForUpdate = userService.getProfileDataForUpdate(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"유저 프로필 수정을 위한 폼 정보",new ProfileUpdateFormResponseWrapper(profileDataForUpdate)));
+    }
+
+    @Operation(summary = "프로필 정보 수정 기능",description = "프로필 정보 수정할때 닉네임 중복 체크의 경우에는 기존 인증 로직에서 사용한 중복 체크 재활용하면 될 것 같아요~")
     @PutMapping("/profile")
     public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest) {
         userService.updateProfile(user.getUsername(), profileUpdateRequest);

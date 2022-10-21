@@ -1,16 +1,15 @@
-package cmc.mellyserver.user.presentation.dto;
+package cmc.mellyserver.user.application.dto;
 
 import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
-public class ProfileUpdateRequest {
+public class ProfileUpdateFormResponse {
 
-    private MultipartFile profileImage;
+    private String profileImage;
     private String nickname;
     private Gender gender;
     private AgeGroup ageGroup;

@@ -7,6 +7,7 @@ import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
+import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.ProfileUpdateRequest;
 import com.amazonaws.services.s3.AmazonS3;
@@ -71,7 +72,13 @@ public class UserService {
     public void updateProfile(String uid, ProfileUpdateRequest profileUpdateRequest) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getImage());
-        user.updateProfile(profileUpdateRequest.getNickname(), multipartFileName);
+        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getProfileImage());
+        user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
+    }
+
+
+    public ProfileUpdateFormResponse getProfileDataForUpdate(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return new ProfileUpdateFormResponse(user.getProfileImage(),user.getNickname(),user.getGender(),user.getAgeGroup());
     }
 }

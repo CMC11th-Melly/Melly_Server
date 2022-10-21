@@ -105,7 +105,7 @@ public class User extends JpaBaseEntity {
         this.nickname = nickname;
     }
 
-    public void updateProfile(String nickname, String image) {
+    public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup, String image) {
        if(nickname != null)
        {
            this.nickname = nickname;
@@ -114,6 +114,16 @@ public class User extends JpaBaseEntity {
        if(image != null)
        {
            this.profileImage = image;
+       }
+
+       if(gender != null)
+       {
+           this.gender = gender;
+       }
+
+       if(ageGroup != null)
+       {
+           this.ageGroup = ageGroup;
        }
     }
 }
