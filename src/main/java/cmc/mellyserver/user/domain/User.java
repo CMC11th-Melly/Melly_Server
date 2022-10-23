@@ -1,5 +1,6 @@
 package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
@@ -73,6 +74,9 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Scrap> scraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup)
     {

@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 
 @Data
@@ -33,7 +33,7 @@ public class PlaceInfoRequest {
     private String content;
 
     @Schema(example = "좋아요")
-    private String keyword;
+    private List<String> keyword;
 
     @Schema(example = "1")
     private Long groupId;

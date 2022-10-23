@@ -24,6 +24,8 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
 
+    public final ListPath<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment> comments = this.<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment>createList("comments", cmc.mellyserver.comment.domain.Comment.class, cmc.mellyserver.comment.domain.QComment.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     //inherited
@@ -33,10 +35,12 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath keyword = createString("keyword");
+    public final ListPath<String, StringPath> keyword = this.<String, StringPath>createList("keyword", String.class, StringPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
+    public final ListPath<cmc.mellyserver.like.domain.Like, cmc.mellyserver.like.domain.QLike> likes = this.<cmc.mellyserver.like.domain.Like, cmc.mellyserver.like.domain.QLike>createList("likes", cmc.mellyserver.like.domain.Like.class, cmc.mellyserver.like.domain.QLike.class, PathInits.DIRECT2);
 
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 

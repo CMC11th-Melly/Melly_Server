@@ -74,12 +74,12 @@ public class RecommendResponseDto implements Serializable {
         @Schema(example = "4.5")
         private Long stars;
         @Schema(example = "최고에요")
-        private String keyword;
+        private List<String> keyword;
         @Schema(example = "20221014")
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
         private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, String keyword,LocalDateTime visitiedDate)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,LocalDateTime visitiedDate)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;

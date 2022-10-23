@@ -79,6 +79,34 @@ public class MemoryQueryRepository {
                         neUserSeq(userSeq),
                         // 내가 설정한 groupType으로 카테고리 필터링
                         eqGroup(groupType),
+
+                        // 상대방 메모리 중에 전체 공개인것만 가져오기
+                        memory.openType.eq(OpenType.ALL),
+                        // 키워드만 필터링
+                        eqKeyword(keyword),
+                        // 날짜로 필터링
+                        eqVisitiedDate(visitiedDate)
+                ).orderBy(memory.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return checkLastPage(pageable, results);
+    }
+
+    public Slice<Memory> searchMemoryMyGroupCreate(Long lastId, Pageable pageable, Long userSeq,Long groupId, Long placeId,GroupType groupType, String keyword, String visitiedDate) {
+
+        List<Memory> results = query.select(memory)
+                .from(memory)
+                .where(
+                        // 커서 기반 페이징 용
+                        ltMemoryId(lastId),
+                        // 특정 장소의 메모리 가져오기
+                        eqPlace(placeId),
+                        // 내가 작성하지 않은 메모리만 가져오기
+                        neUserSeq(userSeq),
+                        inSameGroup(groupId),
+                        // 내가 설정한 groupType으로 카테고리 필터링
+                        eqGroup(groupType),
                         // 상대방 메모리 중에 전체 공개인것만 가져오기
                         memory.openType.eq(OpenType.ALL),
                         // 키워드만 필터링
@@ -95,12 +123,20 @@ public class MemoryQueryRepository {
 
     private BooleanExpression eqKeyword(String keyword) {
 
-        System.out.println("keyword = " + keyword);
         if (keyword == null || keyword.isEmpty()) {
             return null;
         }
 
-        return memory.keyword.eq(keyword);
+        return memory.keyword.contains(keyword);
+    }
+
+    private BooleanExpression inSameGroup(Long groupId)
+    {
+        if(groupId == null)
+        {
+            return null;
+        }
+        return memory.groupInfo.groupId.eq(groupId);
     }
 
 

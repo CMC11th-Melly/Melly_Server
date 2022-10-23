@@ -73,13 +73,13 @@ public class TrendResponseDto implements Serializable {
         private String groupName;
         @Schema(example = "4.5")
         private Long stars;
-        @Schema(example = "최고에요")
-        private String keyword;
+        @Schema(example = "즐거워요, 그냥 그래요")
+        private List<String> keyword;
         @Schema(example = "20221014")
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
         private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType, String groupName,Long stars, String keyword,LocalDateTime visitedDate)
+        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType, String groupName,Long stars, List<String> keyword,LocalDateTime visitedDate)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;
