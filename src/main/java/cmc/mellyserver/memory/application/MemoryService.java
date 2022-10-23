@@ -1,9 +1,14 @@
 package cmc.mellyserver.memory.application;
 
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
+import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
+import cmc.mellyserver.memory.domain.MemoryRepository;
+import cmc.mellyserver.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.memory.presentation.dto.GetOtherMemoryCond;
@@ -28,6 +33,7 @@ public class MemoryService {
     private final MemoryDomainService memoryDomainService;
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final MemoryQueryRepository memoryQueryRepository;
+    private final MemoryRepository memoryRepository;
 
     @Transactional
     public Memory createMemory(String uid, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
@@ -87,5 +93,40 @@ public class MemoryService {
                 getOtherMemoryCond.getVisitedDate());
     }
 
+    public Slice<Memory> getOtherMemorySameGroupCreated(Long lastId, Pageable pageable, String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
 
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
+                placeId,
+                getOtherMemoryCond.getGroupType(),
+                getOtherMemoryCond.getKeyword(),
+                getOtherMemoryCond.getVisitedDate());
+    }
+
+
+    @Transactional
+    public void removeMemory(Long memoryId) {
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
+        memoryRepository.delete(memory);
+    }
+
+
+    public MemoryUpdateFormResponse getFormForUpdateMemory(String uid, Long memoryId) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        List<MemoryFormGroupResponse> collect = user.getGroupAndUsers().stream().map(ug ->
+                new MemoryFormGroupResponse(ug.getGroup().getId(),
+                        ug.getGroup().getGroupName(),
+                        ug.getGroup().getGroupType())).collect(Collectors.toList());
+
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
+
+      return MemoryAssembler.memoryUpdateFormResponse(memory,collect);
+
+    }
 }

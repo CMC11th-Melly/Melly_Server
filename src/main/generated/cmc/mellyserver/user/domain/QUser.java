@@ -26,6 +26,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<cmc.mellyserver.user.domain.enums.AgeGroup> ageGroup = createEnum("ageGroup", cmc.mellyserver.user.domain.enums.AgeGroup.class);
 
+    public final ListPath<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment> comments = this.<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment>createList("comments", cmc.mellyserver.comment.domain.Comment.class, cmc.mellyserver.comment.domain.QComment.class, PathInits.DIRECT2);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 

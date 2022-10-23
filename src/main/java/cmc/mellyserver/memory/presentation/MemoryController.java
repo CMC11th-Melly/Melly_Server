@@ -3,11 +3,13 @@ package cmc.mellyserver.memory.presentation;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.memory.application.MemoryService;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
+import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +80,30 @@ public class MemoryController {
         System.out.println("hello" + LocalDateTime.now());
         memoryService.createMemory(user.getUsername(), images, placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
+    }
+
+//    @Operation(summary = "메모리 수정",description = "사용자가 작성한 메모리 수정")
+//    @PutMapping("/{memoryId}")
+//    public ResponseEntity<CommonResponse> updateMemory(@PathVariable Long memoryId)
+//    {
+//
+//    }
+
+    @Operation(summary = "메모리 수정을 위한 폼 데이터 전송")
+    @GetMapping("/{memoryId}/update")
+    public ResponseEntity<CommonResponse> getFormForUpdateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
+    {
+        MemoryUpdateFormResponse formForUpdateMemory = memoryService.getFormForUpdateMemory(user.getUsername(), memoryId);
+        return ResponseEntity.ok(new CommonResponse(200,"메모리 업데이트 수정 폼",new MemoryUpDateFormResponseWrapper(formForUpdateMemory)));
+    }
+
+
+    @Operation(summary = "메모리 삭제",description = "사용자가 작성한 메모리 삭제")
+    @DeleteMapping("/{memoryId}")
+    public ResponseEntity<CommonResponse> deleteMemory(@PathVariable Long memoryId)
+    {
+        memoryService.removeMemory(memoryId);
+        return ResponseEntity.ok(new CommonResponse(200,"메세지 삭제 완료"));
     }
 
 

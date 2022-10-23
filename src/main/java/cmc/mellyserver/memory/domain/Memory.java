@@ -1,6 +1,8 @@
 package cmc.mellyserver.memory.domain;
 
+import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.like.domain.Like;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
@@ -25,7 +27,6 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long id;
 
-    // 1, 1.5 , 2 , 2.5 .... 5
     private Long stars;
 
     @ManyToOne
@@ -36,13 +37,14 @@ public class Memory extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-//    @ElementCollection
-//    @CollectionTable(
-//            name = "keywords_table",
-//            joinColumns = @JoinColumn(name = "memory_id"))
-//    @Column(name = "keyword") // 컬럼명 지정 (예외)
-//    private List<String> keyword = new ArrayList<>();
-    private String keyword;
+
+
+    @ElementCollection
+    @CollectionTable(
+            name = "keywords_table",
+            joinColumns = @JoinColumn(name = "memory_id"))
+    @Column(name = "keyword") // 컬럼명 지정 (예외)
+    private List<String> keyword = new ArrayList<>();
 
     @Embedded
     GroupInfo groupInfo;
@@ -51,7 +53,8 @@ public class Memory extends JpaBaseEntity {
     private OpenType openType;
 
     private String title;
-    // TODO : 차후에 길이 지정
+
+    @Lob
     private String content;
 
     private LocalDateTime visitedDate;
@@ -59,7 +62,11 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void setPlaceForMemory(Place place)
     {
@@ -79,10 +86,10 @@ public class Memory extends JpaBaseEntity {
         }
     }
 
-    public void setKeyword(String keyword)
+    public void setKeyword(List<String> keywords)
     {
         // 값 타입처럼 아예 대체해버리기
-        this.keyword = keyword;
+        this.keyword = keywords;
     }
 
     @Builder
