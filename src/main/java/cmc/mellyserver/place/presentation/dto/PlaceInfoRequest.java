@@ -32,7 +32,7 @@ public class PlaceInfoRequest {
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
     private String content;
 
-    @Schema(example = "좋아요")
+    @Schema(example = "[좋아요, 그저그래요]")
     private List<String> keyword;
 
     @Schema(example = "1")
