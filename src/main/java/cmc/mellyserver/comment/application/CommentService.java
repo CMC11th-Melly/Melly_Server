@@ -1,6 +1,7 @@
 package cmc.mellyserver.comment.application;
 
 import cmc.mellyserver.comment.application.dto.CommentDto;
+import cmc.mellyserver.comment.application.dto.CommentResponseDto;
 import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.comment.domain.CommentQueryRepository;
 import cmc.mellyserver.comment.domain.CommentRepository;
@@ -34,7 +35,7 @@ public class CommentService {
      private final MemoryRepository memoryRepository;
 
 
-     public List<CommentDto> getComment(String uid,Long memoryId)
+     public CommentResponseDto getComment(String uid,Long memoryId)
      {
          User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
          List<Comment> comment = commentQueryRepository.findComment(memoryId);
@@ -88,10 +89,14 @@ public class CommentService {
     }
 
 
-    private List<CommentDto> convertNestedStructure(List<Comment> comments,User user) {
+    private CommentResponseDto convertNestedStructure(List<Comment> comments,User user) {
 
         List<CommentDto> result = new ArrayList<>();
         Map<Long, CommentDto> map = new HashMap<>();
+        int cnt = (int) comments
+                .stream()
+                .filter(c -> c.getIsDeleted().equals(DeleteStatus.N))
+                .count();
 
         comments.stream().forEach(c -> {
             // 댓글 dto 만들고
@@ -109,7 +114,7 @@ public class CommentService {
                 result.add(dto);
             }
         });
-        return result;
+        return new CommentResponseDto(cnt,result);
     }
 
 

@@ -2,6 +2,7 @@ package cmc.mellyserver.comment.presentation;
 
 import cmc.mellyserver.comment.application.CommentService;
 import cmc.mellyserver.comment.application.dto.CommentDto;
+import cmc.mellyserver.comment.application.dto.CommentResponseDto;
 import cmc.mellyserver.comment.presentation.dto.CommentRequest;
 import cmc.mellyserver.comment.presentation.dto.CommentUpdateRequest;
 import cmc.mellyserver.common.response.CommonResponse;
@@ -32,7 +33,7 @@ public class CommentController {
     @GetMapping("/memory/{memoryId}")
     public ResponseEntity<CommonResponse> getComment(@AuthenticationPrincipal User user,@PathVariable Long memoryId)
     {
-        List<CommentDto> comment = commentService.getComment(user.getUsername(),memoryId);
+        CommentResponseDto comment = commentService.getComment(user.getUsername(),memoryId);
         return ResponseEntity.ok(new CommonResponse(200,"댓글 조회",comment));
     }
 
