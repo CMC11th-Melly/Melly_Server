@@ -129,7 +129,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .where(
                         ltMemoryId(lastId),
-                        memory.groupInfo.groupType.eq(groupType),
+                        eqGroup(groupType),
                         memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
                 ).orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)

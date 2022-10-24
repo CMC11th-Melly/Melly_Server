@@ -16,6 +16,10 @@ import java.util.List;
 public class GetOtherMemoryForPlaceResponse {
 
     @Schema(example = "1")
+    private Long placeId;
+    @Schema(example = "용용선생")
+    private String placeName;
+    @Schema(example = "1")
     private Long memoryId;
     @Schema(example = "[melly.jpg,cmc.png]")
     private List<ImageDto> memoryImages;

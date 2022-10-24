@@ -32,7 +32,7 @@ public class ScrapAssembler {
 
     public static ScrapedMemoryResponseDto scrapedMemoryResponseDto(Memory memory) {
 
-        return new ScrapedMemoryResponseDto(memory.getId(),memory.getMemoryImages().stream().map(mi -> mi.getImagePath()).collect(Collectors.toList()),memory.getTitle(),
+        return new ScrapedMemoryResponseDto(memory.getPlace().getId(),memory.getPlace().getPlaceName(),memory.getId(),memory.getMemoryImages().stream().map(mi -> mi.getImagePath()).collect(Collectors.toList()),memory.getTitle(),
                 memory.getContent(),memory.getGroupInfo().getGroupType(),memory.getGroupInfo().getGroupName(),memory.getStars(),memory.getKeyword(), memory.getVisitedDate());
 
     }

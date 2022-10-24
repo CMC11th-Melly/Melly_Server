@@ -24,7 +24,7 @@ public class TrendResponseDto implements Serializable {
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,recommendType,isScraped,placeName);
         this.memoryInfo = memories.stream().map(m ->
-                new MemoryInfo(m.getId(),
+                new MemoryInfo(placeId,placeName,m.getId(),
                         m.getMemoryImages().stream().
                                 map(tm -> new ImageDto(tm.getId(),tm.getImagePath())).collect(Collectors.toList()),
                         m.getTitle(),
@@ -60,6 +60,11 @@ public class TrendResponseDto implements Serializable {
 
     @Data
     static class MemoryInfo implements Serializable{
+
+        @Schema(example = "1")
+        private Long placeId;
+        @Schema(example = "용용선생")
+        private String placeName;
         @Schema(example = "1")
         private Long memoryId;
         @Schema(example = "[melly.jpg,cmc.png]")
@@ -80,8 +85,10 @@ public class TrendResponseDto implements Serializable {
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
         private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType, String groupName,Long stars, List<String> keyword,LocalDateTime visitedDate)
+        public MemoryInfo(Long placeId, String placeName, Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType, String groupName,Long stars, List<String> keyword,LocalDateTime visitedDate)
         {
+            this.placeId = placeId;
+            this.placeName = placeName;
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;
             this.title = title;
