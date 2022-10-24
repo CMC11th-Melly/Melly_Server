@@ -74,7 +74,7 @@ public class DataLoader {
 
         // 지금 사용자가 속해있는 그룹 1개 추가
         UserGroup userGroup = UserGroup.builder()
-                                        .groupName("CMC 11기 떡잎마을방범대")
+                                        .groupName("떡마방")
                                         .groupType(GroupType.FRIEND)
                                         .inviteLink("http://cmc11th.co.kr")
                                         .build();
