@@ -1,6 +1,7 @@
 package cmc.mellyserver.user.presentation.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.memory.presentation.dto.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class GetUserMemoryResponse {
     @Schema(example = "1")
     private Long memoryId;
     @Schema(example = "[melly.jpg,cmc.png]")
-    private List<String> memoryImages;
+    private List<ImageDto> memoryImages;
     @Schema(example = "오랜만에 고향 친구랑!")
     private String title;
     @Schema(example = "다음에 친구들 데리고 다시 와야지!")
