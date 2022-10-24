@@ -1,4 +1,4 @@
-package cmc.mellyserver.scrap.application.dto;
+package cmc.mellyserver.placeScrap.application.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data

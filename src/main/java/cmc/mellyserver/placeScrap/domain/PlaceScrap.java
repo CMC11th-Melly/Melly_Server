@@ -1,8 +1,7 @@
-package cmc.mellyserver.scrap.domain;
+package cmc.mellyserver.placeScrap.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
@@ -15,11 +14,11 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Scrap extends JpaBaseEntity {
+public class PlaceScrap extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "scrap_id")
+    @Column(name = "place_scrap_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,14 +33,14 @@ public class Scrap extends JpaBaseEntity {
     private ScrapType scrapType;
 
 
-    public Scrap(ScrapType scrapType)
+    public PlaceScrap(ScrapType scrapType)
     {
         this.scrapType = scrapType;
     }
 
 
 
-    public Scrap(User user, Place place)
+    public PlaceScrap(User user, Place place)
     {
         this.user = user;
         this.place = place;
@@ -50,7 +49,7 @@ public class Scrap extends JpaBaseEntity {
     public void setUser(User user)
     {
         this.user= user;
-        user.getScraps().add(this);
+        user.getPlaceScraps().add(this);
     }
 
     public void setPlace(Place place)
@@ -59,9 +58,9 @@ public class Scrap extends JpaBaseEntity {
         place.getScraps().add(this);
     }
 
-    public static Scrap createScrap(User user, Place place, ScrapType scrapType)
+    public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType)
     {
-        Scrap scrap = new Scrap(scrapType);
+        PlaceScrap scrap = new PlaceScrap(scrapType);
         scrap.setPlace(place);
         scrap.setUser(user);
         return scrap;
@@ -72,7 +71,7 @@ public class Scrap extends JpaBaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Scrap scrap = (Scrap) o;
+        PlaceScrap scrap = (PlaceScrap) o;
         return user.equals(scrap.user) && place.equals(scrap.place);
     }
 

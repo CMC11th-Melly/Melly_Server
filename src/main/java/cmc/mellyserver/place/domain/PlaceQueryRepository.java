@@ -1,16 +1,11 @@
 package cmc.mellyserver.place.domain;
 
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.QMemory;
-import cmc.mellyserver.scrap.domain.QScrap;
 import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -79,7 +74,7 @@ public class PlaceQueryRepository {
                 .from(place)
                 .where(
                         ltPlaceId(lastId),
-                        place.id.in(user.getScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList()))
+                        place.id.in(user.getPlaceScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList()))
                 ).orderBy(place.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();

@@ -4,9 +4,12 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
-import cmc.mellyserver.scrap.application.ScrapService;
-import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.scrap.presentation.dto.ScrapResponseWrapper;
+import cmc.mellyserver.memoryScrap.application.MemoryScrapService;
+import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
+import cmc.mellyserver.memoryScrap.presentation.dto.MemoryScrapResponseWrapper;
+import cmc.mellyserver.placeScrap.application.PlaceScrapService;
+import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.placeScrap.presentation.dto.ScrapResponseWrapper;
 import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.presentation.dto.*;
@@ -26,7 +29,8 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final ScrapService scrapService;
+    private final PlaceScrapService placeScrapService;
+    private final MemoryScrapService memoryScrapService;
     private final UserService userService;
 
 
@@ -50,11 +54,19 @@ public class UserController {
      * 스크랩 장소 보여줄 시 날짜 순으로 최신꺼부터 정렬 -> 날짜 함께 보내줘야함
      */
     @Operation(summary = "유저가 스크랩한 장소 조회")
-    @GetMapping("/scrap")
-    public ResponseEntity<CommonResponse> getUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
-        Slice<ScrapedPlaceResponseDto> scrapedPlace = scrapService.getScrapedPlace(lastId, pageable, user.getUsername());
+    @GetMapping("/place/scrap")
+    public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
+        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.getScrapedPlace(lastId, pageable, user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 장소 목록", new ScrapResponseWrapper(scrapedPlace)));
     }
+
+    @Operation(summary = "유저가 스크랩한 메모리 조회")
+    @GetMapping("/memory/scrap")
+    public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
+        Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(lastId, pageable, user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 장소 목록", new MemoryScrapResponseWrapper(scrapedMemory)));
+    }
+
 
 
     /**

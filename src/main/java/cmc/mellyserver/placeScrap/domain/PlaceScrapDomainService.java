@@ -1,4 +1,4 @@
-package cmc.mellyserver.scrap.domain;
+package cmc.mellyserver.placeScrap.domain;
 
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
@@ -8,9 +8,8 @@ import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
-import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
-import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.scrap.presentation.dto.ScrapAssembler;
+import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.placeScrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,18 +17,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ScrapDomainService {
+public class PlaceScrapDomainService {
 
     private final PlaceRepository placeRepository;
     private final PlaceQueryRepository placeQueryRepository;
-    private final ScrapRepository scrapRepository;
+    private final PlaceScrapRepository scrapRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
@@ -55,10 +52,10 @@ public class ScrapDomainService {
         if(placeOpt.isEmpty())
         {
             Place savePlace = placeRepository.save(Place.builder().placeName(placeName).placeCategory(placeCategory).position(new Position(lat, lng)).build());
-            scrapRepository.save(Scrap.createScrap(user,savePlace,scrapType));
+            scrapRepository.save(PlaceScrap.createScrap(user,savePlace,scrapType));
         }
         else{
-            scrapRepository.save(Scrap.createScrap(user,placeOpt.get(),scrapType));
+            scrapRepository.save(PlaceScrap.createScrap(user,placeOpt.get(),scrapType));
         }
 
     }

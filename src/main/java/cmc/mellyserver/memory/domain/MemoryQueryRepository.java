@@ -3,6 +3,8 @@ package cmc.mellyserver.memory.domain;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,8 +20,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
+import static cmc.mellyserver.place.domain.QPlace.place;
 
 @Repository
 public class MemoryQueryRepository {
@@ -120,6 +124,18 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
+    public Slice<Memory> getScrapedMemory(Long lastId, Pageable pageable, User user) {
+        List<Memory> results = query.select(memory)
+                .from(memory)
+                .where(
+                        ltMemoryId(lastId),
+                        memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
+                ).orderBy(memory.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+        return checkLastPage(pageable, results);
+    }
+
 
     private BooleanExpression eqKeyword(String keyword) {
 
@@ -216,6 +232,7 @@ public class MemoryQueryRepository {
 
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
 
 
 }

@@ -4,7 +4,9 @@ import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.like.domain.Like;
 import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
@@ -37,8 +39,6 @@ public class Memory extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-
-
     @ElementCollection
     @CollectionTable(
             name = "keywords_table",
@@ -67,6 +67,9 @@ public class Memory extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<MemoryScrap> scraps = new ArrayList<>();
 
     public void setPlaceForMemory(Place place)
     {

@@ -7,13 +7,11 @@ import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
-import cmc.mellyserver.scrap.domain.Scrap;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +53,7 @@ public class PlaceDomainService {
     }
     private boolean checkIsScraped(User user, Place place)
     {
-        return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
+        return user.getPlaceScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
     }
 
 }

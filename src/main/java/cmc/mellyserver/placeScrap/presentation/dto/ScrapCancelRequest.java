@@ -1,4 +1,4 @@
-package cmc.mellyserver.scrap.presentation.dto;
+package cmc.mellyserver.placeScrap.presentation.dto;
 
 import lombok.AccessLevel;
 import lombok.Data;

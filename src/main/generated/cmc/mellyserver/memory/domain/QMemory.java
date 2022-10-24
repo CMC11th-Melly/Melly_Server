@@ -48,6 +48,8 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final cmc.mellyserver.place.domain.QPlace place;
 
+    public final ListPath<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap> scraps = this.<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap>createList("scraps", cmc.mellyserver.memoryScrap.domain.MemoryScrap.class, cmc.mellyserver.memoryScrap.domain.QMemoryScrap.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> stars = createNumber("stars", Long.class);
 
     public final StringPath title = createString("title");

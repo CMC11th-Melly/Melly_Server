@@ -2,7 +2,7 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.scrap.domain.Scrap;
+import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
@@ -49,7 +49,7 @@ public class Place extends JpaBaseEntity {
     private List<Memory> memories = new ArrayList<>();
 
     @OneToMany(mappedBy = "place",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Scrap> scraps = new ArrayList<>();
+    private List<PlaceScrap> scraps = new ArrayList<>();
     @Builder
     public Place(Position position,String placeImage,String placeCategory,String placeName) {
         this.position = position;
@@ -60,13 +60,13 @@ public class Place extends JpaBaseEntity {
 
     public void removeScrap(User user)
     {
-        Scrap scrap = new Scrap(user, this);
+        PlaceScrap scrap = new PlaceScrap(user, this);
         this.getScraps().remove(scrap);
     }
 
     public void addScrap(User user)
     {
-        Scrap scrap = new Scrap(user, this);
+        PlaceScrap scrap = new PlaceScrap(user, this);
         this.getScraps().add(scrap);
     }
 

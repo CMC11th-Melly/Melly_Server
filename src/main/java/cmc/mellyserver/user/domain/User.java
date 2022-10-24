@@ -4,12 +4,12 @@ import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.scrap.domain.Scrap;
+import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
+import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
 import cmc.mellyserver.user.domain.enums.RoleType;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -73,7 +73,10 @@ public class User extends JpaBaseEntity {
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<Scrap> scraps = new ArrayList<>();
+    private List<PlaceScrap> placeScraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
+    private List<MemoryScrap> memoryScraps = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

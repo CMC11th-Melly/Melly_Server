@@ -1,6 +1,5 @@
-package cmc.mellyserver.scrap.presentation.dto;
+package cmc.mellyserver.placeScrap.presentation.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.place.domain.enums.ScrapType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

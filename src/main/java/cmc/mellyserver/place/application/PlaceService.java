@@ -58,6 +58,6 @@ public class PlaceService {
 
     private boolean checkIsScraped(User user, Place place)
     {
-       return user.getScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
+       return user.getPlaceScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
     }
 }

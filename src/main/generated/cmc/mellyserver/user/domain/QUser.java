@@ -44,9 +44,13 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
 
+    public final ListPath<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap> memoryScraps = this.<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap>createList("memoryScraps", cmc.mellyserver.memoryScrap.domain.MemoryScrap.class, cmc.mellyserver.memoryScrap.domain.QMemoryScrap.class, PathInits.DIRECT2);
+
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
+
+    public final ListPath<cmc.mellyserver.placeScrap.domain.PlaceScrap, cmc.mellyserver.placeScrap.domain.QPlaceScrap> placeScraps = this.<cmc.mellyserver.placeScrap.domain.PlaceScrap, cmc.mellyserver.placeScrap.domain.QPlaceScrap>createList("placeScraps", cmc.mellyserver.placeScrap.domain.PlaceScrap.class, cmc.mellyserver.placeScrap.domain.QPlaceScrap.class, PathInits.DIRECT2);
 
     public final StringPath profileImage = createString("profileImage");
 
@@ -55,8 +59,6 @@ public class QUser extends EntityPathBase<User> {
     public final QRecommend recommend;
 
     public final EnumPath<cmc.mellyserver.user.domain.enums.RoleType> roleType = createEnum("roleType", cmc.mellyserver.user.domain.enums.RoleType.class);
-
-    public final ListPath<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap> scraps = this.<cmc.mellyserver.scrap.domain.Scrap, cmc.mellyserver.scrap.domain.QScrap>createList("scraps", cmc.mellyserver.scrap.domain.Scrap.class, cmc.mellyserver.scrap.domain.QScrap.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> storeCapacity = createNumber("storeCapacity", Double.class);
 
