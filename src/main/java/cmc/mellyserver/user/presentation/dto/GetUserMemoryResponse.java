@@ -13,7 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 public class GetUserMemoryResponse {
 
-
+    @Schema(example = "1")
+    private Long placeId;
+    @Schema(example = "용용선생")
+    private String placeName;
     @Schema(example = "1")
     private Long memoryId;
     @Schema(example = "[melly.jpg,cmc.png]")
