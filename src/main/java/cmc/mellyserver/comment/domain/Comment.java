@@ -1,5 +1,6 @@
 package cmc.mellyserver.comment.domain;
 
+
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.user.domain.User;
@@ -31,6 +32,9 @@ public class Comment extends JpaBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memory_id")
     private Memory memory;
+
+    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

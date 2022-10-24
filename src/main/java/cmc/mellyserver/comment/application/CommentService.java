@@ -2,10 +2,7 @@ package cmc.mellyserver.comment.application;
 
 import cmc.mellyserver.comment.application.dto.CommentDto;
 import cmc.mellyserver.comment.application.dto.CommentResponseDto;
-import cmc.mellyserver.comment.domain.Comment;
-import cmc.mellyserver.comment.domain.CommentQueryRepository;
-import cmc.mellyserver.comment.domain.CommentRepository;
-import cmc.mellyserver.comment.domain.DeleteStatus;
+import cmc.mellyserver.comment.domain.*;
 import cmc.mellyserver.comment.presentation.dto.CommentRequest;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
@@ -33,6 +30,7 @@ public class CommentService {
      private final CommentRepository commentRepository;
      private final AuthenticatedUserChecker authenticatedUserChecker;
      private final MemoryRepository memoryRepository;
+     private final CommentLikeRepository commentLikeRepository;
 
 
      public CommentResponseDto getComment(String uid,Long memoryId)
@@ -79,6 +77,26 @@ public class CommentService {
         }
     }
 
+    @Transactional
+    public void saveCommentLike(String uid, Long commentId) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
+        });
+        CommentLike commentLike = CommentLike.createCommentLike(user, comment);
+        commentLikeRepository.save(commentLike);
+    }
+
+    @Transactional
+    public void deleteCommentLike(Long commentId,String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserUserSeq(commentId,user.getUserSeq()).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT_LIKE);
+        });
+        commentLikeRepository.delete(commentLike);
+    }
+
 
     private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
         Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
@@ -100,7 +118,7 @@ public class CommentService {
 
         comments.stream().forEach(c -> {
             // 댓글 dto 만들고
-            CommentDto dto = convertCommentToDto(c,user.getUserId());
+            CommentDto dto = convertCommentToDto(c,user);
             // 그 댓글을 map에 넣고
             map.put(dto.getId(), dto);
             // 만약 부모 댓글이 있다면?
@@ -116,6 +134,7 @@ public class CommentService {
         });
         return new CommentResponseDto(cnt,result);
     }
+
 
 
 }

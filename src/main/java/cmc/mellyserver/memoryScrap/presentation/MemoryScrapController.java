@@ -22,7 +22,7 @@ public class MemoryScrapController {
     @PostMapping("/memory/scrap")
     public ResponseEntity<CommonResponse> scrapMemory(@AuthenticationPrincipal User user, @RequestBody MemoryScrapRequest memoryScrapRequest) {
         memoryScrapService.createScrap(user.getUsername(), memoryScrapRequest);
-        return ResponseEntity.ok(new CommonResponse(200, "스크랩 완료"));
+        return ResponseEntity.ok(new CommonResponse(200, "메모리 스크랩 완료"));
     }
 
 

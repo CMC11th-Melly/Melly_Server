@@ -1,6 +1,7 @@
 package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.comment.domain.Comment;
+import cmc.mellyserver.comment.domain.CommentLike;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
@@ -77,6 +78,9 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<MemoryScrap> memoryScraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

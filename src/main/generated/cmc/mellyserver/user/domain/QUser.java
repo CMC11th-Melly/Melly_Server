@@ -26,6 +26,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<cmc.mellyserver.user.domain.enums.AgeGroup> ageGroup = createEnum("ageGroup", cmc.mellyserver.user.domain.enums.AgeGroup.class);
 
+    public final ListPath<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike> commentLikes = this.<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike>createList("commentLikes", cmc.mellyserver.comment.domain.CommentLike.class, cmc.mellyserver.comment.domain.QCommentLike.class, PathInits.DIRECT2);
+
     public final ListPath<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment> comments = this.<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment>createList("comments", cmc.mellyserver.comment.domain.Comment.class, cmc.mellyserver.comment.domain.QComment.class, PathInits.DIRECT2);
 
     //inherited
