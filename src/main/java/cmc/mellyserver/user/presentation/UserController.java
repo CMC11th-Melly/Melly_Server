@@ -34,9 +34,6 @@ public class UserController {
     private final UserService userService;
 
 
-    /**
-     * 메모리도 날짜 순으로 정렬할 수 있도록 날짜 함께 보내주기
-     */
     @Operation(summary = "유저가 작성한 메모리 조회")
     @GetMapping("/memory")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
@@ -50,9 +47,6 @@ public class UserController {
     }
 
 
-    /**
-     * 스크랩 장소 보여줄 시 날짜 순으로 최신꺼부터 정렬 -> 날짜 함께 보내줘야함
-     */
     @Operation(summary = "유저가 스크랩한 장소 조회")
     @GetMapping("/place/scrap")
     public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
@@ -63,6 +57,8 @@ public class UserController {
     @Operation(summary = "유저가 스크랩한 메모리 조회")
     @GetMapping("/memory/scrap")
     public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable,GetScrapedMemoryCond getScrapedMemoryCond) {
+
+        System.out.println("pageable : " + pageable.getSort());
         Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(lastId, pageable, user.getUsername(),getScrapedMemoryCond.getGroupType());
         return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 메모리 목록", new MemoryScrapResponseWrapper(scrapedMemory)));
     }

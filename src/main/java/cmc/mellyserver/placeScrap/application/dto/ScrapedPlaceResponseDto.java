@@ -20,7 +20,7 @@ public class ScrapedPlaceResponseDto {
     private GroupType recommendType;
     private String placeImage;
     private String placeCategory;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime scrapedDate;
 
 }

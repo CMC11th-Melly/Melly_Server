@@ -81,8 +81,8 @@ public class RecommendResponseDto implements Serializable {
         private Long stars;
         @Schema(example = "최고에요")
         private List<String> keyword;
-        @Schema(example = "20221014")
-        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
+        @Schema(example = "202210142310")
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
         private LocalDateTime visitedDate;
 
         public MemoryInfo(Long placeId, String placeName, Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,LocalDateTime visitiedDate)

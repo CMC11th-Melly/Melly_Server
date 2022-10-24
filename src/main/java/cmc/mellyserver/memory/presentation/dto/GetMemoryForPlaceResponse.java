@@ -33,8 +33,8 @@ public class GetMemoryForPlaceResponse {
     private Long stars;
     @Schema(example = "기뻐요, 그저 그래요")
     private List<String> keyword;
-    @Schema(example = "20221014")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
+    @Schema(example = "202210142310")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;
 
 }

@@ -1,20 +1,27 @@
 package cmc.mellyserver.place.domain;
 
+import cmc.mellyserver.common.util.jpa.QueryDslUtil;
+import cmc.mellyserver.memory.domain.QMemory;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.*;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 @Repository
 public class PlaceQueryRepository {
@@ -101,5 +108,28 @@ public class PlaceQueryRepository {
 
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
+
+//    private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
+//        List<OrderSpecifier> ORDERS = new ArrayList<>();
+//
+//        if (!isEmpty(pageable.getSort())) {
+//            for (Sort.Order order : pageable.getSort()) {
+//                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+//
+//                switch (order.getProperty()) {
+//                    case "createdDate":
+//                        OrderSpecifier<?> visitedDate = QueryDslUtil
+//                                .getSortedColumn(direction, memory, "visitedDate");
+//                        ORDERS.add(visitedDate);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//
+//        return ORDERS;
+//    }
 
 }
