@@ -3,6 +3,7 @@ package cmc.mellyserver.memoryScrap.domain;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemoryRepository;
@@ -32,11 +33,11 @@ public class MemoryScrapDomainService {
     private final MemoryRepository memoryRepository;
     private final MemoryQueryRepository memoryQueryRepository;
 
-    public Slice<ScrapedMemoryResponseDto> getScrapMemory(Long lastId, Pageable pageable, String uid)
+    public Slice<ScrapedMemoryResponseDto> getScrapMemory(Long lastId, Pageable pageable, String uid, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Memory> result = memoryQueryRepository.getScrapedMemory(lastId, pageable, user);
+        Slice<Memory> result = memoryQueryRepository.getScrapedMemory(lastId, pageable, user,groupType);
         return result.map(m -> ScrapAssembler.scrapedMemoryResponseDto(m));
     }
 

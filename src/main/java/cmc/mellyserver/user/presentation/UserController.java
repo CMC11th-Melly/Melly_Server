@@ -62,8 +62,8 @@ public class UserController {
 
     @Operation(summary = "유저가 스크랩한 메모리 조회")
     @GetMapping("/memory/scrap")
-    public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
-        Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(lastId, pageable, user.getUsername());
+    public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable,GetScrapedMemoryCond getScrapedMemoryCond) {
+        Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(lastId, pageable, user.getUsername(),getScrapedMemoryCond.getGroupType());
         return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 장소 목록", new MemoryScrapResponseWrapper(scrapedMemory)));
     }
 

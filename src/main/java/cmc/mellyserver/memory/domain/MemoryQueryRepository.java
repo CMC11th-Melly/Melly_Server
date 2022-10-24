@@ -124,11 +124,12 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
-    public Slice<Memory> getScrapedMemory(Long lastId, Pageable pageable, User user) {
+    public Slice<Memory> getScrapedMemory(Long lastId, Pageable pageable, User user,GroupType groupType) {
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .where(
                         ltMemoryId(lastId),
+                        memory.groupInfo.groupType.eq(groupType),
                         memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
                 ).orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)

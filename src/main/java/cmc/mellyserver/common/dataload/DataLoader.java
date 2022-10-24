@@ -658,12 +658,18 @@ public class DataLoader {
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 
-        memoryDomainService.createMemory(saveUser.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "최고의 하루가 된 날!","용용선생","주류","최고의 하루였다. 왜냐하면 오빠랑 재미있는 F1 경기를 보러왔기 때문이다. 만약 오늘 오지 않았다면 후회했겠지? 너무 즐겁다 푸하항~~~~끼하하하😂",3L,
-                null,OpenType.ALL,
-                List.of("즐거워요","그냥 그래요","행복해요","기뻐요","좋아요"), LocalDateTime.now(),
+        Memory memory = memoryDomainService.createMemory(saveUser.getUserId(),
+                37.5000541000002, 127.02425909999957,
+                "최고의 하루가 된 날!", "용용선생", "주류", "최고의 하루였다. 왜냐하면 오빠랑 재미있는 F1 경기를 보러왔기 때문이다. 만약 오늘 오지 않았다면 후회했겠지? 너무 즐겁다 푸하항~~~~끼하하하😂", 3L,
+                1L, OpenType.ALL,
+                List.of("즐거워요", "그냥 그래요", "행복해요", "기뻐요", "좋아요"), LocalDateTime.now(),
                 List.of());
+
+        memory.setMemoryImages(   List.of(new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(2).png"),
+                new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0887.JPG.jpg"),
+                new MemoryImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled.png"))
+                );
+
 
         // 가장 최신 데이터
 

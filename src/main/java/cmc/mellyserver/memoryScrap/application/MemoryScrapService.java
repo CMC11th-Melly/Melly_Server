@@ -1,5 +1,6 @@
 package cmc.mellyserver.memoryScrap.application;
 
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrapDomainService;
 import cmc.mellyserver.memoryScrap.presentation.dto.MemoryScrapRequest;
@@ -20,8 +21,8 @@ public class MemoryScrapService {
 
     private final MemoryScrapDomainService memoryScrapDomainService;
 
-    public Slice<ScrapedMemoryResponseDto> getScrapedMemory(Long lastId, Pageable pageable, String uid) {
-        return memoryScrapDomainService.getScrapMemory(lastId,pageable,uid);
+    public Slice<ScrapedMemoryResponseDto> getScrapedMemory(Long lastId, Pageable pageable, String uid, GroupType groupType) {
+        return memoryScrapDomainService.getScrapMemory(lastId,pageable,uid,groupType);
     }
 
     @Transactional

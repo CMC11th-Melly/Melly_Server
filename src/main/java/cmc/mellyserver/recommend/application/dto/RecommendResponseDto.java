@@ -2,6 +2,7 @@ package cmc.mellyserver.recommend.application.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.memory.presentation.dto.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class RecommendResponseDto implements Serializable {
         this.memoryInfo = memories.stream().map(m ->
                 new MemoryInfo(m.getId(),
                         m.getMemoryImages().stream().
-                                map(tm -> tm.getImagePath()).collect(Collectors.toList()),
+                                map(tm -> new ImageDto(tm.getId(),tm.getImagePath())).collect(Collectors.toList()),
                         m.getTitle(),
                         m.getContent(),
                         m.getGroupInfo().getGroupType(),
@@ -62,7 +63,7 @@ public class RecommendResponseDto implements Serializable {
         @Schema(example = "1")
         private Long memoryId;
         @Schema(example = "[melly.jpg,cmc.png]")
-        private List<String> memoryImages;
+        private List<ImageDto> memoryImages;
         @Schema(example = "오랜만에 고향 친구랑!")
         private String title;
         @Schema(example = "다음에 친구들 데리고 다시 와야지!")
@@ -79,7 +80,7 @@ public class RecommendResponseDto implements Serializable {
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
         private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long memoryId,List<String> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,LocalDateTime visitiedDate)
+        public MemoryInfo(Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,LocalDateTime visitiedDate)
         {
             this.memoryId = memoryId;
             this.memoryImages = memoryImages;
