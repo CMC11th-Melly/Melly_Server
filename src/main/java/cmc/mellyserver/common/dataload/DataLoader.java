@@ -1,6 +1,8 @@
 package cmc.mellyserver.common.dataload;
 
 import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.comment.application.CommentService;
+import cmc.mellyserver.comment.presentation.dto.CommentRequest;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.enums.GroupType;
@@ -35,6 +37,7 @@ public class DataLoader {
     private final PlaceRepository placeRepository;
     private final MemoryRepository memoryRepository;
     private final MemoryDomainService memoryDomainService;
+    private final CommentService commentService;
 
 
     @Transactional
@@ -64,7 +67,7 @@ public class DataLoader {
                 .password("asdfasdf")
                 .roleType(RoleType.USER)
                 .profileImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/cdc6a8f9-8798-4214-94ae-1e5538944f60.jpg")
-                .nickname("테스트유저")
+                .nickname("소피아")
                 .ageGroup(AgeGroup.THREE)
                 .provider(Provider.DEFAULT)
                 .gender(Gender.MALE)
@@ -76,7 +79,7 @@ public class DataLoader {
                 .password("asdfasdf")
                 .roleType(RoleType.USER)
                 .profileImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/cdc6a8f9-8798-4214-94ae-1e5538944f60.jpg")
-                .nickname("테스트유저2")
+                .nickname("레이")
                 .ageGroup(AgeGroup.THREE)
                 .provider(Provider.DEFAULT)
                 .gender(Gender.MALE)
@@ -1197,5 +1200,14 @@ public class DataLoader {
                 userGroup3.getId(),OpenType.PRIVATE,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
+
+
+        commentService.saveComment("cmc11th",new CommentRequest("ㅋㅋ 아 웃겨 실화냐?,,,, 가짜 데이터 만드는일 개노잼 제가 지금 이걸 왜 하는거죠?",74L,null,null));
+        commentService.saveComment(user2.getUserId(),new CommentRequest("근데 레이,,,댓글은 대체 왜 까먹었어요?ㅎ",74L,null,null));
+        commentService.saveComment(user3.getUserId(),new CommentRequest("빡치게 하지 마세요ㅎ",74L,2L,user2.getUserSeq()));
+        commentService.saveComment(user3.getUserId(),new CommentRequest("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ웃기다,,,ㅎ.. 나는 왜 지금 여기서 이 데이터를 쓰고 있는지 정말 모르겠지만요,,",74L,2L,user2.getUserSeq()));
+
     }
+
+
 }
