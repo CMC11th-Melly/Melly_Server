@@ -27,7 +27,7 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final ListPath<GroupAndUser, QGroupAndUser> groupAndUsers = this.<GroupAndUser, QGroupAndUser>createList("groupAndUsers", GroupAndUser.class, QGroupAndUser.class, PathInits.DIRECT2);
 
-    public final StringPath groupIcon = createString("groupIcon");
+    public final NumberPath<Integer> groupIcon = createNumber("groupIcon", Integer.class);
 
     public final StringPath groupName = createString("groupName");
 

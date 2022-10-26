@@ -13,10 +13,10 @@ public class GroupCreateRequest {
 
     private String groupName;
     private GroupType groupType;
-    private MultipartFile groupIcon;
+    private int groupIcon;
 
     @Builder
-    public GroupCreateRequest(String groupName, GroupType groupType,MultipartFile groupIcon) {
+    public GroupCreateRequest(String groupName, GroupType groupType,int groupIcon) {
         this.groupName = groupName;
         this.groupType = groupType;
         this.groupIcon = groupIcon;

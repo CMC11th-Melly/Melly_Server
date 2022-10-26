@@ -21,14 +21,13 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
-    private final S3FileLoader s3FileLoader;
+
 
     @Transactional
     public UserGroup saveGroup(String uid, GroupCreateRequest groupCreateRequest)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        String multipartFileName = s3FileLoader.getMultipartFileName(groupCreateRequest.getGroupIcon());
-        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType(),multipartFileName);
+        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType(),groupCreateRequest.getGroupIcon());
         GroupAndUser groupAndUser = new GroupAndUser();
         groupAndUser.setUser(user);
         userGroup.setGroupUser(groupAndUser);

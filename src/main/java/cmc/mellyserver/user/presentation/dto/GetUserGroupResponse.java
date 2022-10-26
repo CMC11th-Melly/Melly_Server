@@ -14,7 +14,7 @@ import java.util.List;
 public class GetUserGroupResponse {
 
     private Long groupId;
-    private String groupIcon;
+    private int groupIcon;
     private String groupName;
     private GroupType groupType;
     private String invitationLink;
