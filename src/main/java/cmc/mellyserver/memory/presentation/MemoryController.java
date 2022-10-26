@@ -2,6 +2,7 @@ package cmc.mellyserver.memory.presentation;
 
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.memory.application.MemoryService;
+import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
@@ -69,6 +70,17 @@ public class MemoryController {
 
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
                 new GetOtherMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getOtherMemoryForPlaceResponses(result))));
+    }
+
+    @Operation(summary = "내가 속해있는 그룹의 사람이 이 장소에 남긴 메모리 조회")
+    @GetMapping("/group/place/{placeId}")
+    public ResponseEntity<CommonResponse> getMyGroupMemory(           @AuthenticationPrincipal User user,
+                                                                      @PathVariable Long placeId,
+                                                                      @RequestParam(name = "lastId", required = false) Long lastId,
+                                                                      @ParameterObject Pageable pageable)
+    {
+        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemory(lastId, pageable, user.getUsername(), placeId);
+        return ResponseEntity.ok(new CommonResponse(200,"내 그룹의 메모리 조회",new MemoryForGroupWrapper(result)));
     }
 
 

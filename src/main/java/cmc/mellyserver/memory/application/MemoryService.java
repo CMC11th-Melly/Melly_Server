@@ -3,16 +3,18 @@ package cmc.mellyserver.memory.application;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.group.domain.GroupAndUser;
+import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
+import cmc.mellyserver.memory.application.dto.MemoryImageDto;
 import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemoryRepository;
-import cmc.mellyserver.memory.presentation.dto.MemoryAssembler;
-import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
+import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
-import cmc.mellyserver.memory.presentation.dto.GetOtherMemoryCond;
-import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -127,6 +129,28 @@ public class MemoryService {
         });
 
       return MemoryAssembler.memoryUpdateFormResponse(memory,collect);
+
+    }
+
+    public Slice<MemoryForGroupResponse> getMyGroupMemory(Long lastId, Pageable pageable, String uid, Long placeId) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(lastId, pageable, user, placeId);
+
+        return myGroupMemory
+                .map(memory -> new MemoryForGroupResponse(memory.getPlace().getId(),
+                                memory.getPlace().getPlaceName(),
+                                memory.getId(),
+                                memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(), mi.getImagePath()))
+                                        .collect(Collectors.toList()),
+                                memory.getTitle(),
+                                memory.getContent(),
+                                memory.getGroupInfo().getGroupType(),
+                                memory.getGroupInfo().getGroupName(),
+                                memory.getStars(),
+                                memory.getKeyword(),
+                                memory.getVisitedDate()));
+
 
     }
 }

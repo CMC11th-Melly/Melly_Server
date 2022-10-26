@@ -25,6 +25,8 @@ public class CommentDto implements Serializable {
     private Boolean isLoginUserWrite;
     private Boolean isLoginUserLike;
     private int likeCount;
+    private String mentionUserName;
+    private Long writerId;
     private String nickname;
     private String profileImage;
     @Schema(example = "202210140920")
@@ -33,23 +35,25 @@ public class CommentDto implements Serializable {
     private List<CommentDto> children = new ArrayList<>();
 
 
-    public CommentDto(Long id, String content,Boolean isLoginUserWrite,Boolean isLoginUserLike, int likeCount, String nickname,String profileImage,LocalDateTime createdDate) {
+    public CommentDto(Long id, String content,Boolean isLoginUserWrite,Boolean isLoginUserLike, int likeCount,String mentionUserName,Long writerId, String nickname,String profileImage,LocalDateTime createdDate) {
         this.id = id;
         this.content = content;
         this.isLoginUserWrite = isLoginUserWrite;
         this.isLoginUserLike = isLoginUserLike;
         this.likeCount = likeCount;
         this.createdDate = createdDate;
+        this.mentionUserName = mentionUserName;
+        this.writerId = writerId;
         this.nickname = nickname;
         this.profileImage = profileImage;
     }
 
 
-    public static CommentDto convertCommentToDto(Comment comment, User user) {
+    public static CommentDto convertCommentToDto(Comment comment, User user,String mentionUserName) {
 
         CommentDto commentDto =  comment.getIsDeleted() == DeleteStatus.Y ?
-                new CommentDto(comment.getId(), "삭제된 댓글입니다.", false,false,0, null,null,null) :
-                new CommentDto(comment.getId(), comment.getContent(),false,false,comment.getCommentLikes().size(), comment.getWriter().getNickname(),comment.getWriter().getProfileImage(),comment.getCreatedDate());
+                new CommentDto(comment.getId(), "삭제된 댓글입니다.", false,false,0,null, null,null,null,null) :
+                new CommentDto(comment.getId(), comment.getContent(),false,false,comment.getCommentLikes().size(),mentionUserName,comment.getWriter().getUserSeq(), comment.getWriter().getNickname(),comment.getWriter().getProfileImage(),comment.getCreatedDate());
 
         if(comment.getWriter().getUserId().equals(user.getUserId()))
         {

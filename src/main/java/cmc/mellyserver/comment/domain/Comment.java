@@ -29,6 +29,8 @@ public class Comment extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User writer;
 
+    private Long metionUser;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memory_id")
     private Memory memory;
@@ -42,6 +44,7 @@ public class Comment extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
+
 
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;
@@ -65,6 +68,11 @@ public class Comment extends JpaBaseEntity {
         user.getComments().add(this);
     }
 
+    private void setMentionUser(Long mentionUser)
+    {
+        this.metionUser = mentionUser;
+    }
+
     private void setMemory(Memory memory)
     {
         this.memory = memory;
@@ -81,13 +89,14 @@ public class Comment extends JpaBaseEntity {
 
     }
 
-    public static Comment createComment(String content, User writer, Memory memory, Comment parent)
+    public static Comment createComment(String content, User writer, Memory memory, Comment parent, Long mentionUser)
     {
         Comment comment = new Comment(content);
         comment.setUser(writer);
         comment.setMemory(memory);
         comment.setParent(parent);
         comment.isDeleted = DeleteStatus.N;
+        comment.setMentionUser(mentionUser);
         return comment;
     }
 

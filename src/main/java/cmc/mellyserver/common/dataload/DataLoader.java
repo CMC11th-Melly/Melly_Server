@@ -56,6 +56,7 @@ public class DataLoader {
                 .provider(Provider.DEFAULT)
                 .gender(Gender.MALE)
                 .build();
+
         User saveUser = userRepository.save(user);
 
         User user2 = User.builder().uid("testuser")
@@ -69,6 +70,18 @@ public class DataLoader {
                 .gender(Gender.MALE)
                 .build();
         User saveUser2 = userRepository.save(user2);
+
+        User user3 = User.builder().uid("testuser2")
+                .email("test2@gmail.com")
+                .password("asdfasdf")
+                .roleType(RoleType.USER)
+                .profileImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/cdc6a8f9-8798-4214-94ae-1e5538944f60.jpg")
+                .nickname("테스트유저2")
+                .ageGroup(AgeGroup.THREE)
+                .provider(Provider.DEFAULT)
+                .gender(Gender.MALE)
+                .build();
+        User saveUser3 = userRepository.save(user3);
 
 
 
@@ -91,6 +104,18 @@ public class DataLoader {
                 .inviteLink("http://cmc11th.co.kr")
                 .build();
 
+        UserGroup userGroup4 = UserGroup.builder()
+                .groupName("학교 친구")
+                .groupType(GroupType.FRIEND)
+                .inviteLink("http://cmc11th.co.kr")
+                .build();
+//
+        // 나랑 같은 그룹에 들어있는 사람이 나랑 같은 장소에 메모리를 쓴다. 하지만 이 사람은 다른 그룹에만 공개를 한데
+
+
+        /**
+         * 첫번째 그룹에는 유저 1과 유저 2가 포함되어 있음
+         */
         GroupAndUser groupAndUser = new GroupAndUser();
         groupAndUser.setUser(saveUser);
         userGroup.setGroupUser(groupAndUser);
@@ -99,15 +124,35 @@ public class DataLoader {
         userGroup.setGroupUser(groupAndUser1);
         groupRepository.save(userGroup);
 
+        /**
+         * 두번째 그룹에는 유저 1과 유저 2가 포함되어 있다.
+         */
         GroupAndUser groupAndUser2 = new GroupAndUser();
+        GroupAndUser groupAndUser2_1 = new GroupAndUser();
         groupAndUser2.setUser(saveUser);
+        groupAndUser2_1.setUser(saveUser2);
         userGroup2.setGroupUser(groupAndUser2);
+        userGroup2.setGroupUser(groupAndUser2_1);
         groupRepository.save(userGroup2);
 
+        /**
+         * 세번째 그룹에는 유저 1과 유저 3이 포함되어 있다.
+         */
         GroupAndUser groupAndUser3 = new GroupAndUser();
+        GroupAndUser groupAndUser3_1 = new GroupAndUser();
         groupAndUser3.setUser(saveUser);
+        groupAndUser3_1.setUser(saveUser3);
         userGroup3.setGroupUser(groupAndUser3);
+        userGroup3.setGroupUser(groupAndUser3_1);
         groupRepository.save(userGroup3);
+
+        /**
+         *  네번째 그룹에는 유저 2가 포함되어 있다.
+         */
+        GroupAndUser groupAndUser4 = new GroupAndUser();
+        groupAndUser4.setUser(user2);
+        userGroup4.setGroupUser(groupAndUser4);
+        groupRepository.save(userGroup4);
 
         Place place1 = Place.builder().position(new Position(37.503837, 127.041793)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/IMG_0888.JPG.jpg").placeName("무명요리사").placeCategory("일식").build();
         // memory 1
@@ -673,138 +718,199 @@ public class DataLoader {
 
         // 가장 최신 데이터
 
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","다음에 또 올래요~",4L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요","행복해요","기뻐요","좋아요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.GROUP,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "그룹 없는 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                null,OpenType.PRIVATE,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "그룹 없는 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                null,OpenType.PRIVATE,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "그룹 없는 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                null,OpenType.PRIVATE,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
+//                null,OpenType.PRIVATE,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
+//                null,OpenType.PRIVATE,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.ALL,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+//        memoryDomainService.createMemory(saveUser2.getUserId(),
+//                37.5000541000002,127.02425909999957,
+//                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
+//                1L,OpenType.ALL,
+//                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+//                List.of());
+
+        /**
+         *  첫번째 그룹에 속해있는 유저 2가 첫번째 그룹을 메모리에 설정 한 후 전체 공개로 올림
+         */
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","다음에 또 올래요~",4L,
+                "첫번째 그룹의 두번째 유저가 씀~","용용선생","주류","맛있게 먹었어용",3L,
                 1L,OpenType.GROUP,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요","행복해요","기뻐요","좋아요"), LocalDateTime.now(),
-                List.of());
 
+        /**
+         * 나랑 같은 그룹에 속해있는 유저 2가 전체 공개로 올림
+         */
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
+                "첫번째 그룹에 들어있는 두번째 유저가 전체공개로 씀","용용선생","주류","맛있게 먹었어용",3L,
+                null,OpenType.ALL,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.GROUP,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.PRIVATE,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.PRIVATE,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.PRIVATE,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.PRIVATE,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.PRIVATE,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.ALL,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.ALL,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
-        memoryDomainService.createMemory(saveUser2.getUserId(),
-                37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                1L,OpenType.ALL,
-                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
-                List.of());
-
+        /**
+         * 나랑 같은 그룹에 속해있는 유저 2가 전체 공개로 올림
+         */
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
                 "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
                 null,OpenType.ALL,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
+
+
+        /**
+         * 나랑 같은 그룹에 속해있는 유저 3이 3번째 그룹을 대상으로 전체 공개 글 씀
+         */
+        memoryDomainService.createMemory(saveUser3.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "3번째 그룹의 3번째 유저가 씀~","용용선생","주류","진짜 성공...?",3L,
+                3L,OpenType.ALL,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+        // 나옴
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "안녕하세요!","용용선생","주류","맛있게 먹었어용",3L,
-                null,OpenType.ALL,
+                "2번째 그룹의 2번째 유저가 씀~","용용선생","주류","진짜 성공...?",3L,
+                2L,OpenType.GROUP,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 
 
+        // 나오면 안됨
+        memoryDomainService.createMemory(saveUser2.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "4번째 그룹의 2번째 유저가 씀~","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                4L,OpenType.GROUP,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+
+        // 나오면 안됨
+        memoryDomainService.createMemory(saveUser2.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "2번째 유저가 비공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                1L,OpenType.PRIVATE,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+     // ======================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 여기부터는 다른 동네
         memoryDomainService.createMemory(saveUser.getUserId(),
                 37.49992030000013,127.02461119999951,
                 "안녕하세요!","을지다락","주류","다음에 또 올래요~",4L,

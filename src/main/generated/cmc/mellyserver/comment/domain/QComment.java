@@ -42,6 +42,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final cmc.mellyserver.memory.domain.QMemory memory;
 
+    public final NumberPath<Long> metionUser = createNumber("metionUser", Long.class);
+
     public final QComment parent;
 
     public final cmc.mellyserver.user.domain.QUser writer;

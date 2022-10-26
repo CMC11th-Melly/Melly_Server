@@ -10,6 +10,7 @@ import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class CommentService {
 
      private final CommentQueryRepository commentQueryRepository;
      private final CommentRepository commentRepository;
+     private final UserRepository userRepository;
      private final AuthenticatedUserChecker authenticatedUserChecker;
      private final MemoryRepository memoryRepository;
      private final CommentLikeRepository commentLikeRepository;
@@ -44,14 +46,18 @@ public class CommentService {
     @Transactional
     public void saveComment(String uid, CommentRequest commentRequest) {
 
+        // 현재 로그인 사용자
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        // 내가 댓글을 남기려는 사람
+
         Memory memory = memoryRepository.findById(commentRequest.getMemoryId()).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
         Comment parent = commentRequest.getParentId() != null ? commentRepository.findById(commentRequest.getParentId()).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
         }) : null;
-        commentRepository.save(Comment.createComment(commentRequest.getContent(),user,memory,parent));
+
+        commentRepository.save(Comment.createComment(commentRequest.getContent(),user,memory,parent,commentRequest.getMentionUserId()));
     }
 
     @Transactional
@@ -118,7 +124,18 @@ public class CommentService {
 
         comments.stream().forEach(c -> {
             // 댓글 dto 만들고
-            CommentDto dto = convertCommentToDto(c,user);
+            CommentDto dto;
+            if(c.getMetionUser() != null)
+            {
+                User mentionUser = userRepository.findById(c.getMetionUser()).orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+                });
+                dto = convertCommentToDto(c,user,mentionUser.getNickname());
+            }else{
+                dto = convertCommentToDto(c,user,null);
+            }
+
+
             // 그 댓글을 map에 넣고
             map.put(dto.getId(), dto);
             // 만약 부모 댓글이 있다면?

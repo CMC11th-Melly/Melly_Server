@@ -1,12 +1,23 @@
 package cmc.mellyserver.memory.domain;
 
+import cmc.mellyserver.group.domain.GroupAndUser;
+import cmc.mellyserver.group.domain.QGroupAndUser;
+import cmc.mellyserver.group.domain.QUserGroup;
+import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.memory.presentation.dto.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.user.domain.QUser;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.geolatte.geom.M;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +33,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static cmc.mellyserver.group.domain.QGroupAndUser.*;
+import static cmc.mellyserver.group.domain.QUserGroup.*;
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.place;
+import static cmc.mellyserver.user.domain.QUser.*;
 
 @Repository
 public class MemoryQueryRepository {
@@ -135,6 +149,65 @@ public class MemoryQueryRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
+    }
+
+    /**
+     * 1. 내가 속해있는 모든 그룹들을 찾아야해
+     */
+    public Slice<Memory> getMyGroupMemory(Long lastId, Pageable pageable, User loginUser, Long placeId) {
+
+
+
+        // 1. 메모리를 가져올꺼야
+        List<Memory> results = query.selectFrom(memory)
+                // 2. 메모리와 그 메모리를 가진 유저를 조인
+                .join(memory.user, user)
+                .join(user.groupAndUsers, groupAndUser)
+                // 3. 이제 그 유저가 어떤 그룹에 속해있는지를 체크할 예정
+                .where(
+                        ltMemoryId(lastId),
+                        // 1. 일단 특정 장소에 속해야 하고
+                        eqPlace(placeId),
+                        // 2. 내가 속해있는 그룹에 속해있는 사람들
+                        groupAndUser.group.id.in(
+                                JPAExpressions.select(userGroup.id)
+                                        .from(groupAndUser)
+                                        .join(groupAndUser.group, userGroup)
+                                        .join(groupAndUser.user, user)
+                                        .where(user.userSeq.eq(loginUser.getUserSeq()))
+                        ),
+                        memory.openType.ne(OpenType.PRIVATE),
+                        checkGroup(loginUser).not(),
+                        // 3. 하지만 나 자신은 제외
+                        user.userSeq.ne(loginUser.getUserSeq())
+                )
+                .distinct()
+                .orderBy(memory.id.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+
+
+        return checkLastPage(pageable, results);
+
+
+
+    }
+
+    private BooleanExpression checkGroup(User loginUser) {
+
+        if(loginUser == null)
+        {
+            return null;
+        }
+
+        return memory.groupInfo.groupId.notIn(
+                JPAExpressions.select(userGroup.id)
+                        .from(groupAndUser)
+                        .join(groupAndUser.group, userGroup)
+                        .join(groupAndUser.user, user)
+                        .where(user.userSeq.eq(loginUser.getUserSeq()))
+        ).and(memory.openType.eq(OpenType.GROUP));
     }
 
 
