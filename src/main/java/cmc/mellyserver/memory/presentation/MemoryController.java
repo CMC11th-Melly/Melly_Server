@@ -49,7 +49,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getUserMemory(@ParameterObject @PageableDefault(sort = "visitedDate",
             direction = Sort.Direction.DESC,size = 10) Pageable pageable, @AuthenticationPrincipal User user,
                                                         @PathVariable Long placeId,
-                                                        @RequestParam GroupType groupType)
+                                                        @RequestParam(required = false) GroupType groupType)
     {
         Slice<Memory> result = memoryService.getUserMemory(pageable,user.getUsername(), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
@@ -64,7 +64,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getOtherMemory(
             @AuthenticationPrincipal User user,
             @PathVariable Long placeId,
-            @RequestParam GroupType groupType,
+            @RequestParam(required = false) GroupType groupType,
             @ParameterObject Pageable pageable
     )
     {
