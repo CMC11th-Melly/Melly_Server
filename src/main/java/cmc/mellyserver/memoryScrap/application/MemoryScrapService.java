@@ -21,8 +21,8 @@ public class MemoryScrapService {
 
     private final MemoryScrapDomainService memoryScrapDomainService;
 
-    public Slice<ScrapedMemoryResponseDto> getScrapedMemory(Long lastId, Pageable pageable, String uid, GroupType groupType) {
-        return memoryScrapDomainService.getScrapMemory(lastId,pageable,uid,groupType);
+    public Slice<ScrapedMemoryResponseDto> getScrapedMemory(Pageable pageable, String uid, GroupType groupType) {
+        return memoryScrapDomainService.getScrapMemory(pageable,uid,groupType);
     }
 
     @Transactional

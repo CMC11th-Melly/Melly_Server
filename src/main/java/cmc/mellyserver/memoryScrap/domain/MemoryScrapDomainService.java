@@ -33,11 +33,11 @@ public class MemoryScrapDomainService {
     private final MemoryRepository memoryRepository;
     private final MemoryQueryRepository memoryQueryRepository;
 
-    public Slice<ScrapedMemoryResponseDto> getScrapMemory(Long lastId, Pageable pageable, String uid, GroupType groupType)
+    public Slice<ScrapedMemoryResponseDto> getScrapMemory(Pageable pageable, String uid, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Memory> result = memoryQueryRepository.getScrapedMemory(lastId, pageable, user,groupType);
+        Slice<Memory> result = memoryQueryRepository.getScrapedMemory(pageable, user,groupType);
         return result.map(m -> ScrapAssembler.scrapedMemoryResponseDto(m));
     }
 

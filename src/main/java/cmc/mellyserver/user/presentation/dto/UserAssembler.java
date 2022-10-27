@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class UserAssembler {
 
+
     public static Slice<GetUserMemoryResponse> getUserMemoryResponses(Slice<Memory> memories)
     {
         return memories.map(m -> new GetUserMemoryResponse(m.getPlace().getId(),m.getPlace().getPlaceName(),m.getId(),m.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()),
@@ -29,8 +30,7 @@ public class UserAssembler {
                         (gu.getUser().getUserId().equals(userId)) ? true : false
                 )).collect(Collectors.toList()),
                 ug.getGroupType(),
-                ug.getInviteLink(),
-                ug.getCreatedDate()
+                ug.getInviteLink()
                 )).collect(Collectors.toList());
     }
 }

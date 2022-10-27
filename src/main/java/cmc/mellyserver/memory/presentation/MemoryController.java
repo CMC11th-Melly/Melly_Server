@@ -1,6 +1,7 @@
 package cmc.mellyserver.memory.presentation;
 
 import cmc.mellyserver.common.response.CommonResponse;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.application.MemoryService;
 import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -43,12 +46,12 @@ public class MemoryController {
     @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
                                                              "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/user/place/{placeId}")
-    public ResponseEntity<CommonResponse> getUserMemory(@ParameterObject Pageable pageable, @AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> getUserMemory(@ParameterObject @PageableDefault(sort = "visitedDate",
+            direction = Sort.Direction.DESC,size = 10) Pageable pageable, @AuthenticationPrincipal User user,
                                                         @PathVariable Long placeId,
-                                                        @RequestParam(name = "lastId",required = false) Long lastId,
-                                                        @ParameterObject GetUserMemoryCond getUserMemoryCond)
+                                                        @RequestParam GroupType groupType)
     {
-        Slice<Memory> result = memoryService.getUserMemory(lastId,pageable,user.getUsername(), placeId, getUserMemoryCond);
+        Slice<Memory> result = memoryService.getUserMemory(pageable,user.getUsername(), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
                 new GetMemoryForPlaceResponseWrapper(result.getContent().stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
@@ -61,12 +64,11 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getOtherMemory(
             @AuthenticationPrincipal User user,
             @PathVariable Long placeId,
-            @RequestParam(name = "lastId", required = false) Long lastId,
-            @ParameterObject Pageable pageable,
-            @ParameterObject GetOtherMemoryCond getOtherMemoryCond
+            @RequestParam GroupType groupType,
+            @ParameterObject Pageable pageable
     )
     {
-        Slice<Memory> result = memoryService.getOtherMemory(lastId, pageable, user.getUsername(), placeId, getOtherMemoryCond);
+        Slice<Memory> result = memoryService.getOtherMemory(pageable, user.getUsername(), placeId, groupType);
 
         return ResponseEntity.ok(new CommonResponse(200, "다른 유저가 전체 공개로 올린 메모리 조회",
                 new GetOtherMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getOtherMemoryForPlaceResponses(result))));
@@ -76,10 +78,9 @@ public class MemoryController {
     @GetMapping("/group/place/{placeId}")
     public ResponseEntity<CommonResponse> getMyGroupMemory(           @AuthenticationPrincipal User user,
                                                                       @PathVariable Long placeId,
-                                                                      @RequestParam(name = "lastId", required = false) Long lastId,
                                                                       @ParameterObject Pageable pageable)
     {
-        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemory(lastId, pageable, user.getUsername(), placeId);
+        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemory(pageable, user.getUsername(), placeId);
         return ResponseEntity.ok(new CommonResponse(200,"내 그룹의 메모리 조회",new MemoryForGroupWrapper(result)));
     }
 

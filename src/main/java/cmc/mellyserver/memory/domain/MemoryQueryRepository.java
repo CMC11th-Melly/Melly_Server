@@ -64,106 +64,77 @@ public class MemoryQueryRepository {
                 .where(memory.user.userSeq.eq(userSeq), memory.title.contains(memoryName)).distinct().fetch();
     }
 
+
     /**
-     * @param userSeq      유저 식별값
-     * @param placeId      장소 아이디
-     * @param keyword      메모리 작성시 설정한 키워드
-     * @param groupType    메모리가 속한 그룹의 타입
-     * @param visitiedDate 메모리의 장소에 방문한 날짜
-     * 만약 groupType이 null이나 ALL로 들어가면 조건 아예 없어버림. size만 처음에 10 넣고, 다음부터 마지막 데이터 가져오기
+     * 장소 상세 - 나의 메모리
      */
-    public Slice<Memory> searchMemoryUserCreate(Long lastMemoryId, Pageable pageable, Long userSeq, Long placeId, String keyword, GroupType groupType, String visitiedDate) {
+    public Slice<Memory> searchMemoryUserCreate(Pageable pageable, Long userSeq, Long placeId,GroupType groupType) {
+
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .where(
-                        ltMemoryId(lastMemoryId),  // 메모리 id를 커서로 사용해서 페이징 -> 인덱스 사용
-                        eqPlace(placeId),          // 특정 장소에 대한 메모리를 가져옴
-                        eqUserSeq(userSeq),  // 특정 장소에 대한 메모리들 중 유저가 작성한 메모리 가져옴
-                        eqKeyword(keyword),      // 해당 키워드가 필요한 메모리
-                        eqGroup(groupType),      // 특정 groupType에 포함되는 메모리
-                        eqVisitiedDate(visitiedDate)  // 특정 날짜에 속하는 메모리
-                ).orderBy(memory.visitedDate.desc())          // memoryId 순서로 내림차순
-                .limit(pageable.getPageSize() + 1)
+                        eqPlace(placeId),  // 특정 장소에 대한 메모리면 placeId로 필터링
+                        eqUserSeq(userSeq),  // 내가 작성한 메모리가 맞는지 체크
+                        eqGroup(groupType)   // 그룹 타입 체크
+                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))  // Sort에 명시한 조건으로 필터링
+                .offset(pageable.getOffset())   // offset 지정
+                .limit(pageable.getPageSize() + 1)  // 하나 더 땡겨와서 마지막 페이지인지 체크
                 .fetch();
         return checkLastPage(pageable, results);
     }
 
-    public Slice<Memory> searchMemoryOtherCreate(Long lastId, Pageable pageable, Long userSeq, Long placeId,GroupType groupType, String keyword, String visitiedDate) {
+    /**
+     * 장소 상세 - 이 장소 메모리
+     */
+    public Slice<Memory> searchMemoryOtherCreate(Pageable pageable, Long userSeq, Long placeId,GroupType groupType) {
+
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
         List<Memory> results = query.select(memory)
                 .from(memory)
 
                 .where(
-                        // 커서 기반 페이징 용
-                        ltMemoryId(lastId),
-                        // 특정 장소의 메모리 가져오기
                         eqPlace(placeId),
-                        // 내가 작성하지 않은 메모리만 가져오기
                         neUserSeq(userSeq),
-                        // 내가 설정한 groupType으로 카테고리 필터링
                         eqGroup(groupType),
-
-                        // 상대방 메모리 중에 전체 공개인것만 가져오기
-                        memory.openType.eq(OpenType.ALL),
-                        // 키워드만 필터링
-                        eqKeyword(keyword),
-                        // 날짜로 필터링
-                        eqVisitiedDate(visitiedDate)
-                ).orderBy(memory.id.desc())
+                        memory.openType.eq(OpenType.ALL)
+                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         return checkLastPage(pageable, results);
     }
 
-    public Slice<Memory> searchMemoryMyGroupCreate(Long lastId, Pageable pageable, Long userSeq,Long groupId, Long placeId,GroupType groupType, String keyword, String visitiedDate) {
+
+    /**
+     * 마이페이지 - 내가 스크랩한 장소
+     */
+    public Slice<Memory> getScrapedMemory(Pageable pageable, User user,GroupType groupType) {
+
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .where(
-                        // 커서 기반 페이징 용
-                        ltMemoryId(lastId),
-                        // 특정 장소의 메모리 가져오기
-                        eqPlace(placeId),
-                        // 내가 작성하지 않은 메모리만 가져오기
-                        neUserSeq(userSeq),
-                        inSameGroup(groupId),
-                        // 내가 설정한 groupType으로 카테고리 필터링
-                        eqGroup(groupType),
-                        // 상대방 메모리 중에 전체 공개인것만 가져오기
-                        memory.openType.eq(OpenType.ALL),
-                        // 키워드만 필터링
-                        eqKeyword(keyword),
-                        // 날짜로 필터링
-                        eqVisitiedDate(visitiedDate)
-                ).orderBy(memory.id.desc())
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-
-        return checkLastPage(pageable, results);
-    }
-
-    public Slice<Memory> getScrapedMemory(Long lastId, Pageable pageable, User user,GroupType groupType) {
-        List<Memory> results = query.select(memory)
-                .from(memory)
-                .where(
-                        ltMemoryId(lastId),
                         eqGroup(groupType),
                         memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
-                ).orderBy(memory.id.desc())
+                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
     }
 
+
     /**
-     * 1. 내가 속해있는 모든 그룹들을 찾아야해
+     * 마이페이지 - 내가 속해있는 모든 그룹의 이 장소에 대한 메모리
      */
-    public Slice<Memory> getMyGroupMemory(Long lastId, Pageable pageable, User loginUser, Long placeId) {
+    public Slice<Memory> getMyGroupMemory(Pageable pageable, User loginUser, Long placeId) {
 
-
-
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         // 1. 메모리를 가져올꺼야
         List<Memory> results = query.selectFrom(memory)
                 // 2. 메모리와 그 메모리를 가진 유저를 조인
@@ -171,7 +142,6 @@ public class MemoryQueryRepository {
                 .join(user.groupAndUsers, groupAndUser)
                 // 3. 이제 그 유저가 어떤 그룹에 속해있는지를 체크할 예정
                 .where(
-                        ltMemoryId(lastId),
                         // 1. 일단 특정 장소에 속해야 하고
                         eqPlace(placeId),
                         // 2. 내가 속해있는 그룹에 속해있는 사람들
@@ -188,16 +158,13 @@ public class MemoryQueryRepository {
                         user.userSeq.ne(loginUser.getUserSeq())
                 )
                 .distinct()
-                .orderBy(memory.id.desc())
+                .offset(pageable.getOffset())
+                .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
 
-
         return checkLastPage(pageable, results);
-
-
-
     }
 
     private BooleanExpression checkGroup(User loginUser) {
@@ -264,6 +231,11 @@ public class MemoryQueryRepository {
     }
 
 
+
+
+
+
+
     private BooleanExpression eqPlace(Long placeId) {
         if (placeId == null) {
             return null;
@@ -280,6 +252,7 @@ public class MemoryQueryRepository {
         return memory.user.userSeq.eq(userSeq);
     }
 
+
     private BooleanExpression neUserSeq(Long userSeq)
     {
         if(userSeq == null)
@@ -287,16 +260,6 @@ public class MemoryQueryRepository {
             return null;
         }
         return memory.user.userSeq.ne(userSeq);
-    }
-
-
-    private BooleanExpression ltMemoryId(Long memoryId) {
-
-        if (memoryId == null || memoryId == -1) {
-            return null;
-        }
-
-        return memory.id.lt(memoryId);
     }
 
 
@@ -313,6 +276,9 @@ public class MemoryQueryRepository {
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
+
+
+
     private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
 
         List<OrderSpecifier> ORDERS = new ArrayList<>();
@@ -326,6 +292,11 @@ public class MemoryQueryRepository {
                         OrderSpecifier<?> visitedDate = QueryDslUtil
                                 .getSortedColumn(direction, memory, "visitedDate");
                         ORDERS.add(visitedDate);
+                        break;
+                    case "stars":
+                        OrderSpecifier<?> stars = QueryDslUtil
+                                .getSortedColumn(direction, memory, "stars");
+                        ORDERS.add(stars);
                         break;
                     default:
                         break;

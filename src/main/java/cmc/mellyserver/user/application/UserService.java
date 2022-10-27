@@ -4,9 +4,13 @@ import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.domain.UserGroupQueryRepository;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
+import cmc.mellyserver.memory.presentation.dto.ImageDto;
+import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.ProfileUpdateRequest;
@@ -36,6 +40,7 @@ public class UserService {
     private final GroupService groupService;
     private final AmazonS3Client amazonS3Client;
     private final S3FileLoader s3FileLoader;
+    private final UserGroupQueryRepository userGroupQueryRepository;
 
 
     public List<UserGroup> getUserGroup(String uid) {
@@ -43,15 +48,11 @@ public class UserService {
         return user.getGroupAndUsers().stream().map(gu -> gu.getGroup()).collect(Collectors.toList());
     }
 
-    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, GetUserMemoryCond getUserMemoryCond) {
+    public Slice<Memory> getUserMemory(Pageable pageable, String uid, GroupType groupType) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId, pageable, user.getUserSeq(),
-                null,
-                getUserMemoryCond.getKeyword(),
-                getUserMemoryCond.getGroupType(),
-                getUserMemoryCond.getVisitedDate());
-
+        return memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserSeq(),
+                null, groupType);
 
     }
 
@@ -80,5 +81,22 @@ public class UserService {
     public ProfileUpdateFormResponse getProfileDataForUpdate(String uid) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return new ProfileUpdateFormResponse(user.getProfileImage(),user.getNickname(),user.getGender(),user.getAgeGroup());
+    }
+
+    public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable, Long groupId,GroupType groupType) {
+        UserGroup userGroup = groupService.getGroupById(groupId);
+        Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,groupType);
+        return myGroupMemory.map(m -> new GroupMemory(m.getPlace().getId(),
+                m.getPlace().getPlaceName(),
+                m.getId(),
+                m.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()),
+                m.getTitle(),
+                m.getContent(),
+                m.getGroupInfo().getGroupType(),
+                m.getGroupInfo().getGroupName(),
+                m.getStars(),
+                m.getKeyword(),
+                m.getVisitedDate()));
+
     }
 }

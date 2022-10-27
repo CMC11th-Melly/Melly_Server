@@ -5,6 +5,7 @@ import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryImageDto;
@@ -74,36 +75,27 @@ public class MemoryService {
     }
 
 
-    public Slice<Memory> getUserMemory(Long lastMemoryId, Pageable pageable, String uid, Long placeId, GetUserMemoryCond getUserMemoryCond)
+    public Slice<Memory> getUserMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(lastMemoryId,pageable,user.getUserSeq(),
-                                                            placeId,
-                                                            getUserMemoryCond.getKeyword(),
-                                                            getUserMemoryCond.getGroupType(),
-                                                            getUserMemoryCond.getVisitedDate());
+        return memoryQueryRepository.searchMemoryUserCreate(pageable,user.getUserSeq(), placeId, groupType);
     }
 
-    public Slice<Memory> getOtherMemory(Long lastId, Pageable pageable, String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
+    public Slice<Memory> getOtherMemory(Pageable pageable, String uid,Long placeId, GroupType groupType) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
-                placeId,
-                getOtherMemoryCond.getGroupType(),
-                getOtherMemoryCond.getKeyword(),
-                getOtherMemoryCond.getVisitedDate());
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user.getUserSeq(),
+                placeId,groupType);
     }
 
-    public Slice<Memory> getOtherMemorySameGroupCreated(Long lastId, Pageable pageable, String uid,Long placeId, GetOtherMemoryCond getOtherMemoryCond) {
+    public Slice<Memory> getOtherMemorySameGroupCreated(Pageable pageable, String uid,Long placeId,GroupType groupType) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,user.getUserSeq(),
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user.getUserSeq(),
                 placeId,
-                getOtherMemoryCond.getGroupType(),
-                getOtherMemoryCond.getKeyword(),
-                getOtherMemoryCond.getVisitedDate());
+                groupType);
     }
 
 
@@ -132,10 +124,10 @@ public class MemoryService {
 
     }
 
-    public Slice<MemoryForGroupResponse> getMyGroupMemory(Long lastId, Pageable pageable, String uid, Long placeId) {
+    public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(lastId, pageable, user, placeId);
+        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId);
 
         return myGroupMemory
                 .map(memory -> new MemoryForGroupResponse(memory.getPlace().getId(),

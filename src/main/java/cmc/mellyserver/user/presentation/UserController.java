@@ -2,8 +2,8 @@ package cmc.mellyserver.user.presentation;
 
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.memoryScrap.application.MemoryScrapService;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.memoryScrap.presentation.dto.MemoryScrapResponseWrapper;
@@ -11,18 +11,22 @@ import cmc.mellyserver.placeScrap.application.PlaceScrapService;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.presentation.dto.ScrapResponseWrapper;
 import cmc.mellyserver.user.application.UserService;
+import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -34,50 +38,72 @@ public class UserController {
     private final UserService userService;
 
 
+    /**
+     * 마이페이지 - My 메모리
+     */
     @Operation(summary = "유저가 작성한 메모리 조회")
     @GetMapping("/memory")
     public ResponseEntity<CommonResponse> getUserMemory(@AuthenticationPrincipal User user,
-                                                        @RequestParam(name = "lastId", required = false) Long lastId,
-                                                        Pageable pageable,
-                                                        GetUserMemoryCond getUserMemoryCond) {
-        Slice<Memory> userMemory = userService.getUserMemory(lastId, pageable, user.getUsername(), getUserMemoryCond);
+                                                        @PageableDefault(sort = "visitedDate",
+                                                                direction = Sort.Direction.ASC,size = 10) Pageable pageable,
+                                                        @RequestParam(required = false) GroupType groupType) {
+        Slice<Memory> userMemory = userService.getUserMemory(pageable, user.getUsername(), groupType);
         return ResponseEntity.ok(new CommonResponse(200,
-                "유저가 작성한 메모리 조회", new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))
+                "My 메모리 조회", new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))
         ));
     }
 
-
-    @Operation(summary = "유저가 스크랩한 장소 조회")
-    @GetMapping("/place/scrap")
-    public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable) {
-        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.getScrapedPlace(lastId, pageable, user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 장소 목록", new ScrapResponseWrapper(scrapedPlace)));
-    }
-
-    @Operation(summary = "유저가 스크랩한 메모리 조회")
-    @GetMapping("/memory/scrap")
-    public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable,GetScrapedMemoryCond getScrapedMemoryCond) {
-
-        System.out.println("pageable : " + pageable.getSort());
-        Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(lastId, pageable, user.getUsername(),getScrapedMemoryCond.getGroupType());
-        return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 메모리 목록", new MemoryScrapResponseWrapper(scrapedMemory)));
-    }
-
-
-
     /**
-     * 그룹 정보 보여줄때도 날짜 함께 보내주기
+     * 마이페이지 - My 그룹
      */
     @Operation(summary = "유저가 속해있는 그룹 조회")
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user) {
         List<UserGroup> userGroup = userService.getUserGroup(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,
-                "유저가 속해있는 그룹 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup,user.getUsername()))
+                "My 그룹 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup,user.getUsername()))
         ));
     }
 
+    /**
+     * 마이페이지 - My 그룹 - 내 그룹의 메모리 모두 조회
+     */
+    @Operation(summary = "유저가 속해있는 그룹의 메모리 조회")
+    @GetMapping("/group/{groupId}/memory")
+    public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId,@RequestParam(required = false) GroupType groupType)
+    {
+        Slice<GroupMemory> results = userService.getMemoryBelongToMyGroup(pageable, groupId,groupType);
+        return ResponseEntity.ok(new CommonResponse(200,"내 그룹",results));
+    }
 
+
+    /**
+     * 마이페이지 - My 장소 스크랩
+     */
+    @Operation(summary = "유저가 스크랩한 장소 조회")
+    @GetMapping("/place/scrap")
+    public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user,Pageable pageable) {
+        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.getScrapedPlace(pageable, user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200, "My 스크랩 조회", new ScrapResponseWrapper(scrapedPlace)));
+    }
+
+
+    /**
+     * 마이페이지 - My 메모리 스크랩 (데모데이 이후에 추가)
+     */
+    @Operation(summary = "유저가 스크랩한 메모리 조회")
+    @GetMapping("/memory/scrap")
+    public ResponseEntity<CommonResponse> getMemoryUserScrap(@AuthenticationPrincipal User user, Pageable pageable,@RequestParam(required = false) GroupType groupType) {
+
+        System.out.println("pageable : " + pageable.getSort());
+        Slice<ScrapedMemoryResponseDto> scrapedMemory = memoryScrapService.getScrapedMemory(pageable, user.getUsername(),groupType);
+        return ResponseEntity.ok(new CommonResponse(200, "유저가 스크랩한 메모리 목록", new MemoryScrapResponseWrapper(scrapedMemory)));
+    }
+
+
+    /**
+     * 유저 이미지 용량 조회
+     */
     @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user) {
@@ -92,6 +118,14 @@ public class UserController {
         userService.participateToGroup(user.getUsername(), participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(200, "그룹에 추가 완료"));
     }
+
+    @Operation(summary = "test")
+    @GetMapping("/group/test")
+    public void test(Pageable pageable, @AuthenticationPrincipal User user)
+    {
+        placeScrapService.getScrapedPlaceGroup(pageable,user.getUsername());
+    }
+
 
 
     @Operation(summary = "프로필 수정 폼에 필요한 유저 정보 조회")

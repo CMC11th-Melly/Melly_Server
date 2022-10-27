@@ -2,7 +2,10 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.memory.domain.QMemory;
+import cmc.mellyserver.placeScrap.domain.PlaceScrap;
+import cmc.mellyserver.placeScrap.domain.QPlaceScrap;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.*;
+import static cmc.mellyserver.placeScrap.domain.QPlaceScrap.*;
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 @Repository
@@ -75,17 +79,29 @@ public class PlaceQueryRepository {
     }
 
 
-    public Slice<Place> getScrapedPlace(Long lastId, Pageable pageable, User user)
+    public Slice<Place> getScrapedPlace(Pageable pageable, User user)
     {
         List<Place> results = query.select(place)
                 .from(place)
                 .where(
-                        ltPlaceId(lastId),
+
                         place.id.in(user.getPlaceScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList()))
                 ).orderBy(place.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
+    }
+
+    public List<Place> getScrapedPlaceGrouping(User user)
+    {
+        List<Tuple> fetch = query.select(placeScrap.scrapType, place.count())
+                .from(placeScrap)
+                .join(placeScrap.place, place)
+                .fetch();
+        System.out.println(fetch);
+        return null;
+
+
     }
 
 

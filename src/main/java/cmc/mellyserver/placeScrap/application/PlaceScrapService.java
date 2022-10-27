@@ -1,5 +1,6 @@
 package cmc.mellyserver.placeScrap.application;
 
+import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.domain.PlaceScrapDomainService;
 import cmc.mellyserver.placeScrap.presentation.dto.ScrapRequest;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,9 +26,15 @@ public class PlaceScrapService {
                                             scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
     }
 
-    public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Long lastId, Pageable pageable, String uid)
+    public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, String uid)
     {
-        return placeScrapDomainService.getScrapPlace(lastId, pageable, uid);
+        return placeScrapDomainService.getScrapPlace(pageable, uid);
+    }
+
+    public void getScrapedPlaceGroup(Pageable pageable, String uid)
+    {
+        List<Place> scrapPlaceGroup = placeScrapDomainService.getScrapPlaceGroup(pageable, uid);
+
     }
 
     @Transactional

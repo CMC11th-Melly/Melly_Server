@@ -16,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,12 +32,20 @@ public class PlaceScrapDomainService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
-    public Slice<ScrapedPlaceResponseDto> getScrapPlace(Long lastId, Pageable pageable, String uid)
+    public Slice<ScrapedPlaceResponseDto> getScrapPlace(Pageable pageable, String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Place> result = placeQueryRepository.getScrapedPlace(lastId, pageable, user);
+        Slice<Place> result = placeQueryRepository.getScrapedPlace(pageable, user);
         return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p,user,p.getCreatedDate()));
+    }
+
+    public List<Place> getScrapPlaceGroup(Pageable pageable, String uid)
+    {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        List<Place> result = placeQueryRepository.getScrapedPlaceGrouping(user);
+        return result;
     }
 
 
