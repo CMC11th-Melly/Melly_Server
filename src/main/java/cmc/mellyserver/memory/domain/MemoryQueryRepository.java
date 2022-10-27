@@ -1,5 +1,6 @@
 package cmc.mellyserver.memory.domain;
 
+import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.QGroupAndUser;
 import cmc.mellyserver.group.domain.QUserGroup;
@@ -13,6 +14,8 @@ import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.QUser;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -23,6 +26,7 @@ import org.geolatte.geom.M;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -30,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +43,7 @@ import static cmc.mellyserver.group.domain.QUserGroup.*;
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.place;
 import static cmc.mellyserver.user.domain.QUser.*;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
 public class MemoryQueryRepository {
@@ -77,7 +83,7 @@ public class MemoryQueryRepository {
                         eqKeyword(keyword),      // 해당 키워드가 필요한 메모리
                         eqGroup(groupType),      // 특정 groupType에 포함되는 메모리
                         eqVisitiedDate(visitiedDate)  // 특정 날짜에 속하는 메모리
-                ).orderBy(memory.id.desc())          // memoryId 순서로 내림차순
+                ).orderBy(memory.visitedDate.desc())          // memoryId 순서로 내림차순
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
@@ -305,6 +311,29 @@ public class MemoryQueryRepository {
         }
 
         return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+    private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
+
+        List<OrderSpecifier> ORDERS = new ArrayList<>();
+
+        if (!isEmpty(pageable.getSort())) {
+            for (Sort.Order order : pageable.getSort()) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
+                switch (order.getProperty()) {
+                    case "visitedDate":
+                        OrderSpecifier<?> visitedDate = QueryDslUtil
+                                .getSortedColumn(direction, memory, "visitedDate");
+                        ORDERS.add(visitedDate);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        return ORDERS;
     }
 
 

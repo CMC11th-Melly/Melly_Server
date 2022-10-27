@@ -17,15 +17,20 @@ public class UserAssembler {
                 ));
     }
 
-    public static List<GetUserGroupResponse> getUserGroupResponses(List<UserGroup> userGroups)
+    public static List<GetUserGroupResponse> getUserGroupResponses(List<UserGroup> userGroups,String userId)
     {
         return userGroups.stream().map(ug -> new GetUserGroupResponse(ug.getId(),
                 ug.getGroupIcon(),
                 ug.getGroupName(),
+                ug.getGroupAndUsers().stream().map(gu -> new UserDto(
+                        gu.getUser().getUserSeq(),
+                        gu.getUser().getProfileImage(),
+                        gu.getUser().getNickname(),
+                        (gu.getUser().getUserId().equals(userId)) ? true : false
+                )).collect(Collectors.toList()),
                 ug.getGroupType(),
                 ug.getInviteLink(),
-                ug.getCreatedDate(),
-                ug.getGroupAndUsers().stream().map(gu -> new UserResponseDto(gu.getUser().getUserId(),gu.getUser().getProfileImage(),gu.getUser().getNickname())).collect(Collectors.toList())
+                ug.getCreatedDate()
                 )).collect(Collectors.toList());
     }
 }
