@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PlaceScrapResponseDto {
-
+    
     private ScrapType scrapType;
     private Long scrapCount;
 }

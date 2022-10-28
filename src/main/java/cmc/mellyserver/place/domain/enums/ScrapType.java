@@ -5,5 +5,5 @@ public enum ScrapType {
     FAMILY,
     COUPLE,
     COMPANY,
-    DEFAULT
+    ALL
 }

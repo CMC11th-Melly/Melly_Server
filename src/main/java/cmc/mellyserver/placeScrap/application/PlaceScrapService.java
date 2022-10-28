@@ -1,6 +1,7 @@
 package cmc.mellyserver.placeScrap.application;
 
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.domain.PlaceScrapDomainService;
@@ -18,26 +19,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaceScrapService {
 
+
     private final PlaceScrapDomainService placeScrapDomainService;
 
+
+    /**
+     * 각 스크랩 타입별 장소 페이지 조회
+     */
+    public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, String uid, ScrapType scrapType)
+    {
+        return placeScrapDomainService.getScrapPlace(pageable, uid,scrapType);
+    }
+
+
+    /**
+     * 각 스크랩 타입별 장소 개수 조회 로직
+     */
+    public List<PlaceScrapResponseDto> getScrapedPlaceCount(String uid)
+    {
+        return placeScrapDomainService.getScrapedPlaceCount(uid);
+    }
+
+
+    /**
+     * 스크랩 생성
+     */
     @Transactional
     public void createScrap(String uid, ScrapRequest scrapRequest)
     {
-        placeScrapDomainService.createScrap(uid, scrapRequest.getLat(), scrapRequest.getLng(),
-                                            scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
+        placeScrapDomainService.createScrap(uid, scrapRequest.getLat(), scrapRequest.getLng(), scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
     }
 
-    public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, String uid)
-    {
-        return placeScrapDomainService.getScrapPlace(pageable, uid);
-    }
 
-    public List<PlaceScrapResponseDto> getScrapedPlaceGroup(Pageable pageable, String uid)
-    {
-      return   placeScrapDomainService.getScrapPlaceGroup(pageable, uid);
-
-    }
-
+    /**
+     * 스크랩 삭제
+     */
     @Transactional
     public void removeScrap(String uid,Double lat, Double lng)
     {

@@ -27,37 +27,45 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PlaceScrapDomainService {
 
+
     private final PlaceRepository placeRepository;
     private final PlaceQueryRepository placeQueryRepository;
     private final PlaceScrapRepository scrapRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
-    public Slice<ScrapedPlaceResponseDto> getScrapPlace(Pageable pageable, String uid)
+    /**
+     * 유저가 스크랩한 장소 조회
+     * @param scrapType 스크랩 타입으로 필터링
+     */
+    public Slice<ScrapedPlaceResponseDto> getScrapPlace(Pageable pageable,String uid,ScrapType scrapType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Place> result = placeQueryRepository.getScrapedPlace(pageable, user);
+        Slice<Place> result = placeQueryRepository.getScrapedPlace(pageable,user,scrapType);
         return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p,user,p.getCreatedDate()));
     }
 
-    public List<PlaceScrapResponseDto> getScrapPlaceGroup(Pageable pageable, String uid)
+
+    /**
+     * 스크랩 타입 별 장소 개수 조회
+     */
+    public List<PlaceScrapResponseDto> getScrapedPlaceCount(String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
         return placeQueryRepository.getScrapedPlaceGrouping(user);
-
     }
 
 
+    /**
+     * 스크랩 생성
+     */
     @Transactional
     public void createScrap(String uid, Double lat, Double lng, ScrapType scrapType,String placeName,String placeCategory)
     {
-
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
         checkDuplicatedScrap(user.getUserSeq(),lat,lng);
-
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
 
         if(placeOpt.isEmpty())
@@ -65,20 +73,23 @@ public class PlaceScrapDomainService {
             Place savePlace = placeRepository.save(Place.builder().placeName(placeName).placeCategory(placeCategory).position(new Position(lat, lng)).build());
             scrapRepository.save(PlaceScrap.createScrap(user,savePlace,scrapType));
         }
-        else{
+        else
+        {
             scrapRepository.save(PlaceScrap.createScrap(user,placeOpt.get(),scrapType));
         }
 
     }
 
 
+    /**
+     * 스크랩 제거
+     */
     @Transactional
     public void removeScrap(String uid, Double lat, Double lng)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        checkExistScrap(user.getUserSeq(),lat,lng );
-
+        checkExistScrap(user.getUserSeq(),lat,lng);
         scrapRepository.deleteByUserUserSeqAndPlacePosition(user.getUserSeq(),new Position(lat,lng));
     }
 
@@ -93,5 +104,6 @@ public class PlaceScrapDomainService {
         scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
                 .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
     }
+
 
 }

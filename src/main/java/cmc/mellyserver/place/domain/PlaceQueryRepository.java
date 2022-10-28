@@ -2,6 +2,7 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.memory.domain.QMemory;
+import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.placeScrap.domain.QPlaceScrap;
@@ -9,6 +10,7 @@ import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,10 +34,11 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 @Repository
 public class PlaceQueryRepository {
 
+
     private final EntityManager em;
     private final JPAQueryFactory query;
 
-    // 인텔리제이 인식 오류, 무시하고 진행하면 된다.
+
     public PlaceQueryRepository(EntityManager em)
     {
         this.em = em;
@@ -43,6 +46,9 @@ public class PlaceQueryRepository {
     }
 
 
+    /**
+     * 추천 장소 조회 -> 차후에 추천 로직으로 변경 예정
+     */
     public List<Place> getTrendingPlace(List<Long> placeIds)
     {
         return query.select(place)
@@ -52,6 +58,9 @@ public class PlaceQueryRepository {
     }
 
 
+    /**
+     * 트렌딩 장소 조회 -> 차후에 레디스 기반 트렌딩 로직으로 변경 예정
+     */
     public List<Place> getRecommendPlace(List<Long> placeIds)
     {
         return query.select(place)
@@ -81,42 +90,60 @@ public class PlaceQueryRepository {
     }
 
 
-    public Slice<Place> getScrapedPlace(Pageable pageable, User user)
+    /**
+     * 스크랩 타입별 유저가 스크랩한 장소 개수 조회
+     */
+    public List<PlaceScrapResponseDto> getScrapedPlaceGrouping(User user)
+    {
+        return query.select(Projections.fields(PlaceScrapResponseDto.class,placeScrap.scrapType, place.count().as("scrapCount")))
+                .from(placeScrap)
+                .join(placeScrap.place, place)
+                .groupBy(placeScrap.scrapType)
+                .where(placeScrap.user.userSeq.eq(user.getUserSeq()))
+                .fetch();
+    }
+
+
+    /**
+     * 유저가 스크랩한 장소 조회
+     * @param scrapType 스크랩 타입별로 필터링
+     */
+    public Slice<Place> getScrapedPlace(Pageable pageable, User user, ScrapType scrapType)
     {
         List<Place> results = query.select(place)
-                .from(place)
+                .from(placeScrap)
+                .join(placeScrap.place,place)
                 .where(
-
-                        place.id.in(user.getPlaceScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList()))
+                        place.id.in(user.getPlaceScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList())),
+                        eqScrapType(scrapType)
                 ).orderBy(place.id.desc())
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
         return checkLastPage(pageable, results);
     }
 
-    public List<PlaceScrapResponseDto> getScrapedPlaceGrouping(User user)
+
+    private BooleanExpression eqScrapType(ScrapType scrapType)
     {
-        return query.select(Projections.fields(PlaceScrapResponseDto.class,placeScrap.scrapType, place.count().as("scrapCount")))
-                .from(placeScrap)
-                .groupBy(placeScrap.scrapType)
-                .join(placeScrap.place, place)
-                .fetch();
-    }
-
-
-    private BooleanExpression ltPlaceId(Long placeId) {
-        if (placeId == null) {
+        if(scrapType == null || scrapType.equals(ScrapType.ALL))
+        {
             return null;
         }
 
-        return place.id.lt(placeId);
+        return placeScrap.scrapType.eq(scrapType);
     }
 
-    private Slice<Place> checkLastPage(Pageable pageable, List<Place> results) {
 
+    /**
+     * 무한 스크롤 페이징 로직
+     */
+    private Slice<Place> checkLastPage(Pageable pageable, List<Place> results)
+    {
         boolean hasNext = false;
 
-        if (results.size() > pageable.getPageSize()) {
+        if (results.size() > pageable.getPageSize())
+        {
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
@@ -124,27 +151,5 @@ public class PlaceQueryRepository {
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
-
-//    private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
-//        List<OrderSpecifier> ORDERS = new ArrayList<>();
-//
-//        if (!isEmpty(pageable.getSort())) {
-//            for (Sort.Order order : pageable.getSort()) {
-//                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
-//
-//                switch (order.getProperty()) {
-//                    case "createdDate":
-//                        OrderSpecifier<?> visitedDate = QueryDslUtil
-//                                .getSortedColumn(direction, memory, "visitedDate");
-//                        ORDERS.add(visitedDate);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        }
-//
-//        return ORDERS;
-//    }
 
 }
