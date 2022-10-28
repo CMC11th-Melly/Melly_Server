@@ -1,6 +1,7 @@
 package cmc.mellyserver.placeScrap.application;
 
 import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.domain.PlaceScrapDomainService;
 import cmc.mellyserver.placeScrap.presentation.dto.ScrapRequest;
@@ -31,9 +32,9 @@ public class PlaceScrapService {
         return placeScrapDomainService.getScrapPlace(pageable, uid);
     }
 
-    public void getScrapedPlaceGroup(Pageable pageable, String uid)
+    public List<PlaceScrapResponseDto> getScrapedPlaceGroup(Pageable pageable, String uid)
     {
-        List<Place> scrapPlaceGroup = placeScrapDomainService.getScrapPlaceGroup(pageable, uid);
+      return   placeScrapDomainService.getScrapPlaceGroup(pageable, uid);
 
     }
 

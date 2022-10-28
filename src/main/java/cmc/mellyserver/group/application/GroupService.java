@@ -9,6 +9,7 @@ import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.UserGroupQueryRepository;
 import cmc.mellyserver.group.presentation.dto.GroupCreateRequest;
+import cmc.mellyserver.group.presentation.dto.GroupUpdateRequest;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import cmc.mellyserver.user.presentation.dto.ParticipateGroupRequest;
@@ -53,6 +54,25 @@ public class GroupService {
         groupAndUser.setUser(user);
         userGroup.setGroupUser(groupAndUser);
         return groupRepository.save(userGroup);
+    }
+
+    @Transactional
+    public void updateGroup(Long groupId, GroupUpdateRequest groupUpdateRequest) {
+
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+        });
+        userGroup.updateUserGroup(groupUpdateRequest.getGroupName(),groupUpdateRequest.getGroupType(),groupUpdateRequest.getGroupIcon());
+
+    }
+
+    @Transactional
+    public void deleteGroup(Long groupId)
+    {
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+        });
+        groupRepository.delete(userGroup);
     }
 
 }

@@ -8,6 +8,7 @@ import cmc.mellyserver.place.domain.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
+import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.user.domain.User;
@@ -40,12 +41,12 @@ public class PlaceScrapDomainService {
         return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p,user,p.getCreatedDate()));
     }
 
-    public List<Place> getScrapPlaceGroup(Pageable pageable, String uid)
+    public List<PlaceScrapResponseDto> getScrapPlaceGroup(Pageable pageable, String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        List<Place> result = placeQueryRepository.getScrapedPlaceGrouping(user);
-        return result;
+        return placeQueryRepository.getScrapedPlaceGrouping(user);
+
     }
 
 

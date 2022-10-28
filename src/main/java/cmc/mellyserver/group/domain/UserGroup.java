@@ -29,7 +29,8 @@ public class UserGroup extends JpaBaseEntity {
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
 
-    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    // 그룹 삭제되면 자동으로 삭제
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @Builder
@@ -47,6 +48,27 @@ public class UserGroup extends JpaBaseEntity {
         groupAndUsers.add(groupUser);
         groupUser.setGroup(this);
     }
+
+    public void updateUserGroup(String groupName, GroupType groupType, Integer groupIcon)
+    {
+        if(groupName != null)
+        {
+            this.groupName = groupName;
+        }
+
+        if(groupType != null)
+        {
+            this.groupType = groupType;
+        }
+
+        if(groupIcon != null)
+        {
+            this.groupIcon = groupIcon;
+        }
+
+
+    }
+
 
 
 

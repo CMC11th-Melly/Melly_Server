@@ -8,6 +8,7 @@ import cmc.mellyserver.memoryScrap.application.MemoryScrapService;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.memoryScrap.presentation.dto.MemoryScrapResponseWrapper;
 import cmc.mellyserver.placeScrap.application.PlaceScrapService;
+import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.placeScrap.presentation.dto.ScrapResponseWrapper;
 import cmc.mellyserver.user.application.UserService;
@@ -81,11 +82,11 @@ public class UserController {
     /**
      * 마이페이지 - My 장소 스크랩
      */
-    @Operation(summary = "유저가 스크랩한 장소 조회")
+    @Operation(summary = "유저가 스크랩한 장소 타입 별 개수 조회")
     @GetMapping("/place/scrap")
     public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user,Pageable pageable) {
-        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.getScrapedPlace(pageable, user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200, "My 스크랩 조회", new ScrapResponseWrapper(scrapedPlace)));
+        List<PlaceScrapResponseDto> scrapedPlaceGroup = placeScrapService.getScrapedPlaceGroup(pageable, user.getUsername());
+        return  ResponseEntity.ok(new CommonResponse(200,"타입 별 스크랩 개수 조회",new PlaceScrapResponseWrapper(scrapedPlaceGroup)));
     }
 
 
@@ -119,14 +120,6 @@ public class UserController {
         userService.participateToGroup(user.getUsername(), participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(200, "그룹에 추가 완료"));
     }
-
-    @Operation(summary = "test")
-    @GetMapping("/group/test")
-    public void test(Pageable pageable, @AuthenticationPrincipal User user)
-    {
-        placeScrapService.getScrapedPlaceGroup(pageable,user.getUsername());
-    }
-
 
 
     @Operation(summary = "프로필 수정 폼에 필요한 유저 정보 조회")

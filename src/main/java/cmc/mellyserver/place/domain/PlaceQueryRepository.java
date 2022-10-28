@@ -2,12 +2,14 @@ package cmc.mellyserver.place.domain;
 
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.memory.domain.QMemory;
+import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.placeScrap.domain.QPlaceScrap;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -92,16 +94,13 @@ public class PlaceQueryRepository {
         return checkLastPage(pageable, results);
     }
 
-    public List<Place> getScrapedPlaceGrouping(User user)
+    public List<PlaceScrapResponseDto> getScrapedPlaceGrouping(User user)
     {
-        List<Tuple> fetch = query.select(placeScrap.scrapType, place.count())
+        return query.select(Projections.fields(PlaceScrapResponseDto.class,placeScrap.scrapType, place.count().as("scrapCount")))
                 .from(placeScrap)
+                .groupBy(placeScrap.scrapType)
                 .join(placeScrap.place, place)
                 .fetch();
-        System.out.println(fetch);
-        return null;
-
-
     }
 
 
