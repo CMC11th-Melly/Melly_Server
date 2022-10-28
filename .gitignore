@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 /src/main/resources/application-local.yml
+/src/main/resources/firebase/melly-fdd90-firebase-adminsdk-a139l-bd9a957ecb.json
 .idea
 *.iws
 *.iml

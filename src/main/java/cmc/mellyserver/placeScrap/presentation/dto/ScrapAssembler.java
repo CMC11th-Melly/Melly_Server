@@ -15,17 +15,13 @@ import java.util.stream.Collectors;
 
 public class ScrapAssembler {
 
-    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(Place place, User user, LocalDateTime createdDate)
+    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(Place place)
     {
-        return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
-                stream().
-                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
+        return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),
                 true,
                 place.getPlaceName(),
-                GroupType.ALL,
                 place.getPlaceImage(),
-                place.getPlaceCategory(),
-                createdDate
+                place.getPlaceCategory()
         );
 
 

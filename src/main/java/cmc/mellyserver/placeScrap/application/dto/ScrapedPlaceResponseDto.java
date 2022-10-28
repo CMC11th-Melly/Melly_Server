@@ -13,14 +13,8 @@ import java.time.LocalDateTime;
 public class ScrapedPlaceResponseDto {
     private Long placeId;
     private Position position;
-    private Long myMemoryCount;
-    private Long otherMemoryCount;
     private Boolean isScraped;
     private String placeName;
-    private GroupType recommendType;
     private String placeImage;
     private String placeCategory;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
-    private LocalDateTime scrapedDate;
-
 }

@@ -43,7 +43,7 @@ public class PlaceScrapDomainService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
         Slice<Place> result = placeQueryRepository.getScrapedPlace(pageable,user,scrapType);
-        return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p,user,p.getCreatedDate()));
+        return result.map(p -> ScrapAssembler.scrapedPlaceResponseDto(p));
     }
 
 
