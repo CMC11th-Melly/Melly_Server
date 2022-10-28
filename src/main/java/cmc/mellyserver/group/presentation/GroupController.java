@@ -22,10 +22,10 @@ public class GroupController {
 
     @Operation(summary = "그룹 추가")
     @PostMapping("/group")
-    private ResponseEntity<GroupCreateResponse> addGroup(@AuthenticationPrincipal User user,GroupCreateRequest groupCreateRequest)
+    private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@RequestBody GroupCreateRequest groupCreateRequest)
     {
-        UserGroup userGroup = groupService.saveGroup(user.getUsername(), groupCreateRequest);
-        return ResponseEntity.ok(new GroupCreateResponse(userGroup.getId(),userGroup.getGroupName()));
+        groupService.saveGroup(user.getUsername(), groupCreateRequest);
+        return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료"));
     }
 
     @Operation(summary = "그룹 편집")

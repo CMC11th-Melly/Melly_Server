@@ -150,7 +150,7 @@ public class DataLoader {
         groupRepository.save(userGroup3);
 
         /**
-         *  네번째 그룹에는 유저 2가 포함되어 있다.
+         *  네번째 그룹에는 유저 2,3이 포함되어 있다.
          */
         GroupAndUser groupAndUser4 = new GroupAndUser();
         groupAndUser4.setUser(user2);
@@ -899,6 +899,34 @@ public class DataLoader {
                 37.5000541000002,127.02425909999957,
                 "2번째 유저가 비공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
                 1L,OpenType.PRIVATE,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+        memoryDomainService.createMemory(saveUser3.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "4번째 그룹의 3번째 유저가 그룹공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                4L,OpenType.GROUP,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+        memoryDomainService.createMemory(saveUser3.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "4번째 그룹의 3번째 유저가 그룹공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                3L,OpenType.GROUP,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+        memoryDomainService.createMemory(saveUser3.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "4번째 그룹의 3번째 유저가 전체공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                4L,OpenType.ALL,
+                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
+                List.of());
+
+        memoryDomainService.createMemory(saveUser3.getUserId(),
+                37.5000541000002,127.02425909999957,
+                "4번째 그룹의 3번째 유저가 비공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                4L,OpenType.PRIVATE,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 

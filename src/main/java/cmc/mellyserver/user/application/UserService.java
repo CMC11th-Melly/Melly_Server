@@ -83,9 +83,11 @@ public class UserService {
         return new ProfileUpdateFormResponse(user.getProfileImage(),user.getNickname(),user.getGender(),user.getAgeGroup());
     }
 
-    public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable, Long groupId,GroupType groupType) {
-        UserGroup userGroup = groupService.getGroupById(groupId);
-        Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,groupType);
+
+    // 내 그룹사람들이 이 그룹으로 쓴 메모리
+    public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable, Long groupId,Long userSeq) {
+
+        Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,userSeq);
         return myGroupMemory.map(m -> new GroupMemory(m.getPlace().getId(),
                 m.getPlace().getPlaceName(),
                 m.getId(),

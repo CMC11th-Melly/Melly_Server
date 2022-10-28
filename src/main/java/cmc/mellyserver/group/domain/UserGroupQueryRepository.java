@@ -7,6 +7,7 @@ import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -44,9 +45,10 @@ public class UserGroupQueryRepository {
 
 
 
-    public Slice<Memory> getMyGroupMemory(Pageable pageable, Long groupId, GroupType groupType) {
+    public Slice<Memory> getMyGroupMemory(Pageable pageable, Long groupId,Long userSeq) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+
         // 1. 메모리를 가져올꺼야
         List<Memory> results = query.select(memory)
                 .from(userGroup)
@@ -56,9 +58,12 @@ public class UserGroupQueryRepository {
                 .join(user.memories,memory)
                 // 3. 이제 그 유저가 어떤 그룹에 속해있는지를 체크할 예정
                 .where(
-                        // 1. 일단 특정 장소에 속해야 하고
+                        // 1. 그 그룹에 속한 사람이여야 함
                         userGroup.id.eq(groupId),
-                        eqGroup(groupType)
+                        // 2. 메모리의 그룹도 이 그룹이여야 함.
+                        memory.groupInfo.groupId.eq(groupId),
+                        memory.openType.ne(OpenType.PRIVATE),
+                        eqUser(userSeq)
 
                 )
                 .distinct()
@@ -73,6 +78,14 @@ public class UserGroupQueryRepository {
 
 
 
+    }
+
+    private BooleanExpression eqUser(Long userSeq) {
+        if(userSeq == null || userSeq == -1)
+        {
+            return null;
+        }
+        return memory.user.userSeq.eq(userSeq);
     }
 
     private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
