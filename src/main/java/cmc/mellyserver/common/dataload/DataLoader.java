@@ -16,6 +16,9 @@ import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
+import cmc.mellyserver.place.domain.enums.ScrapType;
+import cmc.mellyserver.placeScrap.application.PlaceScrapService;
+import cmc.mellyserver.placeScrap.presentation.dto.ScrapRequest;
 import cmc.mellyserver.user.domain.*;
 import cmc.mellyserver.user.domain.enums.AgeGroup;
 import cmc.mellyserver.user.domain.enums.Gender;
@@ -38,7 +41,7 @@ public class DataLoader {
     private final MemoryRepository memoryRepository;
     private final MemoryDomainService memoryDomainService;
     private final CommentService commentService;
-
+    private final PlaceScrapService placeScrapService;
 
     @Transactional
     public void loadData()
@@ -212,7 +215,7 @@ public class DataLoader {
         placeRepository.save(place2);
 
 
-        Place place3 = Place.builder().position(new Position(37.511623, 127.023547)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(1).png").placeName("파인포레스트").placeCategory("글램핑").build();
+        Place place3 = Place.builder().position(new Position(37.511500, 127.023200)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/user1/Untitled+(1).png").placeName("파인포레스트").placeCategory("글램핑").build();
 
         // memory 1
         Memory memory3 = Memory.builder().stars(3L).groupInfo(new GroupInfo(userGroup.getGroupName(),GroupType.FRIEND,userGroup.getId())).openType(OpenType.ALL).title("연구실 탈출은 즐거워").visitedDate(LocalDateTime.now()).content("글램핑 처음이었는데 너무 춥지만 재미있었다ㅋㅅㅋ 교수님이 주신 꿀같은 휴가를 그냥 날릴 수 없지.. 모두 수고 많았어용 짱짱").build();
@@ -1238,6 +1241,20 @@ public class DataLoader {
         commentService.saveComment(user3.getUserId(),new CommentRequest("빡치게 하지 마세요ㅎ",74L,2L,user2.getUserSeq()));
         commentService.saveComment(user3.getUserId(),new CommentRequest("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ웃기다,,,ㅎ.. 나는 왜 지금 여기서 이 데이터를 쓰고 있는지 정말 모르겠지만요,,",74L,2L,user2.getUserSeq()));
 
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.5000541000002,127.02425909999957, ScrapType.FRIEND,"용용선생","카페, 디저트"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.49992030000013,127.02461119999951, ScrapType.FRIEND,"을지다락","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503861,127.024144, ScrapType.FRIEND,"스타벅스","카페, 디저트"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503837, 127.041793, ScrapType.FRIEND,"무명요리사","일식"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511623, 127.023547, ScrapType.FAMILY,"쿠오레 에스프레소","카페, 디저트"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511500, 127.023200, ScrapType.FAMILY,"파인포레스트","글램핑"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.548400,126.912600, ScrapType.FAMILY,"따로집","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560754,127.039851, ScrapType.COMPANY,"버킷리스트","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.559384,127.040284, ScrapType.COMPANY,"장모족발","족발/보쌈집"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560019,127.040981, ScrapType.COMPANY,"베스킨라빈스","카페, 디저트"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560489,127.040181, ScrapType.COUPLE,"대동집","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560662,127.040467, ScrapType.COUPLE,"곱","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560872,127.040201, ScrapType.COUPLE,"생활맥주","주류"));
+        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.561702,127.040677, ScrapType.COUPLE,"유유커피","카페, 디저트"));
     }
 
 
