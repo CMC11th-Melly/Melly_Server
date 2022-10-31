@@ -13,6 +13,7 @@ import cmc.mellyserver.memory.presentation.dto.ImageDto;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.presentation.dto.PollRequest;
 import cmc.mellyserver.user.presentation.dto.ProfileUpdateRequest;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -41,6 +42,21 @@ public class UserService {
     private final AmazonS3Client amazonS3Client;
     private final S3FileLoader s3FileLoader;
     private final UserGroupQueryRepository userGroupQueryRepository;
+
+
+    @Transactional
+    public void createPoll(String uid,PollRequest pollRequest)
+    {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.addPollData(pollRequest.getRecommendGroup(),pollRequest.getRecommendPlace(),pollRequest.getRecommendActivity());
+    }
+
+    // 추천 기능
+    public void getPoll(String uid) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+    }
 
 
     public List<UserGroup> getUserGroup(String uid) {
@@ -101,4 +117,6 @@ public class UserService {
                 m.getVisitedDate()));
 
     }
+
+
 }

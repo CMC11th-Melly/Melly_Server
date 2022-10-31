@@ -7,9 +7,7 @@ import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
-import cmc.mellyserver.user.domain.enums.AgeGroup;
-import cmc.mellyserver.user.domain.enums.Gender;
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -91,6 +89,11 @@ public class User extends JpaBaseEntity {
         this.gender = gender;
         this.profileImage = profileImage;
         this.ageGroup = ageGroup;
+    }
+
+    public void addPollData(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity)
+    {
+        this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }
 
 

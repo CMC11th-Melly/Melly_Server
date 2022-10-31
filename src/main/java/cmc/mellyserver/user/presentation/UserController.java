@@ -7,6 +7,7 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memoryScrap.application.MemoryScrapService;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.memoryScrap.presentation.dto.MemoryScrapResponseWrapper;
+import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.enums.ScrapType;
 import cmc.mellyserver.placeScrap.application.PlaceScrapService;
 import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
@@ -14,6 +15,8 @@ import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
+import cmc.mellyserver.user.domain.enums.RecommendGroup;
+import cmc.mellyserver.user.domain.enums.RecommendPlace;
 import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,25 @@ public class UserController {
     private final PlaceScrapService placeScrapService;
     private final MemoryScrapService memoryScrapService;
     private final UserService userService;
+
+
+    @Operation(summary = "유저 회원가입시 설문조사")
+    @PostMapping("/poll")
+    public ResponseEntity<CommonResponse> addPoll(@AuthenticationPrincipal User user,@RequestBody PollRequest pollRequest)
+    {
+        userService.createPoll(user.getUsername(),pollRequest);
+        return ResponseEntity.ok(new CommonResponse(200,"설문조사 입력 완료"));
+    }
+
+    @Operation(summary = "설문조사 결과로 추천 장소 조회(미완)")
+    @GetMapping("/poll")
+    public ResponseEntity<CommonResponse> getPoll(@AuthenticationPrincipal User user)
+    {
+        userService.getPoll(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"설문 조사 기반 추천 조회",
+                new PollResponse(RecommendGroup.FRIEND, RecommendPlace.CAFE1,"무명요리사",37.503837, 127.041793)));
+
+    }
 
 
     @Operation(summary = "프로필 수정 폼에 필요한 유저 정보 조회")
@@ -153,6 +175,8 @@ public class UserController {
         userService.participateToGroup(user.getUsername(), participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(200, "그룹에 추가 완료"));
     }
+
+
 
 
 }
