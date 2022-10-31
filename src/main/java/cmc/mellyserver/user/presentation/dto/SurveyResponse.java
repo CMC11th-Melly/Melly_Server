@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PollResponse {
+public class SurveyResponse {
 
     @Schema(description = "함께 하고 싶은 그룹",example = "FAMILY")
     private RecommendGroup recommendGroup;

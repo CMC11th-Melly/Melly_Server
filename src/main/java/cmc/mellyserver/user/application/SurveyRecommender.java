@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Component
-public class PollRecommender {
+public class SurveyRecommender {
 
     public PollRecommendResponse getRecommend(User user)
     {

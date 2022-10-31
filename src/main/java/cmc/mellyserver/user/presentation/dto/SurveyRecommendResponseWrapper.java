@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class PollRecommendResponseWrapper {
+public class SurveyRecommendResponseWrapper {
 
     private PollRecommendResponse pollRecommend;
 }

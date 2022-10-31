@@ -15,8 +15,6 @@ import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
-import cmc.mellyserver.user.domain.enums.RecommendGroup;
-import cmc.mellyserver.user.domain.enums.RecommendPlace;
 import cmc.mellyserver.user.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -43,20 +41,20 @@ public class UserController {
 
 
     @Operation(summary = "유저 회원가입시 설문조사(테스트 필요한 API입니다)")
-    @PostMapping("/poll")
-    public ResponseEntity<CommonResponse> addPoll(@AuthenticationPrincipal User user,@RequestBody PollRequest pollRequest)
+    @PostMapping("/survey")
+    public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user,@RequestBody SurveyRequest pollRequest)
     {
-        userService.createPoll(user.getUsername(),pollRequest);
+        userService.createSurvey(user.getUsername(),pollRequest);
         return ResponseEntity.ok(new CommonResponse(200,"설문조사 입력 완료"));
     }
 
     @Operation(summary = "설문조사 결과로 추천 장소 조회(테스트 필요한 API입니다)")
-    @GetMapping("/poll")
+    @GetMapping("/survey")
     public ResponseEntity<CommonResponse> getPoll(@AuthenticationPrincipal User user)
     {
-        PollRecommendResponse result = userService.getPoll(user.getUsername());
+        PollRecommendResponse result = userService.getSurvey(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200,"설문 조사 기반 추천 조회",
-                new PollRecommendResponseWrapper(result)));
+                new SurveyRecommendResponseWrapper(result)));
 
     }
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PollRequest {
+public class SurveyRequest {
     private RecommendGroup recommendGroup;
     private RecommendPlace recommendPlace;
     private RecommendActivity recommendActivity;
