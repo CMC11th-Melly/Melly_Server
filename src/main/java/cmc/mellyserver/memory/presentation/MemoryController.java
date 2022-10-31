@@ -88,7 +88,7 @@ public class MemoryController {
 
     @Operation(summary = "메모리 저장",description = "- 사용자가 메모리를 저장할때 장소 엔티티가 있으면 사용, 없으면 좌표 기준으로 장소 엔티티도 생성")
     @PostMapping
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images")  List<MultipartFile> images,
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
         System.out.println("hello" + LocalDateTime.now());
@@ -96,12 +96,14 @@ public class MemoryController {
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
 
-//    @Operation(summary = "메모리 수정",description = "사용자가 작성한 메모리 수정")
-//    @PutMapping("/{memoryId}")
-//    public ResponseEntity<CommonResponse> updateMemory(@PathVariable Long memoryId)
-//    {
-//
-//    }
+    @Operation(summary = "메모리 수정(테스트 필요한 API 입니다)",description = "사용자가 작성한 메모리 수정")
+    @PutMapping("/{memoryId}")
+    public ResponseEntity<CommonResponse> updateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId,@RequestPart(name = "images",required = false)  List<MultipartFile> images,
+                                                       @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest)
+    {
+         memoryService.updateMemory(user.getUsername(),memoryId,memoryUpdateRequest,images);
+         return ResponseEntity.ok(new CommonResponse(200,"메모리 수정 완료"));
+    }
 
     @Operation(summary = "메모리 수정을 위한 폼 데이터 전송")
     @GetMapping("/{memoryId}/update")

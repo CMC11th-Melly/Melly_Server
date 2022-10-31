@@ -11,6 +11,7 @@ import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.presentation.dto.GetUserMemoryCond;
 import cmc.mellyserver.memory.presentation.dto.ImageDto;
 import cmc.mellyserver.user.application.dto.GroupMemory;
+import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.PollRequest;
@@ -42,7 +43,7 @@ public class UserService {
     private final AmazonS3Client amazonS3Client;
     private final S3FileLoader s3FileLoader;
     private final UserGroupQueryRepository userGroupQueryRepository;
-
+    private final PollRecommender pollRecommender;
 
     @Transactional
     public void createPoll(String uid,PollRequest pollRequest)
@@ -52,9 +53,10 @@ public class UserService {
     }
 
     // 추천 기능
-    public void getPoll(String uid) {
+    public PollRecommendResponse getPoll(String uid) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return pollRecommender.getRecommend(user);
 
     }
 

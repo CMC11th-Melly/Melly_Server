@@ -40,8 +40,6 @@ public class QMemory extends EntityPathBase<Memory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final ListPath<cmc.mellyserver.like.domain.Like, cmc.mellyserver.like.domain.QLike> likes = this.<cmc.mellyserver.like.domain.Like, cmc.mellyserver.like.domain.QLike>createList("likes", cmc.mellyserver.like.domain.Like.class, cmc.mellyserver.like.domain.QLike.class, PathInits.DIRECT2);
-
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 
     public final EnumPath<cmc.mellyserver.memory.domain.enums.OpenType> openType = createEnum("openType", cmc.mellyserver.memory.domain.enums.OpenType.class);

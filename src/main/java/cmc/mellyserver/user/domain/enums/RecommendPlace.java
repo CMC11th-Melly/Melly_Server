@@ -1,9 +1,9 @@
 package cmc.mellyserver.user.domain.enums;
 
 public enum RecommendPlace {
-    CAFE1,
-    CAFE2,
-    CAFE3,
-    CAFE4,
+    PLACE1,
+    PLACE2,
+    PLACE3,
+    PLACE4,
     DEFAULT
 }

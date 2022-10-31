@@ -2,7 +2,7 @@ package cmc.mellyserver.memory.domain;
 
 import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.like.domain.Like;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.place.domain.Place;
@@ -62,9 +62,6 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes = new ArrayList<>();
-
     @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -81,10 +78,31 @@ public class Memory extends JpaBaseEntity {
         user.getMemories().add(this);
     }
 
+    public void updateMemory(String title, String content, List<String> keyword, Long groupId, GroupType groupType, String groupName, OpenType openType, LocalDateTime visitedDate, Long star)
+    {
+          this.title = title;
+          this.content = content;
+          // 키워드는 아예 대체 해버리기
+          this.keyword = keyword;
+          this.groupInfo = new GroupInfo(groupName,groupType,groupId);
+          this.openType = openType;
+          this.visitedDate = visitedDate;
+          this.stars = star;
+
+    }
+
     public void setMemoryImages(List<MemoryImage> memoryImages)
     {
         this.memoryImages = memoryImages;
         for (MemoryImage memoryImage : memoryImages) {
+            memoryImage.setMemory(this);
+        }
+    }
+
+    public void updateMemoryImages(List<MemoryImage> memoryImages)
+    {
+        for (MemoryImage memoryImage : memoryImages) {
+            this.getMemoryImages().add(memoryImage);
             memoryImage.setMemory(this);
         }
     }
