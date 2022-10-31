@@ -50,6 +50,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath nickname = createString("nickname");
 
+    public final ListPath<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification> notifications = this.<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification>createList("notifications", cmc.mellyserver.notification.domain.Notification.class, cmc.mellyserver.notification.domain.QNotification.class, PathInits.DIRECT2);
+
     public final StringPath password = createString("password");
 
     public final ListPath<cmc.mellyserver.placeScrap.domain.PlaceScrap, cmc.mellyserver.placeScrap.domain.QPlaceScrap> placeScraps = this.<cmc.mellyserver.placeScrap.domain.PlaceScrap, cmc.mellyserver.placeScrap.domain.QPlaceScrap>createList("placeScraps", cmc.mellyserver.placeScrap.domain.PlaceScrap.class, cmc.mellyserver.placeScrap.domain.QPlaceScrap.class, PathInits.DIRECT2);

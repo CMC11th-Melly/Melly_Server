@@ -6,6 +6,7 @@ import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
+import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
@@ -82,6 +83,9 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup)
     {

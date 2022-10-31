@@ -14,7 +14,7 @@ import javax.persistence.Enumerated;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Embeddable
 public class Recommend {
 

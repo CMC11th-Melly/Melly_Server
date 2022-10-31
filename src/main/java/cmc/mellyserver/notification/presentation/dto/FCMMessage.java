@@ -1,4 +1,4 @@
-package cmc.mellyserver.fcm.dto;
+package cmc.mellyserver.notification.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

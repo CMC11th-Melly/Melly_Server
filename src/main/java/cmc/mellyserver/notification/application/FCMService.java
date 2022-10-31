@@ -1,6 +1,6 @@
-package cmc.mellyserver.fcm.application;
+package cmc.mellyserver.notification.application;
 
-import cmc.mellyserver.fcm.dto.FCMMessage;
+import cmc.mellyserver.notification.presentation.dto.FCMMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.List;

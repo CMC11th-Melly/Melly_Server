@@ -19,7 +19,11 @@ public class QRecommend extends BeanPath<Recommend> {
 
     public static final QRecommend recommend = new QRecommend("recommend");
 
+    public final EnumPath<cmc.mellyserver.user.domain.enums.RecommendActivity> recommendActivity = createEnum("recommendActivity", cmc.mellyserver.user.domain.enums.RecommendActivity.class);
+
     public final EnumPath<cmc.mellyserver.user.domain.enums.RecommendGroup> recommendGroup = createEnum("recommendGroup", cmc.mellyserver.user.domain.enums.RecommendGroup.class);
+
+    public final EnumPath<cmc.mellyserver.user.domain.enums.RecommendPlace> recommendPlace = createEnum("recommendPlace", cmc.mellyserver.user.domain.enums.RecommendPlace.class);
 
     public QRecommend(String variable) {
         super(Recommend.class, forVariable(variable));
