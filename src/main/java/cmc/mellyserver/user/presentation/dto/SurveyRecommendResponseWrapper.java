@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class SurveyRecommendResponseWrapper {
 
-    private PollRecommendResponse pollRecommend;
+    private PollRecommendResponse surveyRecommend;
 }
