@@ -132,7 +132,7 @@ public class MemoryQueryRepository {
     /**
      * 마이페이지 - 내가 속해있는 모든 그룹의 이 장소에 대한 메모리
      */
-    public Slice<Memory> getMyGroupMemory(Pageable pageable, User loginUser, Long placeId) {
+    public Slice<Memory> getMyGroupMemory(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         // 1. 메모리를 가져올꺼야
@@ -144,6 +144,7 @@ public class MemoryQueryRepository {
                 .where(
                         // 1. 일단 특정 장소에 속해야 하고
                         eqPlace(placeId),
+                        eqGroup(groupType),
                         // 2. 내가 속해있는 그룹에 속해있는 사람들
                         groupAndUser.group.id.in(
                                 JPAExpressions.select(userGroup.id)
@@ -167,6 +168,7 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
+
     private BooleanExpression checkGroup(User loginUser) {
 
         if(loginUser == null)
@@ -184,14 +186,6 @@ public class MemoryQueryRepository {
     }
 
 
-    private BooleanExpression eqKeyword(String keyword) {
-
-        if (keyword == null || keyword.isEmpty()) {
-            return null;
-        }
-
-        return memory.keyword.contains(keyword);
-    }
 
     private BooleanExpression inSameGroup(Long groupId)
     {
@@ -214,21 +208,7 @@ public class MemoryQueryRepository {
     }
 
 
-    private BooleanExpression eqVisitiedDate(String visitiedDate) {
 
-        if (visitiedDate == null || visitiedDate.isEmpty()) {
-            return null;
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate visited = LocalDate.parse(visitiedDate, formatter);
-
-        return memory.visitedDate.between(
-                visited.atStartOfDay(),
-                LocalDateTime.of(visited, LocalTime.of(23, 59, 59)));
-
-
-    }
 
 
 

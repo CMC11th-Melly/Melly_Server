@@ -1,6 +1,6 @@
 package cmc.mellyserver.user.domain.enums;
 
-public enum RecommendPeople {
+public enum RecommendGroup {
     FAMILY,
     FRIEND,
     COMPANY,

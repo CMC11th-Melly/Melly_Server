@@ -89,15 +89,6 @@ public class MemoryService {
                 placeId,groupType);
     }
 
-    public Slice<Memory> getOtherMemorySameGroupCreated(Pageable pageable, String uid,Long placeId,GroupType groupType) {
-
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user.getUserSeq(),
-                placeId,
-                groupType);
-    }
-
 
     @Transactional
     public void removeMemory(Long memoryId) {
@@ -124,10 +115,10 @@ public class MemoryService {
 
     }
 
-    public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId) {
+    public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId);
+        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId,groupType);
 
         return myGroupMemory
                 .map(memory -> new MemoryForGroupResponse(memory.getPlace().getId(),

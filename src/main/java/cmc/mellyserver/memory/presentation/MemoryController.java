@@ -78,9 +78,10 @@ public class MemoryController {
     @GetMapping("/group/place/{placeId}")
     public ResponseEntity<CommonResponse> getMyGroupMemory(           @AuthenticationPrincipal User user,
                                                                       @PathVariable Long placeId,
-                                                                      @ParameterObject Pageable pageable)
+                                                                      @ParameterObject Pageable pageable,
+                                                                      @RequestParam(required = false) GroupType groupType)
     {
-        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemory(pageable, user.getUsername(), placeId);
+        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemory(pageable, user.getUsername(), placeId,groupType);
         return ResponseEntity.ok(new CommonResponse(200,"내 그룹의 메모리 조회",new MemoryForGroupWrapper(result)));
     }
 
