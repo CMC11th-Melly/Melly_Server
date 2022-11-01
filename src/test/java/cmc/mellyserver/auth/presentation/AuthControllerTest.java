@@ -234,6 +234,7 @@ class AuthControllerTest {
         return AuthRequestForLogin.builder()
                                                 .email("melly@gmail.com")
                                                 .password("asdfasdf")
+                .fcmToken("dfdfdfd")
                                                 .build();
 
     }
