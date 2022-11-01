@@ -1,11 +1,23 @@
 package cmc.mellyserver.group.presentation.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponse;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupAssembler {
 
-      public static GroupCreateResponse groupCreateResponse(UserGroup userGroup)
+      public static GetUserGroupResponse getUserGroupResponse(UserGroup userGroup)
       {
-          return new GroupCreateResponse(userGroup.getId(),userGroup.getGroupName(),userGroup.getGroupType(),userGroup.getGroupIcon());
+          return new GetUserGroupResponse(userGroup.getId(),
+                  userGroup.getGroupIcon(),
+                  userGroup.getGroupName(),
+                  Collections.emptyList(),
+                  userGroup.getGroupType(),
+                  userGroup.getInviteLink()
+          );
       }
+
 }
