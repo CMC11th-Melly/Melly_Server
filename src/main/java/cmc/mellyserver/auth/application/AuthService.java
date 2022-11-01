@@ -1,9 +1,9 @@
 package cmc.mellyserver.auth.application;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
-import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
-import cmc.mellyserver.auth.presentation.dto.AuthResponseForLogin;
-import cmc.mellyserver.auth.presentation.dto.SignupResponse;
+import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
+import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
+import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
@@ -37,6 +37,7 @@ public class AuthService {
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 
+
     public SignupResponse signup(AuthRequestForSignupDto authRequestForSignupDto)
     {
         checkDuplicatedEmail(authRequestForSignupDto.getEmail());
@@ -48,7 +49,7 @@ public class AuthService {
     }
 
 
-    public AuthResponseForLogin login(String email, String password)
+    public AuthResponseForLogin login(String email, String password,String fcmToken)
     {
         User user = userRepository.findUserByEmail(email).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);});
         // !passwordEncoder.matches(password, user.getPassword())
@@ -56,7 +57,9 @@ public class AuthService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }
 
+        user.setFcmToken(fcmToken);
         AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), expiry);
+
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 

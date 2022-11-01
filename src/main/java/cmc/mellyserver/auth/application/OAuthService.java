@@ -5,10 +5,10 @@ import cmc.mellyserver.auth.client.AppleClient;
 import cmc.mellyserver.auth.client.GoogleClient;
 import cmc.mellyserver.auth.client.KakaoClient;
 import cmc.mellyserver.auth.client.NaverClient;
-import cmc.mellyserver.auth.presentation.dto.AuthAssembler;
-import cmc.mellyserver.auth.presentation.dto.AuthRequest;
-import cmc.mellyserver.auth.presentation.dto.AuthRequestForOAuthSignup;
-import cmc.mellyserver.auth.presentation.dto.AuthResponseForLogin;
+import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
+import cmc.mellyserver.auth.presentation.dto.request.AuthRequest;
+import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForOAuthSignup;
+import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.auth.token.AuthToken;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
@@ -88,6 +88,7 @@ public class OAuthService {
             if(user.get().getNickname() != null)
             {
                 String accessToken = getToken(socialUser.getUserId());
+                user.get().setFcmToken(authRequest.getFcmToken());
                 return new OAuthLoginResponseDto(accessToken,false,user.get());
             }
             else{

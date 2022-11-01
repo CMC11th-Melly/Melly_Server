@@ -7,11 +7,12 @@ import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
-import cmc.mellyserver.memory.presentation.dto.*;
+import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
+import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
+import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.memory.presentation.dto.wrapper.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +54,7 @@ public class MemoryController {
     {
         Slice<Memory> result = memoryService.getUserMemory(pageable,user.getUsername(), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회",
-                new GetMemoryForPlaceResponseWrapper(result.getContent().stream().count(),MemoryAssembler.getMemoryForPlaceResponse(result))));
+                new GetMemoryForPlaceResponseWrapper(result.getContent().stream().count(), MemoryAssembler.getMemoryForPlaceResponse(result))));
     }
 
 

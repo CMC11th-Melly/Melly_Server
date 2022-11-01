@@ -4,6 +4,11 @@ import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.OAuthService;
 import cmc.mellyserver.auth.config.SecurityConfig;
 import cmc.mellyserver.auth.presentation.dto.*;
+import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForLogin;
+import cmc.mellyserver.auth.presentation.dto.request.CheckDuplicateEmailRequest;
+import cmc.mellyserver.auth.presentation.dto.request.CheckDuplicateNicknameRequest;
+import cmc.mellyserver.auth.presentation.dto.response.AccessTokenUserData;
+import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalExceptionHandler;
@@ -61,7 +66,7 @@ class AuthControllerTest {
         AuthResponseForLogin response = createResponseForEmailLogin();
 
         BDDMockito.doReturn(response).when(authService)
-                .login(BDDMockito.anyString(),BDDMockito.anyString());
+                .login(BDDMockito.anyString(),BDDMockito.anyString(),BDDMockito.anyString());
 
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/auth/login").with(csrf())

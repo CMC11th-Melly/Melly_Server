@@ -21,6 +21,8 @@ public class AuthRequestForSignupDto {
 
     private Gender gender;
 
+    private String fcmToken;
+
     @Nullable
     private MultipartFile profile_image;
 

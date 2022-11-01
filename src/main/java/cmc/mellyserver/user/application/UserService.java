@@ -8,13 +8,13 @@ import cmc.mellyserver.group.domain.UserGroupQueryRepository;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
-import cmc.mellyserver.memory.presentation.dto.ImageDto;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.presentation.dto.SurveyRequest;
-import cmc.mellyserver.user.presentation.dto.ProfileUpdateRequest;
+import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
+import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -40,64 +40,46 @@ public class UserService {
     private final UserGroupQueryRepository userGroupQueryRepository;
     private final SurveyRecommender surveyRecommender;
 
-    @Transactional
-    public void createSurvey(String uid, SurveyRequest pollRequest)
+
+
+    public PollRecommendResponse getSurvey(String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        user.addPollData(pollRequest.getRecommendGroup(),pollRequest.getRecommendPlace(),pollRequest.getRecommendActivity());
-    }
-
-    // 추천 기능
-    public PollRecommendResponse getSurvey(String uid) {
-
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return surveyRecommender.getRecommend(user);
-
     }
 
 
-    public List<UserGroup> getUserGroup(String uid) {
+    public List<UserGroup> getUserGroup(String uid)
+    {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return user.getGroupAndUsers().stream().map(gu -> gu.getGroup()).collect(Collectors.toList());
     }
 
-    public Slice<Memory> getUserMemory(Pageable pageable, String uid, GroupType groupType) {
+
+    public Slice<Memory> getUserMemory(Pageable pageable, String uid, GroupType groupType)
+    {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        return memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserSeq(),
-                null, groupType);
-
+        return memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserSeq(), null, groupType);
     }
 
-    @Transactional
-    public void participateToGroup(String uid, Long groupId) {
-        groupService.participateToGroup(uid, groupId);
-    }
 
-    public int checkUserImageVolume(String username) {
-
+    public int checkUserImageVolume(String username)
+    {
         ObjectListing mellyimage = amazonS3Client.listObjects("mellyimage", username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
         Long sum = objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
         return  sum.intValue();
     }
 
-    @Transactional
-    public void updateProfile(String uid, ProfileUpdateRequest profileUpdateRequest) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getProfileImage());
-        user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
-    }
-
-
-    public ProfileUpdateFormResponse getProfileDataForUpdate(String uid) {
+    public ProfileUpdateFormResponse getProfileDataForUpdate(String uid)
+    {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return new ProfileUpdateFormResponse(user.getProfileImage(),user.getNickname(),user.getGender(),user.getAgeGroup());
     }
 
 
-    // 내 그룹사람들이 이 그룹으로 쓴 메모리
     public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable, Long groupId,Long userSeq) {
 
         Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,userSeq);
@@ -115,5 +97,30 @@ public class UserService {
 
     }
 
+
+    @Transactional
+    public void createSurvey(String uid, SurveyRequest pollRequest)
+    {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        user.addPollData(pollRequest.getRecommendGroup(),pollRequest.getRecommendPlace(),pollRequest.getRecommendActivity());
+    }
+
+
+    @Transactional
+    public void participateToGroup(String uid, Long groupId)
+    {
+        groupService.participateToGroup(uid, groupId);
+    }
+
+
+    @Transactional
+    public void updateProfile(String uid, ProfileUpdateRequest profileUpdateRequest)
+    {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getProfileImage());
+        user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
+    }
 
 }

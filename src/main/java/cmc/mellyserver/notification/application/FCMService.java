@@ -1,5 +1,6 @@
 package cmc.mellyserver.notification.application;
 
+import cmc.mellyserver.notification.domain.NotificationType;
 import cmc.mellyserver.notification.presentation.dto.FCMMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +20,12 @@ import java.util.List;
 @Slf4j
 public class FCMService {
 
-    private static final String API_URL = "https://fcm.googleapis.com/v1/projects/프로젝트id/messages:send";
+    private static final String API_URL = "https://fcm.googleapis.com/v1/projects/melly-fdd90/messages:send";
     private final ObjectMapper objectMapper;
 
 
     private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase/cocotalk_firebase_service_key.json";
+        String firebaseConfigPath = "firebase/melly-fdd90-firebase-adminsdk-a139l-bd9a957ecb.json";
         GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
                 .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
@@ -32,9 +33,9 @@ public class FCMService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException
+    public void sendMessageTo(String targetToken, NotificationType notificationType, String body) throws IOException
     {
-        String message = makeMessage(targetToken,title,body);
+        String message = makeMessage(targetToken,notificationType,body);
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),message);
         Request request = new Request.Builder()
@@ -48,13 +49,13 @@ public class FCMService {
         log.info(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException
+    private String makeMessage(String targetToken, NotificationType notificationType, String body) throws JsonProcessingException
     {
         FCMMessage fcmMessage = FCMMessage.builder()
                 .message(FCMMessage.Message.builder()
                         .token(targetToken)
                         .notification(FCMMessage.Notification.builder()
-                                .title(title).body(body).image(null).build()
+                                .title(notificationType).body(body).image(null).build()
                         ).build()).validateOnly(false).build();
         return objectMapper.writeValueAsString(fcmMessage);
     }

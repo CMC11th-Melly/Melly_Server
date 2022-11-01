@@ -4,25 +4,24 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
-import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.GroupRepository;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.MemoryFormGroupResponse;
-import cmc.mellyserver.memory.application.dto.MemoryImageDto;
 import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemoryRepository;
-import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.memory.presentation.dto.*;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
+import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
+import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
+import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.geolatte.geom.M;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -144,7 +143,7 @@ public class MemoryService {
     }
 
     @Transactional
-    public void updateMemory(String uid, Long memoryId, MemoryUpdateRequest memoryUpdateRequest,List<MultipartFile> images) {
+    public void updateMemory(String uid, Long memoryId, MemoryUpdateRequest memoryUpdateRequest, List<MultipartFile> images) {
 
         // 1. 업데이트할 메모리 찾기
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {

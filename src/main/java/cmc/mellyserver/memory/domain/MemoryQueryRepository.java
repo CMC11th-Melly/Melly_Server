@@ -1,28 +1,16 @@
 package cmc.mellyserver.memory.domain;
 
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
-import cmc.mellyserver.group.domain.GroupAndUser;
-import cmc.mellyserver.group.domain.QGroupAndUser;
-import cmc.mellyserver.group.domain.QUserGroup;
-import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.application.dto.MemoryForGroupResponse;
 import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.memory.presentation.dto.ImageDto;
-import cmc.mellyserver.memory.presentation.dto.MemorySearchDto;
-import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.user.domain.QUser;
+import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.geolatte.geom.M;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -30,10 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +25,6 @@ import java.util.stream.Collectors;
 import static cmc.mellyserver.group.domain.QGroupAndUser.*;
 import static cmc.mellyserver.group.domain.QUserGroup.*;
 import static cmc.mellyserver.memory.domain.QMemory.*;
-import static cmc.mellyserver.place.domain.QPlace.place;
 import static cmc.mellyserver.user.domain.QUser.*;
 import static org.springframework.util.ObjectUtils.isEmpty;
 

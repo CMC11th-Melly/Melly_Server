@@ -15,7 +15,10 @@ import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
-import cmc.mellyserver.user.presentation.dto.*;
+import cmc.mellyserver.user.presentation.dto.common.*;
+import cmc.mellyserver.user.presentation.dto.request.ParticipateGroupRequest;
+import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
+import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -42,20 +45,19 @@ public class UserController {
 
     @Operation(summary = "유저 회원가입시 설문조사(테스트 필요한 API입니다)")
     @PostMapping("/survey")
-    public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user,@RequestBody SurveyRequest pollRequest)
+    public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user,@RequestBody SurveyRequest surveyRequest)
     {
-        userService.createSurvey(user.getUsername(),pollRequest);
+        userService.createSurvey(user.getUsername(),surveyRequest);
         return ResponseEntity.ok(new CommonResponse(200,"설문조사 입력 완료"));
     }
+
 
     @Operation(summary = "설문조사 결과로 추천 장소 조회(테스트 필요한 API입니다)")
     @GetMapping("/survey")
     public ResponseEntity<CommonResponse> getPoll(@AuthenticationPrincipal User user)
     {
         PollRecommendResponse result = userService.getSurvey(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"설문 조사 기반 추천 조회",
-                new SurveyRecommendResponseWrapper(result)));
-
+        return ResponseEntity.ok(new CommonResponse(200,"설문 조사 기반 추천 조회", new SurveyRecommendResponseWrapper(result)));
     }
 
 

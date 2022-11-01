@@ -1,5 +1,6 @@
 package cmc.mellyserver.notification.presentation.dto;
 
+import cmc.mellyserver.notification.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class FCMMessage {
     @AllArgsConstructor
     @Getter
     public static class Notification{
-        private String title;
+        private NotificationType title;
         private String body;
         private String image;
     }

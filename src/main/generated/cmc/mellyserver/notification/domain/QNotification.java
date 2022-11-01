@@ -34,13 +34,9 @@ public class QNotification extends EntityPathBase<Notification> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final StringPath link = createString("link");
-
     public final StringPath message = createString("message");
 
-    public final EnumPath<NotificationType> notificationType = createEnum("notificationType", NotificationType.class);
-
-    public final StringPath title = createString("title");
+    public final EnumPath<NotificationType> title = createEnum("title", NotificationType.class);
 
     public final cmc.mellyserver.user.domain.QUser user;
 

@@ -95,6 +95,11 @@ public class User extends JpaBaseEntity {
         this.ageGroup = ageGroup;
     }
 
+    public void setFcmToken(String fcmToken)
+    {
+        this.fcmToken = fcmToken;
+    }
+
     public void addPollData(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
@@ -110,7 +115,7 @@ public class User extends JpaBaseEntity {
     }
 
     @Builder
-    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String uid,Provider provider,String nickname)
+    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String fcmToken,String uid,Provider provider,String nickname)
     {
         this.email = email;
         this.password = password;
@@ -118,6 +123,7 @@ public class User extends JpaBaseEntity {
         this.profileImage = profileImage;
         this.ageGroup = ageGroup;
         this.gender =gender;
+        this.fcmToken = fcmToken;
         this.userId = uid;
         this.provider = provider;
         this.nickname = nickname;

@@ -45,7 +45,7 @@ class AuthServiceTest {
         given(userRepository.findUserByEmail(any())).willReturn(Optional.empty());
 
         Assertions.assertThatThrownBy(()->{
-            authService.login("melly@gmail.com","asdfasdf");
+            authService.login("melly@gmail.com","asdfasdf","fafegesgseg");
         }).isInstanceOf(GlobalBadRequestException.class);
     }
 

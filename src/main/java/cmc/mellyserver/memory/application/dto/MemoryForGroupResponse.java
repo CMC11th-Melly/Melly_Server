@@ -1,7 +1,7 @@
 package cmc.mellyserver.memory.application.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.presentation.dto.ImageDto;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

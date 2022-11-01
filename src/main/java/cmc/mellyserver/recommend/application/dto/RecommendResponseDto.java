@@ -2,13 +2,12 @@ package cmc.mellyserver.recommend.application.dto;
 
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.presentation.dto.ImageDto;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.swing.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;

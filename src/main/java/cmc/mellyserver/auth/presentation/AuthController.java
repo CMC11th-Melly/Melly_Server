@@ -3,7 +3,10 @@ package cmc.mellyserver.auth.presentation;
 
 import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
-import cmc.mellyserver.auth.presentation.dto.*;
+import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
+import cmc.mellyserver.auth.presentation.dto.request.*;
+import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
+import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
 import cmc.mellyserver.auth.util.HeaderUtil;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
@@ -64,7 +67,7 @@ public class AuthController {
       @PostMapping("/login")
       public ResponseEntity<CommonResponse<AuthResponseForLogin>> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
       {
-          AuthResponseForLogin login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword());
+          AuthResponseForLogin login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword(),authRequestForLogin.getFcmToken());
           return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
       }
 

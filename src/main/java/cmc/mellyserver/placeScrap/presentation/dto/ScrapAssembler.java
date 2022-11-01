@@ -1,15 +1,11 @@
 package cmc.mellyserver.placeScrap.presentation.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.memory.presentation.dto.ImageDto;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.user.domain.User;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 

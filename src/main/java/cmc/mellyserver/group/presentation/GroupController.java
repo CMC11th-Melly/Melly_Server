@@ -1,8 +1,10 @@
 package cmc.mellyserver.group.presentation;
 
+import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.group.presentation.dto.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.GroupCreateResponse;
 import cmc.mellyserver.group.presentation.dto.GroupUpdateRequest;
@@ -24,8 +26,8 @@ public class GroupController {
     @PostMapping("/group")
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@RequestBody GroupCreateRequest groupCreateRequest)
     {
-        groupService.saveGroup(user.getUsername(), groupCreateRequest);
-        return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료"));
+        UserGroup userGroup = groupService.saveGroup(user.getUsername(), groupCreateRequest);
+        return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료", new CommonDetailResponse<>(GroupAssembler.groupCreateResponse(userGroup))));
     }
 
     @Operation(summary = "그룹 편집")
