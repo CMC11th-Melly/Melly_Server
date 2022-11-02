@@ -4,6 +4,7 @@ import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.notification.application.NotificationService;
 import cmc.mellyserver.notification.domain.Notification;
+import cmc.mellyserver.notification.presentation.dto.NotificationAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class NotificationController {
     public ResponseEntity<CommonResponse> getNotifications(@AuthenticationPrincipal User user)
     {
         List<Notification> notificationList = notificationService.getNotificationList(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"알림 조회",new CommonDetailResponse<>(notificationList)));
+        return ResponseEntity.ok(new CommonResponse(200,"알림 조회",new CommonDetailResponse<>(NotificationAssembler.notificationResponses(notificationList))));
     }
 
 }

@@ -1,6 +1,7 @@
 package cmc.mellyserver.notification.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,8 +29,7 @@ public class Notification extends JpaBaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-
-
-
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memory_id")
+    private Memory memory;
 }

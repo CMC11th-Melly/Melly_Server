@@ -900,21 +900,21 @@ public class DataLoader {
         // 나오면 안됨
         memoryDomainService.createMemory(saveUser2.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "2번째 유저가 비공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                "1번째 그룹의 2번 유저가 비공개로 씀!","용용선생","주류","비공개 임으로 나오면 안됨",3L,
                 1L,OpenType.PRIVATE,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser3.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "4번째 그룹의 3번째 유저가 그룹공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                "4번째 그룹의 3번 유저가 그룹공개로 씀!","용용선생","주류","내가 속해있지 않은 그룹을 대상으로 메모리 작성",3L,
                 4L,OpenType.GROUP,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());
 
         memoryDomainService.createMemory(saveUser3.getUserId(),
                 37.5000541000002,127.02425909999957,
-                "4번째 그룹의 3번째 유저가 그룹공개로 씀!","용용선생","주류","이거는 나오면 안됨! 나랑 같은 그룹이지만 공유는 다른 그룹과 한거임",3L,
+                "3번째 그룹의 3번 유저가 그룹공개로 씀!","용용선생","주류","3번 그룹은 1번 유저와 같은 그룹임으로 나와야함",3L,
                 3L,OpenType.GROUP,
                 List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
                 List.of());

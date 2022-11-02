@@ -38,4 +38,5 @@ public class GetOtherMemoryForPlaceResponse {
     @Schema(example = "202210142310")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;
+
 }

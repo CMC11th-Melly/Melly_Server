@@ -13,6 +13,7 @@ import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -58,9 +59,7 @@ public class UserService {
 
     public Slice<Memory> getUserMemory(Pageable pageable, String uid, GroupType groupType)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-        return memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserSeq(), null, groupType);
+        return memoryQueryRepository.searchMemoryUserCreate(pageable, uid, null, groupType);
     }
 
 
@@ -123,4 +122,44 @@ public class UserService {
         user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
     }
 
+    @Transactional
+    public void setPushCommentLikeOn(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableCommentLike(true);
+    }
+
+    @Transactional
+    public void setPushCommentLikeOff(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableCommentLike(false);
+    }
+
+    @Transactional
+    public void setPushCommentOn(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableComment(true);
+    }
+
+    @Transactional
+    public void setPushCommentOff(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableComment(false);
+    }
+
+    @Transactional
+    public void setAppPushOn(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableAppPush(true);
+    }
+
+    @Transactional
+    public void setAppPushOff(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        user.setEnableAppPush(false);
+    }
+
+    public NotificationOnOffResponse getNotificationOnOff(String uid) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return new NotificationOnOffResponse(user.isEnableAppPush(),user.isEnableCommentLike(),user.isEnableComment());
+    }
 }

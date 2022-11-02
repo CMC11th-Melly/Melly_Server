@@ -35,6 +35,12 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath email = createString("email");
 
+    public final BooleanPath enableAppPush = createBoolean("enableAppPush");
+
+    public final BooleanPath enableComment = createBoolean("enableComment");
+
+    public final BooleanPath enableCommentLike = createBoolean("enableCommentLike");
+
     public final StringPath fcmToken = createString("fcmToken");
 
     public final EnumPath<cmc.mellyserver.user.domain.enums.Gender> gender = createEnum("gender", cmc.mellyserver.user.domain.enums.Gender.class);

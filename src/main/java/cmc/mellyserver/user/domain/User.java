@@ -66,6 +66,24 @@ public class User extends JpaBaseEntity {
 
     private String fcmToken;
 
+    private boolean enableAppPush;
+
+    private boolean enableCommentLike;
+
+    private boolean enableComment;
+
+    public void setEnableAppPush(boolean enableAppPush) {
+        this.enableAppPush = enableAppPush;
+    }
+
+    public void setEnableCommentLike(boolean enableCommentLike) {
+        this.enableCommentLike = enableCommentLike;
+    }
+
+    public void setEnableComment(boolean enableComment) {
+        this.enableComment = enableComment;
+    }
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Memory> memories = new ArrayList<>();
 

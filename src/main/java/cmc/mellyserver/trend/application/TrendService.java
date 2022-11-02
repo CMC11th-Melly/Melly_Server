@@ -30,9 +30,9 @@ public class TrendService {
 //        return trendAnalyzer.findKeywordSortedByRank(user);
         return trendingPlace.stream().map
                 (t -> new TrendResponseDto(t.getId(),t.getPlaceImage(),
-                        "카페, 디저트",
+                        t.getPlaceCategory(),
                         GroupType.FRIEND,
-                        false,
+                        t.getIsScraped(),
                         t.getPlaceName(),t.getMemories(),
                         groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
                 ))

@@ -1,5 +1,6 @@
 package cmc.mellyserver.user.presentation;
 
+import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.domain.enums.GroupType;
@@ -15,6 +16,7 @@ import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
+import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
 import cmc.mellyserver.user.presentation.dto.common.*;
 import cmc.mellyserver.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
@@ -50,6 +52,64 @@ public class UserController {
         userService.createSurvey(user.getUsername(),surveyRequest);
         return ResponseEntity.ok(new CommonResponse(200,"설문조사 입력 완료"));
     }
+
+    @Operation(summary = "댓글 좋아요 ON(미완)")
+    @PostMapping("/notification/comment/like")
+    public ResponseEntity<CommonResponse> appPushOn(@AuthenticationPrincipal User user)
+    {
+        userService.setPushCommentLikeOn(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+    @Operation(summary = "댓글 좋아요 OFF(미완)")
+    @DeleteMapping("/notification/comment/like")
+    public ResponseEntity<CommonResponse> appPushOff(@AuthenticationPrincipal User user)
+    {
+        userService.setPushCommentLikeOff(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+
+    @Operation(summary = "댓글 수신 ON(미완)")
+    @PostMapping("/notification/comment")
+    public ResponseEntity<CommonResponse> appPushCommentOn(@AuthenticationPrincipal User user)
+    {
+        userService.setPushCommentOn(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+    @Operation(summary = "댓글 수신 OFF(미완)")
+    @DeleteMapping("/notification/comment")
+    public ResponseEntity<CommonResponse> appPushCommentOff(@AuthenticationPrincipal User user)
+    {
+        userService.setPushCommentOff(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+    @Operation(summary = "유저 앱 푸시 ON(미완)")
+    @PostMapping("/notification")
+    public ResponseEntity<CommonResponse> appPushCommentLikeOn(@AuthenticationPrincipal User user)
+    {
+        userService.setAppPushOn(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+    @Operation(summary = "유저 앱 푸시 OFF(미완)")
+    @DeleteMapping("/notification")
+    public ResponseEntity<CommonResponse> appPushCommentLikeOff(@AuthenticationPrincipal User user)
+    {
+        userService.setAppPushOff(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+    @Operation(summary = "유저 푸시 권한 목록")
+    @GetMapping("/notification")
+    public ResponseEntity<CommonResponse> getNotificationOnOff(@AuthenticationPrincipal User user)
+    {
+        NotificationOnOffResponse notificationOnOff = userService.getNotificationOnOff(user.getUsername());
+        return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(notificationOnOff)));
+    }
+
 
 
     @Operation(summary = "설문조사 결과로 추천 장소 조회(테스트 필요한 API입니다)")

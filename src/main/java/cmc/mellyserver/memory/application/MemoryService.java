@@ -79,19 +79,21 @@ public class MemoryService {
         return memoryQueryRepository.searchMemoryName(user.getUserSeq(),memoryName);
     }
 
-
+    /**
+     * 장소 상세 - 로그인한 유저가 이 장소에 작성한 메모리 조회
+     */
     public Slice<Memory> getUserMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-        return memoryQueryRepository.searchMemoryUserCreate(pageable,user.getUserSeq(), placeId, groupType);
+        return memoryQueryRepository.searchMemoryUserCreate(pageable,uid, placeId, groupType);
     }
 
-    public Slice<Memory> getOtherMemory(Pageable pageable, String uid,Long placeId, GroupType groupType) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user.getUserSeq(),
-                placeId,groupType);
+    /**
+     * 장소 상세 - 로그인 유저가 아닌 다른 사람이 이 장소에 작성한 메모리 조회
+     */
+    public Slice<Memory> getOtherMemory(Pageable pageable, String uid,Long placeId, GroupType groupType)
+    {
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable,uid,placeId,groupType);
     }
 
 
@@ -121,9 +123,9 @@ public class MemoryService {
     }
 
     public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
 
-        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId,groupType);
+
+        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, uid, placeId,groupType);
 
         return myGroupMemory
                 .map(memory -> new MemoryForGroupResponse(memory.getPlace().getId(),

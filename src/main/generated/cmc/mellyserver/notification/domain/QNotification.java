@@ -34,6 +34,8 @@ public class QNotification extends EntityPathBase<Notification> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final cmc.mellyserver.memory.domain.QMemory memory;
+
     public final StringPath message = createString("message");
 
     public final EnumPath<NotificationType> title = createEnum("title", NotificationType.class);
@@ -58,6 +60,7 @@ public class QNotification extends EntityPathBase<Notification> {
 
     public QNotification(Class<? extends Notification> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.memory = inits.isInitialized("memory") ? new cmc.mellyserver.memory.domain.QMemory(forProperty("memory"), inits.get("memory")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

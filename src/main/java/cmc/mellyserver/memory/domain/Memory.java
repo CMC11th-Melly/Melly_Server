@@ -5,6 +5,7 @@ import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
+import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
 import cmc.mellyserver.user.domain.User;
@@ -54,10 +55,14 @@ public class Memory extends JpaBaseEntity {
 
     private String title;
 
+
     @Lob
     private String content;
 
     private LocalDateTime visitedDate;
+
+    @OneToOne(mappedBy = "memory",fetch = FetchType.LAZY)
+    private Notification notification;
 
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();

@@ -4,8 +4,7 @@ import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponse;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class GroupAssembler {
 
