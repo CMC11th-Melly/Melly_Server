@@ -29,6 +29,10 @@ public class AuthAssembler {
                .fcmToken(authRequestForSignupDto.getFcmToken())
                .uid(UUID.randomUUID().toString())
                .provider(Provider.DEFAULT)
+               // TODO : 처음 사용자는 앱 푸시 전부 동의 상태로 만들기 -> 차후에 푸시 동의 기능 추가
+               .enableAppPush(true)
+               .enableComment(true)
+               .enableComment(true)
                .nickname(authRequestForSignupDto.getNickname())
                .build();
    }

@@ -79,6 +79,8 @@ public class OAuthService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.APPLE_ACCESS);
         }
 
+
+
         Optional<User> user = userRepository.findUserByUserId(socialUser.getUserId());
         // 이미 회원가입한 유저라면?
         if(user.isPresent())
@@ -114,11 +116,10 @@ public class OAuthService {
     @Transactional
     public AuthResponseForLogin signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
-        log.info("보자 = {}",authRequestForOAuthSignup.getUid());
         // 일단 유저 찾고
         User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUid()).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);});
         // 있으면 업데이트 하고
-        user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup());
+        user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup(),true,true,true);
         // 회원가입 완료 됐으니깐 토큰 생성
         String token = getToken(user.getUserId());
         // 반환 해주기

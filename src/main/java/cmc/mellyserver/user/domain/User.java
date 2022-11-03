@@ -105,12 +105,15 @@ public class User extends JpaBaseEntity {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
-    public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup)
+    public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
         this.nickname = nickname;
         this.gender = gender;
         this.profileImage = profileImage;
         this.ageGroup = ageGroup;
+        this.enableAppPush = enableAppPush;
+        this.enableComment = enableComment;
+        this.enableCommentLike = enableCommentLike;
     }
 
     public void setFcmToken(String fcmToken)
@@ -133,7 +136,7 @@ public class User extends JpaBaseEntity {
     }
 
     @Builder
-    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String fcmToken,String uid,Provider provider,String nickname)
+    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String fcmToken,String uid,Provider provider,String nickname,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
         this.email = email;
         this.password = password;
@@ -145,6 +148,9 @@ public class User extends JpaBaseEntity {
         this.userId = uid;
         this.provider = provider;
         this.nickname = nickname;
+        this.enableAppPush = enableAppPush;
+        this.enableComment = enableComment;
+        this.enableCommentLike = enableCommentLike;
     }
 
     public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup, String image) {
