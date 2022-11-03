@@ -45,7 +45,7 @@ class PlaceDomainServiceTest {
         BDDMockito.given(authenticatedUserChecker.checkAuthenticatedUserExist(BDDMockito.anyString())).willReturn(new User("1", Provider.DEFAULT, RoleType.USER,"asdfasdf"));
 
         // when
-        PlaceResponseDto place = placeDomainService.getPlace("1", 37.0001, 127.0001);
+        PlaceResponseDto place = placeDomainService.getPlaceByPosition("1", 37.0001, 127.0001);
 
 
         Assertions.assertThat(place.getPlaceId()).isNull();
@@ -66,7 +66,7 @@ class PlaceDomainServiceTest {
                 .willReturn(Optional.empty());
 
         // when
-        PlaceResponseDto place = placeDomainService.getPlace("1", 37.0001, 127.0001);
+        PlaceResponseDto place = placeDomainService.getPlaceByPosition("1", 37.0001, 127.0001);
 
         // then 
         Assertions.assertThat(place.getPlaceId()).isEqualTo(-1L);
