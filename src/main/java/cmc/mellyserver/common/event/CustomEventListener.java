@@ -17,6 +17,6 @@ public class CustomEventListener {
     @Async
     @EventListener
     public void handleEvent(CustomEvent event) throws IOException {
-         fcmService.sendMessageTo(event.getFcmToken(),event.getNotificationType(),event.getMessage());
+         fcmService.sendMessageTo(event.getFcmToken(),event.getNotificationType(),event.getMessage(),event.getUid(),event.getMemoryId());
     }
 }

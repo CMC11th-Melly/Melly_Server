@@ -42,7 +42,7 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 
-    public final cmc.mellyserver.notification.domain.QNotification notification;
+    public final ListPath<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification> notifications = this.<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification>createList("notifications", cmc.mellyserver.notification.domain.Notification.class, cmc.mellyserver.notification.domain.QNotification.class, PathInits.DIRECT2);
 
     public final EnumPath<cmc.mellyserver.memory.domain.enums.OpenType> openType = createEnum("openType", cmc.mellyserver.memory.domain.enums.OpenType.class);
 
@@ -77,7 +77,6 @@ public class QMemory extends EntityPathBase<Memory> {
     public QMemory(Class<? extends Memory> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.groupInfo = inits.isInitialized("groupInfo") ? new QGroupInfo(forProperty("groupInfo")) : null;
-        this.notification = inits.isInitialized("notification") ? new cmc.mellyserver.notification.domain.QNotification(forProperty("notification"), inits.get("notification")) : null;
         this.place = inits.isInitialized("place") ? new cmc.mellyserver.place.domain.QPlace(forProperty("place"), inits.get("place")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }

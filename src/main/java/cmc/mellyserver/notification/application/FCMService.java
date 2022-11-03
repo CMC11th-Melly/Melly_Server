@@ -1,7 +1,16 @@
 package cmc.mellyserver.notification.application;
 
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.memory.domain.MemoryRepository;
+import cmc.mellyserver.notification.domain.Notification;
+import cmc.mellyserver.notification.domain.NotificationRepository;
 import cmc.mellyserver.notification.domain.NotificationType;
 import cmc.mellyserver.notification.presentation.dto.FCMMessage;
+import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.domain.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -11,6 +20,7 @@ import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +31,7 @@ import java.util.List;
 public class FCMService {
 
     private static final String API_URL = "https://fcm.googleapis.com/v1/projects/melly-fdd90/messages:send";
+    private final NotificationService notificationService;
     private final ObjectMapper objectMapper;
 
 
@@ -33,8 +44,11 @@ public class FCMService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
-    public void sendMessageTo(String targetToken, NotificationType notificationType, String body) throws IOException
+    @Transactional
+    public void sendMessageTo(String targetToken, NotificationType notificationType, String body, String uid, Long memoryId) throws IOException
     {
+
+        notificationService.createNotification(notificationType, body, uid, memoryId);
         String message = makeMessage(targetToken,notificationType,body);
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),message);
@@ -47,6 +61,8 @@ public class FCMService {
 
         Response response = okHttpClient.newCall(request).execute();
         log.info(response.body().string());
+
+
     }
 
     private String makeMessage(String targetToken, NotificationType notificationType, String body) throws JsonProcessingException

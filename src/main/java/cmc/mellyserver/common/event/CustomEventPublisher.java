@@ -13,12 +13,12 @@ public class CustomEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void publish(String fcmToken, NotificationType notificationType,String message)
+    public void publish(String fcmToken, NotificationType notificationType,String message,String uid, Long memoryId)
     {
         if(!fcmToken.isBlank())
         {
             log.info("Publishing custom event");
-            CustomEvent customEvent = new CustomEvent(this, fcmToken,notificationType, message);
+            CustomEvent customEvent = new CustomEvent(this, fcmToken,notificationType, message,uid,memoryId);
             applicationEventPublisher.publishEvent(customEvent);
         }
 

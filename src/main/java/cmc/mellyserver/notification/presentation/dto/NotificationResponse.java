@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NotificationResponse {
 
+    private Long notificationId;
     private NotificationType type;
     private String content;
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")

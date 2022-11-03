@@ -13,6 +13,10 @@ import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
+import cmc.mellyserver.notification.application.NotificationService;
+import cmc.mellyserver.notification.domain.Notification;
+import cmc.mellyserver.notification.domain.NotificationRepository;
+import cmc.mellyserver.notification.domain.NotificationType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
@@ -42,6 +46,7 @@ public class DataLoader {
     private final MemoryDomainService memoryDomainService;
     private final CommentService commentService;
     private final PlaceScrapService placeScrapService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void loadData()
@@ -1236,11 +1241,14 @@ public class DataLoader {
                 List.of());
 
 
+        // 댓글 더미 데이터
         commentService.saveComment("cmc11th",new CommentRequest("ㅋㅋ 아 웃겨 실화냐?,,,, 가짜 데이터 만드는일 개노잼 제가 지금 이걸 왜 하는거죠?",74L,null,null));
         commentService.saveComment(user2.getUserId(),new CommentRequest("근데 레이,,,댓글은 대체 왜 까먹었어요?ㅎ",74L,null,null));
         commentService.saveComment(user3.getUserId(),new CommentRequest("빡치게 하지 마세요ㅎ",74L,2L,user2.getUserSeq()));
         commentService.saveComment(user3.getUserId(),new CommentRequest("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ웃기다,,,ㅎ.. 나는 왜 지금 여기서 이 데이터를 쓰고 있는지 정말 모르겠지만요,,",74L,2L,user2.getUserSeq()));
 
+
+        // 스크랩 더미 데이터
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.5000541000002,127.02425909999957, ScrapType.FRIEND,"용용선생","카페, 디저트"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.49992030000013,127.02461119999951, ScrapType.FRIEND,"을지다락","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503861,127.024144, ScrapType.FRIEND,"스타벅스","카페, 디저트"));
@@ -1255,6 +1263,14 @@ public class DataLoader {
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560662,127.040467, ScrapType.COUPLE,"곱","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560872,127.040201, ScrapType.COUPLE,"생활맥주","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.561702,127.040677, ScrapType.COUPLE,"유유커피","카페, 디저트"));
+
+
+        // 알림 더미데이터
+        notificationService.createNotification(NotificationType.COMMENT,"내 메모리에 새 댓글이 달렸어요! 확인해보세요","cmc11th",74L);
+        notificationService.createNotification(NotificationType.REPORT,"메모리에 신고가 들어왔어요! 확인해보세요","cmc11th",74L);
+
+
+
     }
 
 

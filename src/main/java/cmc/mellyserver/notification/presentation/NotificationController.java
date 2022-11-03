@@ -5,6 +5,7 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.notification.application.NotificationService;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.presentation.dto.NotificationAssembler;
+import cmc.mellyserver.notification.presentation.dto.NotificationCheckRequest;
 import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
+
     @Operation(summary = "유저 푸시 권한 목록")
     @GetMapping("/setting")
     public ResponseEntity<CommonResponse> getNotificationOnOff(@AuthenticationPrincipal User user)
@@ -30,7 +32,7 @@ public class NotificationController {
         return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(notificationOnOff)));
     }
 
-    @Operation(summary = "알림 목록 조회(미완성 API)")
+    @Operation(summary = "알림 목록 조회(테스트 필요)")
     @GetMapping
     public ResponseEntity<CommonResponse> getNotifications(@AuthenticationPrincipal User user)
     {
@@ -87,6 +89,14 @@ public class NotificationController {
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
+
+    @Operation(summary = "알림 읽음 처리")
+    @PostMapping("/check")
+    public ResponseEntity<CommonResponse> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest)
+    {
+        notificationService.checkNotification(notificationCheckRequest.getNotificationId());
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
 
 
 }

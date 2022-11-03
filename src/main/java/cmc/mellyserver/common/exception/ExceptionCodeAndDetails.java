@@ -39,7 +39,8 @@ public enum ExceptionCodeAndDetails {
     NO_SUCH_GROUP("2003","그룹이 존재하지 않습니다."),
     NO_SUCH_MEMORY("2004","그룹이 존재하지 않습니다."),
     NO_SUCH_COMMENT("2005","댓글이 존재하지 않습니다."),
-    NO_SUCH_COMMENT_LIKE("2006","댓글에 좋아요가 존재하지 않습니다.");
+    NO_SUCH_COMMENT_LIKE("2006","댓글에 좋아요가 존재하지 않습니다."),
+    NO_SUCH_NOTIFICATION("2007","알림이 존재하지 않습니다.");
     private final String code;
     private final String message;
 }
