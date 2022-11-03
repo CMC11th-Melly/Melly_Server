@@ -42,6 +42,7 @@ public class MemoryDomainService {
     private final TrendAnalyzer trendAnalyzer;
 
 
+
     public Memory createMemory(String uid, Double lat, Double lng, String title, String placeName, String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword, LocalDateTime visitedDate, List<MultipartFile> multipartFiles)
     {
 

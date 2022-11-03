@@ -44,6 +44,10 @@ public class MemoryQueryRepository {
 
 
 
+    /**
+     * 포함하고 있는 메모리 제목으로 장소 조회 (최적화 완료 -> 필요할때 fetch join 도입)
+     * query projection과 fetch join은 동시 사용 불가 -> 둘 중 하나만 선택하자!
+     */
     public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName) {
         return query.select(Projections.constructor(MemorySearchDto.class, memory.place.id, memory.title))
                 .from(memory)
@@ -106,7 +110,7 @@ public class MemoryQueryRepository {
 
 
     /**
-     * 마이페이지 - 내가 스크랩한 장소
+     * 마이페이지 - 내가 스크랩한 메모리 (차후에 추가 및 최적화 예정)
      */
     public Slice<Memory> getScrapedMemory(Pageable pageable, User user,GroupType groupType) {
 

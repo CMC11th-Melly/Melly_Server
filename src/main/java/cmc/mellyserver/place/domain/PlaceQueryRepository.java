@@ -46,6 +46,7 @@ public class PlaceQueryRepository {
     }
 
 
+
     /**
      * 추천 장소 조회 -> 차후에 추천 로직으로 변경 예정
      */
@@ -56,6 +57,7 @@ public class PlaceQueryRepository {
                 .where(place.id.in(placeIds))
                 .fetch();
     }
+
 
 
     /**
@@ -70,28 +72,38 @@ public class PlaceQueryRepository {
     }
 
 
-    public Place getPlaceByMemory(Long placeId)
+
+    /**
+     * placeId로 장소 조회
+     */
+    public Place searchPlaceByPlaceId(Long placeId)
     {
         return  query.select(place)
-                .from(memory)
-                .innerJoin(memory.place,place)
+                .from(place)
                 .where(place.id.eq(placeId))
-                .distinct()
                 .fetchOne();
     }
 
 
+    /**
+     * 로그인 유저의 메모리가 존재하는 장소 조회 (최적화 완료)
+     */
     public List<Place> getPlaceUserMemoryExist(User user)
     {
         return query.select(place)
                 .from(place)
-                .where(place.id.in(user.getVisitedPlace()))
+                .leftJoin(place.memories,memory)
+                .where(
+                        memory.user.userSeq.eq(user.getUserSeq())
+                )
+                .distinct()
                 .fetch();
     }
 
 
+
     /**
-     * 스크랩 타입별 유저가 스크랩한 장소 개수 조회
+     * 스크랩 타입별 유저가 스크랩한 장소 개수 조회(최적화 완료, projection 사용으로 fetch join 불가)
      */
     public List<PlaceScrapResponseDto> getScrapedPlaceGrouping(User user)
     {
@@ -104,9 +116,10 @@ public class PlaceQueryRepository {
     }
 
 
+
     /**
-     * 유저가 스크랩한 장소 조회
-     * @param scrapType 스크랩 타입별로 필터링
+     * 유저가 스크랩한 장소 조회(최적화 완료, 인덱스 설정 필요)
+     * fetch join과 paging 동시 사용 불가! batch in 쿼리로 해결해야 함
      */
     public Slice<Place> getScrapedPlace(Pageable pageable, User user, ScrapType scrapType)
     {
@@ -116,12 +129,14 @@ public class PlaceQueryRepository {
                 .where(
                         place.id.in(user.getPlaceScraps().stream().map(s -> s.getPlace().getId()).collect(Collectors.toList())),
                         eqScrapType(scrapType)
-                ).orderBy(place.id.desc())
+                ).orderBy(place.id.desc()) // 따로 정렬 기준 필요 없으므로 placeId 값으로 정렬함
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
+
         return checkLastPage(pageable, results);
     }
+
 
 
     private BooleanExpression eqScrapType(ScrapType scrapType)
@@ -133,6 +148,7 @@ public class PlaceQueryRepository {
 
         return placeScrap.scrapType.eq(scrapType);
     }
+
 
 
     /**

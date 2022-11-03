@@ -45,14 +45,6 @@ public class MemoryController {
 
 
 
-    /**
-     *
-     * @param pageable sort=visitedDate, sort=stars 사용 가능
-     * @param user
-     * @param placeId
-     * @param groupType 만약에 그룹 필터링 안하면 ALL로 넣어주기
-     * @return
-     */
     @Operation(summary = "내가 작성한 메모리 조회",description ="- 메모리 생성 날짜(연월일), 그룹 타입, 키워드로 필터링 가능" +
                                                              "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/user/place/{placeId}")

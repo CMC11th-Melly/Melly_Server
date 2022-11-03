@@ -19,10 +19,9 @@ import java.util.Optional;
 public class PlaceDomainService {
 
     private final PlaceRepository placeRepository;
-    private final UserRepository userRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
-    public PlaceResponseDto getPlace(String uid, Double lat, Double lng)
+    public PlaceResponseDto getPlaceByPosition(String uid, Double lat, Double lng)
     {
 
         // 1. 위도 경도로 데이터 가져오기
@@ -35,6 +34,7 @@ public class PlaceDomainService {
         // 3. 만약 장소가 존재하면?
         Place place = placeByPosition.get();
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
         place.setScraped(checkIsScraped(user,place));
 
         long myMemoryCount = place.getMemories()
@@ -51,6 +51,7 @@ public class PlaceDomainService {
 
 
     }
+
     private boolean checkIsScraped(User user, Place place)
     {
         return user.getPlaceScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));

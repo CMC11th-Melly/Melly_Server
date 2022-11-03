@@ -45,6 +45,8 @@ public class OAuthService {
     private final AppleClient appleClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final AWSS3UploadService uploadService;
+
+
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 

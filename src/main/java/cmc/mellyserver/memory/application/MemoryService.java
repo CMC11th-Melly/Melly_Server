@@ -43,6 +43,11 @@ public class MemoryService {
     private final S3FileLoader s3FileLoader;
     private final GroupRepository groupRepository;
 
+
+
+    /**
+     * 메모리 등록
+     */
     @Transactional
     public Memory createMemory(String uid, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
     {
@@ -62,6 +67,10 @@ public class MemoryService {
     }
 
 
+
+    /**
+     * 메모리 등록을 위한 로그인 유저가 속한 그룹 목록 조회
+     */
     public List<MemoryFormGroupResponse> getUserGroupForMemoryForm(String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
@@ -73,11 +82,16 @@ public class MemoryService {
     }
 
 
+    /**
+     * 포함하고 있는 메모리 제목으로 장소 검색
+     */
     public List<MemorySearchDto> searchPlaceByMemoryTitle(String uid, String memoryName)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         return memoryQueryRepository.searchMemoryName(user.getUserSeq(),memoryName);
     }
+
+
 
     /**
      * 장소 상세 - 로그인한 유저가 이 장소에 작성한 메모리 조회
@@ -86,6 +100,7 @@ public class MemoryService {
     {
         return memoryQueryRepository.searchMemoryUserCreate(pageable,uid, placeId, groupType);
     }
+
 
 
     /**
@@ -97,6 +112,10 @@ public class MemoryService {
     }
 
 
+
+    /**
+     * 메모리 삭제
+     */
     @Transactional
     public void removeMemory(Long memoryId) {
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
@@ -106,6 +125,10 @@ public class MemoryService {
     }
 
 
+
+    /**
+     * 메모리 업데이트를 위한 폼 데이터 조회
+     */
     public MemoryUpdateFormResponse getFormForUpdateMemory(String uid, Long memoryId) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
@@ -122,28 +145,22 @@ public class MemoryService {
 
     }
 
-    public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType) {
 
 
+    /**
+     * 마이페이지 - 내 그룹만 필터 조회 (최적화 완료,인덱스 필요)
+     */
+    public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType)
+    {
         Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, uid, placeId,groupType);
-
-        return myGroupMemory
-                .map(memory -> new MemoryForGroupResponse(memory.getPlace().getId(),
-                                memory.getPlace().getPlaceName(),
-                                memory.getId(),
-                                memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(), mi.getImagePath()))
-                                        .collect(Collectors.toList()),
-                                memory.getTitle(),
-                                memory.getContent(),
-                                memory.getGroupInfo().getGroupType(),
-                                memory.getGroupInfo().getGroupName(),
-                                memory.getStars(),
-                                memory.getKeyword(),
-                                memory.getVisitedDate()));
-
-
+        return MemoryAssembler.memoryForGroupResponseSlice(myGroupMemory);
     }
 
+
+
+    /**
+     * 메모리 수정
+     */
     @Transactional
     public void updateMemory(String uid, Long memoryId, MemoryUpdateRequest memoryUpdateRequest, List<MultipartFile> images) {
 
@@ -152,25 +169,12 @@ public class MemoryService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
 
-//        // 2. 삭제할 이미지 목록 조회
-//        List<Long> results = memory.getMemoryImages().stream().filter(mi ->
-//                memoryUpdateRequest.getDeleteImageList().contains(mi.getId())
-//        ).map(fmi -> fmi.getId()).collect(Collectors.toList());
-
         // 3. 업데이트할 그룹 찾기
         UserGroup userGroup = groupRepository.findById(memoryUpdateRequest.getGroupId()).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
 
-        // TODO : 만약에 삭제 안 하면 빈 배열로 넣는다는거를 공지!
-        if(!memoryUpdateRequest.getDeleteImageList().isEmpty())
-        {
-            System.out.println("메모리 사진을 삭제할꺼야");
-            for(Long deleteId : memoryUpdateRequest.getDeleteImageList())
-            {
-                memory.getMemoryImages().removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
-            }
-        }
+        removeMemoryImages(memoryUpdateRequest, memory);
 
         List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(uid, images);
 
@@ -189,5 +193,18 @@ public class MemoryService {
             memory.updateMemoryImages(multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
         }
 
+    }
+
+
+
+    // TODO : 만약에 삭제 안 하면 빈 배열로 넣는다는거를 공지!
+    private void removeMemoryImages(MemoryUpdateRequest memoryUpdateRequest, Memory memory) {
+        if(!memoryUpdateRequest.getDeleteImageList().isEmpty())
+        {
+            for(Long deleteId : memoryUpdateRequest.getDeleteImageList())
+            {
+                memory.getMemoryImages().removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
+            }
+        }
     }
 }

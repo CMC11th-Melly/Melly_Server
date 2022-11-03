@@ -26,35 +26,45 @@ public class PlaceService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
+
     /**
      * 지도 상에 로그인 유저가 메모리를 등록한 장소들 표시
      */
     public List<PlaceListReponseDto> getMarkerPosition(String uid, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
         List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(user);
+
         return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, uid);
     }
 
+
+
     /**
-     * 좌표를 기준으로 장소 조회
+     * 좌표를 기준으로 장소 조회 (당장은 최적화 완료)
      */
     public PlaceResponseDto getPlaceByPosition(String uid, Double lat, Double lng)
     {
-        return placeDomainService.getPlace(uid, lat, lng);
+        return placeDomainService.getPlaceByPosition(uid, lat, lng);
     }
 
+
+
     /**
-     * PlaceId로 특정 장소 검색
+     * PlaceId로 특정 장소 검색(당장은 최적화 완료,인덱스 설정하기)
      */
-    public PlaceResponseDto placeSearchByMemory(String uid,Long placeId) {
+    public PlaceResponseDto searchPlaceByPlaceId(String uid,Long placeId) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        Place placeByMemory = placeQueryRepository.getPlaceByMemory(placeId);
+
+        Place placeByMemory = placeQueryRepository.searchPlaceByPlaceId(placeId);
         placeByMemory.setScraped(checkIsScraped(user,placeByMemory));
         return PlaceAssembler.placeResponseDto(placeByMemory,user);
 
     }
+
+
 
     private boolean checkIsScraped(User user, Place place)
     {
