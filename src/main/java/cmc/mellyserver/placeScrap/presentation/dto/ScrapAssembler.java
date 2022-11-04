@@ -1,23 +1,29 @@
 package cmc.mellyserver.placeScrap.presentation.dto;
 
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memoryScrap.application.dto.ScrapedMemoryResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.placeScrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.user.domain.User;
 
 import java.util.stream.Collectors;
 
 
 public class ScrapAssembler {
 
-    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(Place place)
+    public static ScrapedPlaceResponseDto scrapedPlaceResponseDto(User user, Place place)
     {
-        return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),
-                true,
+        return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
+                stream().
+                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
+                place.getIsScraped(),
+                place.getPlaceCategory(),
                 place.getPlaceName(),
-                place.getPlaceImage(),
-                place.getPlaceCategory()
+                GroupType.ALL,
+                place.getPlaceImage()
         );
 
 
