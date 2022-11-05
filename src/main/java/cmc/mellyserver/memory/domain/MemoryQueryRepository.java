@@ -52,6 +52,7 @@ public class MemoryQueryRepository {
         return query.select(Projections.constructor(MemorySearchDto.class, memory.place.id, memory.title))
                 .from(memory)
                 .where(memory.user.userSeq.eq(userSeq),
+                        memory.isReported.eq(false),
                         memory.title.contains(memoryName))
                 .distinct().fetch();
     }
@@ -98,6 +99,7 @@ public class MemoryQueryRepository {
                         eqPlace(placeId),
                         neUserId(uid),  // 로그인한 유저가 작성한 메모리가 아닐때
                         eqGroup(groupType),
+                        memory.isReported.eq(false),
                         memory.openType.eq(OpenType.ALL) // 전체 공개로 올린 메모리만 보여주기
                 ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -120,6 +122,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .where(
                         eqGroup(groupType),
+                        memory.isReported.eq(false),
                         memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
@@ -147,7 +150,7 @@ public class MemoryQueryRepository {
                 .where(
                         eqPlace(placeId),
                         eqGroup(groupType),
-
+                        memory.isReported.eq(false),
                         memory.openType.ne(OpenType.PRIVATE),
                         // 2. 내가 속해있는 그룹에 속해있는 사람들 -> 이건 작성자가 속해있는 그룹 체크
                         groupAndUser.group.id.in(

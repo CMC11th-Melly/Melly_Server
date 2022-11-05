@@ -8,6 +8,7 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
+import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
 import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
 
@@ -104,6 +105,9 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<MemoryReport> memoryReports = new ArrayList<>();
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {

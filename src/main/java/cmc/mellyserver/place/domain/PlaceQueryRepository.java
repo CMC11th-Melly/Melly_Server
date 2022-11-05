@@ -86,7 +86,7 @@ public class PlaceQueryRepository {
 
 
     /**
-     * 로그인 유저의 메모리가 존재하는 장소 조회 (최적화 완료)
+     * 로그인 유저의 메모리가 존재하는 장소 조회 (최적화 완료), 나의 메모리는 신고 당해도 나한테 보이도록 하기!
      */
     public List<Place> getPlaceUserMemoryExist(User user)
     {

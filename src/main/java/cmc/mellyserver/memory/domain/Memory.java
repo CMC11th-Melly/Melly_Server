@@ -7,14 +7,13 @@ import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.placeScrap.domain.PlaceScrap;
+import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
 import cmc.mellyserver.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +54,10 @@ public class Memory extends JpaBaseEntity {
 
     private String title;
 
-
     @Lob
     private String content;
+
+    private boolean isReported = false;
 
     private LocalDateTime visitedDate;
 
@@ -73,6 +73,9 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryScrap> scraps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    private List<MemoryReport> memoryReports = new ArrayList<>();
+
     public void setPlaceForMemory(Place place)
     {
         this.place = place;
@@ -81,6 +84,11 @@ public class Memory extends JpaBaseEntity {
     {
         this.user=  user;
         user.getMemories().add(this);
+    }
+
+    public void isReported(boolean reported)
+    {
+        this.isReported = reported;
     }
 
     public void updateMemory(String title, String content, List<String> keyword, Long groupId, GroupType groupType, String groupName, OpenType openType, LocalDateTime visitedDate, Long star)

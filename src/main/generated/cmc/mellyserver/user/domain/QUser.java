@@ -52,6 +52,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
 
+    public final ListPath<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport> memoryReports = this.<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport>createList("memoryReports", cmc.mellyserver.report.memoryReport.domain.MemoryReport.class, cmc.mellyserver.report.memoryReport.domain.QMemoryReport.class, PathInits.DIRECT2);
+
     public final ListPath<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap> memoryScraps = this.<cmc.mellyserver.memoryScrap.domain.MemoryScrap, cmc.mellyserver.memoryScrap.domain.QMemoryScrap>createList("memoryScraps", cmc.mellyserver.memoryScrap.domain.MemoryScrap.class, cmc.mellyserver.memoryScrap.domain.QMemoryScrap.class, PathInits.DIRECT2);
 
     public final StringPath nickname = createString("nickname");

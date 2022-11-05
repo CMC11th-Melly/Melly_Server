@@ -35,12 +35,16 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isReported = createBoolean("isReported");
+
     public final ListPath<String, StringPath> keyword = this.<String, StringPath>createList("keyword", String.class, StringPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
+
+    public final ListPath<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport> memoryReports = this.<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport>createList("memoryReports", cmc.mellyserver.report.memoryReport.domain.MemoryReport.class, cmc.mellyserver.report.memoryReport.domain.QMemoryReport.class, PathInits.DIRECT2);
 
     public final ListPath<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification> notifications = this.<cmc.mellyserver.notification.domain.Notification, cmc.mellyserver.notification.domain.QNotification>createList("notifications", cmc.mellyserver.notification.domain.Notification.class, cmc.mellyserver.notification.domain.QNotification.class, PathInits.DIRECT2);
 
