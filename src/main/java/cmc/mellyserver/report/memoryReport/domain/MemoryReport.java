@@ -24,14 +24,16 @@ public class MemoryReport {
     @JoinColumn(name = "memory_id")
     private Memory memory;
 
+    private String content;
 
 
-    public MemoryReport(User user, Memory memory)
+    public MemoryReport(User user, Memory memory,String content)
     {
         this.user = user;
         user.getMemoryReports().add(this);
         this.memory = memory;
         memory.getMemoryReports().add(this);
+        this.content = content;
     }
 
 }

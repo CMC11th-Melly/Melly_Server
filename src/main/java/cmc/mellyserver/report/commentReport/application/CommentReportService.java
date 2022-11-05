@@ -21,13 +21,13 @@ public class CommentReportService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final CommentRepository commentRepository;
 
-    public void createReport(String uid, Long commentId) {
+    public void createReport(String uid, Long commentId,String content) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
         });
-        reportRepository.save(new CommentReport(user,comment));
+        reportRepository.save(new CommentReport(user,comment,content));
         comment.setIsReported(true);
     }
 }

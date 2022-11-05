@@ -25,7 +25,7 @@ public class CommentReportController {
     @PostMapping
     public ResponseEntity<CommonResponse> createCommentReport(@AuthenticationPrincipal User user, @RequestBody CommentReportRequest commentReportRequest)
     {
-        commentReportService.createReport(user.getUsername(),commentReportRequest.getCommentId());
+        commentReportService.createReport(user.getUsername(),commentReportRequest.getCommentId(),commentReportRequest.getContent());
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 }

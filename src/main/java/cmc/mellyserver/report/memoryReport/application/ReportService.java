@@ -26,14 +26,14 @@ public class ReportService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     @Transactional
-    public void reportMemory(String uid, Long memoryId)
+    public void reportMemory(String uid, Long memoryId,String content)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
 
-        reportRepository.save(new MemoryReport(user,memory));
+        reportRepository.save(new MemoryReport(user,memory,content));
         memory.isReported(true);
 
     }

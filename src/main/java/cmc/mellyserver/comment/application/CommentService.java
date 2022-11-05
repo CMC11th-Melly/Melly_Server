@@ -147,7 +147,11 @@ public class CommentService {
             if(c.getParent() != null)
             {
                 // dto로 뿌려줄때 연관관게 맺는건가...? 부모가 누군지만 관리!
-                map.get(c.getParent().getId()).getChildren().add(dto);
+                if(map.getOrDefault(c.getParent().getId(),null) != null)
+                {
+                    map.get(c.getParent().getId()).getChildren().add(dto);
+                }
+
             }
             else
             {

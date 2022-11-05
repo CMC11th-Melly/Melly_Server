@@ -21,7 +21,7 @@ public class ReportController {
     @PostMapping
     public ResponseEntity<CommonResponse> reportMemory(@AuthenticationPrincipal User user, @RequestBody MemoryReportRequest memoryReportRequest)
     {
-         reportService.reportMemory(user.getUsername(), memoryReportRequest.getMemoryId());
+         reportService.reportMemory(user.getUsername(), memoryReportRequest.getMemoryId(),memoryReportRequest.getContent());
          return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 

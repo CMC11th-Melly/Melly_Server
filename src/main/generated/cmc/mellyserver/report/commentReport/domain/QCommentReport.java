@@ -24,6 +24,8 @@ public class QCommentReport extends EntityPathBase<CommentReport> {
 
     public final cmc.mellyserver.comment.domain.QComment comment;
 
+    public final StringPath content = createString("content");
+
     public final NumberPath<Long> reportId = createNumber("reportId", Long.class);
 
     public final cmc.mellyserver.user.domain.QUser user;

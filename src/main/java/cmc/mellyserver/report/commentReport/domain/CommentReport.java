@@ -24,14 +24,17 @@ public class CommentReport {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    private String content;
 
 
-    public CommentReport(User user, Comment comment)
+
+    public CommentReport(User user, Comment comment,String content)
     {
         this.user = user;
         user.getCommentReports().add(this);
         this.comment = comment;
         comment.getCommentReports().add(this);
+        this.content = content;
     }
 
 }

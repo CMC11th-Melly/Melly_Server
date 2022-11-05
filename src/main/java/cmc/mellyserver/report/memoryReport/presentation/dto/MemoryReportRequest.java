@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 public class MemoryReportRequest {
 
     private Long memoryId;
+    private String content;
 
 }

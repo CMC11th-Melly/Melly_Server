@@ -22,6 +22,8 @@ public class QMemoryReport extends EntityPathBase<MemoryReport> {
 
     public static final QMemoryReport memoryReport = new QMemoryReport("memoryReport");
 
+    public final StringPath content = createString("content");
+
     public final cmc.mellyserver.memory.domain.QMemory memory;
 
     public final NumberPath<Long> reportId = createNumber("reportId", Long.class);
