@@ -1199,6 +1199,7 @@ public class DataLoader {
 //
 //                List.of("즐거워요","그냥 그래요"), LocalDateTime.now(),
 //                List.of());
+
 //        memoryDomainService.createMemory(saveUser.getUserId(),
 //                37.503861,127.024144,
 //                "안녕하세요!","스타벅스","카페, 디저트","다음에 또 올래요~",4L,
