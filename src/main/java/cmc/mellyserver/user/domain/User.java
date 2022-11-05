@@ -129,7 +129,7 @@ public class User extends JpaBaseEntity {
         this.fcmToken = fcmToken;
     }
 
-    public void addPollData(RecommendGroup recommendGroup, String recommendPlace, RecommendActivity recommendActivity)
+    public void addPollData(RecommendGroup recommendGroup, String recommendPlace, String recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }

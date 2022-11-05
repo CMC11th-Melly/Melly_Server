@@ -14,5 +14,5 @@ public class SurveyRequest {
     @Schema(description = "FRIEND, FAMILY, COUPLE, COMPANY 중 하나 입력",example = "FRIEND")
     private RecommendGroup recommendGroup;
     private String recommendPlace;
-    private RecommendActivity recommendActivity;
+    private String recommendActivity;
 }

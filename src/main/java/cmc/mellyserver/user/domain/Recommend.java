@@ -23,7 +23,6 @@ public class Recommend {
 
     private String recommendPlace;
 
-    @Enumerated(EnumType.STRING)
-    private RecommendActivity recommendActivity;
+    private String recommendActivity;
 
 }
