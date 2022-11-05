@@ -23,7 +23,6 @@ public class ReportService {
 
     private final MemoryRepository memoryRepository;
     private final MemoryReportRepository reportRepository;
-    private final CommentRepository commentRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     @Transactional

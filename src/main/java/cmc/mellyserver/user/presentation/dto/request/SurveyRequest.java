@@ -13,7 +13,6 @@ public class SurveyRequest {
 
     @Schema(description = "FRIEND, FAMILY, COUPLE, COMPANY 중 하나 입력",example = "FRIEND")
     private RecommendGroup recommendGroup;
-    // TODO : ENUM 이름이 길어질 것 같은데, 이름으로 할지 INT형 숫자로 할지 결정하기
-    private RecommendPlace recommendPlace;
+    private String recommendPlace;
     private RecommendActivity recommendActivity;
 }

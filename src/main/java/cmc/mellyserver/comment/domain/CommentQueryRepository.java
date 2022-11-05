@@ -23,7 +23,10 @@ public class CommentQueryRepository {
         return query.selectFrom(comment)
                 .leftJoin(comment.parent)
                 .fetchJoin()
-                .where(comment.memory.id.eq(memoryId))
+                .where(
+                        comment.memory.id.eq(memoryId),
+                        comment.isReported.eq(false)
+                        )
                 .orderBy(
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdDate.asc()

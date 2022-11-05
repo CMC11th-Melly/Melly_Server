@@ -77,7 +77,7 @@ public class MemoryDomainService {
 
             memory.setKeyword(keyword);
             // 사용자가 방문한 장소 세팅
-            user.getVisitedPlace().add(savePlace.getId());
+//            user.getVisitedPlace().add(savePlace.getId());
             trendAnalyzer.addKeywordToRedis(savePlace.getPlaceName());
             return memoryRepository.save(memory);
         }
@@ -103,7 +103,7 @@ public class MemoryDomainService {
 
             memory.setPlaceForMemory(placeOpt.get());
             memory.setKeyword(keyword);
-            user.getVisitedPlace().add(placeOpt.get().getId());
+//            user.getVisitedPlace().add(placeOpt.get().getId());
             trendAnalyzer.addKeywordToRedis(placeOpt.get().getPlaceName());
             return memoryRepository.save(memory);
         }

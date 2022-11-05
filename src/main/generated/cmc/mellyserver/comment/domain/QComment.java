@@ -28,6 +28,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final ListPath<CommentLike, QCommentLike> commentLikes = this.<CommentLike, QCommentLike>createList("commentLikes", CommentLike.class, QCommentLike.class, PathInits.DIRECT2);
 
+    public final ListPath<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport> commentReports = this.<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport>createList("commentReports", cmc.mellyserver.report.commentReport.domain.CommentReport.class, cmc.mellyserver.report.commentReport.domain.QCommentReport.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     //inherited
@@ -36,6 +38,8 @@ public class QComment extends EntityPathBase<Comment> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final EnumPath<DeleteStatus> isDeleted = createEnum("isDeleted", DeleteStatus.class);
+
+    public final BooleanPath isReported = createBoolean("isReported");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;

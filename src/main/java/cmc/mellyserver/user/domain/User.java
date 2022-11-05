@@ -8,6 +8,7 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.placeScrap.domain.PlaceScrap;
+import cmc.mellyserver.report.commentReport.domain.CommentReport;
 import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
 import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
@@ -40,12 +41,12 @@ public class User extends JpaBaseEntity {
 
     private String profileImage;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "visited_place_table",
-            joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "visited_place") // 컬럼명 지정 (예외)
-    private Set<Long> visitedPlace = new HashSet<>();
+//    @ElementCollection
+//    @CollectionTable(
+//            name = "visited_place_table",
+//            joinColumns = @JoinColumn(name = "user_id"))
+//    @Column(name = "visited_place") // 컬럼명 지정 (예외)
+//    private Set<Long> visitedPlace = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -109,6 +110,9 @@ public class User extends JpaBaseEntity {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<MemoryReport> memoryReports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<CommentReport> commentReports = new ArrayList<>();
+
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
         this.nickname = nickname;
@@ -125,7 +129,7 @@ public class User extends JpaBaseEntity {
         this.fcmToken = fcmToken;
     }
 
-    public void addPollData(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity)
+    public void addPollData(RecommendGroup recommendGroup, String recommendPlace, RecommendActivity recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }

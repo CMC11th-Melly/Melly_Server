@@ -28,6 +28,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike> commentLikes = this.<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike>createList("commentLikes", cmc.mellyserver.comment.domain.CommentLike.class, cmc.mellyserver.comment.domain.QCommentLike.class, PathInits.DIRECT2);
 
+    public final ListPath<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport> commentReports = this.<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport>createList("commentReports", cmc.mellyserver.report.commentReport.domain.CommentReport.class, cmc.mellyserver.report.commentReport.domain.QCommentReport.class, PathInits.DIRECT2);
+
     public final ListPath<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment> comments = this.<cmc.mellyserver.comment.domain.Comment, cmc.mellyserver.comment.domain.QComment>createList("comments", cmc.mellyserver.comment.domain.Comment.class, cmc.mellyserver.comment.domain.QComment.class, PathInits.DIRECT2);
 
     //inherited
@@ -77,8 +79,6 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath userId = createString("userId");
 
     public final NumberPath<Long> userSeq = createNumber("userSeq", Long.class);
-
-    public final SetPath<Long, NumberPath<Long>> visitedPlace = this.<Long, NumberPath<Long>>createSet("visitedPlace", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);

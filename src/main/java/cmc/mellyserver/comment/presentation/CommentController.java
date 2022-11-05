@@ -23,7 +23,7 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final FCMService fcmService;
+
     @Operation(summary = "댓글에 좋아요 추가")
     @PostMapping("/like")
     public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest)

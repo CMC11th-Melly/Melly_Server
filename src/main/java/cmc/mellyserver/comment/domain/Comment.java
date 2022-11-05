@@ -3,6 +3,7 @@ package cmc.mellyserver.comment.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
+import cmc.mellyserver.report.commentReport.domain.CommentReport;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,9 +47,18 @@ public class Comment extends JpaBaseEntity {
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
+    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+    private List<CommentReport> commentReports = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;
+
+    private boolean isReported = false;
+
+    public void setIsReported(boolean isReported)
+    {
+        this.isReported = isReported;
+    }
 
     public void changeDeletedStatus(DeleteStatus deleteStatus) {
         this.isDeleted = deleteStatus;

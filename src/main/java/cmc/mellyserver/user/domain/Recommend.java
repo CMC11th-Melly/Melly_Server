@@ -21,8 +21,7 @@ public class Recommend {
     @Enumerated(EnumType.STRING)
     private RecommendGroup recommendGroup;
 
-    @Enumerated(EnumType.STRING)
-    private RecommendPlace recommendPlace;
+    private String recommendPlace;
 
     @Enumerated(EnumType.STRING)
     private RecommendActivity recommendActivity;
