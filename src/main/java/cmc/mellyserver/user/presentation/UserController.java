@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user,@RequestBody SurveyRequest surveyRequest)
     {
         userService.createSurvey(user.getUsername(),surveyRequest);
-        return ResponseEntity.ok(new CommonResponse(200,"설문조사 입력 완료"));
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
 
@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getPoll(@AuthenticationPrincipal User user)
     {
         PollRecommendResponse result = userService.getSurvey(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200,"설문 조사 기반 추천 조회", new SurveyRecommendResponseWrapper(result)));
+        return ResponseEntity.ok(new CommonResponse(200,"성공", new SurveyRecommendResponseWrapper(result)));
     }
 
 

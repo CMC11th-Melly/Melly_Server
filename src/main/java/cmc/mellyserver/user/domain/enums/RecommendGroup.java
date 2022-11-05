@@ -5,5 +5,5 @@ public enum RecommendGroup {
     FRIEND,
     COMPANY,
     COUPLE,
-    DEFAULT
+    ALL
 }
