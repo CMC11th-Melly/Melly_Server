@@ -1,12 +1,16 @@
 package cmc.mellyserver.comment.domain;
 
+import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cmc.mellyserver.comment.domain.QComment.*;
+import static cmc.mellyserver.memory.domain.QMemory.memory;
 
 @Repository
 public class CommentQueryRepository {
@@ -19,17 +23,30 @@ public class CommentQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Comment> findComment(Long memoryId) {
+    public List<Comment> findComment(Long memoryId, User loginUser) {
+
+        List<Long> userBlockedCommentId = loginUser.getCommentBlocks().stream().map(m -> m.getComment().getId()).collect(Collectors.toList());
         return query.selectFrom(comment)
                 .leftJoin(comment.parent)
                 .fetchJoin()
                 .where(
                         comment.memory.id.eq(memoryId),
-                        comment.isReported.eq(false)
+                        comment.isReported.eq(false),
+                        commentBlocked(userBlockedCommentId).not()
                         )
                 .orderBy(
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdDate.asc()
                 ).fetch();
+    }
+
+    private BooleanExpression commentBlocked(List<Long> compare) {
+
+        if(compare == null)
+        {
+            return null;
+        }
+
+        return comment.id.in(compare);
     }
 }

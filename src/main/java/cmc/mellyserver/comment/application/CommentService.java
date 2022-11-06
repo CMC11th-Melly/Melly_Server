@@ -42,7 +42,7 @@ public class CommentService {
      public CommentResponseDto getComment(String uid,Long memoryId)
      {
          User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-         List<Comment> comment = commentQueryRepository.findComment(memoryId);
+         List<Comment> comment = commentQueryRepository.findComment(memoryId,user);
          return convertNestedStructure(comment,user);
      }
 
