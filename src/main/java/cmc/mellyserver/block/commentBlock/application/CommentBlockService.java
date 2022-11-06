@@ -30,6 +30,5 @@ public class CommentBlockService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
         });
         blockRepository.save(new CommentBlock(user,comment));
-        comment.setIsReported(true);
     }
 }
