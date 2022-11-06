@@ -1,6 +1,7 @@
 package cmc.mellyserver.comment.domain;
 
 
+import cmc.mellyserver.block.commentBlock.domain.CommentBlock;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.report.commentReport.domain.CommentReport;
@@ -49,6 +50,9 @@ public class Comment extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+    private List<CommentBlock> commentBlocks = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;

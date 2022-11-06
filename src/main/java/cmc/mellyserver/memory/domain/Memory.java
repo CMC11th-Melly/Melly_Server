@@ -1,5 +1,6 @@
 package cmc.mellyserver.memory.domain;
 
+import cmc.mellyserver.block.memoryBlock.domain.MemoryBlock;
 import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.group.domain.enums.GroupType;
@@ -75,6 +76,9 @@ public class Memory extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
     private List<MemoryReport> memoryReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
 
     public void setPlaceForMemory(Place place)
     {

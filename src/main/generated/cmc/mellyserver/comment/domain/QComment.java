@@ -26,6 +26,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final ListPath<Comment, QComment> children = this.<Comment, QComment>createList("children", Comment.class, QComment.class, PathInits.DIRECT2);
 
+    public final ListPath<cmc.mellyserver.block.commentBlock.domain.CommentBlock, cmc.mellyserver.block.commentBlock.domain.QCommentBlock> commentBlocks = this.<cmc.mellyserver.block.commentBlock.domain.CommentBlock, cmc.mellyserver.block.commentBlock.domain.QCommentBlock>createList("commentBlocks", cmc.mellyserver.block.commentBlock.domain.CommentBlock.class, cmc.mellyserver.block.commentBlock.domain.QCommentBlock.class, PathInits.DIRECT2);
+
     public final ListPath<CommentLike, QCommentLike> commentLikes = this.<CommentLike, QCommentLike>createList("commentLikes", CommentLike.class, QCommentLike.class, PathInits.DIRECT2);
 
     public final ListPath<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport> commentReports = this.<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport>createList("commentReports", cmc.mellyserver.report.commentReport.domain.CommentReport.class, cmc.mellyserver.report.commentReport.domain.QCommentReport.class, PathInits.DIRECT2);

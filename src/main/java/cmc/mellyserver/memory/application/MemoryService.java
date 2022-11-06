@@ -108,7 +108,8 @@ public class MemoryService {
      */
     public Slice<Memory> getOtherMemory(Pageable pageable, String uid,Long placeId, GroupType groupType)
     {
-        return memoryQueryRepository.searchMemoryOtherCreate(pageable,uid,placeId,groupType);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user,placeId,groupType);
     }
 
 
@@ -152,7 +153,8 @@ public class MemoryService {
      */
     public Slice<MemoryForGroupResponse> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType)
     {
-        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, uid, placeId,groupType);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId,groupType);
         return MemoryAssembler.memoryForGroupResponseSlice(myGroupMemory);
     }
 

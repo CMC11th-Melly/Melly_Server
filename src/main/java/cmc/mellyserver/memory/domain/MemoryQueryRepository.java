@@ -6,8 +6,10 @@ import cmc.mellyserver.memory.domain.enums.OpenType;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.place.domain.QPlace;
 import cmc.mellyserver.user.domain.User;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -87,9 +89,12 @@ public class MemoryQueryRepository {
     /**
      * 장소 상세 - 다른 사람이 작성한 메모리 (최적화 완료,인덱스 추가 필요)
      */
-    public Slice<Memory> searchMemoryOtherCreate(Pageable pageable, String uid, Long placeId,GroupType groupType) {
+    public Slice<Memory> searchMemoryOtherCreate(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+
+        // 리스트
+        List<Long> userBlockedMemoryId = loginUser.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
 
         List<Memory> results = query.select(memory)
                 .from(memory)
@@ -97,9 +102,10 @@ public class MemoryQueryRepository {
                 .join(memory.user,user).fetchJoin()
                 .where(
                         eqPlace(placeId),
-                        neUserId(uid),  // 로그인한 유저가 작성한 메모리가 아닐때
+                        neUser(loginUser),  // 로그인한 유저가 작성한 메모리가 아닐때
                         eqGroup(groupType),
                         memory.isReported.eq(false),
+                        memoryBlocked(userBlockedMemoryId).not(),
                         memory.openType.eq(OpenType.ALL) // 전체 공개로 올린 메모리만 보여주기
                 ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -110,7 +116,6 @@ public class MemoryQueryRepository {
     }
 
 
-
     /**
      * 마이페이지 - 내가 스크랩한 메모리 (차후에 추가 및 최적화 예정)
      */
@@ -118,12 +123,15 @@ public class MemoryQueryRepository {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
+        List<Long> userBlockedMemoryId = user.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .where(
                         eqGroup(groupType),
                         memory.isReported.eq(false),
-                        memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList()))
+                        memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList())),
+                        memoryBlocked(userBlockedMemoryId).not()
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -138,10 +146,10 @@ public class MemoryQueryRepository {
     /**
      * 마이페이지 - 내 그룹만 필터 조회 (최적화 완료,인덱스 필요)
      */
-    public Slice<Memory> getMyGroupMemory(Pageable pageable, String uid, Long placeId,GroupType groupType) {
+    public Slice<Memory> getMyGroupMemory(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
-
+        List<Long> userBlockedMemoryId = loginUser.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .join(memory.user,user).fetchJoin()
@@ -158,10 +166,11 @@ public class MemoryQueryRepository {
                                         .from(groupAndUser)
                                         .join(groupAndUser.group, userGroup)
                                         .join(groupAndUser.user, user)
-                                        .where(user.userId.eq(uid))
+                                        .where(user.userId.eq(loginUser.getUserId()))
                         ),
-                        checkGroup(uid).not(),
-                        neUserId(uid)
+                        memoryBlocked(userBlockedMemoryId).not(),
+                        checkGroup(loginUser.getUserId()).not(),
+                        neUserId(loginUser.getUserId())
                 )
                 .distinct()
                 .offset(pageable.getOffset())
@@ -190,6 +199,16 @@ public class MemoryQueryRepository {
                         .join(groupAndUser.user, user)
                         .where(user.userId.eq(uid))
         ).and(memory.openType.eq(OpenType.GROUP));
+    }
+
+    private BooleanExpression memoryBlocked(List<Long> compare) {
+
+        if(compare == null)
+        {
+            return null;
+        }
+
+        return memory.id.in(compare);
     }
 
 
@@ -225,6 +244,15 @@ public class MemoryQueryRepository {
     }
 
 
+
+    private BooleanExpression neUser(User user)
+    {
+        if(user == null)
+        {
+            return null;
+        }
+        return memory.user.userId.ne(user.getUserId());
+    }
 
     private BooleanExpression neUserId(String uid)
     {

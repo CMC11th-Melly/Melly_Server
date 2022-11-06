@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cmc.mellyserver.group.domain.QGroupAndUser.groupAndUser;
 import static cmc.mellyserver.group.domain.QUserGroup.userGroup;
@@ -45,8 +46,9 @@ public class UserGroupQueryRepository {
 
 
 
-    public Slice<Memory> getMyGroupMemory(Pageable pageable, Long groupId,Long userSeq) {
+    public Slice<Memory> getMyGroupMemory(Pageable pageable, Long groupId,User loginUser,Long userSeq) {
 
+        List<Long> userBlockedMemoryId = loginUser.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
         // 1. 메모리를 가져올꺼야
@@ -63,6 +65,7 @@ public class UserGroupQueryRepository {
                         // 2. 메모리의 그룹도 이 그룹이여야 함.
                         memory.groupInfo.groupId.eq(groupId),
                         memory.openType.ne(OpenType.PRIVATE),
+                        memoryBlocked(userBlockedMemoryId).not(),
                         eqUser(userSeq)
 
                 )
@@ -114,6 +117,17 @@ public class UserGroupQueryRepository {
         }
 
         return ORDERS;
+    }
+
+
+    private BooleanExpression memoryBlocked(List<Long> compare) {
+
+        if(compare == null)
+        {
+            return null;
+        }
+
+        return memory.id.in(compare);
     }
 
 

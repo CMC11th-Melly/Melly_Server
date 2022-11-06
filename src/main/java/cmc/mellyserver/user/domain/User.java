@@ -1,5 +1,7 @@
 package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.block.commentBlock.domain.CommentBlock;
+import cmc.mellyserver.block.memoryBlock.domain.MemoryBlock;
 import cmc.mellyserver.comment.domain.Comment;
 import cmc.mellyserver.comment.domain.CommentLike;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
@@ -12,18 +14,19 @@ import cmc.mellyserver.report.commentReport.domain.CommentReport;
 import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
 import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
 public class User extends JpaBaseEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +44,6 @@ public class User extends JpaBaseEntity {
 
     private String profileImage;
 
-//    @ElementCollection
-//    @CollectionTable(
-//            name = "visited_place_table",
-//            joinColumns = @JoinColumn(name = "user_id"))
-//    @Column(name = "visited_place") // 컬럼명 지정 (예외)
-//    private Set<Long> visitedPlace = new HashSet<>();
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -64,7 +60,7 @@ public class User extends JpaBaseEntity {
     private Recommend recommend;
 
     @Column(name = "store_capacity")
-    private Double storeCapacity;
+    private Double storeCapacity;  // 아직 필요한게 맞는지는 모르겠다.
 
     private String fcmToken;
 
@@ -73,18 +69,6 @@ public class User extends JpaBaseEntity {
     private boolean enableCommentLike;
 
     private boolean enableComment;
-
-    public void setEnableAppPush(boolean enableAppPush) {
-        this.enableAppPush = enableAppPush;
-    }
-
-    public void setEnableCommentLike(boolean enableCommentLike) {
-        this.enableCommentLike = enableCommentLike;
-    }
-
-    public void setEnableComment(boolean enableComment) {
-        this.enableComment = enableComment;
-    }
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Memory> memories = new ArrayList<>();
@@ -112,6 +96,21 @@ public class User extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
+
+//    @ElementCollection
+//    @CollectionTable(
+//            name = "block_memory_table",
+//            joinColumns = @JoinColumn(name = "user_seq"))
+//    @Column(name = "block_memory")
+//    private Set<Long> blockedMemory = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<CommentBlock> commentBlocks = new ArrayList<>();
+
+
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
@@ -181,5 +180,17 @@ public class User extends JpaBaseEntity {
        {
            this.ageGroup = ageGroup;
        }
+    }
+
+    public void setEnableAppPush(boolean enableAppPush) {
+        this.enableAppPush = enableAppPush;
+    }
+
+    public void setEnableCommentLike(boolean enableCommentLike) {
+        this.enableCommentLike = enableCommentLike;
+    }
+
+    public void setEnableComment(boolean enableComment) {
+        this.enableComment = enableComment;
     }
 }

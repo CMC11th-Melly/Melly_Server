@@ -112,9 +112,9 @@ public class UserController {
      */
     @Operation(summary = "유저가 속해 있는 그룹의 메모리 조회",description = "유저의 그룹 내 구성원들이 해당 그룹을 대상으로 그룹공개/전체공개로 작성한 메모리 목록입니다")
     @GetMapping("/group/{groupId}/memory")
-    public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long userSeq)
+    public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(@AuthenticationPrincipal User user, Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long uid)
     {
-        Slice<GroupMemory> results = userService.getMemoryBelongToMyGroup(pageable, groupId,userSeq);
+        Slice<GroupMemory> results = userService.getMemoryBelongToMyGroup(pageable, groupId,user.getUsername(),uid);
         return ResponseEntity.ok(new CommonResponse(200,"유저가 속해있는 그룹의 메모리 조회",results));
     }
 

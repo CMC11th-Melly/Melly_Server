@@ -26,6 +26,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<cmc.mellyserver.user.domain.enums.AgeGroup> ageGroup = createEnum("ageGroup", cmc.mellyserver.user.domain.enums.AgeGroup.class);
 
+    public final ListPath<cmc.mellyserver.block.commentBlock.domain.CommentBlock, cmc.mellyserver.block.commentBlock.domain.QCommentBlock> commentBlocks = this.<cmc.mellyserver.block.commentBlock.domain.CommentBlock, cmc.mellyserver.block.commentBlock.domain.QCommentBlock>createList("commentBlocks", cmc.mellyserver.block.commentBlock.domain.CommentBlock.class, cmc.mellyserver.block.commentBlock.domain.QCommentBlock.class, PathInits.DIRECT2);
+
     public final ListPath<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike> commentLikes = this.<cmc.mellyserver.comment.domain.CommentLike, cmc.mellyserver.comment.domain.QCommentLike>createList("commentLikes", cmc.mellyserver.comment.domain.CommentLike.class, cmc.mellyserver.comment.domain.QCommentLike.class, PathInits.DIRECT2);
 
     public final ListPath<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport> commentReports = this.<cmc.mellyserver.report.commentReport.domain.CommentReport, cmc.mellyserver.report.commentReport.domain.QCommentReport>createList("commentReports", cmc.mellyserver.report.commentReport.domain.CommentReport.class, cmc.mellyserver.report.commentReport.domain.QCommentReport.class, PathInits.DIRECT2);
@@ -53,6 +55,8 @@ public class QUser extends EntityPathBase<User> {
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final ListPath<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory> memories = this.<cmc.mellyserver.memory.domain.Memory, cmc.mellyserver.memory.domain.QMemory>createList("memories", cmc.mellyserver.memory.domain.Memory.class, cmc.mellyserver.memory.domain.QMemory.class, PathInits.DIRECT2);
+
+    public final ListPath<cmc.mellyserver.block.memoryBlock.domain.MemoryBlock, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock> memoryBlocks = this.<cmc.mellyserver.block.memoryBlock.domain.MemoryBlock, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock>createList("memoryBlocks", cmc.mellyserver.block.memoryBlock.domain.MemoryBlock.class, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock.class, PathInits.DIRECT2);
 
     public final ListPath<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport> memoryReports = this.<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport>createList("memoryReports", cmc.mellyserver.report.memoryReport.domain.MemoryReport.class, cmc.mellyserver.report.memoryReport.domain.QMemoryReport.class, PathInits.DIRECT2);
 

@@ -39,7 +39,8 @@ public class PlaceAssembler {
     {
         return new PlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
                 stream().
-                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
+                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
+                place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId()))).count(),
                 place.getIsScraped(),
                 place.getPlaceCategory(),
                 place.getPlaceName(),

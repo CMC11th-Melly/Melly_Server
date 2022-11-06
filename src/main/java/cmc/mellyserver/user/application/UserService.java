@@ -79,9 +79,10 @@ public class UserService {
     }
 
 
-    public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable, Long groupId,Long userSeq) {
+    public Slice<GroupMemory> getMemoryBelongToMyGroup(Pageable pageable,Long groupId,String uid,Long userSeq) {
 
-        Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,userSeq);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        Slice<Memory> myGroupMemory = userGroupQueryRepository.getMyGroupMemory(pageable, groupId,user,userSeq);
         return myGroupMemory.map(m -> new GroupMemory(m.getPlace().getId(),
                 m.getPlace().getPlaceName(),
                 m.getId(),

@@ -42,6 +42,8 @@ public class QMemory extends EntityPathBase<Memory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final ListPath<cmc.mellyserver.block.memoryBlock.domain.MemoryBlock, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock> memoryBlocks = this.<cmc.mellyserver.block.memoryBlock.domain.MemoryBlock, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock>createList("memoryBlocks", cmc.mellyserver.block.memoryBlock.domain.MemoryBlock.class, cmc.mellyserver.block.memoryBlock.domain.QMemoryBlock.class, PathInits.DIRECT2);
+
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 
     public final ListPath<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport> memoryReports = this.<cmc.mellyserver.report.memoryReport.domain.MemoryReport, cmc.mellyserver.report.memoryReport.domain.QMemoryReport>createList("memoryReports", cmc.mellyserver.report.memoryReport.domain.MemoryReport.class, cmc.mellyserver.report.memoryReport.domain.QMemoryReport.class, PathInits.DIRECT2);

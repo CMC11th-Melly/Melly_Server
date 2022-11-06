@@ -59,6 +59,9 @@ public class MemoryController {
 
 
 
+    /**
+     * 메모리 차단 반영 완료
+     */
     @Operation(summary = "다른 사람들이 전체 공개로 작성한 메모리 조회", description = "- 메모리 생성 날짜(연월일), 키워드로 필터링 가능" +
             "\n- 연월일 데이터 보낼때는 20221010 형식으로 String 보내주시면 감사하겠습니다!")
     @GetMapping("/other/place/{placeId}")
@@ -72,7 +75,9 @@ public class MemoryController {
     }
 
 
-
+    /**
+     * 메모리 차단 반영 완료
+     */
     @Operation(summary = "내가 속해있는 그룹의 사람이 이 장소에 남긴 메모리 조회")
     @GetMapping("/group/place/{placeId}")
     public ResponseEntity<CommonResponse> getMyGroupMemory(           @AuthenticationPrincipal User user,
@@ -91,7 +96,6 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images,
                                                @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
-        System.out.println("hello" + LocalDateTime.now());
         memoryService.createMemory(user.getUsername(), images, placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
@@ -128,7 +132,9 @@ public class MemoryController {
     }
 
 
-
+    /**
+     * 내가 작성한 메모리 중 고르는 거라서 메모리 차단 설정 필요 없음
+     */
     @Operation(summary = "검색창에서 메모리 제목으로 검색")
     @GetMapping("/search")
     public ResponseEntity<CommonResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName)
