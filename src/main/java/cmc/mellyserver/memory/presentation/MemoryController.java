@@ -10,6 +10,8 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.memory.presentation.dto.response.GetMemoryForPlaceResponse;
+import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
 import cmc.mellyserver.memory.presentation.dto.wrapper.*;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,8 +55,8 @@ public class MemoryController {
                                                         @PathVariable Long placeId,
                                                         @RequestParam(required = false) GroupType groupType)
     {
-        Slice<Memory> result = memoryService.getUserMemory(pageable,user.getUsername(), placeId, groupType);
-        return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회", new GetMemoryForPlaceResponseWrapper(result.getContent().stream().count(), MemoryAssembler.getMemoryForPlaceResponse(result))));
+        Slice<GetMemoryForPlaceResponse> userMemory = memoryService.getUserMemory(pageable, user.getUsername(), placeId, groupType);
+        return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회", new GetMemoryForPlaceResponseWrapper(userMemory.getContent().stream().count(),userMemory)));
     }
 
 
@@ -70,8 +72,8 @@ public class MemoryController {
                                                          @RequestParam(required = false) GroupType groupType,
                                                          @ParameterObject @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable)
     {
-        Slice<Memory> result = memoryService.getOtherMemory(pageable, user.getUsername(), placeId, groupType);
-        return ResponseEntity.ok(new CommonResponse(200, "성공", new GetOtherMemoryForPlaceResponseWrapper(result.stream().count(),MemoryAssembler.getOtherMemoryForPlaceResponses(result))));
+        Slice<GetOtherMemoryForPlaceResponse> otherMemory = memoryService.getOtherMemory(pageable, user.getUsername(), placeId, groupType);
+        return ResponseEntity.ok(new CommonResponse(200, "성공", new GetOtherMemoryForPlaceResponseWrapper(otherMemory.stream().count(),otherMemory)));
     }
 
 

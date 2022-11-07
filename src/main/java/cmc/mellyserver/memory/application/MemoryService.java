@@ -19,6 +19,8 @@ import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.memory.presentation.dto.response.GetMemoryForPlaceResponse;
+import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -96,9 +98,11 @@ public class MemoryService {
     /**
      * 장소 상세 - 로그인한 유저가 이 장소에 작성한 메모리 조회
      */
-    public Slice<Memory> getUserMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
+    public Slice<GetMemoryForPlaceResponse> getUserMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
     {
-        return memoryQueryRepository.searchMemoryUserCreate(pageable,uid, placeId, groupType);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        Slice<Memory> memories = memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserId(), placeId, groupType);
+        return MemoryAssembler.getMemoryForPlaceResponse(memories,user);
     }
 
 
@@ -106,10 +110,11 @@ public class MemoryService {
     /**
      * 장소 상세 - 로그인 유저가 아닌 다른 사람이 이 장소에 작성한 메모리 조회
      */
-    public Slice<Memory> getOtherMemory(Pageable pageable, String uid,Long placeId, GroupType groupType)
+    public Slice<GetOtherMemoryForPlaceResponse> getOtherMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return memoryQueryRepository.searchMemoryOtherCreate(pageable,user,placeId,groupType);
+        Slice<Memory> memories = memoryQueryRepository.searchMemoryOtherCreate(pageable, user, placeId, groupType);
+        return MemoryAssembler.getOtherMemoryForPlaceResponses(memories,user);
     }
 
 
@@ -155,7 +160,7 @@ public class MemoryService {
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, user, placeId,groupType);
-        return MemoryAssembler.memoryForGroupResponseSlice(myGroupMemory);
+        return MemoryAssembler.memoryForGroupResponseSlice(myGroupMemory,user);
     }
 
 

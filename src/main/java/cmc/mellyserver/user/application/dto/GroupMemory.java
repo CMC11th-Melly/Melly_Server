@@ -31,6 +31,8 @@ public class GroupMemory {
     private String groupName;
     @Schema(example = "4.5")
     private Long stars;
+    @Schema(description = "로그인 유저가 작성한 메모리인지 판별")
+    private boolean loginUserWrite;
     @Schema(example = "기뻐요, 그저 그래요")
     private List<String> keyword;
     @Schema(example = "202210142310")

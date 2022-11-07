@@ -92,9 +92,7 @@ public class MemoryQueryRepository {
     public Slice<Memory> searchMemoryOtherCreate(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
-
-        // 리스트
-        List<Long> userBlockedMemoryId = loginUser.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+        List<Long> userBlockedMemoryId = getBlockedMemoryId(loginUser);
 
         List<Memory> results = query.select(memory)
                 .from(memory)
@@ -122,8 +120,7 @@ public class MemoryQueryRepository {
     public Slice<Memory> getScrapedMemory(Pageable pageable, User user,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
-
-        List<Long> userBlockedMemoryId = user.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+        List<Long> userBlockedMemoryId = getBlockedMemoryId(user);
 
         List<Memory> results = query.select(memory)
                 .from(memory)
@@ -149,7 +146,8 @@ public class MemoryQueryRepository {
     public Slice<Memory> getMyGroupMemory(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
-        List<Long> userBlockedMemoryId = loginUser.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+        List<Long> userBlockedMemoryId = getBlockedMemoryId(loginUser);
+
         List<Memory> results = query.select(memory)
                 .from(memory)
                 .join(memory.user,user).fetchJoin()
@@ -182,7 +180,10 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
-
+    private List<Long> getBlockedMemoryId(User user)
+    {
+        return user.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+    }
 
     private BooleanExpression checkGroup(String uid) {
 

@@ -34,6 +34,8 @@ public class GetMemoryForPlaceResponse {
     private Long stars;
     @Schema(example = "기뻐요, 그저 그래요")
     private List<String> keyword;
+    @Schema(description = "로그인 유저가 작성한 메모리인지 판별")
+    private boolean loginUserWrite;
     @Schema(example = "202210142310")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;

@@ -32,18 +32,8 @@ public class MemoryBlockService {
         });
 
         blockRepository.save(new MemoryBlock(user,memory));
-//        user.getBlockedMemory().add(memory.getId());
 
     }
 
-//    @Transactional
-//    public void reportComment(String uid, Long commentId) {
-//
-//        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-//        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-//            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
-//        });
-//        reportRepository.save(new Report(user,, ReportType.MEMORY));
-//        memory.isReported(true);
-//    }
+
 }

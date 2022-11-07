@@ -24,6 +24,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     @Operation(summary = "댓글에 좋아요 추가")
     @PostMapping("/like")
     public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest)
@@ -31,6 +32,7 @@ public class CommentController {
              commentService.saveCommentLike(user.getUsername(),likeRequest.getCommentId());
              return ResponseEntity.ok(new CommonResponse(200,"댓글에 좋아요 추가 완료"));
     }
+
 
 
     @Operation(summary = "댓글 좋아요 삭제")
@@ -42,6 +44,7 @@ public class CommentController {
     }
 
 
+
     @Operation(summary = "댓글 달기")
     @PostMapping
     public ResponseEntity<CommonResponse> saveComment(@AuthenticationPrincipal User user, @RequestBody CommentRequest commentRequest)
@@ -49,6 +52,7 @@ public class CommentController {
          commentService.saveComment(user.getUsername(),commentRequest);
          return ResponseEntity.ok(new CommonResponse(200,"댓글 추가 완료"));
     }
+
 
 
     @Operation(summary = "댓글 조회")
@@ -59,6 +63,8 @@ public class CommentController {
         return ResponseEntity.ok(new CommonResponse(200,"댓글 조회",comment));
     }
 
+
+
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommonResponse> removeComment(@PathVariable Long commentId)
@@ -66,6 +72,8 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok(new CommonResponse(200,"댓글 삭제 완료"));
     }
+
+
 
     @Operation(summary = "댓글 수정")
     @PutMapping("/{commentId}")

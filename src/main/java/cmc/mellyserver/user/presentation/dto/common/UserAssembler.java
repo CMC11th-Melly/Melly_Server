@@ -3,6 +3,7 @@ package cmc.mellyserver.user.presentation.dto.common;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
+import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponse;
 import cmc.mellyserver.user.presentation.dto.response.GetUserMemoryResponse;
 import org.springframework.data.domain.Slice;
@@ -13,10 +14,10 @@ import java.util.stream.Collectors;
 public class UserAssembler {
 
 
-    public static Slice<GetUserMemoryResponse> getUserMemoryResponses(Slice<Memory> memories)
+    public static Slice<GetUserMemoryResponse> getUserMemoryResponses(Slice<Memory> memories, User user)
     {
         return memories.map(m -> new GetUserMemoryResponse(m.getPlace().getId(),m.getPlace().getPlaceName(),m.getId(),m.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()),
-                m.getTitle(),m.getContent(),m.getGroupInfo().getGroupType(),m.getGroupInfo().getGroupName(),m.getStars(),m.getKeyword(),m.getVisitedDate()
+                m.getTitle(),m.getContent(),m.getGroupInfo().getGroupType(),m.getGroupInfo().getGroupName(),m.getStars(),m.getKeyword(),user.getMemories().stream().anyMatch((um -> um.getId().equals(m.getId()))),m.getVisitedDate()
                 ));
     }
 

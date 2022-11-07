@@ -21,6 +21,7 @@ import cmc.mellyserver.user.presentation.dto.common.*;
 import cmc.mellyserver.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
+import cmc.mellyserver.user.presentation.dto.response.GetUserMemoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,7 @@ public class UserController {
     private final UserService userService;
 
 
+    
     @Operation(summary = "유저 회원가입시 설문조사(테스트 필요한 API입니다)")
     @PostMapping("/survey")
     public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user,@RequestBody SurveyRequest surveyRequest)
@@ -90,8 +92,8 @@ public class UserController {
                                                          @PageableDefault(sort = "visitedDate", direction = Sort.Direction.ASC,size = 10) Pageable pageable,
                                                          @RequestParam(required = false) GroupType groupType )
     {
-        Slice<Memory> userMemory = userService.getUserMemory(pageable, user.getUsername(), groupType);
-        return ResponseEntity.ok(new CommonResponse(200, "유저가 작성한 메모리 조회", new GetUserMemoryResponseWrapper(UserAssembler.getUserMemoryResponses(userMemory))));
+        Slice<GetUserMemoryResponse> userMemory = userService.getUserMemory(pageable, user.getUsername(), groupType);
+        return ResponseEntity.ok(new CommonResponse(200, "유저가 작성한 메모리 조회", new GetUserMemoryResponseWrapper(userMemory)));
     }
 
 

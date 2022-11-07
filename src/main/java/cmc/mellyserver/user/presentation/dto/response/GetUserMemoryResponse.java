@@ -26,7 +26,6 @@ public class GetUserMemoryResponse {
     private String title;
     @Schema(example = "다음에 친구들 데리고 다시 와야지!")
     private String content;
-
     @Schema(example = "FRIEND")
     private GroupType groupType;
     @Schema(example = "떡잎마을방범대")
@@ -35,6 +34,7 @@ public class GetUserMemoryResponse {
     private Long stars;
     @Schema(example = "최고에요")
     private List<String> keyword;
+    private boolean loginUserWrite;
     @Schema(example = "202210141830")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;

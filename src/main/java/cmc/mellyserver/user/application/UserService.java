@@ -14,8 +14,10 @@ import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
+import cmc.mellyserver.user.presentation.dto.common.UserAssembler;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
+import cmc.mellyserver.user.presentation.dto.response.GetUserMemoryResponse;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -57,9 +59,11 @@ public class UserService {
     }
 
 
-    public Slice<Memory> getUserMemory(Pageable pageable, String uid, GroupType groupType)
+    public Slice<GetUserMemoryResponse> getUserMemory(Pageable pageable, String uid, GroupType groupType)
     {
-        return memoryQueryRepository.searchMemoryUserCreate(pageable, uid, null, groupType);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        Slice<Memory> memories = memoryQueryRepository.searchMemoryUserCreate(pageable, uid, null, groupType);
+        return UserAssembler.getUserMemoryResponses(memories, user);
     }
 
 
@@ -92,6 +96,7 @@ public class UserService {
                 m.getGroupInfo().getGroupType(),
                 m.getGroupInfo().getGroupName(),
                 m.getStars(),
+                user.getMemories().stream().anyMatch((um -> um.getId().equals(m.getId()))),
                 m.getKeyword(),
                 m.getVisitedDate()));
 

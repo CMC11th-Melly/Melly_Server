@@ -65,6 +65,8 @@ public class CommentService {
         commentRepository.save(Comment.createComment(commentRequest.getContent(),user,memory,parent,commentRequest.getMentionUserId()));
      }
 
+
+
     @Transactional
     public void updateComment(Long commentId, String content)
     {
@@ -73,6 +75,7 @@ public class CommentService {
         });
         comment.updateComment(content);
     }
+
 
 
     @Transactional
@@ -88,6 +91,8 @@ public class CommentService {
         }
     }
 
+
+
     @Transactional
     public void saveCommentLike(String uid, Long commentId) {
 
@@ -99,6 +104,8 @@ public class CommentService {
         commentLikeRepository.save(commentLike);
     }
 
+
+
     @Transactional
     public void deleteCommentLike(Long commentId,String uid) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
@@ -107,6 +114,7 @@ public class CommentService {
         });
         commentLikeRepository.delete(commentLike);
     }
+
 
 
     private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
@@ -118,25 +126,28 @@ public class CommentService {
     }
 
 
+
     private CommentResponseDto convertNestedStructure(List<Comment> comments,User user) {
 
         List<CommentDto> result = new ArrayList<>();
         Map<Long, CommentDto> map = new HashMap<>();
-        int cnt = (int) comments
-                .stream()
-                .filter(c -> c.getIsDeleted().equals(DeleteStatus.N))
-                .count();
+
+        int cnt = (int) comments.stream().filter(c -> c.getIsDeleted().equals(DeleteStatus.N)).count();
 
         comments.stream().forEach(c -> {
-            // 댓글 dto 만들고
+
             CommentDto dto;
+
             if(c.getMetionUser() != null)
             {
                 User mentionUser = userRepository.findById(c.getMetionUser()).orElseThrow(() -> {
                     throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
                 });
+
                 dto = convertCommentToDto(c,user,mentionUser.getNickname());
-            }else{
+            }
+            else
+            {
                 dto = convertCommentToDto(c,user,null);
             }
 
@@ -158,9 +169,8 @@ public class CommentService {
                 result.add(dto);
             }
         });
+
         return new CommentResponseDto(cnt,result);
     }
-
-
 
 }
