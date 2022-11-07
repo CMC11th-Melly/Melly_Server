@@ -57,9 +57,7 @@ public class PlaceScrapDomainService {
     }
 
 
-    /**
-     * 스크랩 생성
-     */
+
     @Transactional
     public void createScrap(String uid, Double lat, Double lng, ScrapType scrapType,String placeName,String placeCategory)
     {
