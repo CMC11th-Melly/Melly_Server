@@ -22,8 +22,8 @@ public class CommentDto implements Serializable {
 
     private Long id;
     private String content;
-    private Boolean isLoginUserWrite;
-    private Boolean isLoginUserLike;
+    private boolean loginUserWrite;
+    private boolean loginUserLike;
     private int likeCount;
     private String mentionUserName;
     private Long writerId;
@@ -38,8 +38,8 @@ public class CommentDto implements Serializable {
     public CommentDto(Long id, String content,Boolean isLoginUserWrite,Boolean isLoginUserLike, int likeCount,String mentionUserName,Long writerId, String nickname,String profileImage,LocalDateTime createdDate) {
         this.id = id;
         this.content = content;
-        this.isLoginUserWrite = isLoginUserWrite;
-        this.isLoginUserLike = isLoginUserLike;
+        this.loginUserWrite = isLoginUserWrite;
+        this.loginUserLike = isLoginUserLike;
         this.likeCount = likeCount;
         this.createdDate = createdDate;
         this.mentionUserName = mentionUserName;
@@ -57,11 +57,11 @@ public class CommentDto implements Serializable {
 
         if(comment.getWriter().getUserId().equals(user.getUserId()))
         {
-            commentDto.setIsLoginUserWrite(true);
+            commentDto.setLoginUserWrite(true);
         }
         if(comment.getCommentLikes().stream().anyMatch(cl -> user.getCommentLikes().contains(cl)))
         {
-            commentDto.setIsLoginUserLike(true);
+            commentDto.setLoginUserLike(true);
         }
         return commentDto;
     }
