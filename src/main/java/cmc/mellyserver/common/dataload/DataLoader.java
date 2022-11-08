@@ -1272,9 +1272,9 @@ public class DataLoader {
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.5000541000002,127.02425909999957, ScrapType.FRIEND,"용용선생","카페, 디저트"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.49992030000013,127.02461119999951, ScrapType.FRIEND,"을지다락","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503861,127.024144, ScrapType.FRIEND,"스타벅스","카페, 디저트"));
-        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503837, 127.041793, ScrapType.FRIEND,"무명요리사","일식"));
-        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511623, 127.023547, ScrapType.FAMILY,"쿠오레 에스프레소","카페, 디저트"));
-        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511500, 127.023200, ScrapType.FAMILY,"파인포레스트","글램핑"));
+//        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.503837, 127.041793, ScrapType.FRIEND,"무명요리사","일식"));
+//        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511623, 127.023547, ScrapType.FAMILY,"쿠오레 에스프레소","카페, 디저트"));
+//        placeScrapService.createScrap("cmc11th",new ScrapRequest(37.511500, 127.023200, ScrapType.FAMILY,"파인포레스트","글램핑"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.548400,126.912600, ScrapType.FAMILY,"따로집","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.560754,127.039851, ScrapType.COMPANY,"버킷리스트","주류"));
         placeScrapService.createScrap("cmc11th",new ScrapRequest(37.559384,127.040284, ScrapType.COMPANY,"장모족발","족발/보쌈집"));
