@@ -114,6 +114,17 @@ public class MemoryQueryRepository {
     }
 
 
+    public Slice<Memory> searchMemoryOtherCreateTemp(Pageable pageable, User loginUser, Long placeId,GroupType groupType, List<Long> memoryIds)
+    {
+        List<Memory> results = query.select(memory)
+                .from(memory)
+                .where(memory.id.in(memoryIds))
+                .fetch();
+
+        return checkLastPage(pageable, results);
+    }
+
+
     /**
      * 마이페이지 - 내가 스크랩한 메모리 (차후에 추가 및 최적화 예정)
      */

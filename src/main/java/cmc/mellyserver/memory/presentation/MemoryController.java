@@ -72,7 +72,7 @@ public class MemoryController {
                                                          @RequestParam(required = false) GroupType groupType,
                                                          @ParameterObject @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable)
     {
-        Slice<GetOtherMemoryForPlaceResponse> otherMemory = memoryService.getOtherMemory(pageable, user.getUsername(), placeId, groupType);
+        Slice<GetOtherMemoryForPlaceResponse> otherMemory = memoryService.getOtherMemoryTemp(pageable, user.getUsername(), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "성공", new GetOtherMemoryForPlaceResponseWrapper(otherMemory.stream().count(),otherMemory)));
     }
 
