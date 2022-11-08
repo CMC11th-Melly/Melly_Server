@@ -19,7 +19,7 @@ public class ScrapAssembler {
         return new ScrapedPlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
                 stream().
                 filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL)).count(),
-                place.getIsScraped(),
+                checkIsScraped(user,place),
                 place.getPlaceCategory(),
                 place.getPlaceName(),
                 GroupType.ALL,
@@ -34,5 +34,10 @@ public class ScrapAssembler {
         return new ScrapedMemoryResponseDto(memory.getPlace().getId(),memory.getPlace().getPlaceName(),memory.getId(),memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()),memory.getTitle(),
                 memory.getContent(),memory.getGroupInfo().getGroupType(),memory.getGroupInfo().getGroupName(),memory.getStars(),memory.getKeyword(), memory.getVisitedDate());
 
+    }
+
+    private static boolean checkIsScraped(User user, Place place)
+    {
+        return user.getPlaceScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
     }
 }
