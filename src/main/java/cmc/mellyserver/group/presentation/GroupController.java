@@ -22,6 +22,13 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    @GetMapping("/group/{groupId}")
+    private ResponseEntity<CommonResponse> getGroupInfo(@PathVariable Long groupId)
+    {
+        UserGroup group = groupService.getGroupById(groupId);
+        return ResponseEntity.ok(new CommonResponse(200,"성공",GroupAssembler.getUserGroupResponse(group)));
+    }
+
     @Operation(summary = "그룹 추가")
     @PostMapping("/group")
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@RequestBody GroupCreateRequest groupCreateRequest)

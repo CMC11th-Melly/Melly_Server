@@ -1,5 +1,7 @@
 package cmc.mellyserver.user.application;
 
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
@@ -13,6 +15,7 @@ import cmc.mellyserver.user.application.dto.GroupMemory;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.domain.UserRepository;
 import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
 import cmc.mellyserver.user.presentation.dto.common.UserAssembler;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
@@ -42,6 +45,7 @@ public class UserService {
     private final S3FileLoader s3FileLoader;
     private final UserGroupQueryRepository userGroupQueryRepository;
     private final SurveyRecommender surveyRecommender;
+    private final UserRepository userRepository;
 
 
 
@@ -123,10 +127,26 @@ public class UserService {
     public void updateProfile(String uid, ProfileUpdateRequest profileUpdateRequest)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        if(profileUpdateRequest.isDeleteImage() == true)
+        {
+            user.setProfileImage(null);
+            user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), null);
+        }
+        else
+        {
+            String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getProfileImage());
+            user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
+        }
 
-        String multipartFileName = s3FileLoader.getMultipartFileName(profileUpdateRequest.getProfileImage());
-        user.updateProfile(profileUpdateRequest.getNickname(),profileUpdateRequest.getGender(),profileUpdateRequest.getAgeGroup(), multipartFileName);
     }
 
 
+    public String getUserNickname(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+        });
+        return user.getNickname();
+
+    }
 }

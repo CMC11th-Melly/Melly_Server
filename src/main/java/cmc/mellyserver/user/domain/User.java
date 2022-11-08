@@ -133,8 +133,11 @@ public class User extends JpaBaseEntity {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
-    public User(String uid, Provider provider,RoleType roleType,String password)
+    public User(String uid, Provider provider, RoleType roleType, String password)
     {
         this.userId  = uid;
         this.provider = provider;

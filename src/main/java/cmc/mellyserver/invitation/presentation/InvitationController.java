@@ -19,4 +19,6 @@ public class InvitationController {
     {
         emailSender.sendEmail("jemin3161@naver.com","메일 전송 테스트","테스트 중입니다.");
     }
+
+
 }

@@ -14,4 +14,5 @@ public class ProfileUpdateRequest {
     private String nickname;
     private Gender gender;
     private AgeGroup ageGroup;
+    private boolean deleteImage;
 }

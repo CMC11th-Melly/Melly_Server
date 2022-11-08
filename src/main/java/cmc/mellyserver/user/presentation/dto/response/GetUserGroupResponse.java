@@ -20,8 +20,5 @@ public class GetUserGroupResponse {
     private List<UserDto> users;
     private GroupType groupType;
     private String invitationLink;
-//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMdd")
-//    private LocalDateTime createdDate;
-
 
 }

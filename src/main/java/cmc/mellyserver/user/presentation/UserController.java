@@ -46,6 +46,14 @@ public class UserController {
     private final UserService userService;
 
 
+
+    @Operation(summary = "유저 id로 유저 정보 가져오기")
+    @GetMapping("/{userSeq}")
+    public ResponseEntity<CommonResponse> getUserNickname(@PathVariable Long userSeq)
+    {
+        String nickname = userService.getUserNickname(userSeq);
+        return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(nickname)));
+    }
     
     @Operation(summary = "유저 회원가입시 설문조사(테스트 필요한 API입니다)")
     @PostMapping("/survey")
