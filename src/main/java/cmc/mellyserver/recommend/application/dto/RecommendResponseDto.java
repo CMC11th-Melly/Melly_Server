@@ -3,6 +3,7 @@ package cmc.mellyserver.recommend.application.dto;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
+import cmc.mellyserver.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class RecommendResponseDto implements Serializable {
     private PlaceInfo placeInfo;
     private List<MemoryInfo> memoryInfo;
 
-    public RecommendResponseDto(Long placeId, String placeImage, String placeCategory, GroupType recommendType, Boolean isScraped, String placeName, List<Memory> memories,String groupName)
+    public RecommendResponseDto(Long placeId, String placeImage, String placeCategory, GroupType recommendType, Boolean isScraped, String placeName, List<Memory> memories, String groupName, User user)
     {
         this.placeInfo = new PlaceInfo(placeId,placeImage,placeCategory,recommendType,isScraped,placeName);
         this.memoryInfo = memories.stream().map(m ->
@@ -33,6 +34,7 @@ public class RecommendResponseDto implements Serializable {
                         m.getGroupInfo().getGroupName(),
                         m.getStars(),
                         m.getKeyword(),
+                        user.getMemories().stream().anyMatch((um -> um.getId().equals(m.getId()))),
                         m.getVisitedDate()))
                 .collect(Collectors.toList());
 
@@ -80,11 +82,12 @@ public class RecommendResponseDto implements Serializable {
         private Long stars;
         @Schema(example = "최고에요")
         private List<String> keyword;
+        private boolean loginUserWrite;
         @Schema(example = "202210142310")
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
         private LocalDateTime visitedDate;
 
-        public MemoryInfo(Long placeId, String placeName, Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,LocalDateTime visitiedDate)
+        public MemoryInfo(Long placeId, String placeName, Long memoryId,List<ImageDto> memoryImages, String title, String content,GroupType groupType,String groupName,Long stars, List<String> keyword,boolean isLoginUserWrite,LocalDateTime visitiedDate)
         {
             this.placeId = placeId;
             this.placeName = placeName;
@@ -96,6 +99,7 @@ public class RecommendResponseDto implements Serializable {
             this.groupName = groupName;
             this.stars =stars;
             this.keyword = keyword;
+            this.loginUserWrite = isLoginUserWrite;
             this.visitedDate = visitiedDate;
         }
     }

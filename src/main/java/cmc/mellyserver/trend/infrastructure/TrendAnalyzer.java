@@ -54,7 +54,8 @@ public class TrendAnalyzer {
                     GroupType.ALL,place.getIsScraped(),
                     place.getPlaceName(),
                     place.getMemories(),
-                    "떡잎마을 방범대"
+                    "떡잎마을 방범대",
+                    User.builder().build()
                     );
         }).collect(Collectors.toList());
     }

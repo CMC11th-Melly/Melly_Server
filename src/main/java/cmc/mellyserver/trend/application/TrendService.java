@@ -36,7 +36,8 @@ public class TrendService {
                         GroupType.FRIEND,
                         checkIsScraped(user,t),
                         t.getPlaceName(),t.getMemories(),
-                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName()
+                        groupRepository.findById(t.getMemories().get(0).getGroupInfo().getGroupId()).get().getGroupName(),
+                        user
                 ))
                 .collect(Collectors.toList());
     }
