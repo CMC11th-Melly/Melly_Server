@@ -1289,6 +1289,7 @@ public class DataLoader {
         notificationService.createNotification(NotificationType.COMMENT,"내 메모리에 새 댓글이 달렸어요! 확인해보세요","cmc11th",memory.getId());
         notificationService.createNotification(NotificationType.REPORT,"메모리에 신고가 들어왔어요! 확인해보세요","cmc11th",memory.getId());
 
+        notificationService.createNotification(NotificationType.COMMENT,"내 메모리에 새 댓글이 달렸어요! 확인해보세요","cmc11th",memory.getId());
 
 
     }

@@ -46,6 +46,7 @@ public class NotificationResponse {
         private Long stars;
         @Schema(example = "기뻐요, 그저 그래요")
         private List<String> keyword;
+        private boolean loginUserWrite;
         @Schema(example = "202210142310")
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
         private LocalDateTime visitedDate;
