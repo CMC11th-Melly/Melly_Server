@@ -15,8 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HealthController {
 
-    private final CustomEventPublisher customEventPublisher;
-    private final MemoryQueryRepository memoryQueryRepository;
+
     @GetMapping("/")
     public String test()
     {

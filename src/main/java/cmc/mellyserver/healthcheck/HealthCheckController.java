@@ -37,13 +37,14 @@ public class HealthCheckController {
         return "떡잎마을방범대 파이어~";
     }
 
+
+
     @Operation(summary = "액세스 토큰 Authorization Header에 추가 시 인증 통과 테스트")
     @GetMapping("/authTest")
     public ResponseEntity<CommonResponse> authCheck()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(new CommonResponse(200,"정상적으로 인증되었습니다"));
-
     }
 
 
@@ -55,6 +56,8 @@ public class HealthCheckController {
         List<String> multipartFileNames = getMultipartFileNames(multipartTestRequest.getImage());
         return ResponseEntity.ok(multipartFileNames);
     }
+
+
 
     private List<String> getMultipartFileNames(List<MultipartFile> multipartFiles) {
 
@@ -80,11 +83,14 @@ public class HealthCheckController {
         return null;
     }
 
+
+
     private String createFileName(String fileName) {
         return "user1/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
+
+
     private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
