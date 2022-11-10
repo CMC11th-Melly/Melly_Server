@@ -80,7 +80,7 @@ public class CommentController {
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest)
     {
         commentService.updateComment(commentId,commentUpdateRequest.getContent());
-        return ResponseEntity.ok(new CommonResponse(200,"댓글 수정 완료"));
+        return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
 }

@@ -110,7 +110,7 @@ public class MemoryController {
                                                        @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest)
     {
          memoryService.updateMemory(user.getUsername(),memoryId,memoryUpdateRequest,images);
-         return ResponseEntity.ok(new CommonResponse(200,"메모리 수정 완료"));
+         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
 
