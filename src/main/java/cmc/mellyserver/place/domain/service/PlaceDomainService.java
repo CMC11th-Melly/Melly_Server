@@ -21,6 +21,7 @@ public class PlaceDomainService {
     private final PlaceRepository placeRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
+    // & m.getOpenType().equals(OpenType.ALL)
     public PlaceResponseDto getPlaceByPosition(String uid, Double lat, Double lng)
     {
 
@@ -44,7 +45,7 @@ public class PlaceDomainService {
 
         long otherMemoryCount = place.getMemories()
                 .stream()
-                .filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId())) )
+                .filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId())) )
                 .count();
 
         return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL,place.getPlaceImage());
