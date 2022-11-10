@@ -34,13 +34,13 @@ public class PlaceAssembler {
                 }).count()
                 )).collect(Collectors.toList());
     }
-
+   // & m.getOpenType().equals(OpenType.ALL)
     public static PlaceResponseDto placeResponseDto(Place place, User user)
     {
         return new PlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
                 stream().
                 filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
-                place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId())) & m.getOpenType().equals(OpenType.ALL) & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId()))).count(),
+                place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId()))).count(),
                 place.getIsScraped(),
                 place.getPlaceCategory(),
                 place.getPlaceName(),
