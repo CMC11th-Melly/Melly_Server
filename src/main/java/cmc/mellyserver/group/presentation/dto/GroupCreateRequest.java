@@ -8,12 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class GroupCreateRequest {
 
+    @NotNull
     private String groupName;
+    @NotNull
     private GroupType groupType;
+
     @Schema(example = "1부터 10까지 int형 숫자 중 하나 넣어주세용")
     private int groupIcon;
 

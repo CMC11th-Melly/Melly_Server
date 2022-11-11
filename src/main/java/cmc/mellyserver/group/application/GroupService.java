@@ -41,7 +41,16 @@ public class GroupService {
     @Transactional
     public UserGroup participateToGroup(String uid, Long groupId)
     {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        boolean userParticiatedToGroup = user.getGroupAndUsers().stream().anyMatch(g -> g.getGroup().getId().equals(groupId));
+
+        if (userParticiatedToGroup)
+        {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
+        }
+
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });

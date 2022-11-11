@@ -1,6 +1,7 @@
 package cmc.mellyserver.user.presentation.dto.common;
 
 import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.domain.User;
@@ -25,14 +26,14 @@ public class UserAssembler {
     {
         return userGroups.stream().map(ug -> new GetUserGroupResponse(ug.getId(),
                 ug.getGroupIcon(),
-                ug.getGroupName(),
+                ug.getGroupName() == null ? "" : ug.getGroupName(),
                 ug.getGroupAndUsers().stream().map(gu -> new UserDto(
                         gu.getUser().getUserSeq(),
                         gu.getUser().getProfileImage(),
                         gu.getUser().getNickname(),
                         (gu.getUser().getUserId().equals(userId)) ? true : false
                 )).collect(Collectors.toList()),
-                ug.getGroupType(),
+                ug.getGroupType() == null ? GroupType.ALL : ug.getGroupType(),
                 ug.getInviteLink()
                 )).collect(Collectors.toList());
     }

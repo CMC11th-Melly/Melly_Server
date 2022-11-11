@@ -113,7 +113,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
     {
         List<UserGroup> userGroup = userService.getUserGroup(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(200, "My 그룹 조회", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup,user.getUsername()))));
+        return ResponseEntity.ok(new CommonResponse(200, "성공", new GetUserGroupResponseWrapper(UserAssembler.getUserGroupResponses(userGroup,user.getUsername()))));
     }
 
 
@@ -185,10 +185,6 @@ public class UserController {
     public ResponseEntity<CommonResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest)
     {
         userService.participateToGroup(user.getUsername(), participateGroupRequest.getGroupId());
-        return ResponseEntity.ok(new CommonResponse(200, "그룹에 추가 완료"));
+        return ResponseEntity.ok(new CommonResponse(200, "성공"));
     }
-
-
-
-
 }
