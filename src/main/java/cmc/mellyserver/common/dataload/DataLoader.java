@@ -257,7 +257,10 @@ public class DataLoader {
 
       // 추천 / 핫한 메모리
       //  =============================================================================================
-
+        Place place_scrap0 = Place.builder().position(new Position(37.5000541000002,127.02425909999957)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/cmc11th/scrapimage/KakaoTalk_20221111_164112262_08.jpg").placeName("용용선생").placeCategory("주류").build();
+        placeRepository.save(place_scrap0);
+        Place place_scrap0_2 = Place.builder().position(new Position(37.49992030000013,127.02461119999951)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/cmc11th/scrapimage/KakaoTalk_20221111_164112262_07.jpg").placeName("을지다락").placeCategory("주류").build();
+        placeRepository.save(place_scrap0_2);
 
 
         Memory memory4 = memoryDomainService.createMemory(saveUser.getUserId(),
@@ -367,7 +370,7 @@ public class DataLoader {
         Place place_scrap6 = Place.builder().position(new Position(37.5389526,127.1397714)).placeImage("https://mellyimage.s3.ap-northeast-2.amazonaws.com/cmc11th/scrapimage/KakaoTalk_20221111_164112262_09.jpg").placeName("빈터커피").placeCategory("카페, 디저트").build();
         placeRepository.save(place_scrap6);
         // 스크랩 더미 데이터
-        placeScrapService.createScrap(saveUser.getUserId(),new ScrapRequest(37.5000541000002,127.02425909999957, ScrapType.FRIEND,"용용선생","카페, 디저트"));
+        placeScrapService.createScrap(saveUser.getUserId(),new ScrapRequest(37.5000541000002,127.02425909999957, ScrapType.FRIEND,"용용선생","주류"));
         placeScrapService.createScrap(saveUser.getUserId(),new ScrapRequest(37.49992030000013,127.02461119999951, ScrapType.FRIEND,"을지다락","주류"));
 
         placeScrapService.createScrap(saveUser.getUserId(),new ScrapRequest(37.494402, 126.724740, ScrapType.FRIEND,"이삼옥","카페, 디저트"));
