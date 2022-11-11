@@ -19,6 +19,7 @@ import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.memory.presentation.dto.response.GetMemoryByMemoryIdResponse;
 import cmc.mellyserver.memory.presentation.dto.response.GetMemoryForPlaceResponse;
 import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
 import cmc.mellyserver.place.presentation.dto.PlaceInfoRequest;
@@ -222,5 +223,17 @@ public class MemoryService {
                 memory.getMemoryImages().removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
             }
         }
+    }
+
+    public GetMemoryByMemoryIdResponse getMemoryByMemoryId(String uid, Long memoryId) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
+
+        return MemoryAssembler.getMemoryByMemoryIdResponse(memory, user);
+
     }
 }

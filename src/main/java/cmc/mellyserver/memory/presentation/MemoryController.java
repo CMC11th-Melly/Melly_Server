@@ -1,5 +1,6 @@
 package cmc.mellyserver.memory.presentation;
 
+import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.domain.enums.GroupType;
 import cmc.mellyserver.memory.application.MemoryService;
@@ -10,6 +11,7 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.memory.presentation.dto.response.GetMemoryByMemoryIdResponse;
 import cmc.mellyserver.memory.presentation.dto.response.GetMemoryForPlaceResponse;
 import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
 import cmc.mellyserver.memory.presentation.dto.wrapper.*;
@@ -131,6 +133,14 @@ public class MemoryController {
     {
         memoryService.removeMemory(memoryId);
         return ResponseEntity.ok(new CommonResponse(200,"메세지 삭제 완료"));
+    }
+
+    @Operation(summary = "메모리 id로 메모리 조회")
+    @GetMapping("/{memoryId}")
+    public ResponseEntity<CommonResponse> findMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
+    {
+        GetMemoryByMemoryIdResponse memoryByMemoryId = memoryService.getMemoryByMemoryId(user.getUsername(), memoryId);
+        return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(memoryByMemoryId)));
     }
 
 
