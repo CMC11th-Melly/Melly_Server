@@ -18,10 +18,11 @@ public class ScrapedPlaceResponseDto {
     private Long myMemoryCount;
     private Long otherMemoryCount;
     private Boolean isScraped;
-    private String PlaceCategory = "";
+    private String placeCategory = "";
     private String placeName = "";
     private GroupType recommendType = GroupType.ALL;
     private String placeImage;
+
 
     public static ScrapedPlaceResponseDto placeNotCreated(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped)
     {
