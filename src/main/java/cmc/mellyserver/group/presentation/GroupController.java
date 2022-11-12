@@ -34,7 +34,7 @@ public class GroupController {
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@RequestBody GroupCreateRequest groupCreateRequest)
     {
         groupService.saveGroup(user.getUsername(), groupCreateRequest);
-        return ResponseEntity.ok(new CommonResponse(200,"성공"));
+        return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료"));
     }
 
     @Operation(summary = "그룹 편집")
