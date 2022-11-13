@@ -52,8 +52,8 @@ public class AuthService {
     public AuthResponseForLogin login(String email, String password,String fcmToken)
     {
         User user = userRepository.findUserByEmail(email).orElseThrow(()->{throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);});
-        // !passwordEncoder.matches(password, user.getPassword())
-        if(!password.matches(user.getPassword())) {
+
+        if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }
 

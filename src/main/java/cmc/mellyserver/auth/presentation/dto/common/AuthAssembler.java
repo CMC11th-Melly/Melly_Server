@@ -18,10 +18,10 @@ public class AuthAssembler {
 
    public static User createEmailLoginUser(AuthRequestForSignupDto authRequestForSignupDto, PasswordEncoder passwordEncoder, String filename)
    {
-       //passwordEncoder.encode(authRequestForSignupDto.getPassword())
+       String encode = passwordEncoder.encode(authRequestForSignupDto.getPassword());
        return User.builder()
                .email(authRequestForSignupDto.getEmail())
-               .password(authRequestForSignupDto.getPassword())
+               .password(encode)
                .roleType(RoleType.USER)
                .profileImage(filename)
                .ageGroup(authRequestForSignupDto.getAgeGroup())
