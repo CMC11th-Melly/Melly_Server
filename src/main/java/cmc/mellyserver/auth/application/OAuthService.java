@@ -103,6 +103,7 @@ public class OAuthService {
        // signup 로직에서 추가정보 다 기입 받고 나면 실제 유저 정보와 토큰 발급 해주는게 좋을듯
         // signup 도중에 밖에 나간다면, 회원가입 안된 상태 -> 똑같이 isNewUser true만 발급
 
+        socialUser.setFcmToken(authRequest.getFcmToken());
         userRepository.save(socialUser);
 
         return OAuthLoginResponseDto.builder().isNewUser(true).user(User.builder().uid(socialUser.getUserId()).build()).build();
