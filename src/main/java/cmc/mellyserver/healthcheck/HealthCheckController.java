@@ -5,6 +5,8 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.healthcheck.dto.MultipartTestRequest;
 import cmc.mellyserver.healthcheck.dto.PwEncode;
+import cmc.mellyserver.user.application.UserService;
+import cmc.mellyserver.user.domain.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ import java.util.UUID;
 public class HealthCheckController {
 
     private final AWSS3UploadService uploadService;
-    private final PasswordEncoder passwordEncoder;
+
 
     @Operation(summary = "헬스 체크용 API")
     @GetMapping("/health")
@@ -57,14 +59,6 @@ public class HealthCheckController {
     {
         List<String> multipartFileNames = getMultipartFileNames(multipartTestRequest.getImage());
         return ResponseEntity.ok(multipartFileNames);
-    }
-
-    @Operation(summary = "password")
-    @GetMapping("/pw")
-    public ResponseEntity<CommonResponse> pwcheck(PwEncode pwEncode)
-    {
-        String encode = passwordEncoder.encode(pwEncode.getPass());
-        return ResponseEntity.ok(new CommonResponse(200,"변환",encode));
     }
 
 
