@@ -23,4 +23,14 @@
 <br>
 
 ## 📕 Development Environment
-📌 Language
+- <b>Language</b> :  Java 11
+- <b>Framework</b> :  SpringBoot, Spring Security 
+- <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
+- <b>HTTP Client</b> : Web Client, okhttp3
+- <b>DevOps</b> : EC2, RDS, S3, Elasticache
+- <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)  
+
+<br>
+
+## 🗓 Development
+2022.09.12 ~ 2021.11.12
