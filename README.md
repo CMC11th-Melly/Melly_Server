@@ -38,7 +38,7 @@
 
 <br>
 
-## Folder Structure
+## 📚 Folder Structure
 ```
 ├── MellyServerApplication.java
 ├── auth                                 # 인증 관련 도메인
