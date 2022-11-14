@@ -59,3 +59,13 @@
 └── user                                 # 유저 도메인
 
 ```
+
+<br>
+
+## 🏛 System Structure
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/82302520/201564545-02f665c9-499a-4075-a9b3-a77e1bbe6ef3.png" width="800" height="500">
+  </p>
