@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,9 +30,13 @@ public class PlaceInfoRequest {
     private String placeCategory;
 
     @Schema(example = "진짜 인생 술집")
+    @NotNull
+    @Size(max = 23)
     private String title;
 
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
+    @NotNull
+    @Size(min = 20, max = 650)
     private String content;
 
     @Schema(example = "[좋아요, 그저그래요]")

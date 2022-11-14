@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class GroupController {
 
     @Operation(summary = "그룹 추가")
     @PostMapping("/group")
-    private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@RequestBody GroupCreateRequest groupCreateRequest)
+    private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@Valid @RequestBody GroupCreateRequest groupCreateRequest)
     {
         UserGroup userGroup = groupService.saveGroup(user.getUsername(), groupCreateRequest);
         GetUserGroupResponse userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);

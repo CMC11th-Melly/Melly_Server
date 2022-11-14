@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.net.BindException;
 
 @Slf4j
@@ -41,6 +43,13 @@ public class GlobalExceptionHandler {
         String code = ExceptionCodeAndDetails.NOT_FOUND_API.getCode();
         String message = ExceptionCodeAndDetails.NOT_FOUND_API.getMessage();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GlobalExceptionResponse(code, message));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidExceptionResponse> handlerBeanValidation(MethodArgumentNotValidException e)
+    {
+        String code = "333";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ValidExceptionResponse(code,e.getBindingResult().toString()));
     }
 
 

@@ -6,16 +6,20 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class GroupCreateRequest {
 
     @NotNull
+    @Size(max = 23,message = "그룹명은 23자 이하입니다.")
     private String groupName;
+
     @NotNull
     private GroupType groupType;
 

@@ -57,7 +57,6 @@ public class Memory extends JpaBaseEntity {
     private String title;
 
     @Lob
-    @Length(max = 35)
     private String content;
 
     private boolean isReported = false;
@@ -70,7 +69,7 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
