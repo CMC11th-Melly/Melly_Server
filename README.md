@@ -28,7 +28,8 @@
 - <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
 - <b>HTTP Client</b> : Web Client, okhttp3
 - <b>DevOps</b> : EC2, RDS, S3, Elasticache
-- <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)  
+- <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)
+- <b>Docs</b> : Swagger (SpringDocs)  
 
 <br>
 
