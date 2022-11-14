@@ -74,8 +74,8 @@ public class MemoryQueryRepository {
                 .join(memory.user,user).fetchJoin()
                 .where(
                         eqPlace(placeId),  // 특정 장소에 대한 메모리면 placeId로 필터링
-                        eqUserId(uid),  // 내가 작성한 메모리가 맞는지 체크
-                        eqGroup(groupType)   // 그룹 타입 체크
+                        eqUserId(uid)  // 내가 작성한 메모리가 맞는지 체크
+                     //   eqGroup(groupType)   // 그룹 타입 체크
                 ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))  // Sort에 명시한 조건으로 필터링
                 .offset(pageable.getOffset())   // offset 지정
                 .limit(pageable.getPageSize() + 1)  // 하나 더 땡겨와서 마지막 페이지인지 체크
