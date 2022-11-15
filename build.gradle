@@ -131,6 +131,9 @@ dependencies {
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.3'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // Emoji parser
+    compileOnly 'com.vdurmont:emoji-java:5.1.1'
 }
 
 tasks.named('test') {

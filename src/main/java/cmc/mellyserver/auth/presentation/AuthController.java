@@ -20,6 +20,7 @@ import cmc.mellyserver.auth.application.OAuthService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -56,7 +57,7 @@ public class AuthController {
                                                               "\n- 연령대는 enum으로 처리하기 위해서 10대부터 70대 이상까지 차례대로 **ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN** 으로 설정했습니다."
       )
       @PostMapping("/signup")
-      public ResponseEntity<CommonResponse> emailLoginSignup(AuthRequestForSignup authRequestForSignup)
+      public ResponseEntity<CommonResponse> emailLoginSignup(@Valid AuthRequestForSignup authRequestForSignup)
       {
           SignupResponse signup = authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
           return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료",signup));

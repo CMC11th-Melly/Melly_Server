@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,12 +32,13 @@ public class PlaceInfoRequest {
 
     @Schema(example = "진짜 인생 술집")
     @NotNull
-    @Size(max = 23)
+    @Length(max = 23, message = "제목은 23자 이하로 입력해주세요.")   // TODO : 보완 필요
     private String title;
 
     @Schema(example = "동기들 데리고 꼭 다시 와볼만한 술집")
     @NotNull
-    @Size(min = 20, max = 650)
+    @Length(min = 20, message = "본문은 20자 이상으로 작성해주세요.")   // ok
+    @Length(max = 650, message = "본문은 650자 이하로 작성해주세요.")   // ok
     private String content;
 
     @Schema(example = "[좋아요, 그저그래요]")

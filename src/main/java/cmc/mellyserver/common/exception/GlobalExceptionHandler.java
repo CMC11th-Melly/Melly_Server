@@ -45,11 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GlobalExceptionResponse(code, message));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidExceptionResponse> handlerBeanValidation(MethodArgumentNotValidException e)
+    @ExceptionHandler(org.springframework.validation.BindException.class)
+    public ResponseEntity<ValidExceptionResponse> handlerBeanValidation(org.springframework.validation.BindException e)
     {
-        String code = "333";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ValidExceptionResponse(code,e.getBindingResult().toString()));
+        String code = "유효성 검증 실패";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ValidExceptionResponse(code,e.getFieldError().getDefaultMessage()));
     }
 
 
