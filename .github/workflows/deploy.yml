@@ -8,36 +8,15 @@ on:
   pull_request:
     branches:
       - 'develop'
-      - 'master'
 env:
-  S3_BUCKET_NAME: kiyobackend
-  PROJECT_NAME: kiyo
+  S3_BUCKET_NAME: melly
+  PROJECT_NAME: melly
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Setup MySQL
-        uses: samin/mysql-action@v1
-        with:
-          host port : 3306
-          container port: 3306
-          mysql version: '8.0'
-          mysql root password: root
-          mysql database: 'testdb'
-          mysql user: root
-
-      - name: Start MySQL
-        run: sudo service mysql start
-
-      - name: verify MySQL connection from host
-        run: |
-               mysql --version
-               mysql --user=root --password=root
-               mysql -uroot -proot -e 'CREATE DATABASE testdb'
-               mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '4321'"
 
       - name: checkout code
         uses: actions/checkout@v2
@@ -51,13 +30,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-              ${{ runner.os }}-gradle-
-
-
+            ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
@@ -79,6 +56,28 @@ jobs:
         run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
         shell: bash
 
+#      - name: Generate deployment package
+#        run: |
+#          mkdir -p deploy
+#          cp build/libs/mellyServer-0.0.1-SNAPSHOT.jar deploy/application.jar
+#          cp Procfile deploy/Procfile
+#          cp -r .ebextensions deploy/.ebextensions
+#          cp -r .platform deploy/.platform
+#          cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .platform 포함하여 zip 생성
+#
+#      - name: Beanstalk Deploy
+#        uses: einaregilsson/beanstalk-deploy@v20
+#        with:
+#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          application_name: melly
+#          environment_name: Melly-env
+#          version_label: Github Action-${{steps.current-time.outputs.formattedTime}}
+#          region: ap-northeast-2
+#          deployment_package: deploy/deploy.zip
+#          use_existing_version_if_available: true
+
+
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip .
         shell: bash
@@ -94,14 +93,4 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name kiyo-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
-
-      - name: action-slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          author_name: Github Action Test
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-        if: always()
+        run: aws deploy create-deployment --application-name melly-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name melly-develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip

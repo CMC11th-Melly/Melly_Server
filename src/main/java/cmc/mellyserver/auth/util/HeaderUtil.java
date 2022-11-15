@@ -22,7 +22,7 @@ public class HeaderUtil {
         {
 
             String substring = headerValue.substring(TOKEN_PREFIX.length());
-            // TODO : Authorization Header에 값 넣는거 보고 둘 중 하나는 없애기
+
             if(substring.contains("null") || substring == null)
             {
                 return null;
