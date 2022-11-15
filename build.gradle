@@ -133,7 +133,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Emoji parser
-    compileOnly 'com.vdurmont:emoji-java:5.1.1'
+    implementation 'com.vdurmont:emoji-java:5.1.1'
 }
 
 tasks.named('test') {
