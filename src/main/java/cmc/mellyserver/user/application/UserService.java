@@ -64,6 +64,9 @@ public class UserService {
     }
 
 
+    /**
+     * My 메모리 -> 유저가 작성한 메모리 조회
+     */
     public Slice<GetUserMemoryResponse> getUserMemory(Pageable pageable, String uid, GroupType groupType)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);

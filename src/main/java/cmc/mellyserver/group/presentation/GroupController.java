@@ -46,7 +46,7 @@ public class GroupController {
     @PutMapping("/group/{groupId}")
     private ResponseEntity<CommonResponse> updateGroup(
                                                        @PathVariable Long groupId,
-                                                       @RequestBody GroupUpdateRequest groupUpdateRequest)
+                                                       @Valid @RequestBody GroupUpdateRequest groupUpdateRequest)
     {
         groupService.updateGroup(groupId,groupUpdateRequest);
         return ResponseEntity.ok(new CommonResponse(200,"그룹 수정 완료"));

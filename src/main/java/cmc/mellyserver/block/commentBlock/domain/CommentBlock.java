@@ -1,6 +1,7 @@
 package cmc.mellyserver.block.commentBlock.domain;
 
 import cmc.mellyserver.comment.domain.Comment;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentBlock {
+public class CommentBlock extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -35,6 +35,7 @@ public class PlaceController {
     }
 
 
+
     /**
      * 메모리 차단 반영 완료
      */
@@ -46,6 +47,7 @@ public class PlaceController {
         return ResponseEntity.ok(new CommonResponse(200, "메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDto)));
 
     }
+
 
 
     /**

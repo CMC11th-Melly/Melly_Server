@@ -1,6 +1,7 @@
 package cmc.mellyserver.report.memoryReport.domain;
 
 import cmc.mellyserver.comment.domain.Comment;
+import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemoryReport {
+public class MemoryReport extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -62,7 +62,7 @@ public class MemoryQueryRepository {
 
 
     /**
-     * 장소 상세 - 나의 메모리 (최적화 완료, 인덱스 추가 필요)
+     * 장소 상세 - 나의 메모리, 마이페이지 - 내가 작성한 메모리 조회 (최적화 완료, 인덱스 추가 필요)
      */
     public Slice<Memory> searchMemoryUserCreate(Pageable pageable, String uid, Long placeId,GroupType groupType) {
 
