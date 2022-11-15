@@ -22,7 +22,15 @@ public class QMemoryBlock extends EntityPathBase<MemoryBlock> {
 
     public static final QMemoryBlock memoryBlock = new QMemoryBlock("memoryBlock");
 
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
+
     public final NumberPath<Long> blockId = createNumber("blockId", Long.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final cmc.mellyserver.memory.domain.QMemory memory;
 

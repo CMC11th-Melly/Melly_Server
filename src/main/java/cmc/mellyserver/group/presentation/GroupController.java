@@ -54,10 +54,11 @@ public class GroupController {
 
     @Operation(summary = "그룹 삭제")
     @DeleteMapping("/group/{groupId}")
-    private ResponseEntity<CommonResponse> deleteGroup(@PathVariable Long groupId)
+    private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
     {
-        groupService.deleteGroup(groupId);
-        return ResponseEntity.ok(new CommonResponse(200,"그룹 삭제 완료"));
+
+        String message = groupService.deleteGroup(user.getUsername(), groupId);
+        return ResponseEntity.ok(new CommonResponse(200,message));
     }
 
 

@@ -25,6 +25,8 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final NumberPath<Long> creatorId = createNumber("creatorId", Long.class);
+
     public final ListPath<GroupAndUser, QGroupAndUser> groupAndUsers = this.<GroupAndUser, QGroupAndUser>createList("groupAndUsers", GroupAndUser.class, QGroupAndUser.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> groupIcon = createNumber("groupIcon", Integer.class);

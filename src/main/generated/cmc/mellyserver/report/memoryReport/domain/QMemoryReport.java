@@ -22,7 +22,15 @@ public class QMemoryReport extends EntityPathBase<MemoryReport> {
 
     public static final QMemoryReport memoryReport = new QMemoryReport("memoryReport");
 
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
+
     public final StringPath content = createString("content");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final cmc.mellyserver.memory.domain.QMemory memory;
 

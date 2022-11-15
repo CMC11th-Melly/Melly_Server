@@ -31,7 +31,7 @@ public class GroupService {
     public UserGroup saveGroup(String uid, GroupCreateRequest groupCreateRequest)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType(),groupCreateRequest.getGroupIcon());
+        UserGroup userGroup = new UserGroup(groupCreateRequest.getGroupName(), "hello.co.kr", groupCreateRequest.getGroupType(),groupCreateRequest.getGroupIcon(),user.getUserSeq());
         GroupAndUser groupAndUser = new GroupAndUser();
         groupAndUser.setUser(user);
         userGroup.setGroupUser(groupAndUser);
@@ -71,12 +71,21 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteGroup(Long groupId)
+    public String deleteGroup(String uid, Long groupId)
     {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
-        groupRepository.delete(userGroup);
+
+        if (userGroup.getCreatorId().equals(user.getUserSeq()))
+        {
+            userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> m.deleteGroupInfo()));
+            groupRepository.delete(userGroup);
+            return "그룹 삭제 완료";
+        }
+        return "삭제 권한이 없습니다";
+
     }
 
 }

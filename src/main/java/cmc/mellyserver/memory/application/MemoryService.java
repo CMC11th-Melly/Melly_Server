@@ -118,14 +118,7 @@ public class MemoryService {
         return MemoryAssembler.getOtherMemoryForPlaceResponses(memories,user);
     }
 
-    public Slice<GetOtherMemoryForPlaceResponse> getOtherMemoryTemp(Pageable pageable,String uid, Long placeId, GroupType groupType)
-    {
-        List<Long> longs = List.of(1L, 2L, 3L,4L,5L,6L,7L,8L);
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        Slice<Memory> memories = memoryQueryRepository.searchMemoryOtherCreateTemp(pageable, user, placeId, groupType,longs);
 
-        return MemoryAssembler.getOtherMemoryForPlaceResponses(memories,user);
-    }
 
 
 

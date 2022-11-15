@@ -25,6 +25,8 @@ public class UserGroup extends JpaBaseEntity {
 
     private String inviteLink;
 
+    private Long creatorId; // TODO : 그룹 만든사람이 누구인지 알아야 삭제 여부 판단 가능
+
     // 하나의 메모리는 무조건 하나의 그룹에 속함. 따라서 타입은 grouptype으로 판단하면 될듯!
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
@@ -34,12 +36,13 @@ public class UserGroup extends JpaBaseEntity {
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @Builder
-    public UserGroup(String groupName, String inviteLink,GroupType groupType,int groupIcon)
+    public UserGroup(String groupName, String inviteLink,GroupType groupType,int groupIcon,Long userSeq)
     {
         this.groupName = groupName;
         this.inviteLink = inviteLink;
         this.groupType =groupType;
         this.groupIcon = groupIcon;
+        this.creatorId = userSeq;
     }
 
 

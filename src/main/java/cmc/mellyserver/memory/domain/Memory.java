@@ -109,6 +109,11 @@ public class Memory extends JpaBaseEntity {
 
     }
 
+    public void deleteGroupInfo()
+    {
+        this.groupInfo = new GroupInfo("그룹 미설정",GroupType.ALL,-1L);
+    }
+
     public void setMemoryImages(List<MemoryImage> memoryImages)
     {
         this.memoryImages = memoryImages;

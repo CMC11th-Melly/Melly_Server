@@ -22,9 +22,17 @@ public class QCommentReport extends EntityPathBase<CommentReport> {
 
     public static final QCommentReport commentReport = new QCommentReport("commentReport");
 
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
+
     public final cmc.mellyserver.comment.domain.QComment comment;
 
     public final StringPath content = createString("content");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Long> reportId = createNumber("reportId", Long.class);
 

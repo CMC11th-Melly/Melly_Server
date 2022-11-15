@@ -22,9 +22,17 @@ public class QCommentBlock extends EntityPathBase<CommentBlock> {
 
     public static final QCommentBlock commentBlock = new QCommentBlock("commentBlock");
 
+    public final cmc.mellyserver.common.util.jpa.QJpaBaseEntity _super = new cmc.mellyserver.common.util.jpa.QJpaBaseEntity(this);
+
     public final NumberPath<Long> blockId = createNumber("blockId", Long.class);
 
     public final cmc.mellyserver.comment.domain.QComment comment;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final cmc.mellyserver.user.domain.QUser user;
 
