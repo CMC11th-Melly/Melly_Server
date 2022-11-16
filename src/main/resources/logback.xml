@@ -7,11 +7,9 @@
         <layout>
             <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>
         </layout>
-        <if condition='property("spring.profiles.active").contains("local")'>
-            <then>
-                <logGroupName>KPOP-API-local</logGroupName>
-            </then>
-        </if>
+
+                <logGroupName>melly_log</logGroupName>
+
         <logStreamUuidPrefix>error-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
