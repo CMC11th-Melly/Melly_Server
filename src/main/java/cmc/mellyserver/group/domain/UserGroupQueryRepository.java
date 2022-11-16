@@ -83,6 +83,8 @@ public class UserGroupQueryRepository {
 
     }
 
+
+
     private BooleanExpression eqUser(Long userSeq) {
         if(userSeq == null || userSeq == -1)
         {

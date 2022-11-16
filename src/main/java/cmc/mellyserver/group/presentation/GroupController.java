@@ -42,6 +42,18 @@ public class GroupController {
         return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료",new CommonDetailResponse<>(userGroupResponse)));
     }
 
+
+
+    @Operation(summary = "그룹 탈퇴")
+    @PutMapping("/group/{groupId}/exit")
+    private ResponseEntity<CommonResponse> exitGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
+    {
+       groupService.exitGroup(user.getUsername(),groupId);
+       return ResponseEntity.ok(new CommonResponse(200,"성공"));
+    }
+
+
+
     @Operation(summary = "그룹 편집")
     @PutMapping("/group/{groupId}")
     private ResponseEntity<CommonResponse> updateGroup(
@@ -51,6 +63,8 @@ public class GroupController {
         groupService.updateGroup(groupId,groupUpdateRequest);
         return ResponseEntity.ok(new CommonResponse(200,"그룹 수정 완료"));
     }
+
+
 
 
     @Operation(summary = "그룹 삭제")

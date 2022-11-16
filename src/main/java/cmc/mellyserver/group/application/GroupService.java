@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GroupService {
@@ -106,4 +109,33 @@ public class GroupService {
             return "그룹 삭제 완료";
     }
 
+    @Transactional
+    public void exitGroup(String uid, Long groupId) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+        });
+
+
+        List<Long> deleteList = new ArrayList<>();
+
+        userGroup.getGroupAndUsers().stream().forEach(ga -> {
+
+            // 만약 이 유저 그룹에서 지금 로그인 유저를 분리하고 싶다면?
+            if(ga.getUser().getUserId().equals(user.getUserId()))
+            {
+                ga.getUser().getMemories().stream().forEach(m -> {
+                    if (m.getGroupInfo().getGroupId().equals(userGroup.getId()))
+                    {
+                        m.deleteGroupInfo();
+                        deleteList.add(ga.getId());
+                    }
+                });
+            }
+
+        });
+
+        userGroup.getGroupAndUsers().removeIf(groupAndUser -> deleteList.contains(groupAndUser.getId()));
+    }
 }
