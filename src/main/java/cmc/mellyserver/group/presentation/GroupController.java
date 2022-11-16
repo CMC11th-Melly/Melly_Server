@@ -52,6 +52,7 @@ public class GroupController {
         return ResponseEntity.ok(new CommonResponse(200,"그룹 수정 완료"));
     }
 
+
     @Operation(summary = "그룹 삭제")
     @DeleteMapping("/group/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)

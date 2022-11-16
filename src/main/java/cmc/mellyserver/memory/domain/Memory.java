@@ -63,7 +63,7 @@ public class Memory extends JpaBaseEntity {
 
     private LocalDateTime visitedDate;
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
@@ -75,10 +75,10 @@ public class Memory extends JpaBaseEntity {
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryScrap> scraps = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<MemoryReport> memoryReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<MemoryBlock> memoryBlocks = new ArrayList<>();
 
     public void setPlaceForMemory(Place place)

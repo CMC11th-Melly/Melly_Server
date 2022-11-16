@@ -32,7 +32,7 @@ public class UserGroup extends JpaBaseEntity {
     private GroupType groupType;
 
     // 그룹 삭제되면 자동으로 삭제
-    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<GroupAndUser> groupAndUsers = new ArrayList<>();
 
     @Builder

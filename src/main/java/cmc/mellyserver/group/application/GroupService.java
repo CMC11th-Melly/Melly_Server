@@ -20,7 +20,7 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
-    private final UserGroupQueryRepository userGroupQueryRepository;
+
 
     public UserGroup getGroupById(Long groupId)
     {
@@ -78,19 +78,32 @@ public class GroupService {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
 
-        if (userGroup.getCreatorId().equals(user.getUserSeq()))
+//        if (userGroup.getCreatorId().equals(user.getUserSeq()))
+//        {
+//            userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> {
+//                if(m.getGroupInfo().getGroupId().equals(groupId))
+//                {
+//                    m.deleteGroupInfo();
+//                }
+//            }));
+//            groupRepository.delete(userGroup);
+//            return "그룹 삭제 완료";
+//        }
+//        return "삭제 권한이 없습니다";
+
+        if(userGroup.getGroupAndUsers().size() > 1)
         {
-            userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> {
-                if(m.getGroupInfo().getGroupId().equals(groupId))
+            return "그룹원이 2명 이상이면 삭제할 수 없습니다.";
+        }
+
+        userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> {
+            if(m.getGroupInfo().getGroupId().equals(groupId))
                 {
                     m.deleteGroupInfo();
                 }
             }));
             groupRepository.delete(userGroup);
             return "그룹 삭제 완료";
-        }
-        return "삭제 권한이 없습니다";
-
     }
 
 }
