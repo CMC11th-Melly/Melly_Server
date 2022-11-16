@@ -3,7 +3,7 @@ name: KIYO CI
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'develop'
   pull_request:
     branches:

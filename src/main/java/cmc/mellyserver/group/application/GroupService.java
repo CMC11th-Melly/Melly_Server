@@ -80,7 +80,12 @@ public class GroupService {
 
         if (userGroup.getCreatorId().equals(user.getUserSeq()))
         {
-            userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> m.deleteGroupInfo()));
+            userGroup.getGroupAndUsers().stream().forEach(ga -> ga.getUser().getMemories().stream().forEach(m -> {
+                if(m.getGroupInfo().getGroupId().equals(groupId))
+                {
+                    m.deleteGroupInfo();
+                }
+            }));
             groupRepository.delete(userGroup);
             return "그룹 삭제 완료";
         }
