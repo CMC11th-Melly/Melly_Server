@@ -11,8 +11,6 @@ import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
 import cmc.mellyserver.user.domain.User;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

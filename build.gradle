@@ -99,7 +99,8 @@ dependencies {
 
     // AWS
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
-    implementation "ca.pjer:logback-awslogs-appender:1.6.0"
+    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
+    implementation 'org.codehaus.janino:janino:3.1.7'
 
     // FCM
     implementation 'com.google.firebase:firebase-admin:7.1.1'
