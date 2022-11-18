@@ -20,17 +20,18 @@ public class PlaceResponseDto {
     private GroupType recommendType = GroupType.ALL;
     private String placeImage;
 
-    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped)
+    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped,String placeImage)
     {
-        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped);
+        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped,placeImage);
 
     }
 
-    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped) {
+    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped,String placeImage) {
 
         this.position = position;
         this.myMemoryCount = myMemoryCount;
         this.otherMemoryCount = otherMemoryCount;
         this.isScraped = isScraped;
+        this.placeImage = "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
     }
 }

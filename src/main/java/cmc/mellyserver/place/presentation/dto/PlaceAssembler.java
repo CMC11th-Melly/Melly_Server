@@ -45,7 +45,7 @@ public class PlaceAssembler {
                 place.getPlaceCategory(),
                 place.getPlaceName(),
                 GroupType.ALL,
-                place.getPlaceImage()
+                place.getPlaceImage() == null ? null : "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png"
                 );
 
 

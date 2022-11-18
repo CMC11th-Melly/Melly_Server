@@ -30,7 +30,7 @@ public class PlaceDomainService {
         // 2. 만약 아무도 데이터 저장 안했다면?
         if(placeByPosition.isEmpty())
         {
-            return PlaceResponseDto.PlaceNotCreated(new Position(lat,lng),0L,0L,false);
+            return PlaceResponseDto.PlaceNotCreated(new Position(lat,lng),0L,0L,false,null);
         }
         // 3. 만약 장소가 존재하면?
         Place place = placeByPosition.get();
@@ -47,8 +47,8 @@ public class PlaceDomainService {
                 .stream()
                 .filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId())) )
                 .count();
-
-        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL,place.getPlaceImage());
+        String placeImage = place.getPlaceImage() == null ? null : "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
+        return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL,placeImage);
 
 
     }
