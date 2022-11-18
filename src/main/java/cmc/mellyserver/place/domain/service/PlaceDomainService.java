@@ -47,7 +47,7 @@ public class PlaceDomainService {
                 .stream()
                 .filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId())) )
                 .count();
-        String placeImage = place.getPlaceImage() == null ? null : "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
+        String placeImage = place.getPlaceImage() == null ? "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png" : place.getPlaceImage();
         return new PlaceResponseDto(place.getId(),place.getPosition(),myMemoryCount,otherMemoryCount,place.getIsScraped(),place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL,placeImage);
 
 

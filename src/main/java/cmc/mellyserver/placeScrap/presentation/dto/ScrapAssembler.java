@@ -23,7 +23,7 @@ public class ScrapAssembler {
                 place.getPlaceCategory(),
                 place.getPlaceName(),
                 GroupType.ALL,
-                place.getPlaceImage()  == null ? null : "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png"
+                place.getPlaceImage() == null ? "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png" : place.getPlaceImage()
         );
 
 
