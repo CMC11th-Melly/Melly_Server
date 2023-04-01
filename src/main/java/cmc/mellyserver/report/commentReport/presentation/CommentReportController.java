@@ -3,7 +3,6 @@ package cmc.mellyserver.report.commentReport.presentation;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.report.commentReport.application.CommentReportService;
 import cmc.mellyserver.report.commentReport.presentation.dto.CommentReportRequest;
-import cmc.mellyserver.user.application.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

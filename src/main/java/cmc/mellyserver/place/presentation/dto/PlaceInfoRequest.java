@@ -1,6 +1,6 @@
 package cmc.mellyserver.place.presentation.dto;
 
-import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.common.enums.OpenType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 

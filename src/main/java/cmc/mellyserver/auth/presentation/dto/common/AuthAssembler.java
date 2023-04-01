@@ -8,7 +8,7 @@ import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.auth.presentation.dto.response.OAuthLoginResponse;
 import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
 import cmc.mellyserver.common.response.CommonResponse;
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

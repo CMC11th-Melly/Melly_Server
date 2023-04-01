@@ -1,11 +1,9 @@
 package cmc.mellyserver.auth.token;
 
 import cmc.mellyserver.auth.exception.TokenValidFailedException;
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +31,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public AuthToken createToken(String id, RoleType roleType, String expiry) {
+    public AuthToken createToken(Long id, RoleType roleType, String expiry) {
         Date expiryDate = getExpiryDate(expiry);
         return new AuthToken(id, roleType, expiryDate, key);
     }

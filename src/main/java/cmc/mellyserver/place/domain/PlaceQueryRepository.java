@@ -1,35 +1,25 @@
 package cmc.mellyserver.place.domain;
 
-import cmc.mellyserver.common.util.jpa.QueryDslUtil;
-import cmc.mellyserver.memory.domain.QMemory;
-import cmc.mellyserver.place.domain.enums.ScrapType;
-import cmc.mellyserver.placeScrap.application.dto.PlaceScrapResponseDto;
-import cmc.mellyserver.placeScrap.domain.PlaceScrap;
-import cmc.mellyserver.placeScrap.domain.QPlaceScrap;
+
+import cmc.mellyserver.common.enums.ScrapType;
+import cmc.mellyserver.place.placeScrap.application.dto.PlaceScrapResponseDto;
+
 import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
 import static cmc.mellyserver.place.domain.QPlace.*;
-import static cmc.mellyserver.placeScrap.domain.QPlaceScrap.*;
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 @Repository
 public class PlaceQueryRepository {
@@ -76,6 +66,8 @@ public class PlaceQueryRepository {
     /**
      * placeId로 장소 조회
      */
+
+    // 조건 1 :
     public Place searchPlaceByPlaceId(Long placeId)
     {
         return  query.select(place)
@@ -85,17 +77,17 @@ public class PlaceQueryRepository {
     }
 
 
-    /**
+    /** TODO : 수정 완료
      * 로그인 유저의 메모리가 존재하는 장소 조회 (최적화 완료), 나의 메모리는 신고 당해도 나한테 보이도록 하기!
      * 차단 당해도 내 메모리는 보여야 하니 해당사항 없음! (차단 필터링 x)
      */
-    public List<Place> getPlaceUserMemoryExist(User user)
+    public List<Place> getPlaceUserMemoryExist(Long userSeq)
     {
         return query.select(place)
                 .from(place)
-                .leftJoin(place.memories,memory)
+                .leftJoin(memory).on(memory.placeId.eq(place.id))
                 .where(
-                        memory.user.userSeq.eq(user.getUserSeq())
+                        memory.userId.eq(userSeq)
                 )
                 .distinct()
                 .fetch();

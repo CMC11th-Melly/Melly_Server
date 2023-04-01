@@ -3,10 +3,8 @@ package cmc.mellyserver.user.application;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.enums.RecommendGroup;
-import org.springframework.security.core.parameters.P;
+import cmc.mellyserver.common.enums.RecommendGroup;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

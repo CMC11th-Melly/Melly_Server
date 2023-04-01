@@ -44,7 +44,7 @@ public class AuthService {
         String filename = s3FileLoader.getMultipartFileName(authRequestForSignupDto.getProfile_image());
         User saveUser = AuthAssembler.createEmailLoginUser(authRequestForSignupDto,passwordEncoder,filename);
         userRepository.save(saveUser);
-        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserId(), saveUser.getRoleType(), expiry);
+        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserSeq(), saveUser.getRoleType(), expiry);
         return AuthAssembler.signupResponse(accessToken.getToken(),saveUser);
     }
 
@@ -58,7 +58,7 @@ public class AuthService {
         }
 
         user.setFcmToken(fcmToken);
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), expiry);
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType(), expiry);
 
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }

@@ -10,6 +10,7 @@ import cmc.mellyserver.group.domain.UserGroupQueryRepository;
 import cmc.mellyserver.group.presentation.dto.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.GroupUpdateRequest;
 import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final UserGroupQueryRepository userGroupQueryRepository;
+    private final UserRepository userRepository;
 
     public UserGroup getGroupById(Long groupId)
     {
@@ -39,25 +41,44 @@ public class GroupService {
     }
 
     @Transactional
-    public UserGroup participateToGroup(String uid, Long groupId)
+    public UserGroup participateToGroup(Long userSeq, Long groupId)
     {
+        // 1. 현재 로그인한 유저 정보를 찾는다.
+        User user = userRepository.findById(userSeq).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+        });
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        // 2. 현재 로그인한 유저의 그룹 목록에서 그룹 아이디를 찾는다.
+        boolean isDuplicatedGroup = user.getParticipatedGroupId().contains(groupId);
 
-        boolean userParticiatedToGroup = user.getGroupAndUsers().stream().anyMatch(g -> g.getGroup().getId().equals(groupId));
+        // 3. 만약 이미 존재하는 그룹이라면 예외 발생
+        if(isDuplicatedGroup) throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
 
-        if (userParticiatedToGroup)
-        {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
-        }
-
+        // 4. 그룹 정보 가져오기
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
-        });
-        GroupAndUser groupAndUser = new GroupAndUser();
-        groupAndUser.setUser(user);
-        userGroup.setGroupUser(groupAndUser);
-        return groupRepository.save(userGroup);
+                    });
+
+        userGroup.addParticipant(userSeq);
+
+
+//        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+//
+//        boolean userParticiatedToGroup = user.getGroupAndUsers().stream().anyMatch(g -> g.getGroup().getId().equals(groupId));
+//
+//        if (userParticiatedToGroup)
+//        {
+//            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
+//        }
+//
+
+//
+//        GroupAndUser groupAndUser = new GroupAndUser();
+//        groupAndUser.setUser(user);
+//        userGroup.setGroupUser(groupAndUser);
+//        return groupRepository.save(userGroup);
+
+
     }
 
     @Transactional

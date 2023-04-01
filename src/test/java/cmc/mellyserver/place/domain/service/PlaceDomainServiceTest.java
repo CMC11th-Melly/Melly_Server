@@ -8,7 +8,7 @@ import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

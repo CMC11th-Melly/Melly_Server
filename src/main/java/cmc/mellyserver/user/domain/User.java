@@ -1,117 +1,107 @@
 package cmc.mellyserver.user.domain;
 import cmc.mellyserver.auth.presentation.dto.Provider;
-import cmc.mellyserver.block.commentBlock.domain.CommentBlock;
-import cmc.mellyserver.block.memoryBlock.domain.MemoryBlock;
-import cmc.mellyserver.comment.domain.Comment;
-import cmc.mellyserver.comment.domain.CommentLike;
+import cmc.mellyserver.common.enums.AgeGroup;
+import cmc.mellyserver.common.enums.Gender;
+import cmc.mellyserver.common.enums.RecommendGroup;
+import cmc.mellyserver.common.enums.RoleType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.group.domain.GroupAndUser;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
-import cmc.mellyserver.notification.domain.Notification;
-import cmc.mellyserver.placeScrap.domain.PlaceScrap;
-import cmc.mellyserver.report.commentReport.domain.CommentReport;
-import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
-import cmc.mellyserver.user.domain.enums.*;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
+@Table(name = "tb_user")
 public class User extends JpaBaseEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_seq")
-    private Long userSeq;
+    private Long userSeq; // 유저 DB 식별자
 
     @Column(name = "user_id",nullable = false)
-    private String userId;
+    private String userId; // 유저 OAuth 아이디
 
-    private String email;
+    private String email; // 유저 이메일
 
-    private String password;
+    private String password; // 유저 비밀번호
 
-    private String nickname;
+    private String nickname; // 유저 닉네임
 
-    private String profileImage;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String profileImage; // 유저 프로필 이미지
 
     @Enumerated(EnumType.STRING)
-    private AgeGroup ageGroup;
+    private Gender gender; // 유저 성별
 
     @Enumerated(EnumType.STRING)
-    private Provider provider;
+    private AgeGroup ageGroup; // 유저 연령
 
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    private Provider provider; // 유저 제공자
 
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType; // 유저 역할
     @Embedded
-    private Recommend recommend;
+    private Recommend recommend; // 유저 추천 정보
 
     @Column(name = "store_capacity")
     private Double storeCapacity;  // 아직 필요한게 맞는지는 모르겠다.
 
-    private String fcmToken;
+    private String fcmToken; // 푸시 위한 토큰
 
+    // 푸시 알림 허용 목록
     private boolean enableAppPush;
 
     private boolean enableCommentLike;
 
     private boolean enableComment;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<Memory> memories = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    private List<GroupAndUser> groupAndUsers = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<PlaceScrap> placeScraps = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<MemoryScrap> memoryScraps = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<CommentLike> commentLikes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
-    private List<Notification> notifications = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private List<MemoryReport> memoryReports = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private List<CommentReport> commentReports = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
-
-//    @ElementCollection
-//    @CollectionTable(
-//            name = "block_memory_table",
-//            joinColumns = @JoinColumn(name = "user_seq"))
-//    @Column(name = "block_memory")
-//    private Set<Long> blockedMemory = new HashSet<>();
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private List<CommentBlock> commentBlocks = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable
+    private List<Long> participatedGroupId = new ArrayList<>();
 
 
-
+//
+//    // TODO : 관계 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
+//    private List<MemoryScrap> memoryScraps = new ArrayList<>();
+//
+//    // TODO : 관계 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
+//    private List<CommentLike> commentLikes = new ArrayList<>();
+//
+//    // TODO : 관계 끊기
+//    @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
+//    private List<Comment> comments = new ArrayList<>();
+//
+//    // TODO : 알림
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
+//    private List<Notification> notifications = new ArrayList<>();
+//
+//    // TODO : 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+//    private List<MemoryReport> memoryReports = new ArrayList<>();
+//
+//    // TODO : 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+//    private List<CommentReport> commentReports = new ArrayList<>();
+//
+//    // TODO : 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+//    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
+//
+//    @CollectionTable
+//    private List<Long> blockedMemoryIds = new ArrayList<>();
+//
+//    // TODO : 끊기
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+//    private List<CommentBlock> commentBlocks = new ArrayList<>();
+//
+//
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
         this.nickname = nickname;

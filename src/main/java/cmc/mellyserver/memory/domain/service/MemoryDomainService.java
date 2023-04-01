@@ -12,7 +12,7 @@ import cmc.mellyserver.memory.domain.GroupInfo;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.MemoryRepository;
-import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;

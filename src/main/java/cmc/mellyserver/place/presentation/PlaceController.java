@@ -23,18 +23,14 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-
-
     @Operation(summary = "특정 좌표 영역 내의 장소 데이터를 모두 조회(내것만 체크하면 되니깐 따로 차단 체크 필요 없음)")
     @GetMapping("/place/list")
     public ResponseEntity<CommonResponse<PlaceListResponseWrapper>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType) {
 
-        List<PlaceListReponseDto> placeList = placeService.getMarkerPosition(user.getUsername(), groupType);
+        List<PlaceListReponseDto> placeList = placeService.getMarkerPosition(Long.parseLong(user.getUsername()), groupType);
         return ResponseEntity.ok(new CommonResponse<>(200, "유저가 메모리 작성한 장소 조회", new PlaceListResponseWrapper(placeList)));
 
     }
-
-
 
     /**
      * 메모리 차단 반영 완료
@@ -43,12 +39,10 @@ public class PlaceController {
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<CommonResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId) {
 
-        PlaceResponseDto placeResponseDto = placeService.searchPlaceByPlaceId(user.getUsername(), placeId);
+        PlaceResponseDto placeResponseDto = placeService.searchPlaceByPlaceId(Long.parseLong(user.getUsername()), placeId);
         return ResponseEntity.ok(new CommonResponse(200, "메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDto)));
 
     }
-
-
 
     /**
      * 메모리 차단 반영 완료
@@ -57,7 +51,8 @@ public class PlaceController {
     @GetMapping("/place")
     public ResponseEntity<CommonResponse> getDetailPlace(@AuthenticationPrincipal User user, PlaceSimpleRequest placeSimpleRequest) {
 
-        return ResponseEntity.ok(new CommonResponse(200, "장소 상세 조회", placeService.getPlaceByPosition(user.getUsername(), placeSimpleRequest.getLat(), placeSimpleRequest.getLng())));
+        PlaceResponseDto placeByPosition = placeService.getPlaceByPosition(Long.parseLong(user.getUsername()), placeSimpleRequest.getLat(), placeSimpleRequest.getLng());
+        return ResponseEntity.ok(new CommonResponse(200, "장소 상세 조회", placeByPosition));
 
     }
 

@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.token;
 
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +19,15 @@ public class AuthToken {
 
     private static final String AUTHORITIES_KEY = "role";
 
-    AuthToken(String socialId, RoleType roleType, Date expiry, Key key) {
+    AuthToken(Long userId, RoleType roleType, Date expiry, Key key) {
         String role = roleType.toString();
         this.key = key;
-        this.token = createAuthToken(socialId, role, expiry);
+        this.token = createAuthToken(userId, role, expiry);
     }
 
-    private String createAuthToken(String socialId, String role, Date expiry) {
+    private String createAuthToken(Long userId, String role, Date expiry) {
         return Jwts.builder()
-                .setSubject(socialId)
+                .setSubject(userId.toString())
                 .claim(AUTHORITIES_KEY, role)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)

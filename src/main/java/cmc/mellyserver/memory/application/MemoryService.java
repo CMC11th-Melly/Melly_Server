@@ -14,6 +14,7 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.MemoryRepository;
+import cmc.mellyserver.memory.domain.dto.UserCreatedMemoryListResponseDto;
 import cmc.mellyserver.memory.domain.service.MemoryDomainService;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
@@ -74,6 +75,7 @@ public class MemoryService {
     /**
      * 메모리 등록을 위한 로그인 유저가 속한 그룹 목록 조회
      */
+    // TODO : 이 부분 쪼개기
     public List<MemoryFormGroupResponse> getUserGroupForMemoryForm(String uid)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
@@ -88,10 +90,9 @@ public class MemoryService {
     /**
      * 포함하고 있는 메모리 제목으로 장소 검색
      */
-    public List<MemorySearchDto> searchPlaceByMemoryTitle(String uid, String memoryName)
+    public List<MemorySearchDto> searchPlaceByMemoryTitle(Long userSeq, String memoryName)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        return memoryQueryRepository.searchMemoryName(user.getUserSeq(),memoryName);
+        return memoryQueryRepository.searchMemoryName(userSeq,memoryName);
     }
 
 
@@ -99,11 +100,12 @@ public class MemoryService {
     /**
      * 장소 상세 - 로그인한 유저가 이 장소에 작성한 메모리 조회
      */
-    public Slice<GetMemoryForPlaceResponse> getUserMemory(Pageable pageable, String uid, Long placeId, GroupType groupType)
+    public Slice<GetMemoryForPlaceResponse> getUserMemory(Pageable pageable, Long userSeq, Long placeId, GroupType groupType)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        Slice<Memory> memories = memoryQueryRepository.searchMemoryUserCreate(pageable, user.getUserId(), placeId, groupType);
-        return MemoryAssembler.getMemoryForPlaceResponse(memories,user);
+        Slice<UserCreatedMemoryListResponseDto> userCreatedMemoryListResponseDtos = memoryQueryRepository.searchMemoryUserCreate(pageable, userSeq, placeId, groupType);
+
+// 이전 사항
+//        return MemoryAssembler.getMemoryForPlaceResponse(memories,user);
     }
 
 
@@ -127,10 +129,12 @@ public class MemoryService {
      */
     @Transactional
     public void removeMemory(Long memoryId) {
+
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
-        memoryRepository.delete(memory);
+
+        memory.delete();
     }
 
 

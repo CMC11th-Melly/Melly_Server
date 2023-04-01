@@ -1,15 +1,17 @@
 package cmc.mellyserver.memory.domain;
 
+import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.domain.enums.OpenType;
+import cmc.mellyserver.memory.domain.dto.UserCreatedMemoryListResponseDto;
+import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
-import cmc.mellyserver.place.domain.QPlace;
+
+import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
-import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -22,14 +24,16 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static cmc.mellyserver.group.domain.QGroupAndUser.*;
-import static cmc.mellyserver.group.domain.QUserGroup.*;
+
+import static cmc.mellyserver.group.domain.QUserGroup.userGroup;
 import static cmc.mellyserver.memory.domain.QMemory.*;
-import static cmc.mellyserver.place.domain.QPlace.*;
-import static cmc.mellyserver.user.domain.QUser.*;
+import static cmc.mellyserver.memory.domain.QMemoryImage.memoryImage;
+import static cmc.mellyserver.place.domain.QPlace.place;
+import static cmc.mellyserver.user.domain.QUser.user;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -51,11 +55,13 @@ public class MemoryQueryRepository {
      * query projection과 fetch join은 동시 사용 불가 -> 둘 중 하나만 선택하자!
      */
     public List<MemorySearchDto> searchMemoryName(Long userSeq, String memoryName) {
-        return query.select(Projections.constructor(MemorySearchDto.class, memory.place.id, memory.title))
+        return query.select(Projections.constructor(MemorySearchDto.class, memory.placeId, memory.title))
                 .from(memory)
-                .where(memory.user.userSeq.eq(userSeq),
-                        memory.isReported.eq(false),
-                        memory.title.contains(memoryName))
+                .where(
+                        memory.user.userSeq.eq(userSeq),  // 본인이 가지고 있는 메모리
+                        memory.isReported.isFalse(),      // 신고되지 않은 메모리
+                        memory.isDelete.isFalse(),        // 삭제 되지 않은 메모리
+                        memory.title.contains(memoryName)) // 메모리 제목으로 검색하는 로직
                 .distinct().fetch();
     }
 
@@ -63,49 +69,75 @@ public class MemoryQueryRepository {
 
     /**
      * 장소 상세 - 나의 메모리, 마이페이지 - 내가 작성한 메모리 조회 (최적화 완료, 인덱스 추가 필요)
+     * TODO : 수정 완료 (2023.3.30)
      */
-    public Slice<Memory> searchMemoryUserCreate(Pageable pageable, String uid, Long placeId,GroupType groupType) {
+    public Slice<UserCreatedMemoryListResponseDto> searchMemoryUserCreate(Pageable pageable, Long userSeq, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<Memory> results = query.select(memory)
+        List<Tuple> result = query.select(memory, place)
                 .from(memory)
-                .join(memory.place,place).fetchJoin()
-                .join(memory.user,user).fetchJoin()
+                .leftJoin(memory.memoryImages, memoryImage).fetchJoin() // 이미지는 연관관계로 관리할 예정
+                .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
-                        eqPlace(placeId),  // 특정 장소에 대한 메모리면 placeId로 필터링
-                        eqUserId(uid),  // 내가 작성한 메모리가 맞는지 체크
-                        eqGroup(groupType)   // 그룹 타입 체크
-                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))  // Sort에 명시한 조건으로 필터링
-                .offset(pageable.getOffset())   // offset 지정
-                .limit(pageable.getPageSize() + 1)  // 하나 더 땡겨와서 마지막 페이지인지 체크
+                        memory.placeId.eq(placeId),
+                        memory.userId.eq(userSeq),
+                        eqGroup(groupType)
+                )
+                .orderBy(
+                        ORDERS.stream().toArray(OrderSpecifier[]::new)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        return checkLastPage(pageable, results); // 마지막 페이지인지 체크 후 SliceImpl 반환해주기
+        List<UserCreatedMemoryListResponseDto> collect = result.stream().map(tuple -> {
+            Memory memory = tuple.get(0, Memory.class);
+            Place place = tuple.get(1, Place.class);
+            return new UserCreatedMemoryListResponseDto(place.getId(), place.getPlaceName(), memory.getId(), memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(), mi.getImagePath())).collect(Collectors.toList()), memory.getTitle(), memory.getContent(), memory.groupInfo.getGroupType(), memory.getGroupInfo().getGroupName(), memory.getStars(), memory.getKeyword(), true, memory.getVisitedDate())
+        }).collect(Collectors.toList());
+
+
+//        List<Memory> results = query.select(memory)
+//                .from(memory)
+//                .join(memory.place,place).fetchJoin()
+//                .join(memory.user,user).fetchJoin()
+//                .where(
+//                        eqPlace(placeId),  // 특정 장소에 대한 메모리면 placeId로 필터링
+//                        eqUserId(uid),  // 내가 작성한 메모리가 맞는지 체크
+//                        eqGroup(groupType)   // 그룹 타입 체크
+//                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))  // Sort에 명시한 조건으로 필터링
+//                .offset(pageable.getOffset())   // offset 지정
+//                .limit(pageable.getPageSize() + 1)  // 하나 더 땡겨와서 마지막 페이지인지 체크
+//                .fetch();
+//
+//
+       checkLastPage(pageable, collect); // 마지막 페이지인지 체크 후 SliceImpl 반환해주기
+        return null;
     }
 
 
 
     /**
-     * 장소 상세 - 다른 사람이 작성한 메모리 (최적화 완료,인덱스 추가 필요)
+     * TODO : 장소 상세 - 다른 사람이 작성한 메모리 (최적화 완료,인덱스 추가 필요), 수정 완료
      */
     public Slice<Memory> searchMemoryOtherCreate(Pageable pageable, User loginUser, Long placeId,GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         List<Long> userBlockedMemoryId = getBlockedMemoryId(loginUser);
 
-        List<Memory> results = query.select(memory)
+        List<Memory> results = query.select(memory) //  다른 사람이 작성한 메모리 가져오기
                 .from(memory)
-                .join(memory.place,place).fetchJoin()
-                .join(memory.user,user).fetchJoin()
                 .where(
-                        eqPlace(placeId),
-                        neUser(loginUser),  // 로그인한 유저가 작성한 메모리가 아닐때
-                        eqGroup(groupType),
-                        memory.isReported.eq(false),
-                        memoryBlocked(userBlockedMemoryId).not(),
-                        memory.openType.eq(OpenType.ALL) // 전체 공개로 올린 메모리만 보여주기
-                ).orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                        memory.placeId.eq(placeId),  // 특정 장소에 속해있는지 체크
+                        memory.userId.ne(loginUser.getUserSeq()), // 로그인 유저가 아닌 다른 사람이 작성했는지 체크
+                        eqGroup(groupType), // 그룹 타입 체크
+                        memory.isReported.isFalse(), // 신고되지 않은 메모리 조회
+                        memory.isDelete.isFalse(),   // 삭제되지 않은 메모리 조회
+                        checkMemoryNotBlocked(userBlockedMemoryId), // 다른 사람이 작성했더라도, 내가 차단한 메모리는 안보이게 하기
+                        memory.openType.eq(OpenType.ALL) // 다른 사람이 전체 공개로 올린 메모리만 보여주기
+                )
+                .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -114,15 +146,15 @@ public class MemoryQueryRepository {
     }
 
 
-    public Slice<Memory> searchMemoryOtherCreateTemp(Pageable pageable, User loginUser, Long placeId,GroupType groupType, List<Long> memoryIds)
-    {
-        List<Memory> results = query.select(memory)
-                .from(memory)
-                .where(memory.id.in(memoryIds))
-                .fetch();
-
-        return checkLastPage(pageable, results);
-    }
+//    public Slice<Memory> searchMemoryOtherCreateTemp(Pageable pageable, User loginUser, Long placeId,GroupType groupType, List<Long> memoryIds)
+//    {
+//        List<Memory> results = query.select(memory)
+//                .from(memory)
+//                .where(memory.id.in(memoryIds))
+//                .fetch();
+//
+//        return checkLastPage(pageable, results);
+//    }
 
 
     /**
@@ -139,7 +171,7 @@ public class MemoryQueryRepository {
                         eqGroup(groupType),
                         memory.isReported.eq(false),
                         memory.id.in(user.getMemoryScraps().stream().map(s -> s.getMemory().getId()).collect(Collectors.toList())),
-                        memoryBlocked(userBlockedMemoryId).not()
+                        checkMemoryNotBlocked(userBlockedMemoryId)
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -158,17 +190,20 @@ public class MemoryQueryRepository {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         List<Long> userBlockedMemoryId = getBlockedMemoryId(loginUser);
-
+        List<Long> groupIds = loginUser.getGroupIds(); // 현재 로그인한 유저가 속해있는 그룹의 ID들 체크
         List<Memory> results = query.select(memory)
                 .from(memory)
-                .join(memory.user,user).fetchJoin()
-                .join(memory.place,place).fetchJoin()
-                .join(user.groupAndUsers, groupAndUser) // 컬렉션 조회이므로 fetch join 걸지 않고 in 쿼리로 가져오기
+                .leftJoin(user).on(user.userSeq.eq(memory.userId))
+//                .join(memory.place,place).fetchJoin()
+//                .join(user.groupAndUsers, groupAndUser) // 컬렉션 조회이므로 fetch join 걸지 않고 in 쿼리로 가져오기
+                .join(userGroup).on(userGroup.id.in(user.groupIds))
                 .where(
-                        eqPlace(placeId),
-                        eqGroup(groupType),
-                        memory.isReported.eq(false),
-                        memory.openType.ne(OpenType.PRIVATE),
+                        memory.placeId.eq(placeId),  // 특정 장소에 속해있는 메모리인지 체크
+                        eqGroup(groupType),  // 내가 원하는 그룹에 속해있는 데이터만 가져오기
+                        memory.isReported.isFalse(), // 신고되지 않은 메모리만 가져오기
+                        memory.isDelete.isFalse(), // 삭제되지 않은 메모리만 가져오기
+                        memory.openType.ne(OpenType.PRIVATE), // 비공개가 아닌 것만 다 가져오기
+                        user.group
                         // 2. 내가 속해있는 그룹에 속해있는 사람들 -> 이건 작성자가 속해있는 그룹 체크
                         groupAndUser.group.id.in(
                                 JPAExpressions.select(userGroup.id)
@@ -177,9 +212,9 @@ public class MemoryQueryRepository {
                                         .join(groupAndUser.user, user)
                                         .where(user.userId.eq(loginUser.getUserId()))
                         ),
-                        memoryBlocked(userBlockedMemoryId).not(),
+                        checkMemoryNotBlocked(userBlockedMemoryId),
                         checkGroup(loginUser.getUserId()).not(),
-                        neUserId(loginUser.getUserId())
+                        memory.userId.ne(loginUser.getUserSeq())
                 )
                 .distinct()
                 .offset(pageable.getOffset())
@@ -191,9 +226,12 @@ public class MemoryQueryRepository {
         return checkLastPage(pageable, results);
     }
 
+
+    // TODO : Block한 메모리 ID만 가지고 있어야지...
     private List<Long> getBlockedMemoryId(User user)
     {
-        return user.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+//        return user.getMemoryBlocks().stream().map(m -> m.getMemory().getId()).collect(Collectors.toList());
+       return user.getBlockedMemoryIds();
     }
 
     private BooleanExpression checkGroup(String uid) {
@@ -213,14 +251,14 @@ public class MemoryQueryRepository {
         ).and(memory.openType.eq(OpenType.GROUP));
     }
 
-    private BooleanExpression memoryBlocked(List<Long> compare) {
+    private BooleanExpression checkMemoryNotBlocked(List<Long> compare) {
 
         if(compare == null)
         {
             return null;
         }
 
-        return memory.id.in(compare);
+        return memory.id.notIn(compare);
     }
 
 
@@ -241,7 +279,7 @@ public class MemoryQueryRepository {
         if (placeId == null) {
             return null;
         }
-        return memory.place.id.eq(placeId);
+        return memory.placeId.eq(placeId);
     }
 
 
@@ -277,7 +315,7 @@ public class MemoryQueryRepository {
 
 
 
-    private Slice<Memory> checkLastPage(Pageable pageable, List<Memory> results) {
+    private Slice<UserCreatedMemoryListResponseDto> checkLastPage(Pageable pageable, List<UserCreatedMemoryListResponseDto> results) {
 
         boolean hasNext = false;
 
@@ -320,4 +358,65 @@ public class MemoryQueryRepository {
         return ORDERS;
     }
 
+    public HashMap<String,Long> countMemoryOfPlace(Long placeId, Long userSeq) {
+
+        Long myMemoryCount = query.select(memory.count())
+                .from(memory)
+                .where(
+                        memory.placeId.eq(placeId),
+                        memory.userId.eq(userSeq)
+                )
+                .fetchOne();
+
+        Long otherMemoryCount = query.select(memory.count())
+                .from(memory)
+                .where(
+                        memory.placeId.eq(placeId), // 해당 장소에 속해 있지만
+                        memory.userId.ne(userSeq)  // 해당 유저의 아이디를 가지고 있지 않고
+                        // TODO : 메모리 블록되지 않았다는거 보장해야 한다 로직 추가 예정 2023.3.30
+                )
+                .fetchOne();
+
+        HashMap<String,Long> map = new HashMap<>();
+        map.put("myMemoryCount",myMemoryCount);
+        map.put("otherMemoryCount",otherMemoryCount);
+
+        return map;
+
+
+        //        long myMemoryCount = place.getMemories()
+//                .stream()
+//                .filter(m -> m.getUser().getUserSeq().equals(userSeq))
+//                .count();
+//
+//        long otherMemoryCount = place.getMemories()
+//                .stream()
+//                .filter(m -> (!m.getUser().getUserSeq().equals(userSeq))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId())) )
+//                .count();
+
+
+    }
+
+    public HashMap<String,Long> countMemoriesBelongToPlace(Long userSeq, Long placeId) {
+
+        Long memoriesBelongToLoginUser = query.select(memory.count())
+                .from(memory)
+                .where(
+                        memory.placeId.eq(placeId),
+                        memory.userId.eq(userSeq)
+                ).fetchOne();
+
+        Long memoriesNotBelongToLoginUser = query.select(memory.count())
+                .from(memory)
+                .where(
+                        memory.placeId.eq(placeId),
+                        memory.userId.ne(userSeq)
+                ).fetchOne();
+
+        HashMap<String, Long> map = new HashMap<>();
+        map.put("belongToUser",memoriesBelongToLoginUser);
+        map.put("notBelongToUser",memoriesNotBelongToLoginUser);
+
+        return map;
+    }
 }
