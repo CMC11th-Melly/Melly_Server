@@ -33,9 +33,11 @@ public class Comment extends JpaBaseEntity {
 
     private Long metionUser;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memory_id")
-    private Memory memory;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "memory_id")
+//    private Memory memory;
+
+    private Long memoryId;
 
     @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
@@ -48,11 +50,11 @@ public class Comment extends JpaBaseEntity {
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
-    private List<CommentReport> commentReports = new ArrayList<>();
-
-    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
-    private List<CommentBlock> commentBlocks = new ArrayList<>();
+//    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+//    private List<CommentReport> commentReports = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+//    private List<CommentBlock> commentBlocks = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;

@@ -1,10 +1,10 @@
 package cmc.mellyserver.trend.application;
 
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.group.domain.GroupRepository;
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.group.domain.group.GroupRepository;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.place.domain.PlaceQueryRepository;
+import cmc.mellyserver.place.domain.repository.PlaceQueryRepository;
 import cmc.mellyserver.trend.application.dto.TrendResponseDto;
 import cmc.mellyserver.trend.infrastructure.TrendAnalyzer;
 import cmc.mellyserver.user.domain.User;
@@ -25,8 +25,8 @@ public class TrendService {
     private final TrendAnalyzer trendAnalyzer;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
-    public List<TrendResponseDto> getTrend(String uid) {
-           User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public List<TrendResponseDto> getTrend(Long userSeq) {
+           User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
            List<Place> trendingPlace = placeQueryRepository.getTrendingPlace(List.of(1L, 2L, 3L));
 
 //        return trendAnalyzer.findKeywordSortedByRank(user);

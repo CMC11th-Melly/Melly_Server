@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 public class ProfileUpdateRequest {
-
     private MultipartFile profileImage;
     private String nickname;
     private Gender gender;

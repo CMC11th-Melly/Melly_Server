@@ -7,13 +7,12 @@ import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.domain.NotificationRepository;
-import cmc.mellyserver.notification.domain.NotificationType;
+import cmc.mellyserver.common.enums.NotificationType;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
+import cmc.mellyserver.user.presentation.dto.response.NotificationOnOffResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -26,57 +25,57 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemoryRepository memoryRepository;
 
-    public List<Notification> getNotificationList(String uid)
+    public List<Notification> getNotificationList(Long userSeq)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         return user.getNotifications();
     }
 
     @Transactional
-    public void setPushCommentLikeOn(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setPushCommentLikeOn(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableCommentLike(true);
     }
 
     @Transactional
-    public void setPushCommentLikeOff(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setPushCommentLikeOff(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableCommentLike(false);
     }
 
     @Transactional
-    public void setPushCommentOn(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setPushCommentOn(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableComment(true);
     }
 
     @Transactional
-    public void setPushCommentOff(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setPushCommentOff(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableComment(false);
     }
 
     @Transactional
-    public void setAppPushOn(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setAppPushOn(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableAppPush(true);
     }
 
     @Transactional
-    public void setAppPushOff(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public void setAppPushOff(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         user.setEnableAppPush(false);
     }
 
-    public NotificationOnOffResponse getNotificationOnOff(String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+    public NotificationOnOffResponse getNotificationOnOff(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         return new NotificationOnOffResponse(user.isEnableAppPush(),user.isEnableCommentLike(),user.isEnableComment());
     }
 
     @Transactional
-    public Notification createNotification(NotificationType notificationType,String body,String uid, Long memoryId)
+    public Notification createNotification(NotificationType notificationType,String body,Long userSeq, Long memoryId)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });

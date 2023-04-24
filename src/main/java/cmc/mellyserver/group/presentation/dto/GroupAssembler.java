@@ -1,6 +1,6 @@
 package cmc.mellyserver.group.presentation.dto;
 
-import cmc.mellyserver.group.domain.UserGroup;
+import cmc.mellyserver.group.domain.group.UserGroup;
 import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponse;
 
 import java.util.Collections;

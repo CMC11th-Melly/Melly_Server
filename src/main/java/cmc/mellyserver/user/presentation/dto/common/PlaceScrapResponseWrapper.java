@@ -1,6 +1,6 @@
 package cmc.mellyserver.user.presentation.dto.common;
 
-import cmc.mellyserver.place.placeScrap.application.dto.PlaceScrapResponseDto;
+import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package cmc.mellyserver.memory.domain.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +16,6 @@ import java.util.List;
  * @author jemlog
  */
 @Data
-@AllArgsConstructor
 public class UserCreatedMemoryListResponseDto {
 
     @Schema(example = "1")
@@ -43,4 +42,18 @@ public class UserCreatedMemoryListResponseDto {
     @Schema(example = "202210141830")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;
+
+
+    public UserCreatedMemoryListResponseDto(Long placeId, String placeName, Long memoryId, String title, String content, GroupType groupType, String groupName, Long stars, boolean loginUserWrite, LocalDateTime visitedDate) {
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.memoryId = memoryId;
+        this.title = title;
+        this.content = content;
+        this.groupType = groupType;
+        this.groupName = groupName;
+        this.stars = stars;
+        this.loginUserWrite = loginUserWrite;
+        this.visitedDate = visitedDate;
+    }
 }

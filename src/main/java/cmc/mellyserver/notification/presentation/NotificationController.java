@@ -6,7 +6,7 @@ import cmc.mellyserver.notification.application.NotificationService;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.presentation.dto.NotificationAssembler;
 import cmc.mellyserver.notification.presentation.dto.NotificationCheckRequest;
-import cmc.mellyserver.user.presentation.dto.NotificationOnOffResponse;
+import cmc.mellyserver.user.presentation.dto.response.NotificationOnOffResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

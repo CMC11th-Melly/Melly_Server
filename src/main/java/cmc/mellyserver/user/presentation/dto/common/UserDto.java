@@ -12,5 +12,4 @@ public class UserDto {
     private String nickname;
     private Boolean isLoginUser;
 
-
 }

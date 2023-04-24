@@ -1,10 +1,10 @@
 package cmc.mellyserver.place.presentation.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.Position;
-import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.place.presentation.dto.response.PlaceListReponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PlaceAssembler {
 
-    public static List<PlaceListReponseDto> placeListReponseDto(List<Place> places,GroupType groupType,Long userSeq)
+    public static List<PlaceListReponseDto> placeListReponseDto(List<Place> places, GroupType groupType, Long userSeq)
     {
        return places.stream().map(p -> new PlaceListReponseDto(
-                new Position(p.getPosition().getLat(),p.getPosition().getLng()),
-                groupType,
-                p.getId(),
+                new Position(p.getPosition().getLat(),p.getPosition().getLng()), // 좌표 값
+                groupType, // 그룹 종류
+                p.getId(), // 장소
                 p.getMemories().stream().filter(pm -> {
 
                     // 만약 메모리가 전체 공개라면
@@ -36,6 +36,8 @@ public class PlaceAssembler {
                 }).count()
                 )).collect(Collectors.toList());
     }
+
+
    // & m.getOpenType().equals(OpenType.ALL)
     public static PlaceResponseDto placeResponseDto(Place place, Boolean isScraped, HashMap<String,Long> memoryCounts)
     {
@@ -46,14 +48,3 @@ public class PlaceAssembler {
 
 }
 
-
-//        return new PlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
-//                stream().
-//                filter(m -> m.getUser().getUserSeq().equals(userSeq)).count(),
-//                place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId()))).count(),
-//                isScraped,
-//                place.getPlaceCategory(),
-//                place.getPlaceName(),
-//                GroupType.ALL,
-//                place.getPlaceImage()
-//                );

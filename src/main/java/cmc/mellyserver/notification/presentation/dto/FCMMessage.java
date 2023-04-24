@@ -1,6 +1,6 @@
 package cmc.mellyserver.notification.presentation.dto;
 
-import cmc.mellyserver.notification.domain.NotificationType;
+import cmc.mellyserver.common.enums.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

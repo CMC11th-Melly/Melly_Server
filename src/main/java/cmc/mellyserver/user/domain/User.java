@@ -9,6 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -23,7 +24,7 @@ public class User extends JpaBaseEntity {
     @Column(name = "user_seq")
     private Long userSeq; // 유저 DB 식별자
 
-    @Column(name = "user_id",nullable = false)
+    @Column(name = "user_id")
     private String userId; // 유저 OAuth 아이디
 
     private String email; // 유저 이메일
@@ -49,59 +50,19 @@ public class User extends JpaBaseEntity {
     private Recommend recommend; // 유저 추천 정보
 
     @Column(name = "store_capacity")
-    private Double storeCapacity;  // 아직 필요한게 맞는지는 모르겠다.
+    private Double storeCapacity;  // 저장한 이미지 용량
 
     private String fcmToken; // 푸시 위한 토큰
 
-    // 푸시 알림 허용 목록
+    private boolean isdeleted;
+
+    // 푸시 알림 목록
     private boolean enableAppPush;
 
     private boolean enableCommentLike;
 
     private boolean enableComment;
 
-    @ElementCollection
-    @CollectionTable
-    private List<Long> participatedGroupId = new ArrayList<>();
-
-
-//
-//    // TODO : 관계 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-//    private List<MemoryScrap> memoryScraps = new ArrayList<>();
-//
-//    // TODO : 관계 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-//    private List<CommentLike> commentLikes = new ArrayList<>();
-//
-//    // TODO : 관계 끊기
-//    @OneToMany(mappedBy = "writer",fetch = FetchType.LAZY,orphanRemoval = true)
-//    private List<Comment> comments = new ArrayList<>();
-//
-//    // TODO : 알림
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
-//    private List<Notification> notifications = new ArrayList<>();
-//
-//    // TODO : 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private List<MemoryReport> memoryReports = new ArrayList<>();
-//
-//    // TODO : 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private List<CommentReport> commentReports = new ArrayList<>();
-//
-//    // TODO : 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
-//
-//    @CollectionTable
-//    private List<Long> blockedMemoryIds = new ArrayList<>();
-//
-//    // TODO : 끊기
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private List<CommentBlock> commentBlocks = new ArrayList<>();
-//
-//
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
     {
         this.nickname = nickname;
@@ -118,7 +79,8 @@ public class User extends JpaBaseEntity {
         this.fcmToken = fcmToken;
     }
 
-    public void addPollData(RecommendGroup recommendGroup, String recommendPlace, String recommendActivity)
+    // 초기 회원가입시, 회원 맞춤 정보를 제공하기 위함
+    public void addSurveyData(RecommendGroup recommendGroup, String recommendPlace, String recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }
@@ -159,10 +121,9 @@ public class User extends JpaBaseEntity {
            this.nickname = nickname;
        }
 
-       if(image != null)
-       {
-           this.profileImage = image;
-       }
+
+       this.profileImage = image;
+
 
        if(gender != null)
        {
@@ -173,6 +134,12 @@ public class User extends JpaBaseEntity {
        {
            this.ageGroup = ageGroup;
        }
+    }
+
+    @PrePersist
+    private void init()
+    {
+        this.isdeleted = false;
     }
 
     public void setEnableAppPush(boolean enableAppPush) {

@@ -1,16 +1,7 @@
 package cmc.mellyserver.notification.application;
 
-import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
-import cmc.mellyserver.common.exception.GlobalBadRequestException;
-import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.MemoryRepository;
-import cmc.mellyserver.notification.domain.Notification;
-import cmc.mellyserver.notification.domain.NotificationRepository;
-import cmc.mellyserver.notification.domain.NotificationType;
+import cmc.mellyserver.common.enums.NotificationType;
 import cmc.mellyserver.notification.presentation.dto.FCMMessage;
-import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -45,10 +36,10 @@ public class FCMService {
     }
 
     @Transactional
-    public void sendMessageTo(String targetToken, NotificationType notificationType, String body, String uid, Long memoryId) throws IOException
+    public void sendMessageTo(String targetToken, NotificationType notificationType, String body, Long userSeq, Long memoryId) throws IOException
     {
 
-        notificationService.createNotification(notificationType, body, uid, memoryId);
+        notificationService.createNotification(notificationType, body, userSeq, memoryId);
         String message = makeMessage(targetToken,notificationType,body);
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),message);

@@ -4,7 +4,7 @@ import cmc.mellyserver.auth.presentation.dto.Provider;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.place.domain.PlaceRepository;
+import cmc.mellyserver.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
@@ -28,9 +28,6 @@ class PlaceDomainServiceTest {
 
     @Mock
     PlaceRepository placeRepository;
-
-    @Mock
-    UserRepository userRepository;
 
     @Mock
     AuthenticatedUserChecker authenticatedUserChecker;

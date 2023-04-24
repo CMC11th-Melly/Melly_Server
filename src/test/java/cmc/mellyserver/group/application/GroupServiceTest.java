@@ -1,21 +1,7 @@
 package cmc.mellyserver.group.application;
 
-import cmc.mellyserver.common.factory.UserFactory;
-import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.group.domain.GroupRepository;
-import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.group.presentation.dto.GroupCreateRequest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {

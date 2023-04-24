@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class AuthenticatedUserChecker {
     private final UserRepository userRepository;
 
-    public User checkAuthenticatedUserExist(String uid) {
-        return userRepository.findUserByUserId(uid).orElseThrow(() -> {
+    public User checkAuthenticatedUserExist(Long userSeq) {
+        return userRepository.findById(userSeq).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
         });
     }

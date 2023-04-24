@@ -1,10 +1,17 @@
 package cmc.mellyserver.group.domain;
 
+import cmc.mellyserver.group.domain.group.UserGroup;
 import cmc.mellyserver.user.domain.User;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * GroupAndUser.java
+ *
+ * @author jemlog
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -15,7 +22,7 @@ public class GroupAndUser {
     @Column(name = "group_and_user_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -30,7 +37,12 @@ public class GroupAndUser {
 
     public void setUser(User user)
     {
-        this.user= user;
-        user.getGroupAndUsers().add(this);
+        this.user = user;
+    }
+
+
+    public GroupAndUser(User user, UserGroup group) {
+        this.user = user;
+        this.group = group;
     }
 }
