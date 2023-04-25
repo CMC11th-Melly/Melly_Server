@@ -21,7 +21,6 @@ import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.memory.presentation.dto.request.MemorySearchDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.memory.presentation.dto.response.GetMemoryByMemoryIdResponse;
-import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
 import cmc.mellyserver.place.presentation.dto.request.PlaceInfoRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -211,14 +210,11 @@ public class MemoryService {
 
     public GetMemoryByMemoryIdResponse getMemoryByMemoryId(Long userSeq, Long memoryId) {
 
-//        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-//
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
-        return MemoryAssembler.getMemoryByMemoryIdResponse(memory, user);
+        return null;
+//        return MemoryAssembler.getMemoryByMemoryIdResponse(memory, userSeq);
 
-
-     return null;
     }
 }

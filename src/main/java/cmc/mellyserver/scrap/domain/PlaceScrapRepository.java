@@ -7,9 +7,8 @@ import java.util.Optional;
 
 public interface PlaceScrapRepository extends JpaRepository<PlaceScrap,Long> {
 
-    Optional<PlaceScrap> findByUserUserSeqAndPlacePosition(Long userSeq, Position position);
-    Optional<PlaceScrap> findByPlaceIdAndUserUserSeq(Long placeId, Long userSeq);
-    void deleteByUserUserSeqAndPlacePosition(Long userSeq,Position position);
+    Optional<PlaceScrap> findByUserIdAndPlaceId(Long userId, Long placeId);
+    void deleteByUserIdAndPlaceId(Long userId,Position position);
 
 
 }

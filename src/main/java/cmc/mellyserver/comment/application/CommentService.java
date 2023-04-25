@@ -4,11 +4,10 @@ import cmc.mellyserver.comment.application.dto.CommentDto;
 import cmc.mellyserver.comment.application.dto.CommentResponseDto;
 import cmc.mellyserver.comment.domain.*;
 import cmc.mellyserver.comment.presentation.dto.CommentRequest;
+import cmc.mellyserver.common.enums.DeleteStatus;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.MemoryRepository;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,37 +30,26 @@ public class CommentService {
      private final CommentRepository commentRepository;
      private final UserRepository userRepository;
      private final AuthenticatedUserChecker authenticatedUserChecker;
-     private final MemoryRepository memoryRepository;
      private final CommentLikeRepository commentLikeRepository;
 
 
-
-     public CommentResponseDto getComment(String uid,Long memoryId)
+     public CommentResponseDto getComment(Long userSeq,Long memoryId)
      {
-         User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-         List<Comment> comment = commentQueryRepository.findComment(memoryId,user);
+         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+         List<Comment> comment = commentQueryRepository.findComment(memoryId,userSeq);
          return convertNestedStructure(comment,user);
      }
 
 
-
     @Transactional
-    public void saveComment(String uid, CommentRequest commentRequest) {
+    public void saveComment(Long userSeq, CommentRequest commentRequest) {
 
-        // 현재 로그인 사용자
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        // 내가 댓글을 남기려는 사람
-
-        Memory memory = memoryRepository.findById(commentRequest.getMemoryId()).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
-        });
         Comment parent = commentRequest.getParentId() != null ? commentRepository.findById(commentRequest.getParentId()).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
         }) : null;
 
-        commentRepository.save(Comment.createComment(commentRequest.getContent(),user,memory,parent,commentRequest.getMentionUserId()));
+        commentRepository.save(Comment.createComment(commentRequest.getContent(),userSeq,commentRequest.getMemoryId(),parent,commentRequest.getMentionUserId()));
      }
-
 
 
     @Transactional
@@ -91,22 +79,21 @@ public class CommentService {
 
 
     @Transactional
-    public void saveCommentLike(String uid, Long commentId) {
+    public void saveCommentLike(Long userSeq, Long commentId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
         });
-        CommentLike commentLike = CommentLike.createCommentLike(user, comment);
+        CommentLike commentLike = CommentLike.createCommentLike(userSeq, comment);
         commentLikeRepository.save(commentLike);
     }
 
 
 
     @Transactional
-    public void deleteCommentLike(Long commentId,String uid) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-        CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserUserSeq(commentId,user.getUserSeq()).orElseThrow(() -> {
+    public void deleteCommentLike(Long userSeq, Long commentId) {
+
+        CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId,userSeq).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT_LIKE);
         });
         commentLikeRepository.delete(commentLike);

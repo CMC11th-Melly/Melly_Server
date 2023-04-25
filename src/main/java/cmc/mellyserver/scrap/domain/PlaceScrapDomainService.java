@@ -56,7 +56,8 @@ public class PlaceScrapDomainService {
     @Transactional
     public void createScrap(Long userSeq, Double lat, Double lng, ScrapType scrapType,String placeName,String placeCategory)
     {
-        checkDuplicatedScrap(userSeq,lat,lng);
+
+
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(lat,lng));
 
         if(placeOpt.isEmpty())
@@ -66,6 +67,7 @@ public class PlaceScrapDomainService {
         }
         else
         {
+            checkDuplicatedScrap(userSeq,placeOpt.get().getId());
             scrapRepository.save(PlaceScrap.createScrap(userSeq,placeOpt.get().getId(),scrapType));
         }
     }
@@ -74,19 +76,22 @@ public class PlaceScrapDomainService {
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng)
     {
-        checkExistScrap(userSeq,lat,lng);
-        scrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng));
+        Place place = placeRepository.findPlaceByPosition(new Position(lat, lng)).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_PLACE);
+        });
+        checkExistScrap(userSeq,place.getId());
+        scrapRepository.deleteByUserIdAndPlaceId(userSeq,new Position(lat,lng));
     }
 
 
-    private void checkDuplicatedScrap(Long userSeq, Double lat, Double lng) {
-        scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
+    private void checkDuplicatedScrap(Long userSeq, Long placeId) {
+        scrapRepository.findByUserIdAndPlaceId(userSeq,placeId)
                 .ifPresent(x -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_SCRAP);});
     }
 
 
-    private void checkExistScrap(Long userSeq, Double lat, Double lng) {
-        scrapRepository.findByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng))
+    private void checkExistScrap(Long userSeq, Long placeId) {
+        scrapRepository.findByUserIdAndPlaceId(userSeq, placeId)
                 .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
     }
 

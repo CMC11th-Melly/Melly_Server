@@ -23,16 +23,15 @@ public class CommentQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Comment> findComment(Long memoryId, User loginUser) {
+    public List<Comment> findComment(Long memoryId, Long userSeq) {
 
-        List<Long> userBlockedCommentId = loginUser.getCommentBlocks().stream().map(m -> m.getComment().getId()).collect(Collectors.toList());
         return query.selectFrom(comment)
                 .leftJoin(comment.parent)
                 .fetchJoin()
                 .where(
-                        comment.memory.id.eq(memoryId),
-                        comment.isReported.eq(false),
-                        commentBlocked(userBlockedCommentId).not()
+                        comment.memoryId.eq(memoryId),
+                        comment.isReported.eq(false)
+                      //  commentBlocked(userBlockedCommentId).not()
                         )
                 .orderBy(
                         comment.parent.id.asc().nullsFirst(),
@@ -40,13 +39,13 @@ public class CommentQueryRepository {
                 ).fetch();
     }
 
-    private BooleanExpression commentBlocked(List<Long> compare) {
-
-        if(compare == null)
-        {
-            return null;
-        }
-
-        return comment.id.in(compare);
-    }
+//    private BooleanExpression commentBlocked(List<Long> compare) {
+//
+//        if(compare == null)
+//        {
+//            return null;
+//        }
+//
+//        return comment.id.in(compare);
+//    }
 }

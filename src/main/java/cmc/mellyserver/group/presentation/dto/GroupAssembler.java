@@ -13,7 +13,6 @@ public class GroupAssembler {
           return new GetUserGroupResponse(userGroup.getId(),
                   userGroup.getGroupIcon(),
                   userGroup.getGroupName(),
-                  Collections.emptyList(),
                   userGroup.getGroupType(),
                   userGroup.getInviteLink()
           );
