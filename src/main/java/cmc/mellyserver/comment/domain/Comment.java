@@ -1,11 +1,9 @@
 package cmc.mellyserver.comment.domain;
 
 
-import cmc.mellyserver.block.commentBlock.domain.CommentBlock;
+
+import cmc.mellyserver.common.enums.DeleteStatus;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.report.commentReport.domain.CommentReport;
-import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,17 +25,12 @@ public class Comment extends JpaBaseEntity {
     @Lob
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
-    private User writer;
+    private Long writerId;
+
+    private Long memoryId;
 
     private Long metionUser;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "memory_id")
-//    private Memory memory;
-
-    private Long memoryId;
 
     @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
@@ -46,15 +39,8 @@ public class Comment extends JpaBaseEntity {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
-//    private List<CommentReport> commentReports = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
-//    private List<CommentBlock> commentBlocks = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;
@@ -79,21 +65,10 @@ public class Comment extends JpaBaseEntity {
     }
 
 
-    private void setUser(User user)
-    {
-        this.writer = user;
-        user.getComments().add(this);
-    }
 
     private void setMentionUser(Long mentionUser)
     {
         this.metionUser = mentionUser;
-    }
-
-    private void setMemory(Memory memory)
-    {
-        this.memory = memory;
-        memory.getComments().add(this);
     }
 
     private void setParent(Comment parent)
@@ -106,11 +81,11 @@ public class Comment extends JpaBaseEntity {
 
     }
 
-    public static Comment createComment(String content, User writer, Memory memory, Comment parent, Long mentionUser)
+    public static Comment createComment(String content, Long writerId, Long memoryId, Comment parent, Long mentionUser)
     {
         Comment comment = new Comment(content);
-        comment.setUser(writer);
-        comment.setMemory(memory);
+        comment.memoryId = memoryId;
+        comment.writerId = writerId;
         comment.setParent(parent);
         comment.isDeleted = DeleteStatus.N;
         comment.setMentionUser(mentionUser);
@@ -121,4 +96,5 @@ public class Comment extends JpaBaseEntity {
     {
         this.content = content;
     }
+
 }

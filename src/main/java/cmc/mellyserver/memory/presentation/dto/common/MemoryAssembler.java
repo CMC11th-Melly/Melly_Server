@@ -65,19 +65,20 @@ public class MemoryAssembler {
 
     public static Slice<MemoryForGroupResponse> memoryForGroupResponseSlice(Slice<Memory> myGroupMemory,User user)
     {
-        return myGroupMemory
-                .map(memory -> new MemoryForGroupResponse(memory.getPlaceId(),
-                        memory.getPlace().getPlaceName(),
-                        memory.getId(),
-                        memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(), mi.getImagePath()))
-                                .collect(Collectors.toList()),
-                        memory.getTitle(),
-                        memory.getContent(),
-                        memory.getGroupInfo().getGroupType(),
-                        memory.getGroupInfo().getGroupName(),
-                        memory.getStars(),
-                        memory.getKeyword(),
-                        user.getMemories().stream().anyMatch((um -> um.getId().equals(memory.getId()))),
-                        memory.getVisitedDate()));
+//        return myGroupMemory
+//                .map(memory -> new MemoryForGroupResponse(memory.getPlaceId(),
+//                        memory.getPlace().getPlaceName(),
+//                        memory.getId(),
+//                        memory.getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(), mi.getImagePath()))
+//                                .collect(Collectors.toList()),
+//                        memory.getTitle(),
+//                        memory.getContent(),
+//                        memory.getGroupInfo().getGroupType(),
+//                        memory.getGroupInfo().getGroupName(),
+//                        memory.getStars(),
+//                        memory.getKeyword(),
+//                        user.getMemories().stream().anyMatch((um -> um.getId().equals(memory.getId()))),
+//                        memory.getVisitedDate()));
+        return null;
     }
 }

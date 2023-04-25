@@ -29,7 +29,7 @@ public class CommentController {
     @PostMapping("/like")
     public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest)
     {
-             commentService.saveCommentLike(user.getUsername(),likeRequest.getCommentId());
+             commentService.saveCommentLike(Long.parseLong(user.getUsername()),likeRequest.getCommentId());
              return ResponseEntity.ok(new CommonResponse(200,"댓글에 좋아요 추가 완료"));
     }
 
@@ -39,7 +39,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}/like")
     public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user, @PathVariable Long commentId)
     {
-        commentService.deleteCommentLike(commentId,user.getUsername());
+        commentService.deleteCommentLike(commentId,Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"댓글에 좋아요 삭제 완료"));
     }
 
@@ -49,7 +49,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommonResponse> saveComment(@AuthenticationPrincipal User user, @RequestBody CommentRequest commentRequest)
     {
-         commentService.saveComment(user.getUsername(),commentRequest);
+         commentService.saveComment(Long.parseLong(user.getUsername()),commentRequest);
          return ResponseEntity.ok(new CommonResponse(200,"댓글 추가 완료"));
     }
 
@@ -59,7 +59,7 @@ public class CommentController {
     @GetMapping("/memory/{memoryId}")
     public ResponseEntity<CommonResponse> getComment(@AuthenticationPrincipal User user,@PathVariable Long memoryId)
     {
-        CommentResponseDto comment = commentService.getComment(user.getUsername(),memoryId);
+        CommentResponseDto comment = commentService.getComment(Long.parseLong(user.getUsername()),memoryId);
         return ResponseEntity.ok(new CommonResponse(200,"댓글 조회",comment));
     }
 

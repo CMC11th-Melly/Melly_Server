@@ -63,9 +63,9 @@ public class AuthService {
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 
-    public void logout(String uid, String accessToken)
+    public void logout(Long userSeq, String accessToken)
     {
-        authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }
 
@@ -92,9 +92,9 @@ public class AuthService {
      * 1. DB에서 유저 삭제
      * 2. redis에 지금 로그인한 토큰 블랙리스트 설정
      */
-    public void withdraw(String uid,String accessToken) {
+    public void withdraw(Long userSeq,String accessToken) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         userRepository.delete(user);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }

@@ -1,4 +1,4 @@
-package cmc.mellyserver.comment.domain;
+package cmc.mellyserver.common.enums;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

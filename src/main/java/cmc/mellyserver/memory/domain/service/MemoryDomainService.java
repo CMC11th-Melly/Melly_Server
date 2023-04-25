@@ -16,7 +16,6 @@ import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
-import cmc.mellyserver.trend.infrastructure.TrendAnalyzer;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class MemoryDomainService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final S3FileLoader s3FileLoader;
     private final GroupRepository groupRepository;
-    private final TrendAnalyzer trendAnalyzer;
+
 
 
     // TODO : 찐막 수정 완료
@@ -79,8 +78,6 @@ public class MemoryDomainService {
             // 키워드 등록
             memory.setKeyword(keyword);
             // 트렌드 분석에 사용되는 장소 이름 추가
-            trendAnalyzer.addKeywordToRedis(savePlace.getPlaceName());
-
             return memoryRepository.save(memory);
         }
         else{
@@ -107,8 +104,6 @@ public class MemoryDomainService {
 
             memory.setPlaceId(placeOpt.get().getId());
             memory.setKeyword(keyword);
-
-            trendAnalyzer.addKeywordToRedis(placeOpt.get().getPlaceName());
             return memoryRepository.save(memory);
         }
 

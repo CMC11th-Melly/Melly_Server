@@ -25,10 +25,11 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemoryRepository memoryRepository;
 
+    // TOOD : 조치 필요
     public List<Notification> getNotificationList(Long userSeq)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return user.getNotifications();
+        return null;
     }
 
     @Transactional

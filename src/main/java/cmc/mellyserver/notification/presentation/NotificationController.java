@@ -28,7 +28,7 @@ public class NotificationController {
     @GetMapping("/setting")
     public ResponseEntity<CommonResponse> getNotificationOnOff(@AuthenticationPrincipal User user)
     {
-        NotificationOnOffResponse notificationOnOff = notificationService.getNotificationOnOff(user.getUsername());
+        NotificationOnOffResponse notificationOnOff = notificationService.getNotificationOnOff(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(notificationOnOff)));
     }
 
@@ -36,7 +36,7 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<CommonResponse> getNotifications(@AuthenticationPrincipal User user)
     {
-        List<Notification> notificationList = notificationService.getNotificationList(user.getUsername());
+        List<Notification> notificationList = notificationService.getNotificationList(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"알림 조회",new CommonDetailResponse<>(NotificationAssembler.notificationResponses(notificationList))));
     }
 
@@ -44,7 +44,7 @@ public class NotificationController {
     @PostMapping("/setting/comment/like")
     public ResponseEntity<CommonResponse> appPushOn(@AuthenticationPrincipal User user)
     {
-        notificationService.setPushCommentLikeOn(user.getUsername());
+        notificationService.setPushCommentLikeOn(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
@@ -52,7 +52,7 @@ public class NotificationController {
     @DeleteMapping("/setting/comment/like")
     public ResponseEntity<CommonResponse> appPushOff(@AuthenticationPrincipal User user)
     {
-        notificationService.setPushCommentLikeOff(user.getUsername());
+        notificationService.setPushCommentLikeOff(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
@@ -61,7 +61,7 @@ public class NotificationController {
     @PostMapping("/setting/comment")
     public ResponseEntity<CommonResponse> appPushCommentOn(@AuthenticationPrincipal User user)
     {
-        notificationService.setPushCommentOn(user.getUsername());
+        notificationService.setPushCommentOn(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
@@ -69,7 +69,7 @@ public class NotificationController {
     @DeleteMapping("/setting/comment")
     public ResponseEntity<CommonResponse> appPushCommentOff(@AuthenticationPrincipal User user)
     {
-        notificationService.setPushCommentOff(user.getUsername());
+        notificationService.setPushCommentOff(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
@@ -77,7 +77,7 @@ public class NotificationController {
     @PostMapping("/setting")
     public ResponseEntity<CommonResponse> appPushCommentLikeOn(@AuthenticationPrincipal User user)
     {
-        notificationService.setAppPushOn(user.getUsername());
+        notificationService.setAppPushOn(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
@@ -85,7 +85,7 @@ public class NotificationController {
     @DeleteMapping("/setting")
     public ResponseEntity<CommonResponse> appPushCommentLikeOff(@AuthenticationPrincipal User user)
     {
-        notificationService.setAppPushOff(user.getUsername());
+        notificationService.setAppPushOff(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
