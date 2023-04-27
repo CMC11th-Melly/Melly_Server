@@ -61,6 +61,15 @@
 
 <br>
 
+## 🏛 Domain Architecture
+
+<img src="https://user-images.githubusercontent.com/82302520/234835879-48072114-75ba-476c-9914-a731967ca4bf.png" width="700" height="700">
+
+- DDD 기반의 아키텍쳐로 애그리거트를 분리하는 리팩토링을 진행했습니다.
+- 애그리거트 간의 필수적인 연관관계 참조가 필요없는 경우 ID 참조로 전환했습니다.
+
+<br>
+
 ## 🏛 System Structure
 
 <br>
