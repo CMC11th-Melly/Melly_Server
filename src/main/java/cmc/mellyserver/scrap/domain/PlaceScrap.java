@@ -2,10 +2,11 @@ package cmc.mellyserver.scrap.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.common.enums.ScrapType;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -18,21 +19,25 @@ public class PlaceScrap extends JpaBaseEntity {
     @Column(name = "place_scrap_id")
     private Long id;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user;
 
-    private Long placeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
 
     @Enumerated(EnumType.STRING)
     private ScrapType scrapType;
 
-    public static PlaceScrap createScrap(Long userSeq,Long placeId,ScrapType scrapType)
+    public static PlaceScrap createScrap(User user,Place place,ScrapType scrapType)
     {
-        return new PlaceScrap(userSeq,placeId,scrapType);
+        return new PlaceScrap(user,place,scrapType);
     }
 
-    public PlaceScrap(Long userId, Long placeId, ScrapType scrapType) {
-        this.userId = userId;
-        this.placeId = placeId;
+    public PlaceScrap(User user, Place place, ScrapType scrapType) {
+        this.user = user;
+        this.place = place;
         this.scrapType = scrapType;
     }
 }

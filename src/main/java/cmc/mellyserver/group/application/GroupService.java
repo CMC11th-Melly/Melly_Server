@@ -4,16 +4,15 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.group.domain.GroupAndUser;
-import cmc.mellyserver.group.domain.group.GroupAndUserRepository;
-import cmc.mellyserver.group.domain.group.GroupRepository;
-import cmc.mellyserver.group.domain.group.UserGroup;
+import cmc.mellyserver.group.domain.repository.GroupAndUserRepository;
+import cmc.mellyserver.group.domain.repository.GroupRepository;
+import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @Service
@@ -25,14 +24,14 @@ public class GroupService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
-    // TODO : 수정 완료 (2023.04.16)
+
     public UserGroup getGroupById(Long groupId)
     {
       return groupRepository.findById(groupId).orElseThrow(()-> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);});
     }
 
 
-    // TODO : 수정 완료 (2023.04.16)
+
     @Transactional
     public UserGroup saveGroup(Long userSeq, GroupCreateRequest groupCreateRequest)
     {
@@ -43,7 +42,6 @@ public class GroupService {
 
 
 
-    // TODO : 다시 안봐
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId)
     {
@@ -62,7 +60,7 @@ public class GroupService {
     }
 
 
-    // TODO : 수정 완료 (2023.04.16)
+
     @Transactional
     public void updateGroup(Long groupId, GroupUpdateRequest groupUpdateRequestDto) {
 
@@ -74,7 +72,7 @@ public class GroupService {
     }
 
 
-    // TODO : 수정 완료
+
     @Transactional
     public String deleteGroup(Long userSeq, Long groupId)
     {

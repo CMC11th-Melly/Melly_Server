@@ -1,13 +1,12 @@
 package cmc.mellyserver.place.domain.service;
 
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
 import cmc.mellyserver.common.enums.RoleType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

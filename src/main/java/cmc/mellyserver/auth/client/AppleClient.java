@@ -2,7 +2,7 @@ package cmc.mellyserver.auth.client;
 
 
 import cmc.mellyserver.auth.client.dto.ApplePublicKeyResponse;
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;

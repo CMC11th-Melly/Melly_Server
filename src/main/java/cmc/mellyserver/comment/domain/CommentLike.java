@@ -20,7 +20,7 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    private Long userId;
+    private Long userId; // CommentLike에서 user쪽으로 참조할 일은 없다.
 
     public void setComment(Comment comment) {
         this.comment = comment;

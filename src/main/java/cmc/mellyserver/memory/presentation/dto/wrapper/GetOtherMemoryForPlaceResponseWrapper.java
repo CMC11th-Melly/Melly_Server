@@ -1,7 +1,6 @@
 package cmc.mellyserver.memory.presentation.dto.wrapper;
 
-import cmc.mellyserver.memory.domain.dto.UserCreatedMemoryListResponseDto;
-import cmc.mellyserver.memory.presentation.dto.response.GetOtherMemoryForPlaceResponse;
+import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Slice;
@@ -10,5 +9,5 @@ import org.springframework.data.domain.Slice;
 @AllArgsConstructor
 public class GetOtherMemoryForPlaceResponseWrapper {
     private Long memoryCount;
-    private Slice<UserCreatedMemoryListResponseDto> memoryList;
+    private Slice<MemoryResponseDto> memoryList;
 }

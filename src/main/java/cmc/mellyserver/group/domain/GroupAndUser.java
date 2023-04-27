@@ -1,6 +1,5 @@
 package cmc.mellyserver.group.domain;
 
-import cmc.mellyserver.group.domain.group.UserGroup;
 import cmc.mellyserver.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

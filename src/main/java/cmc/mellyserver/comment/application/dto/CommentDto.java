@@ -55,7 +55,7 @@ public class CommentDto implements Serializable {
 //        CommentDto commentDto =  comment.getIsDeleted() == DeleteStatus.Y ?
 //                new CommentDto(comment.getId(), "삭제된 댓글입니다.", false,false,0,null, null,null,null,null) :
 //                new CommentDto(comment.getId(), comment.getContent(),false,false,comment.getCommentLikes().size(),mentionUserName,comment.getWriterId(), comment.getWriter().getNickname(),comment.getWriter().getProfileImage(),comment.getCreatedDate());
-//
+
 //        if(comment.getWriter().getUserId().equals(user.getUserId()))
 //        {
 //            commentDto.setLoginUserWrite(true);

@@ -2,9 +2,6 @@ package cmc.mellyserver.place.domain.repository;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.ScrapType;
-import cmc.mellyserver.group.domain.GroupAndUser;
-import cmc.mellyserver.group.domain.group.UserGroup;
-import cmc.mellyserver.memory.domain.dto.UserCreatedMemoryListResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;

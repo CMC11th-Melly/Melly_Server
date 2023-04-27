@@ -2,8 +2,8 @@ package cmc.mellyserver.auth.presentation;
 
 import cmc.mellyserver.auth.application.AuthService;
 import cmc.mellyserver.auth.application.OAuthService;
-import cmc.mellyserver.auth.config.SecurityConfig;
-import cmc.mellyserver.auth.presentation.dto.*;
+import cmc.mellyserver.common.enums.Provider;
+import cmc.mellyserver.config.SecurityConfig;
 import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForLogin;
 import cmc.mellyserver.auth.presentation.dto.request.CheckDuplicateEmailRequest;
 import cmc.mellyserver.auth.presentation.dto.request.CheckDuplicateNicknameRequest;

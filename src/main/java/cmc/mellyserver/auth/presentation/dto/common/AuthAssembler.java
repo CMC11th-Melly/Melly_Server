@@ -1,7 +1,7 @@
 package cmc.mellyserver.auth.presentation.dto.common;
 
 import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForSignup;
 import cmc.mellyserver.auth.presentation.dto.response.AccessTokenUserData;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;

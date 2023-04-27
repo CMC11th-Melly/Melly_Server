@@ -2,8 +2,8 @@ package cmc.mellyserver.scrap.presentation;
 
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.scrap.application.PlaceScrapService;
-import cmc.mellyserver.scrap.presentation.dto.ScrapCancelRequest;
-import cmc.mellyserver.scrap.presentation.dto.ScrapRequest;
+import cmc.mellyserver.scrap.presentation.dto.request.ScrapCancelRequest;
+import cmc.mellyserver.scrap.presentation.dto.request.ScrapRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class PlaceScrapController {
 
+
     private final PlaceScrapService scrapService;
+
 
     @Operation(summary = "장소 스크랩")
     @PostMapping("/place/scrap")

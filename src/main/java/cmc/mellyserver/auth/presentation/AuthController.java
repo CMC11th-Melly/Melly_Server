@@ -7,7 +7,7 @@ import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.request.*;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
-import cmc.mellyserver.auth.util.HeaderUtil;
+import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.user.domain.User;

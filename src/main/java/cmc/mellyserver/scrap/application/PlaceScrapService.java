@@ -1,10 +1,19 @@
 package cmc.mellyserver.scrap.application;
 
 import cmc.mellyserver.common.enums.ScrapType;
+import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
+import cmc.mellyserver.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.place.domain.Place;
+import cmc.mellyserver.place.domain.Position;
+import cmc.mellyserver.place.domain.repository.PlaceQueryRepository;
+import cmc.mellyserver.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.scrap.domain.PlaceScrapDomainService;
-import cmc.mellyserver.scrap.presentation.dto.ScrapRequest;
+import cmc.mellyserver.scrap.domain.PlaceScrap;
+import cmc.mellyserver.scrap.domain.repository.PlaceScrapRepository;
+import cmc.mellyserver.scrap.presentation.dto.request.ScrapRequest;
+import cmc.mellyserver.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -12,52 +21,78 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PlaceScrapService {
 
-    private final PlaceScrapDomainService placeScrapDomainService;
+    private final PlaceRepository placeRepository;
+
+    private final PlaceQueryRepository placeQueryRepository;
+
+    private final PlaceScrapRepository scrapRepository;
+
+    private final AuthenticatedUserChecker authenticatedUserChecker;
 
 
-    /**
-     * 각 스크랩 타입별 장소 페이지 조회
-     * TODO : 다시 안봐
-     */
+
     public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, Long userSeq, ScrapType scrapType)
     {
-        return placeScrapDomainService.getScrapPlace(pageable, userSeq,scrapType);
+        return placeQueryRepository.getScrapedPlace(pageable,userSeq,scrapType);
     }
 
 
-    /**
-     * 각 스크랩 타입별 장소 개수 조회 로직
-     * TODO : 다시 안봐
-     */
+
     public List<PlaceScrapResponseDto> getScrapedPlaceCount(Long userSeq)
     {
-        return placeScrapDomainService.getScrapedPlaceCount(userSeq);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        return placeQueryRepository.getScrapedPlaceGrouping(user);
     }
 
 
-    /**
-     * 스크랩 생성
-     */
+
     @Transactional
     public void createScrap(Long userSeq, ScrapRequest scrapRequest)
     {
-        placeScrapDomainService.createScrap(userSeq, scrapRequest.getLat(), scrapRequest.getLng(), scrapRequest.getScrapType(),scrapRequest.getPlaceName(),scrapRequest.getPlaceCategory());
+        Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(scrapRequest.getLat(), scrapRequest.getLng()));
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        if(placeOpt.isEmpty())
+        {
+            Place savePlace = placeRepository.save(Place.builder().placeName(scrapRequest.getPlaceName()).placeCategory(scrapRequest.getPlaceCategory()).position(new Position(scrapRequest.getLat(), scrapRequest.getLng())).build());
+            scrapRepository.save(PlaceScrap.createScrap(user,savePlace,scrapRequest.getScrapType()));
+        }
+        else
+        {
+            checkDuplicatedScrap(userSeq,placeOpt.get().getId());
+            scrapRepository.save(PlaceScrap.createScrap(user,placeOpt.get(),scrapRequest.getScrapType()));
+        }
     }
 
 
-    /**
-     * 스크랩 삭제
-     */
+
     @Transactional
     public void removeScrap(Long userSeq,Double lat, Double lng)
     {
-        placeScrapDomainService.removeScrap(userSeq,lat,lng);
+        Place place = placeRepository.findPlaceByPosition(new Position(lat, lng)).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_PLACE);
+        });
+        checkExistScrap(userSeq,place.getId());
+        scrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq,new Position(lat,lng));
     }
 
+
+
+    private void checkDuplicatedScrap(Long userSeq, Long placeId) {
+        scrapRepository.findByUserUserSeqAndPlaceId(userSeq,placeId)
+                .ifPresent(x -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_SCRAP);});
+    }
+
+
+
+    private void checkExistScrap(Long userSeq, Long placeId) {
+        scrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId)
+                .orElseThrow(() -> {throw new GlobalBadRequestException(ExceptionCodeAndDetails.NOT_EXIST_SCRAP);});
+    }
 }

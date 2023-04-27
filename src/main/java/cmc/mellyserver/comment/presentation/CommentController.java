@@ -29,8 +29,8 @@ public class CommentController {
     @PostMapping("/like")
     public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest)
     {
-             commentService.saveCommentLike(Long.parseLong(user.getUsername()),likeRequest.getCommentId());
-             return ResponseEntity.ok(new CommonResponse(200,"댓글에 좋아요 추가 완료"));
+        commentService.saveCommentLike(Long.parseLong(user.getUsername()),likeRequest.getCommentId());
+        return ResponseEntity.ok(new CommonResponse(200,"댓글에 좋아요 추가 완료"));
     }
 
 

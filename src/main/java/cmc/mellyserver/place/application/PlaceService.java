@@ -2,13 +2,13 @@ package cmc.mellyserver.place.application;
 
 
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.memory.domain.MemoryQueryRepository;
+import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.repository.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.repository.PlaceRepository;
-import cmc.mellyserver.scrap.domain.PlaceScrapQueryRepository;
+import cmc.mellyserver.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
 import cmc.mellyserver.place.presentation.dto.response.PlaceListReponseDto;
 import lombok.RequiredArgsConstructor;

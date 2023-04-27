@@ -5,18 +5,19 @@ import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
-import cmc.mellyserver.group.domain.group.dto.MyGroupMemoryResponseDto;
-import cmc.mellyserver.group.domain.group.UserGroupQueryRepository;
+import cmc.mellyserver.group.application.dto.MyGroupMemoryResponseDto;
+import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.memory.domain.MemoryQueryRepository;
-import cmc.mellyserver.memory.domain.dto.UserCreatedMemoryListResponseDto;
+import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
+import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
 import cmc.mellyserver.user.application.dto.PollRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
+import cmc.mellyserver.user.domain.repository.UserRepository;
+import cmc.mellyserver.user.infrastructure.SurveyRecommender;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponse;
+import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -43,7 +44,7 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-    // TODO : 다시 안봐
+
     public PollRecommendResponse getSurvey(Long userSeq)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
@@ -51,21 +52,21 @@ public class UserService {
     }
 
 
-    // TODO : 다시 안봐
-    public List<GetUserGroupResponse> getUserGroup(Long userSeq)
+
+    public List<GetUserGroupResponseDto> getGroupListLoginUserParticipate(Long userSeq)
     {
-       return userGroupQueryRepository.getgroupInfo(userSeq);
+       return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
     }
 
 
-    // TODO : 다시 안봐
-    public Slice<UserCreatedMemoryListResponseDto> getUserMemory(Pageable pageable, Long userSeq, GroupType groupType)
+
+    public Slice<MemoryResponseDto> getUserMemory(Pageable pageable, Long userSeq, GroupType groupType)
     {
        return memoryQueryRepository.searchMemoryUserCreatedForMyPage(pageable, userSeq, groupType);
     }
 
-    // TODO : 다시 안봐
-    // 나랑 같은 그룹의 사람들이 이 그룹을 대상으로 쓴 전체/그룹 공개 메모리들 가져오기
+
+
     public Slice<MyGroupMemoryResponseDto> getMemoryBelongToMyGroup(Pageable pageable,Long groupId,Long userSeq) {
         return userGroupQueryRepository.getMyGroupMemory(pageable, groupId, userSeq);
     }
@@ -80,7 +81,7 @@ public class UserService {
     }
 
 
-    // TODO : 다시 안봐
+
     public ProfileUpdateFormResponse getProfileDataForUpdate(Long userSeq)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
@@ -89,7 +90,7 @@ public class UserService {
 
 
 
-    // TODO : 다시 안봐
+
     @Transactional
     public void createSurvey(Long userSeq, SurveyRequest surveyRequest)
     {
@@ -98,7 +99,7 @@ public class UserService {
     }
 
 
-    // TODO : 다시 안봐
+
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId)
     {
@@ -106,7 +107,7 @@ public class UserService {
     }
 
 
-    // TODO : 다시 안봐
+
     @Transactional
     public void updateProfile(Long userSeq, ProfileUpdateRequest profileUpdateRequest)
     {
@@ -124,7 +125,8 @@ public class UserService {
 
     }
 
-    // TODO : 다시 안봐
+
+
     public String getUserNickname(Long userSeq) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
@@ -132,6 +134,4 @@ public class UserService {
         });
         return user.getNickname();
     }
-
-
 }

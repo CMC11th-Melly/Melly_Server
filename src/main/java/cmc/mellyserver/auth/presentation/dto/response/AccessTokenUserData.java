@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.presentation.dto.response;
 
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.common.enums.AgeGroup;
 import cmc.mellyserver.common.enums.Gender;
 import lombok.AllArgsConstructor;
