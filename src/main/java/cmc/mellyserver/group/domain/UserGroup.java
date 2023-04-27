@@ -1,12 +1,10 @@
 package cmc.mellyserver.group.domain;
 
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,26 +15,24 @@ public class UserGroup extends JpaBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "groups_id")
-    private Long id;
+    private Long id; // 그룹 id
 
-    private String groupName;
+    private String groupName; // 그룹 이름
 
-    private int groupIcon;
+    private int groupIcon; // 그룹 아이콘 구분하는 번호
 
-    private String inviteLink;
+    private String inviteLink; // 초대 링크
 
-    private Long creatorId; // TODO : 그룹 만든사람이 누구인지 알아야 삭제 여부 판단 가능
+    private Long creatorId; // 초기에 그룹을 만든 사람
 
-    // 하나의 메모리는 무조건 하나의 그룹에 속함. 따라서 타입은 grouptype으로 판단하면 될듯!
     @Enumerated(EnumType.STRING)
-    private GroupType groupType;
+    private GroupType groupType; // 그룹 종류
 
-    // 그룹 삭제되면 자동으로 삭제
-    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<GroupAndUser> groupAndUsers = new ArrayList<>();
+    private boolean isDeleted; // 삭제 여부
+
 
     @Builder
-    public UserGroup(String groupName, String inviteLink,GroupType groupType,int groupIcon,Long userSeq)
+    public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon, Long userSeq)
     {
         this.groupName = groupName;
         this.inviteLink = inviteLink;
@@ -46,34 +42,30 @@ public class UserGroup extends JpaBaseEntity {
     }
 
 
-    public void setGroupUser(GroupAndUser groupUser)
-    {
-        groupAndUsers.add(groupUser);
-        groupUser.setGroup(this);
-    }
-
-    public void updateUserGroup(String groupName, GroupType groupType, Integer groupIcon)
-    {
-        if(groupName != null)
-        {
-            this.groupName = groupName;
-        }
-
-        if(groupType != null)
-        {
-            this.groupType = groupType;
-        }
-
-        if(groupIcon != null)
-        {
-            this.groupIcon = groupIcon;
-        }
-
-
+    public void updateUserGroup(String groupName, GroupType groupType, Integer groupIcon) {
+        this.groupName = groupName;
+        this.groupType = groupType;
+        this.groupIcon = groupIcon;
     }
 
 
+    @PrePersist
+    private void init()
+    {
+        this.isDeleted = false;
+    }
 
+
+    public void remove()
+    {
+        this.isDeleted = true;
+    }
+
+
+    public void setCreatorId(Long userId)
+    {
+        this.creatorId = userId;
+    }
 
 
 }

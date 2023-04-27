@@ -9,16 +9,16 @@ import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.request.AuthRequest;
 import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForOAuthSignup;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
-import cmc.mellyserver.auth.token.AuthToken;
-import cmc.mellyserver.auth.token.JwtTokenProvider;
+import cmc.mellyserver.common.token.AuthToken;
+import cmc.mellyserver.common.token.JwtTokenProvider;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
 
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
+import cmc.mellyserver.user.domain.repository.UserRepository;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +91,7 @@ public class OAuthService {
             // 닉네임은 필수 정보 이기때문에 현재 DB에 저장된 소셜 로그인 유저가 닉네임을 가지고 있는지 여부로 회원가입 여부 판단
             if(user.get().getNickname() != null)
             {
-                String accessToken = getToken(socialUser.getUserId());
+                String accessToken = getToken(socialUser.getUserSeq());
                 user.get().setFcmToken(authRequest.getFcmToken());
                 return new OAuthLoginResponseDto(accessToken,false,user.get());
             }
@@ -110,9 +110,9 @@ public class OAuthService {
 
     }
 
-    private String getToken(String userId)
+    private String getToken(Long userSeq)
     {
-        AuthToken accessToken = jwtTokenProvider.createToken(userId, RoleType.USER, expiry);
+        AuthToken accessToken = jwtTokenProvider.createToken(userSeq, RoleType.USER, expiry);
         return accessToken.getToken();
     }
 
@@ -124,7 +124,7 @@ public class OAuthService {
         // 있으면 업데이트 하고
         user.updateUser(authRequestForOAuthSignup.getNickname(),authRequestForOAuthSignup.getGender(),getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),authRequestForOAuthSignup.getAgeGroup(),true,true,true);
         // 회원가입 완료 됐으니깐 토큰 생성
-        String token = getToken(user.getUserId());
+        String token = getToken(user.getUserSeq());
         // 반환 해주기
         return AuthAssembler.loginResponse(token, user);
 

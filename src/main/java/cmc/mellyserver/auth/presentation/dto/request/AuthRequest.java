@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.presentation.dto.request;
 
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;

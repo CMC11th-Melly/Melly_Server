@@ -1,6 +1,6 @@
 package cmc.mellyserver.user.application.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class GroupMemory {
     @Schema(example = "1")
     private Long placeId;
@@ -38,4 +37,6 @@ public class GroupMemory {
     @Schema(example = "202210142310")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;
+
+
 }

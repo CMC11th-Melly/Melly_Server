@@ -2,11 +2,11 @@ package cmc.mellyserver.auth.client;
 
 
 import cmc.mellyserver.auth.client.dto.ApplePublicKeyResponse;
-import cmc.mellyserver.auth.presentation.dto.Provider;
+import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.exception.GlobalServerException;
-import cmc.mellyserver.user.domain.enums.RoleType;
+import cmc.mellyserver.common.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;

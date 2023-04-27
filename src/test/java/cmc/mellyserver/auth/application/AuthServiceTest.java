@@ -1,10 +1,10 @@
 package cmc.mellyserver.auth.application;
 
-import cmc.mellyserver.auth.token.JwtTokenProvider;
+import cmc.mellyserver.common.token.JwtTokenProvider;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
+import cmc.mellyserver.user.domain.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -10,8 +10,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 @EqualsAndHashCode
 public class Position {
-
     private Double lat;
     private Double lng;
-
 }

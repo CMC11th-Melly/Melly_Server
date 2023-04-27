@@ -10,6 +10,7 @@ public class LikeRequest {
 
     private Long commentId;
 
+
     @Nullable
     private Long userId;
 }

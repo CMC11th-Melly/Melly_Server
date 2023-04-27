@@ -1,8 +1,8 @@
 package cmc.mellyserver.notification.presentation.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
-import cmc.mellyserver.notification.domain.NotificationType;
+import cmc.mellyserver.common.enums.NotificationType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
