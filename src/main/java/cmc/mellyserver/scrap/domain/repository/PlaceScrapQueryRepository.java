@@ -25,10 +25,10 @@ public class PlaceScrapQueryRepository {
     {
         Integer result = query.selectOne()
                 .from(placeScrap)
-                .leftJoin(place).on(place.id.eq(placeScrap.placeId))
+                .leftJoin(place).on(place.id.eq(placeScrap.place.id))
                 .where(
                         place.position.eq(position),
-                        placeScrap.userId.eq(userSeq)
+                        placeScrap.user.userSeq.eq(userSeq)
                 )
                 .fetchOne();
 
@@ -39,10 +39,10 @@ public class PlaceScrapQueryRepository {
     {
         Integer result = query.selectOne()
                 .from(placeScrap)
-                .leftJoin(place).on(place.id.eq(placeScrap.placeId))
+                .leftJoin(place).on(place.id.eq(placeScrap.place.id))
                 .where(
                         place.id.eq(placeId),
-                        placeScrap.userId.eq(userSeq)
+                        placeScrap.user.userSeq.eq(userSeq)
                 )
                 .fetchOne();
 

@@ -19,13 +19,13 @@ public class PlaceResponseDto {
     private GroupType recommendType = GroupType.ALL;
     private String placeImage;
 
-    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped,String placeImage)
+    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped)
     {
-        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped,placeImage);
+        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped);
 
     }
 
-    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped,String placeImage) {
+    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped) {
 
         this.position = position;
         this.myMemoryCount = myMemoryCount;

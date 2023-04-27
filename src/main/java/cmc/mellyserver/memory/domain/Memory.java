@@ -3,12 +3,7 @@ package cmc.mellyserver.memory.domain;
 import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.place.domain.Place;
 import lombok.*;
-<<<<<<< HEAD
-=======
-
->>>>>>> fix
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,12 +36,8 @@ public class Memory extends JpaBaseEntity {
     private boolean isReported = false;
     private LocalDateTime visitedDate;
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
-    private List<Notification> notifications = new ArrayList<>();
 
-=======
->>>>>>> fix
+
     @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
@@ -57,13 +48,8 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "keyword") // 컬럼명 지정 (예외)
     private List<String> keyword = new ArrayList<>();
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
-    private List<MemoryReport> memoryReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
-    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
-=======
+
     @PrePersist
     public void init()
     {
@@ -74,7 +60,7 @@ public class Memory extends JpaBaseEntity {
     {
         this.isDelete = true;
     }
->>>>>>> fix
+
 
     public void setUserId(Long userId)
     {
@@ -101,15 +87,6 @@ public class Memory extends JpaBaseEntity {
           this.openType = openType;
           this.visitedDate = visitedDate;
           this.stars = star;
-<<<<<<< HEAD
-
-    }
-
-    public void deleteGroupInfo()
-    {
-        this.groupInfo = new GroupInfo(this.groupInfo.getGroupName(),this.groupInfo.getGroupType(),-1L);
-=======
->>>>>>> fix
     }
 
     public void setMemoryImages(List<MemoryImage> memoryImages)

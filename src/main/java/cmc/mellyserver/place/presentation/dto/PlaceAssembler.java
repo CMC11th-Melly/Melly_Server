@@ -37,31 +37,14 @@ public class PlaceAssembler {
 //                )).collect(Collectors.toList());
         return null;
     }
-<<<<<<< HEAD
-   // & m.getOpenType().equals(OpenType.ALL)
-    public static PlaceResponseDto placeResponseDto(Place place, User user)
-    {
-        return new PlaceResponseDto(place.getId(),place.getPosition(),place.getMemories().
-                stream().
-                filter(m -> m.getUser().getUserId().equals(user.getUserId())).count(),
-                place.getMemories().stream().filter(m -> (!m.getUser().getUserId().equals(user.getUserId()))  & user.getMemoryBlocks().stream().noneMatch(mb -> mb.getMemory().getId().equals(m.getId()))).count(),
-                place.getIsScraped(),
-                place.getPlaceCategory(),
-                place.getPlaceName(),
-                GroupType.ALL,
-                place.getPlaceImage() == null ? "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png" : place.getPlaceImage()
-                );
-=======
->>>>>>> fix
 
 
-   // & m.getOpenType().equals(OpenType.ALL)
+    // & m.getOpenType().equals(OpenType.ALL)
     public static PlaceResponseDto placeResponseDto(Place place, Boolean isScraped, HashMap<String,Long> memoryCounts)
     {
-         return new PlaceResponseDto(place.getId(),place.getPosition(),memoryCounts.get("belongToUSer"),memoryCounts.get("NotBelongToUSer"),
-                 isScraped,place.getPlaceCategory(),place.getPlaceName(),GroupType.ALL,place.getPlaceImage());
+        return new PlaceResponseDto(place.getId(),place.getPosition(),memoryCounts.get("belongToUSer"),memoryCounts.get("NotBelongToUSer"),
+                isScraped,place.getPlaceCategory(),place.getPlaceName(),GroupType.ALL,place.getPlaceImage());
     }
 
 
 }
-

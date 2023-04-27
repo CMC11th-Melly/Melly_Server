@@ -42,20 +42,7 @@ public class GroupController {
     }
 
 
-<<<<<<< HEAD
 
-    @Operation(summary = "그룹 탈퇴")
-    @PutMapping("/group/{groupId}/exit")
-    private ResponseEntity<CommonResponse> exitGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
-    {
-       groupService.exitGroup(user.getUsername(),groupId);
-       return ResponseEntity.ok(new CommonResponse(200,"성공"));
-    }
-
-
-
-=======
->>>>>>> fix
     @Operation(summary = "그룹 편집")
     @PutMapping("/{groupId}")
     private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest)
@@ -65,11 +52,6 @@ public class GroupController {
     }
 
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fix
     @Operation(summary = "그룹 삭제")
     @DeleteMapping("/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)

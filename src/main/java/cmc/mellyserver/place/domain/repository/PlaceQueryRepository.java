@@ -95,7 +95,7 @@ public class PlaceQueryRepository {
                 )
                 .distinct()
                 .fetch();
-       return null;
+        return null;
     }
 
 
@@ -108,9 +108,9 @@ public class PlaceQueryRepository {
     {
         return query.select(Projections.fields(PlaceScrapResponseDto.class, placeScrap.scrapType, place.count().as("scrapCount")))
                 .from(placeScrap)
-                .join(place).on(placeScrap.placeId.eq(place.id))
+                .join(place).on(placeScrap.place.id.eq(place.id))
                 .groupBy(placeScrap.scrapType)
-                .where(placeScrap.userId.eq(user.getUserSeq()))
+                .where(placeScrap.user.userSeq.eq(user.getUserSeq()))
                 .fetch();
     }
 
@@ -124,9 +124,9 @@ public class PlaceQueryRepository {
         List<ScrapedPlaceResponseDto> results = query.select(Projections.constructor(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory, place.placeName, place.placeImage))
                 .from(place)
                 .where(place.id.in(
-                                JPAExpressions.select(placeScrap.placeId)
+                                JPAExpressions.select(placeScrap.place.id)
                                         .from(placeScrap)
-                                        .where(placeScrap.userId.eq(userSeq).and(eqScrapType(scrapType)))
+                                        .where(placeScrap.user.userSeq.eq(userSeq).and(eqScrapType(scrapType)))
                         )
                 )
                 .orderBy(place.id.desc())
@@ -169,12 +169,12 @@ public class PlaceQueryRepository {
             otherMemoryCountMap.put(placeId, otherMemoryTuple.get(1,Long.class));
         }
 
-       results.stream().forEach(r -> {
-           r.setIsScraped(true);
-           r.setMyMemoryCount(myMemoryCountMap.get(r.getPlaceId()));
-           r.setOtherMemoryCount(otherMemoryCountMap.get(r.getPlaceId()));
-           r.setRecommendType(GroupType.ALL);
-       });
+        results.stream().forEach(r -> {
+            r.setIsScraped(true);
+            r.setMyMemoryCount(myMemoryCountMap.get(r.getPlaceId()));
+            r.setOtherMemoryCount(otherMemoryCountMap.get(r.getPlaceId()));
+            r.setRecommendType(GroupType.ALL);
+        });
 
 
         boolean hasNext = false;
