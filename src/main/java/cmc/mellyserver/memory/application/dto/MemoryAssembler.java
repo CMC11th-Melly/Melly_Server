@@ -29,9 +29,4 @@ public class MemoryAssembler {
                 memory.getKeyword()
         );
     }
-
-    public static Slice<MemoryForGroupResponse> memoryForGroupResponses(Slice<Memory> myGroupMemory)
-    {
-
-    }
 }

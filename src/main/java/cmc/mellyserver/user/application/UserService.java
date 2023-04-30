@@ -5,7 +5,6 @@ import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
-import cmc.mellyserver.group.application.dto.MyGroupMemoryResponseDto;
 import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
@@ -67,7 +66,7 @@ public class UserService {
 
 
 
-    public Slice<MyGroupMemoryResponseDto> getMemoryBelongToMyGroup(Pageable pageable,Long groupId,Long userSeq) {
+    public Slice<MemoryResponseDto> getMemoryBelongToMyGroup(Pageable pageable,Long groupId,Long userSeq) {
         return userGroupQueryRepository.getMyGroupMemory(pageable, groupId, userSeq);
     }
 

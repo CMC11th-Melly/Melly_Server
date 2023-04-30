@@ -22,18 +22,28 @@ public class Memory extends JpaBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "memory_id")
     private Long id;
+
     private Long stars;
+
     private Long userId;
+
     private Long placeId;
+
     private String title;
+
     @Lob
     private String content;
+
     @Embedded
     GroupInfo groupInfo;
+
     @Enumerated(EnumType.STRING)
     private OpenType openType;
+
     private boolean isDelete;
+
     private boolean isReported = false;
+
     private LocalDateTime visitedDate;
 
 
@@ -47,8 +57,6 @@ public class Memory extends JpaBaseEntity {
             joinColumns = @JoinColumn(name = "memory_id"))
     @Column(name = "keyword") // 컬럼명 지정 (예외)
     private List<String> keyword = new ArrayList<>();
-
-
 
     @PrePersist
     public void init()

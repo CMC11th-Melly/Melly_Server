@@ -70,19 +70,16 @@ public class MemoryController {
     // TODO : 조치 필요
     @Operation(summary = "내가 속해있는 그룹의 사람이 이 장소에 남긴 메모리 조회")
     @GetMapping("/group/place/{placeId}")
-    public ResponseEntity<CommonResponse> getMyGroupMemory(           @AuthenticationPrincipal User user,
-                                                                      @PathVariable Long placeId,
-                                                                      @ParameterObject Pageable pageable, @RequestParam(required = false) GroupType groupType)
+    public ResponseEntity<CommonResponse> getMyGroupMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId, @ParameterObject Pageable pageable, @RequestParam(required = false) GroupType groupType)
     {
-        Slice<MemoryForGroupResponse> result = memoryService.getMyGroupMemoryInplace(pageable, Long.parseLong(user.getUsername()), placeId,groupType);
-        return ResponseEntity.ok(new CommonResponse(200,"성공",new GetMyGroupMemoryForPlaceResponseWrapper(result.stream().count(),result)));
+        Slice<MemoryResponseDto> results = memoryService.getMyGroupMemoryInplace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        return ResponseEntity.ok(new CommonResponse(200,"성공",new GetMyGroupMemoryForPlaceResponseWrapper(results.stream().count(),results)));
     }
 
 
     @Operation(summary = "메모리 저장")
     @PostMapping
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images,
-                                               @Valid @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images, @Valid @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
         memoryService.createMemory(Long.parseLong(user.getUsername()), images, placeInfoRequest);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));

@@ -3,7 +3,6 @@ package cmc.mellyserver.user.presentation;
 import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.group.application.dto.MyGroupMemoryResponseDto;
 import cmc.mellyserver.common.enums.ScrapType;
 import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
 import cmc.mellyserver.scrap.application.PlaceScrapService;
@@ -118,7 +117,7 @@ public class UserController {
     @GetMapping("/group/{groupId}/memory")
     public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long userSeq)
     {
-        Slice<MyGroupMemoryResponseDto> results = userService.getMemoryBelongToMyGroup(pageable, groupId, userSeq);
+        Slice<MemoryResponseDto> results = userService.getMemoryBelongToMyGroup(pageable, groupId, userSeq);
         return ResponseEntity.ok(new CommonResponse(200,"유저가 속해있는 그룹의 메모리 조회",results));
     }
 

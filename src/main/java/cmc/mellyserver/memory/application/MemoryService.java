@@ -88,10 +88,9 @@ public class MemoryService {
 
 
 
-    public Slice<MemoryForGroupResponse> getMyGroupMemoryInplace(Pageable pageable,Long userSeq, Long placeId,GroupType groupType)
+    public Slice<MemoryResponseDto> getMyGroupMemoryInplace(Pageable pageable,Long userSeq, Long placeId,GroupType groupType)
     {
-        Slice<Memory> myGroupMemory = memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId,groupType);
-        return MemoryAssembler.memoryForGroupResponses(myGroupMemory);
+        return memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId,groupType);
     }
 
 

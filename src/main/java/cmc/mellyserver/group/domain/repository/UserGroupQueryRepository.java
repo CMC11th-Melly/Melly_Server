@@ -4,9 +4,10 @@ import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.group.application.dto.MyGroupMemoryResponseDto;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.domain.dto.KeywordResponse;
+import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.common.UserDto;
@@ -16,6 +17,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
@@ -48,11 +50,11 @@ public class UserGroupQueryRepository {
     }
 
 
-    public Slice<MyGroupMemoryResponseDto> getMyGroupMemory(Pageable pageable, Long groupId, Long userSeq) {
+    public Slice<MemoryResponseDto> getMyGroupMemory(Pageable pageable, Long groupId, Long userSeq) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<MyGroupMemoryResponseDto> results = query.select(Projections.constructor(MyGroupMemoryResponseDto.class, place.id, place.placeName,
+        List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
                         memory.id, memory.title, memory.content,
                         memory.groupInfo.groupType, memory.groupInfo.groupName,
                         memory.stars, eqUser(userSeq), memory.visitedDate))
@@ -67,23 +69,10 @@ public class UserGroupQueryRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(results));
-        Map<Long, List<KeywordResponse>> keywordList = findKeywordList(toMemoryIds(results));
-
-        results.forEach(f -> {
-            f.setMemoryImages(memoryImageList.get(f.getMemoryId()));
-            f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponse::getKeyword).collect(Collectors.toList()));
-        });
-
-        boolean hasNext = false;
-
-        if (results.size() > pageable.getPageSize()) {
-            hasNext = true;
-            results.remove(pageable.getPageSize());
-        }
-
-        return new SliceImpl<>(results, pageable,hasNext);
+        initMemoryImageAndKeyword(results);
+        return transferToSlice(pageable, results);
     }
+
 
     // ok
     public List<GroupListForSaveMemoryResponseDto> getUserGroupListForMemoryEnroll(Long userSeq)
@@ -142,6 +131,7 @@ public class UserGroupQueryRepository {
         return memory.userId.eq(userSeq);
     }
 
+
     private BooleanExpression checkOpenTypeAllOrGroup() {
         return memory.openType.ne(OpenType.PRIVATE);
     }
@@ -195,20 +185,45 @@ public class UserGroupQueryRepository {
     }
 
 
-    private Map<Long, List<ImageDto>> findMemoryImage(List<Long> memoryIds) {
+    private Map<Long, List<MemoryImage>> findMemoryImage(List<Long> memoryIds) {
 
-        List<ImageDto> result = query.select(Projections.constructor(ImageDto.class, memoryImage.memory.id, memoryImage.id, memoryImage.imagePath))
+        List<MemoryImage> results = query.select(Projections.constructor(MemoryImage.class, memoryImage.memory.id, memoryImage.id, memoryImage.imagePath))
                 .from(memoryImage)
-                .where(memoryImage.id.in(memoryIds))
+                .where(memoryImage.memory.id.in(memoryIds))
                 .fetch();
 
-        return result.stream()
-                .collect(Collectors.groupingBy(ImageDto::getMemoryId));
+        return results.stream()
+                .collect(Collectors.groupingBy(MemoryImage::getId));
     }
 
-    private List<Long> toMemoryIds(List<MyGroupMemoryResponseDto> result) {
+
+    private List<Long> toMemoryIds(List<MemoryResponseDto> result) {
         return result.stream()
                 .map(o -> o.getMemoryId())
                 .collect(Collectors.toList());
+    }
+
+
+    @NotNull
+    private static SliceImpl<MemoryResponseDto> transferToSlice(Pageable pageable, List<MemoryResponseDto> results) {
+        boolean hasNext = false;
+
+        if (results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+
+    private void initMemoryImageAndKeyword(List<MemoryResponseDto> results) {
+        Map<Long, List<MemoryImage>> memoryImageList = findMemoryImage(toMemoryIds(results));
+        Map<Long, List<KeywordResponse>> keywordList = findKeywordList(toMemoryIds(results));
+
+        results.forEach(f -> {
+            f.setMemoryImages(memoryImageList.get(f.getMemoryId()).stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()));
+            f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponse::getKeyword).collect(Collectors.toList()));
+        });
     }
 }
