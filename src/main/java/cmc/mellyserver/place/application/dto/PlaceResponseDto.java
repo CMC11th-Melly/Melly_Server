@@ -1,10 +1,9 @@
 package cmc.mellyserver.place.application.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.security.core.parameters.P;
 
 @Data
 @AllArgsConstructor
@@ -20,13 +19,13 @@ public class PlaceResponseDto {
     private GroupType recommendType = GroupType.ALL;
     private String placeImage;
 
-    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped,String placeImage)
+    public static PlaceResponseDto PlaceNotCreated(Position position,Long myMemoryCount,Long otherMemoryCount,Boolean isScraped)
     {
-        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped,placeImage);
+        return new PlaceResponseDto(position,myMemoryCount,otherMemoryCount,isScraped);
 
     }
 
-    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped,String placeImage) {
+    private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped) {
 
         this.position = position;
         this.myMemoryCount = myMemoryCount;
@@ -34,4 +33,5 @@ public class PlaceResponseDto {
         this.isScraped = isScraped;
         this.placeImage = "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
     }
+
 }
