@@ -1,6 +1,7 @@
 package cmc.mellyserver.memory.presentation.dto.wrapper;
 
 import cmc.mellyserver.memory.application.dto.response.MemoryForGroupResponse;
+import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Slice;
@@ -9,5 +10,5 @@ import org.springframework.data.domain.Slice;
 @AllArgsConstructor
 public class GetMyGroupMemoryForPlaceResponseWrapper {
     private Long memoryCount;
-    private Slice<MemoryForGroupResponse> memoryList;
+    private Slice<MemoryResponseDto> memoryList;
 }
