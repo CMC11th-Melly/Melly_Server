@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class PollRecommendResponse {
+public class SurveyRecommendResponse {
     private Position position;
     private List<String> words;
 }

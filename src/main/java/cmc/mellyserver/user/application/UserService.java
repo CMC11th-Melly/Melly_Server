@@ -10,7 +10,7 @@ import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
-import cmc.mellyserver.user.application.dto.PollRecommendResponse;
+import cmc.mellyserver.user.application.dto.SurveyRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.repository.UserRepository;
@@ -45,7 +45,7 @@ public class UserService {
 
 
 
-    public PollRecommendResponse getSurvey(Long userSeq)
+    public SurveyRecommendResponse getSurvey(Long userSeq)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         return surveyRecommender.getRecommend(user);

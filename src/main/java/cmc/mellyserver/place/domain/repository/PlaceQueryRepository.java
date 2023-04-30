@@ -116,8 +116,7 @@ public class PlaceQueryRepository {
 
 
     /**
-     * 유저가 스크랩한 장소 조회(최적화 완료, 인덱스 설정 필요)
-     *  TODO : 다시 안봐
+     * 유저가 스크랩한 장소 조회
      */
     public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, Long userSeq, ScrapType scrapType)
     {
@@ -135,7 +134,6 @@ public class PlaceQueryRepository {
                 .fetch();
 
         List<Long> placeIds = toPlaceIds(results);
-
 
         List<Tuple> myMemoryCount = query.select(memory.placeId, memory.count())
                 .from(memory)

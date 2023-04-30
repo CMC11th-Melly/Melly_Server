@@ -45,18 +45,15 @@ public class GroupService {
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq); // 1. 유저 찾기
 
-        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> { // 2. group 만들기
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
-
-        Optional<GroupAndUser> groupAndUserByUserAndGroup = groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup);
-
-        if(groupAndUserByUserAndGroup.isPresent()) throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
-
-        GroupAndUser groupAndUser = new GroupAndUser(user, userGroup);
-        groupAndUserRepository.save(groupAndUser);
+        // 3. group_and_user 만들기
+        if(groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup).isPresent()) throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
+        // 4. 저장
+        groupAndUserRepository.save(new GroupAndUser(user, userGroup));
     }
 
 

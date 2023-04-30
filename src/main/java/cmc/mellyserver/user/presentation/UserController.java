@@ -10,7 +10,7 @@ import cmc.mellyserver.scrap.application.PlaceScrapService;
 import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.user.application.UserService;
-import cmc.mellyserver.user.application.dto.PollRecommendResponse;
+import cmc.mellyserver.user.application.dto.SurveyRecommendResponse;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
 import cmc.mellyserver.user.presentation.dto.common.*;
 import cmc.mellyserver.user.presentation.dto.request.ParticipateGroupRequest;
@@ -66,7 +66,7 @@ public class UserController {
     @GetMapping("/survey")
     public ResponseEntity<CommonResponse> getSurvey(@AuthenticationPrincipal User user)
     {
-        PollRecommendResponse result = userService.getSurvey(Long.parseLong(user.getUsername()));
+        SurveyRecommendResponse result = userService.getSurvey(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공", new SurveyRecommendResponseWrapper(result)));
     }
 
@@ -143,7 +143,7 @@ public class UserController {
     }
 
 
-
+   // 최종 확인 완료
     @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
@@ -153,7 +153,7 @@ public class UserController {
     }
 
 
-
+    // 최종 확인 완료
     @Operation(summary = "초대링크를 받은 후 그룹에 참여")
     @PostMapping("/group")
     public ResponseEntity<CommonResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest)

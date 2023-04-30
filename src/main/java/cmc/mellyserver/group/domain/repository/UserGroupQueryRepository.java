@@ -85,7 +85,7 @@ public class UserGroupQueryRepository {
         return new SliceImpl<>(results, pageable,hasNext);
     }
 
-
+    // ok
     public List<GroupListForSaveMemoryResponseDto> getUserGroupListForMemoryEnroll(Long userSeq)
     {
         return query.select(Projections.constructor(GroupListForSaveMemoryResponseDto.class,userGroup.id,userGroup.groupName,userGroup.groupType))

@@ -7,7 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ImageDto {
 
-    private Long memoryId;
     private Long imageId;
     private String memoryImage;
 }

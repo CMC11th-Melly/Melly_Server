@@ -35,6 +35,7 @@ public class MemoryController {
     private final MemoryService memoryService;
 
 
+    // ok
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user)
