@@ -1,7 +1,7 @@
 package cmc.mellyserver.user.presentation.dto.response;
 
-import cmc.mellyserver.user.domain.enums.RecommendGroup;
-import cmc.mellyserver.user.domain.enums.RecommendPlace;
+import cmc.mellyserver.common.enums.RecommendGroup;
+import cmc.mellyserver.common.enums.RecommendPlace;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

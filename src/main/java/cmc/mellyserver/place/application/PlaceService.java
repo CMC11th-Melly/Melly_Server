@@ -1,19 +1,23 @@
 package cmc.mellyserver.place.application;
 
 
-import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
+import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.place.domain.PlaceQueryRepository;
-import cmc.mellyserver.place.domain.service.PlaceDomainService;
+import cmc.mellyserver.place.domain.Position;
+import cmc.mellyserver.place.domain.repository.PlaceQueryRepository;
+import cmc.mellyserver.place.domain.repository.PlaceRepository;
+import cmc.mellyserver.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
-import cmc.mellyserver.place.presentation.dto.PlaceListReponseDto;
-import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.place.presentation.dto.response.PlaceListReponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -22,52 +26,54 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceQueryRepository placeQueryRepository;
-    private final PlaceDomainService placeDomainService;
-    private final AuthenticatedUserChecker authenticatedUserChecker;
-
+    private final PlaceRepository placeRepository;
+    private final PlaceScrapQueryRepository placeScrapQueryRepository;
+    private final MemoryQueryRepository memoryQueryRepository;
 
 
     /**
      * 지도 상에 로그인 유저가 메모리를 등록한 장소들 표시
      */
-    public List<PlaceListReponseDto> getMarkerPosition(String uid, GroupType groupType)
+    public List<PlaceListReponseDto> displayMarker(Long userSeq, GroupType groupType)
     {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(user);
-
-        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, uid);
+        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq);
+        return PlaceAssembler.placeListReponseDto(placeUserMemoryExist, groupType, userSeq);
     }
-
-
-
-    /**
-     * 좌표를 기준으로 장소 조회 (당장은 최적화 완료)
-     */
-    public PlaceResponseDto getPlaceByPosition(String uid, Double lat, Double lng)
-    {
-        return placeDomainService.getPlaceByPosition(uid, lat, lng);
-    }
-
-
 
     /**
      * PlaceId로 특정 장소 검색(당장은 최적화 완료,인덱스 설정하기)
      */
-    public PlaceResponseDto searchPlaceByPlaceId(String uid,Long placeId) {
-
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
-
-        Place placeByMemory = placeQueryRepository.searchPlaceByPlaceId(placeId);
-        placeByMemory.setScraped(checkIsScraped(user,placeByMemory));
-        return PlaceAssembler.placeResponseDto(placeByMemory,user);
-
+    public PlaceResponseDto searchPlaceByPlaceId(Long userSeq,Long placeId)
+    {
+        Place place = placeQueryRepository.searchPlaceByPlaceId(placeId);
+        HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoriesBelongToPlace(userSeq, placeId);
+        Boolean checkCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userSeq);
+        return PlaceAssembler.placeResponseDto(place,checkCurrentLoginUserScraped,memoryCounts);
     }
 
-
-
-    private boolean checkIsScraped(User user, Place place)
+    public PlaceResponseDto searchPlaceByPosition(Long userSeq, Double lat, Double lng)
     {
-       return user.getPlaceScraps().stream().anyMatch(s -> s.getPlace().getId().equals(place.getId()));
+        Optional<Place> optPlace = placeRepository.findPlaceByPosition(new Position(lat, lng));
+
+        if(optPlace.isEmpty()) {
+            return PlaceResponseDto.PlaceNotCreated(new Position(lat, lng), 0L, 0L, false);
+        }
+
+        Place place = optPlace.get();
+
+        HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoryOfPlace(place.getId(), userSeq);
+        Boolean isCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userSeq, new Position(lat, lng));
+
+        return new PlaceResponseDto(
+                place.getId(), // id
+                place.getPosition(), // 좌표
+                memoryCounts.get("myMemoryCount"), // 내가 쓴 메모리 개수
+                memoryCounts.get("otherMemoryCount"), // 상대방이 쓴 메모리 개수
+                isCurrentLoginUserScraped, // 해당 장소 스크랩 여부
+                place.getPlaceCategory(), // 해당 장소 카테고리
+                place.getPlaceName(), // 장소 이름
+                GroupType.ALL, // 해당 장소 타입
+                place.getPlaceImage() // 장소 이미지
+        );
     }
 }

@@ -1,6 +1,6 @@
 package cmc.mellyserver.common.event;
 
-import cmc.mellyserver.notification.domain.NotificationType;
+import cmc.mellyserver.common.enums.NotificationType;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

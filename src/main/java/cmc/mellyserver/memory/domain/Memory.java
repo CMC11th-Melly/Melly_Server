@@ -1,18 +1,9 @@
 package cmc.mellyserver.memory.domain;
 
-import cmc.mellyserver.block.memoryBlock.domain.MemoryBlock;
-import cmc.mellyserver.comment.domain.Comment;
+import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.group.domain.enums.GroupType;
-import cmc.mellyserver.memory.domain.enums.OpenType;
-import cmc.mellyserver.memoryScrap.domain.MemoryScrap;
-import cmc.mellyserver.notification.domain.Notification;
-import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.report.memoryReport.domain.MemoryReport;
-import cmc.mellyserver.user.domain.User;
+import cmc.mellyserver.common.enums.GroupType;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,22 +15,31 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
+@Table(name = "tb_memory")
 public class Memory extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "memory_id")
     private Long id;
-
     private Long stars;
+    private Long userId;
+    private Long placeId;
+    private String title;
+    @Lob
+    private String content;
+    @Embedded
+    GroupInfo groupInfo;
+    @Enumerated(EnumType.STRING)
+    private OpenType openType;
+    private boolean isDelete;
+    private boolean isReported = false;
+    private LocalDateTime visitedDate;
 
-    @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
 
-    @ManyToOne
-    @JoinColumn(name = "user_seq")
-    private User user;
+
+    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<MemoryImage> memoryImages = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(
@@ -48,48 +48,30 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "keyword") // 컬럼명 지정 (예외)
     private List<String> keyword = new ArrayList<>();
 
-    @Embedded
-    GroupInfo groupInfo;
 
-    @Enumerated(EnumType.STRING)
-    private OpenType openType;
 
-    private String title;
-
-    @Lob
-    private String content;
-
-    private boolean isReported = false;
-
-    private LocalDateTime visitedDate;
-
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
-    private List<Notification> notifications = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<MemoryImage> memoryImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.REMOVE)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<MemoryScrap> scraps = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
-    private List<MemoryReport> memoryReports = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memory",fetch = FetchType.LAZY)
-    private List<MemoryBlock> memoryBlocks = new ArrayList<>();
-
-    public void setPlaceForMemory(Place place)
+    @PrePersist
+    public void init()
     {
-        this.place = place;
+        this.isDelete = false;
     }
-    public void setUser(User user)
+
+    public void delete()
     {
-        this.user=  user;
-        user.getMemories().add(this);
+        this.isDelete = true;
     }
+
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public void setPlaceId(Long placeId)
+    {
+        this.placeId = placeId;
+    }
+
 
     public void isReported(boolean reported)
     {
@@ -100,18 +82,11 @@ public class Memory extends JpaBaseEntity {
     {
           this.title = title;
           this.content = content;
-          // 키워드는 아예 대체 해버리기
           this.keyword = keyword;
           this.groupInfo = new GroupInfo(groupName,groupType,groupId);
           this.openType = openType;
           this.visitedDate = visitedDate;
           this.stars = star;
-
-    }
-
-    public void deleteGroupInfo()
-    {
-        this.groupInfo = new GroupInfo("그룹 미설정",GroupType.ALL,-1L);
     }
 
     public void setMemoryImages(List<MemoryImage> memoryImages)
@@ -132,8 +107,11 @@ public class Memory extends JpaBaseEntity {
 
     public void setKeyword(List<String> keywords)
     {
-        // 값 타입처럼 아예 대체해버리기
         this.keyword = keywords;
+    }
+    public LocalDate getLocalDate()
+    {
+        return  this.getCreatedDate().toLocalDate();
     }
 
     @Builder
@@ -144,10 +122,5 @@ public class Memory extends JpaBaseEntity {
         this.content = content;
         this.openType = openType;
         this.visitedDate = visitedDate;
-    }
-
-    public LocalDate getLocalDate()
-    {
-        return  this.getCreatedDate().toLocalDate();
     }
 }

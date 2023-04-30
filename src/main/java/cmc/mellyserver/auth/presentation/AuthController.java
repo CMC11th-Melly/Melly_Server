@@ -7,7 +7,7 @@ import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.request.*;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
-import cmc.mellyserver.auth.util.HeaderUtil;
+import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.user.domain.User;
@@ -98,7 +98,7 @@ public class AuthController {
       public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                                    HttpServletRequest request)
       {
-          authService.logout(user.getUsername(), HeaderUtil.getAccessToken(request));
+          authService.logout(Long.parseLong(user.getUsername()), HeaderUtil.getAccessToken(request));
           return ResponseEntity.ok(new CommonResponse(200,"로그아웃 완료"));
       }
 
@@ -108,7 +108,7 @@ public class AuthController {
       public ResponseEntity<CommonResponse> withdraw(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                                      HttpServletRequest request)
       {
-          authService.withdraw(user.getUsername(),HeaderUtil.getAccessToken(request));
+          authService.withdraw(Long.parseLong(user.getUsername()),HeaderUtil.getAccessToken(request));
           return ResponseEntity.ok(new CommonResponse(200,"회원탈퇴 완료"));
       }
 
@@ -117,7 +117,7 @@ public class AuthController {
       @GetMapping("/me")
       public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
       {
-          User userData = authenticatedUserChecker.checkAuthenticatedUserExist(user.getUsername());
+          User userData = authenticatedUserChecker.checkAuthenticatedUserExist(Long.parseLong(user.getUsername()));
           return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
       }
 

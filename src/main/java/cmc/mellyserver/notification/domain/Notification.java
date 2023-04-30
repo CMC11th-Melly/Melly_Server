@@ -1,10 +1,10 @@
 package cmc.mellyserver.notification.domain;
 
+import cmc.mellyserver.common.enums.NotificationType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,18 +26,16 @@ public class Notification extends JpaBaseEntity {
 
     private boolean checked;
 
-    @ManyToOne
-    @JoinColumn(name = "user_seq")
-    private User user;
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memory_id")
-    private Memory memory;
+    private Long memoryId;
 
-    public Notification(NotificationType title, String message, boolean checked) {
+    public Notification(NotificationType title, String message, boolean checked, Long userId, Long memoryId) {
         this.title = title;
         this.message = message;
         this.checked = checked;
+        this.userId = userId;
+        this.memoryId = memoryId;
     }
 
     public void checkNotification(boolean check)
@@ -45,23 +43,10 @@ public class Notification extends JpaBaseEntity {
         this.checked = check;
     }
 
-    private void setUser(User user)
-    {
-        this.user = user;
-        user.getNotifications().add(this);
-    }
-
-    private void setMemory(Memory memory)
-    {
-        this.memory = memory;
-        memory.getNotifications().add(this);
-    }
 
     public static Notification createNotification(NotificationType title, String message, boolean checked,Memory memory,User user)
     {
-        Notification notification = new Notification(title, message, checked);
-        notification.setMemory(memory);
-        notification.setUser(user);
+        Notification notification = new Notification(title, message, checked,user.getUserSeq(),memory.getId());
         return notification;
     }
 }

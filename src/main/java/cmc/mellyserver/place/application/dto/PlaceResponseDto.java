@@ -1,10 +1,9 @@
 package cmc.mellyserver.place.application.dto;
 
-import cmc.mellyserver.group.domain.enums.GroupType;
+import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.security.core.parameters.P;
 
 @Data
 @AllArgsConstructor
@@ -32,5 +31,7 @@ public class PlaceResponseDto {
         this.myMemoryCount = myMemoryCount;
         this.otherMemoryCount = otherMemoryCount;
         this.isScraped = isScraped;
+        this.placeImage = "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
     }
+
 }

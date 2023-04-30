@@ -4,14 +4,14 @@ import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
 import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
 import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
-import cmc.mellyserver.auth.token.AuthToken;
-import cmc.mellyserver.auth.token.JwtTokenProvider;
+import cmc.mellyserver.common.token.AuthToken;
+import cmc.mellyserver.common.token.JwtTokenProvider;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.domain.UserRepository;
+import cmc.mellyserver.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +44,7 @@ public class AuthService {
         String filename = s3FileLoader.getMultipartFileName(authRequestForSignupDto.getProfile_image());
         User saveUser = AuthAssembler.createEmailLoginUser(authRequestForSignupDto,passwordEncoder,filename);
         userRepository.save(saveUser);
-        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserId(), saveUser.getRoleType(), expiry);
+        AuthToken accessToken = jwtTokenProvider.createToken(saveUser.getUserSeq(), saveUser.getRoleType(), expiry);
         return AuthAssembler.signupResponse(accessToken.getToken(),saveUser);
     }
 
@@ -58,14 +58,14 @@ public class AuthService {
         }
 
         user.setFcmToken(fcmToken);
-        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getRoleType(), expiry);
+        AuthToken accessToken = jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType(), expiry);
 
         return AuthAssembler.loginResponse(accessToken.getToken(),user);
     }
 
-    public void logout(String uid, String accessToken)
+    public void logout(Long userSeq, String accessToken)
     {
-        authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }
 
@@ -92,9 +92,9 @@ public class AuthService {
      * 1. DB에서 유저 삭제
      * 2. redis에 지금 로그인한 토큰 블랙리스트 설정
      */
-    public void withdraw(String uid,String accessToken) {
+    public void withdraw(Long userSeq,String accessToken) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(uid);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         userRepository.delete(user);
         redisTemplate.opsForValue().set(accessToken,"blackList");
     }

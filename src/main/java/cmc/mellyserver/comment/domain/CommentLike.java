@@ -11,7 +11,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_like_id")
@@ -21,41 +20,21 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
-    private User user;
+    private Long userId; // CommentLike에서 user쪽으로 참조할 일은 없다.
 
-    public void setComment(Comment comment)
-    {
+    public void setComment(Comment comment) {
         this.comment = comment;
-        comment.getCommentLikes().add(this);
     }
 
-    public void setUser(User user)
-    {
-        this.user = user;
-        user.getCommentLikes().add(this);
-    }
-
-    public static CommentLike createCommentLike(User user , Comment comment)
+    public static CommentLike createCommentLike(Long userSeq , Comment comment)
     {
         CommentLike commentLike = new CommentLike();
         commentLike.setComment(comment);
-        commentLike.setUser(user);
+        commentLike.userId = userSeq;
         return commentLike;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CommentLike that = (CommentLike) o;
-        return Objects.equals(comment, that.comment) && Objects.equals(user, that.user);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(comment, user);
-    }
+
 
 }

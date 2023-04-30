@@ -1,6 +1,6 @@
 package cmc.mellyserver.memory.presentation.dto.wrapper;
 
-import cmc.mellyserver.memory.application.dto.MemoryUpdateFormResponse;
+import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
