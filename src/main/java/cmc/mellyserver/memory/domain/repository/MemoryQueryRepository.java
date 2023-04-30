@@ -146,11 +146,11 @@ public class MemoryQueryRepository {
 
 
     // 해당 장소에 대해 내 그룹 사람들이 쓴 메모리 조회
-    public Slice<Memory> getMyGroupMemory(Pageable pageable, Long userSeq, Long placeId, GroupType groupType) {
+    public Slice<MemoryResponseDto> getMyGroupMemory(Pageable pageable, Long userSeq, Long placeId, GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        query.select(Projections.constructor(MemoryForGroupResponse.class,place.id,place.placeName,memory.id,memory.title,memory.content,memory.groupInfo.groupType,memory.groupInfo.groupName,memory.stars,memory.userId.eq(userSeq),memory.visitedDate))
+        List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class, place.id, place.placeName, memory.id, memory.title, memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName, memory.stars, memory.userId.eq(userSeq), memory.visitedDate))
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
@@ -170,8 +170,8 @@ public class MemoryQueryRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-
-        return null;
+        initMemoryImageAndKeyword(results);
+        return transferToSlice(pageable,results);
     }
 
 

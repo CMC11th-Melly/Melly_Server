@@ -15,6 +15,7 @@ public class Place extends JpaBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long id;
+
     @Embedded
     @Column(name = "place_position")
     private Position position;
