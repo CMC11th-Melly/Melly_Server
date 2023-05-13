@@ -3,6 +3,7 @@ package cmc.mellyserver.memory.domain;
 import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.common.enums.GroupType;
+import cmc.mellyserver.memory.domain.vo.GroupInfo;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,18 +23,28 @@ public class Memory extends JpaBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "memory_id")
     private Long id;
+
     private Long stars;
+
     private Long userId;
+
     private Long placeId;
+
     private String title;
+
     @Lob
     private String content;
+
     @Embedded
     GroupInfo groupInfo;
+
     @Enumerated(EnumType.STRING)
     private OpenType openType;
+
     private boolean isDelete;
+
     private boolean isReported = false;
+
     private LocalDateTime visitedDate;
 
 
@@ -47,8 +58,6 @@ public class Memory extends JpaBaseEntity {
             joinColumns = @JoinColumn(name = "memory_id"))
     @Column(name = "keyword") // 컬럼명 지정 (예외)
     private List<String> keyword = new ArrayList<>();
-
-
 
     @PrePersist
     public void init()
@@ -115,7 +124,7 @@ public class Memory extends JpaBaseEntity {
     }
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, String title, String content,OpenType openType,LocalDateTime visitedDate) {
+    public Memory(Long stars, GroupInfo groupInfo, String title, String content, OpenType openType, LocalDateTime visitedDate) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;

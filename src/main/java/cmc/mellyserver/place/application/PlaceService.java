@@ -2,7 +2,7 @@ package cmc.mellyserver.place.application;
 
 
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
+import cmc.mellyserver.memory.infrastructure.data.MemoryQueryRepository;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.Position;

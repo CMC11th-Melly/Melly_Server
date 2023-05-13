@@ -1,4 +1,4 @@
-package cmc.mellyserver.memory.domain;
+package cmc.mellyserver.memory.domain.vo;
 
 import cmc.mellyserver.common.enums.GroupType;
 import lombok.AccessLevel;

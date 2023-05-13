@@ -1,13 +1,7 @@
 name: KIYO CI
 
 on:
-  push:
-    branches:
-      - 'main'
-      - 'develop'
-  pull_request:
-    branches:
-      - 'develop'
+  workflow_dispatch
 env:
   S3_BUCKET_NAME: melly
   PROJECT_NAME: melly

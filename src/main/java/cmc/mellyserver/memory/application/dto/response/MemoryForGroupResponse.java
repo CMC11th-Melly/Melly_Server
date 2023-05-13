@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class MemoryForGroupResponse {
     @Schema(example = "1")
     private Long placeId;
@@ -37,4 +36,17 @@ public class MemoryForGroupResponse {
     @Schema(example = "202210142310")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime visitedDate;
+
+    public MemoryForGroupResponse(Long placeId, String placeName, Long memoryId, String title, String content, GroupType groupType, String groupName, Long stars, boolean loginUserWrite, LocalDateTime visitedDate) {
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.memoryId = memoryId;
+        this.title = title;
+        this.content = content;
+        this.groupType = groupType;
+        this.groupName = groupName;
+        this.stars = stars;
+        this.loginUserWrite = loginUserWrite;
+        this.visitedDate = visitedDate;
+    }
 }

@@ -1,4 +1,4 @@
-package cmc.mellyserver.memory.domain.dto;
+package cmc.mellyserver.memory.infrastructure.data.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
