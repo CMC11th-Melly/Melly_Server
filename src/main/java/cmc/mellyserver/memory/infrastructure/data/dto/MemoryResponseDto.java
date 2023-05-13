@@ -1,4 +1,4 @@
-package cmc.mellyserver.memory.domain.dto;
+package cmc.mellyserver.memory.infrastructure.data.dto;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;

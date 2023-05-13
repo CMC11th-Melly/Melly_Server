@@ -3,6 +3,7 @@ package cmc.mellyserver.memory.domain;
 import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.common.enums.GroupType;
+import cmc.mellyserver.memory.domain.vo.GroupInfo;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -123,7 +124,7 @@ public class Memory extends JpaBaseEntity {
     }
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, String title, String content,OpenType openType,LocalDateTime visitedDate) {
+    public Memory(Long stars, GroupInfo groupInfo, String title, String content, OpenType openType, LocalDateTime visitedDate) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;

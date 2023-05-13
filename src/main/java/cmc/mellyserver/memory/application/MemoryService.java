@@ -13,12 +13,11 @@ import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.memory.application.dto.MemoryAssembler;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponse;
-import cmc.mellyserver.memory.domain.GroupInfo;
+import cmc.mellyserver.memory.domain.repository.MemoryRepository;
+import cmc.mellyserver.memory.domain.vo.GroupInfo;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
-import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
-import cmc.mellyserver.memory.domain.repository.MemoryRepository;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.request.SearchMemoryByNameResponseDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.place.domain.Place;
@@ -43,9 +42,8 @@ import java.util.stream.Collectors;
 public class MemoryService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
-    private final MemoryQueryRepository memoryQueryRepository;
-    private final PlaceRepository placeRepository;
     private final MemoryRepository memoryRepository;
+    private final PlaceRepository placeRepository;
     private final S3FileLoader s3FileLoader;
     private final GroupRepository groupRepository;
     private final UserGroupQueryRepository userGroupQueryRepository;
@@ -88,7 +86,7 @@ public class MemoryService {
             // 키워드 등록
             memory.setKeyword(placeInfoRequest.getKeyword());
             // 트렌드 분석에 사용되는 장소 이름 추가
-            return memoryRepository.save(memory);
+            return memoryRepository.createMemory(memory);
         }
         else{
 
@@ -114,7 +112,7 @@ public class MemoryService {
 
             memory.setPlaceId(placeOpt.get().getId());
             memory.setKeyword(placeInfoRequest.getKeyword());
-            return memoryRepository.save(memory);
+            return memoryRepository.createMemory(memory);
         }
     }
 
@@ -173,7 +171,7 @@ public class MemoryService {
 
     public MemoryUpdateFormResponse getFormForUpdateMemory(Long userSeq, Long memoryId) {
 
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+        Memory memory = memoryRepository.findMemoryById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
 
@@ -188,7 +186,7 @@ public class MemoryService {
     public void updateMemory(String uid, Long memoryId, MemoryUpdateRequest memoryUpdateRequest, List<MultipartFile> images) {
 
 
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+        Memory memory = memoryRepository.findMemoryById(memoryId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
         });
 

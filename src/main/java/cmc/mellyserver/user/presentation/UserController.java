@@ -4,7 +4,7 @@ import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.ScrapType;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.scrap.application.PlaceScrapService;
 import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
 import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;

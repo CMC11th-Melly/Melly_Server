@@ -1,13 +1,11 @@
-package cmc.mellyserver.memory.domain.repository;
+package cmc.mellyserver.memory.infrastructure.data;
 
 import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.util.jpa.QueryDslUtil;
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.memory.application.dto.response.MemoryForGroupResponse;
-import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.MemoryImage;
-import cmc.mellyserver.memory.domain.dto.KeywordResponse;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.KeywordResponse;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.memory.presentation.dto.request.SearchMemoryByNameResponseDto;
 import cmc.mellyserver.user.domain.User;
