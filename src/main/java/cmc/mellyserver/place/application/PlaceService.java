@@ -51,6 +51,9 @@ public class PlaceService {
         return PlaceAssembler.placeResponseDto(place,checkCurrentLoginUserScraped,memoryCounts);
     }
 
+
+
+
     public PlaceResponseDto searchPlaceByPosition(Long userSeq, Double lat, Double lng)
     {
         Optional<Place> optPlace = placeRepository.findPlaceByPosition(new Position(lat, lng));

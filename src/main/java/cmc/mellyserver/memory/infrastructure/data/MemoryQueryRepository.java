@@ -7,7 +7,7 @@ import cmc.mellyserver.memory.domain.MemoryImage;
 import cmc.mellyserver.memory.infrastructure.data.dto.KeywordResponse;
 import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
-import cmc.mellyserver.memory.presentation.dto.request.SearchMemoryByNameResponseDto;
+import cmc.mellyserver.memory.presentation.dto.request.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -15,6 +15,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
@@ -28,22 +29,17 @@ import static cmc.mellyserver.memory.domain.QMemoryImage.memoryImage;
 import static cmc.mellyserver.place.domain.QPlace.place;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+@RequiredArgsConstructor
 @Repository
 public class MemoryQueryRepository {
-
 
     private final EntityManager em;
     private final JPAQueryFactory query;
 
-    public MemoryQueryRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
 
+    public List<FindPlaceInfoByMemoryNameResponseDto> searchPlaceByContainMemoryName(Long userSeq, String memoryName) {
 
-    public List<SearchMemoryByNameResponseDto> searchPlaceByContainMemoryName(Long userSeq, String memoryName) {
-
-        return query.select(Projections.constructor(SearchMemoryByNameResponseDto.class, memory.placeId, memory.title))
+        return query.select(Projections.constructor(FindPlaceInfoByMemoryNameResponseDto.class, memory.placeId, memory.title))
                 .from(memory)
                 .where(
                         memory.userId.eq(userSeq),  // 본인이 가지고 있는 메모리

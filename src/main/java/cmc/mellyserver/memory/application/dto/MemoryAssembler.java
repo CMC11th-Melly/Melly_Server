@@ -2,11 +2,9 @@ package cmc.mellyserver.memory.application.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
-import cmc.mellyserver.memory.application.dto.response.MemoryForGroupResponse;
 import cmc.mellyserver.memory.application.dto.response.MemoryImageDto;
-import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponse;
+import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponseDto;
 import cmc.mellyserver.memory.domain.Memory;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,9 +16,9 @@ import java.util.stream.Collectors;
  */
 public class MemoryAssembler {
 
-    public static MemoryUpdateFormResponse memoryUpdateFormResponse(Memory memory, List<UserGroup> userGroups)
+    public static MemoryUpdateFormResponseDto memoryUpdateFormResponse(Memory memory, List<UserGroup> userGroups)
     {
-        return new MemoryUpdateFormResponse(
+        return new MemoryUpdateFormResponseDto(
                 memory.getMemoryImages().stream().map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath())).collect(Collectors.toList()),
                 memory.getTitle(),
                 memory.getContent(),

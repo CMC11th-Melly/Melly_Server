@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchMemoryByNameResponseDto {
+public class FindPlaceInfoByMemoryNameResponseDto {
     private Long placeId;
     private String memoryName;
 }

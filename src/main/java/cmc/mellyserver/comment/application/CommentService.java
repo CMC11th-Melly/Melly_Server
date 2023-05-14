@@ -10,7 +10,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.infrastructure.data.MemoryJpaRepository;
+import cmc.mellyserver.memory.infrastructure.data.MemoryRepository;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CommentService {
      private final UserRepository userRepository;
      private final AuthenticatedUserChecker authenticatedUserChecker;
      private final CommentLikeRepository commentLikeRepository;
-    private final MemoryJpaRepository memoryRepository;
+    private final MemoryRepository memoryRepository;
 
 
     public CommentResponseDto getComment(Long userSeq,Long memoryId)

@@ -4,7 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.infrastructure.data.MemoryJpaRepository;
+import cmc.mellyserver.memory.infrastructure.data.MemoryRepository;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.common.enums.NotificationType;
@@ -23,7 +23,7 @@ public class NotificationService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final NotificationRepository notificationRepository;
-    private final MemoryJpaRepository memoryRepository;
+    private final MemoryRepository memoryRepository;
 
     // TOOD : 조치 필요
     public List<Notification> getNotificationList(Long userSeq)
