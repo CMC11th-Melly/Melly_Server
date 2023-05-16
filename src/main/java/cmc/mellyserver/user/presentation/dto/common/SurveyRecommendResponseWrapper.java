@@ -1,7 +1,7 @@
 package cmc.mellyserver.user.presentation.dto.common;
 
 
-import cmc.mellyserver.user.application.dto.SurveyRecommendResponse;
+import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class SurveyRecommendResponseWrapper {
 
-    private SurveyRecommendResponse surveyRecommend;
+    private SurveyRecommendResponseDto surveyRecommend;
 }

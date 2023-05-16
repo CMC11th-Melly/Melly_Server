@@ -1,6 +1,6 @@
 package cmc.mellyserver.user.presentation.dto.common;
 
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 public class GetUserGroupResponseWrapper {
 
-    List<GetUserGroupResponseDto> groupInfo;
+    List<GroupLoginUserParticipatedResponseDto> groupInfo;
 }

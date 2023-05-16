@@ -3,22 +3,20 @@ package cmc.mellyserver.place.presentation.dto;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.place.domain.Position;
-import cmc.mellyserver.place.presentation.dto.response.PlaceListReponseDto;
+import cmc.mellyserver.place.presentation.dto.response.MarkedPlaceReponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 public class PlaceAssembler {
 
-    public static List<PlaceListReponseDto> placeListReponseDto(List<Place> places, GroupType groupType, Long userSeq)
+    public static List<MarkedPlaceReponseDto> placeListReponseDto(List<Place> places, GroupType groupType, Long userSeq)
     {
-//       return places.stream().map(p -> new PlaceListReponseDto(
+//       return places.stream().map(p -> new MarkedPlaceReponseDto(
 //                new Position(p.getPosition().getLat(),p.getPosition().getLng()), // 좌표 값
 //                groupType, // 그룹 종류
 //                p.getId(), // 장소

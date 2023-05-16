@@ -1,6 +1,6 @@
 package cmc.mellyserver.memory.presentation.dto.wrapper;
 
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Slice;

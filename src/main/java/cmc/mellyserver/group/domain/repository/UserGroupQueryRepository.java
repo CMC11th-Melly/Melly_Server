@@ -6,12 +6,12 @@ import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.memory.domain.MemoryImage;
-import cmc.mellyserver.memory.domain.dto.KeywordResponse;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.KeywordResponse;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.common.UserDto;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -85,7 +85,7 @@ public class UserGroupQueryRepository {
     }
 
 
-    public List<GetUserGroupResponseDto> getGroupListLoginUserParticipate(Long userSeq)
+    public List<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userSeq)
     {
         List<GroupAndUser> results = query.select(groupAndUser)
                 .from(groupAndUser)
@@ -114,7 +114,7 @@ public class UserGroupQueryRepository {
         }
 
         return results.stream().map(ga -> {
-            GetUserGroupResponseDto getUserGroupResponse = new GetUserGroupResponseDto(ga.getId(), ga.getGroup().getGroupIcon(), ga.getGroup().getGroupName(), ga.getGroup().getGroupType(), ga.getGroup().getInviteLink());
+            GroupLoginUserParticipatedResponseDto getUserGroupResponse = new GroupLoginUserParticipatedResponseDto(ga.getId(), ga.getGroup().getGroupIcon(), ga.getGroup().getGroupName(), ga.getGroup().getGroupType(), ga.getGroup().getInviteLink());
             List<User> users = map.get(getUserGroupResponse.getGroupId());
             List<UserDto> collect = users.stream().map(u -> new UserDto(u.getUserSeq(), u.getProfileImage(), u.getNickname(), u.getUserSeq().equals(userSeq))).collect(Collectors.toList());
             getUserGroupResponse.setUsers(collect);

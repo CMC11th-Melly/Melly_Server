@@ -1,7 +1,7 @@
 package cmc.mellyserver.user.presentation.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 
 
 import java.util.List;

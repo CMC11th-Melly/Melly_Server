@@ -4,11 +4,12 @@ import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.application.MemoryService;
+import cmc.mellyserver.memory.application.dto.request.CreateMemoryRequestDto;
+import cmc.mellyserver.memory.application.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
-import cmc.mellyserver.memory.application.dto.response.MemoryForGroupResponse;
-import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponse;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
-import cmc.mellyserver.memory.presentation.dto.request.SearchMemoryByNameResponseDto;
+import cmc.mellyserver.memory.application.dto.response.MemoryUpdateFormResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.presentation.dto.request.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.memory.presentation.dto.wrapper.*;
 import cmc.mellyserver.place.presentation.dto.request.PlaceInfoRequest;
@@ -35,12 +36,11 @@ public class MemoryController {
     private final MemoryService memoryService;
 
 
-    // ok
     @Operation(summary = "메모리 추가를 위한 로그인 유저의 그룹 조회")
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user)
     {
-        List<GroupListForSaveMemoryResponseDto> userGroup = memoryService.getGroupListForSaveMemory(Long.parseLong(user.getUsername()));
+        List<GroupListForSaveMemoryResponseDto> userGroup = memoryService.findGroupListLoginUserParticipate(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"메모리 작성 위한 그룹 정보 전달", new MemoryFormGroupResponseWrapper(userGroup)));
     }
 
@@ -50,7 +50,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getUserMemory(@ParameterObject @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable,
                                                         @AuthenticationPrincipal User user, @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType)
     {
-        Slice<MemoryResponseDto> userMemory = memoryService.getUserMemoryInplace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        Slice<MemoryResponseDto> userMemory = memoryService.findLoginUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "내가 작성한 메모리 전체 조회", new GetMemoryForPlaceResponseWrapper(userMemory.getContent().stream().count(),userMemory)));
     }
 
@@ -62,17 +62,17 @@ public class MemoryController {
                                                          @RequestParam(required = false) GroupType groupType,
                                                          @ParameterObject @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable)
     {
-        Slice<MemoryResponseDto> otherMemory = memoryService.getOtherMemoryInplace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        Slice<MemoryResponseDto> otherMemory = memoryService.findOtherUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200, "성공", new GetOtherMemoryForPlaceResponseWrapper(otherMemory.stream().count(),otherMemory)));
     }
 
 
-    // TODO : 조치 필요
+
     @Operation(summary = "내가 속해있는 그룹의 사람이 이 장소에 남긴 메모리 조회")
     @GetMapping("/group/place/{placeId}")
     public ResponseEntity<CommonResponse> getMyGroupMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId, @ParameterObject Pageable pageable, @RequestParam(required = false) GroupType groupType)
     {
-        Slice<MemoryResponseDto> results = memoryService.getMyGroupMemoryInplace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        Slice<MemoryResponseDto> results = memoryService.findMyGroupMemberWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         return ResponseEntity.ok(new CommonResponse(200,"성공",new GetMyGroupMemoryForPlaceResponseWrapper(results.stream().count(),results)));
     }
 
@@ -81,26 +81,25 @@ public class MemoryController {
     @PostMapping
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images, @Valid @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
     {
-        memoryService.createMemory(Long.parseLong(user.getUsername()), images, placeInfoRequest);
+        memoryService.createMemory(CreateMemoryRequestDto.of(Long.parseLong(user.getUsername()),images,placeInfoRequest));
         return ResponseEntity.ok(new CommonResponse(200,"메모리 저장 완료"));
     }
 
 
     @Operation(summary = "메모리 수정(테스트 필요한 API 입니다)")
     @PutMapping("/{memoryId}")
-    public ResponseEntity<CommonResponse> updateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId,@RequestPart(name = "images",required = false)  List<MultipartFile> images,
-                                                       @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest)
+    public ResponseEntity<CommonResponse> updateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId, @RequestPart(name = "images",required = false)  List<MultipartFile> images, @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest)
     {
-         memoryService.updateMemory(user.getUsername(),memoryId,memoryUpdateRequest,images);
+         memoryService.updateMemory(UpdateMemoryRequestDto.of(Long.parseLong(user.getUsername()),memoryId,memoryUpdateRequest,images));
          return ResponseEntity.ok(new CommonResponse(200,"성공"));
     }
 
-   // TODO : 조치 필요
+
     @Operation(summary = "메모리 수정을 위한 폼 데이터 전송")
     @GetMapping("/{memoryId}/update")
     public ResponseEntity<CommonResponse> getFormForUpdateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
     {
-        MemoryUpdateFormResponse formForUpdateMemory = memoryService.getFormForUpdateMemory(Long.parseLong(user.getUsername()), memoryId);
+        MemoryUpdateFormResponseDto formForUpdateMemory = memoryService.findMemoryUpdateFormData(Long.parseLong(user.getUsername()), memoryId);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 업데이트 수정 폼",new MemoryUpDateFormResponseWrapper(formForUpdateMemory)));
     }
 
@@ -118,7 +117,7 @@ public class MemoryController {
     @GetMapping("/{memoryId}")
     public ResponseEntity<CommonResponse> findMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
     {
-        MemoryResponseDto memoryByMemoryId = memoryService.getMemoryByMemoryId(Long.parseLong(user.getUsername()), memoryId);
+        MemoryResponseDto memoryByMemoryId = memoryService.findMemoryByMemoryId(Long.parseLong(user.getUsername()), memoryId);
         return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(memoryByMemoryId)));
     }
 
@@ -127,7 +126,7 @@ public class MemoryController {
     @GetMapping("/search")
     public ResponseEntity<CommonResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName)
     {
-        List<SearchMemoryByNameResponseDto> result = memoryService.searchPlaceByContainMemoryName(Long.parseLong(user.getUsername()), memoryName);
+        List<FindPlaceInfoByMemoryNameResponseDto> result = memoryService.findPlaceInfoByMemoryName(Long.parseLong(user.getUsername()), memoryName);
         return ResponseEntity.ok(new CommonResponse(200,"메모리 제목 검색",new SearchMemoryNameResponseWrapper(result)));
     }
 }

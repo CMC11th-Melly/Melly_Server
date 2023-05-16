@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceListResponseWrapper
 {
-    private List<PlaceListReponseDto> place;
+    private List<MarkedPlaceReponseDto> place;
 }

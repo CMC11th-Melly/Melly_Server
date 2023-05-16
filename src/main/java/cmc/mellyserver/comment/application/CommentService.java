@@ -10,7 +10,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.repository.MemoryRepository;
+import cmc.mellyserver.memory.infrastructure.data.MemoryRepository;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

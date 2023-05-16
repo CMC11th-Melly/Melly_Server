@@ -4,7 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.domain.repository.MemoryRepository;
+import cmc.mellyserver.memory.infrastructure.data.MemoryRepository;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.common.enums.NotificationType;
