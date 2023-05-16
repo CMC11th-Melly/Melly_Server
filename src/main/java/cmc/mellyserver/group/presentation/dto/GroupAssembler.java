@@ -1,14 +1,14 @@
 package cmc.mellyserver.group.presentation.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 
 
 public class GroupAssembler {
 
-      public static GetUserGroupResponseDto getUserGroupResponse(UserGroup userGroup)
+      public static GroupLoginUserParticipatedResponseDto getUserGroupResponse(UserGroup userGroup)
       {
-          return new GetUserGroupResponseDto(userGroup.getId(),
+          return new GroupLoginUserParticipatedResponseDto(userGroup.getId(),
                   userGroup.getGroupIcon(),
                   userGroup.getGroupName(),
                   userGroup.getGroupType(),

@@ -1,6 +1,6 @@
 package cmc.mellyserver.unit.user.application;
 
-import cmc.mellyserver.user.application.UserService;
+import cmc.mellyserver.user.application.impl.UserServiceImpl;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class UserServiceTest {
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
 
 }

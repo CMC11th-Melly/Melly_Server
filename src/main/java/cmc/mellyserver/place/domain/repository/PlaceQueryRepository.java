@@ -3,8 +3,8 @@ package cmc.mellyserver.place.domain.repository;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.ScrapType;
 import cmc.mellyserver.place.domain.Place;
-import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
-import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.scrap.application.dto.response.PlaceScrapCountResponseDto;
+import cmc.mellyserver.scrap.application.dto.response.ScrapedPlaceResponseDto;
 import cmc.mellyserver.user.domain.User;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,9 +103,9 @@ public class PlaceQueryRepository {
      * 스크랩 타입별 유저가 스크랩한 장소 개수 조회(최적화 완료, projection 사용으로 fetch join 불가)
      * TODO : 수정 완료
      */
-    public List<PlaceScrapResponseDto> getScrapedPlaceGrouping(User user)
+    public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(User user)
     {
-        return query.select(Projections.fields(PlaceScrapResponseDto.class, placeScrap.scrapType, place.count().as("scrapCount")))
+        return query.select(Projections.fields(PlaceScrapCountResponseDto.class, placeScrap.scrapType, place.count().as("scrapCount")))
                 .from(placeScrap)
                 .join(place).on(placeScrap.place.id.eq(place.id))
                 .groupBy(placeScrap.scrapType)

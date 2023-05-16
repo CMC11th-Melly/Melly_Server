@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ProfileUpdateFormResponse {
+public class ProfileUpdateFormResponseDto {
 
     private String profileImage;
     private String nickname;

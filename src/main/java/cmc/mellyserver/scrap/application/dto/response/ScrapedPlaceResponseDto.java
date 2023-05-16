@@ -1,4 +1,4 @@
-package cmc.mellyserver.scrap.application.dto;
+package cmc.mellyserver.scrap.application.dto.response;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;

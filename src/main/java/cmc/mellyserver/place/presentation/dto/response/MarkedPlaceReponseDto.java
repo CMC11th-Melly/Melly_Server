@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PlaceListReponseDto {
+public class MarkedPlaceReponseDto {
 
     private Position position;
     private GroupType groupType;

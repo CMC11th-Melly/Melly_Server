@@ -1,6 +1,6 @@
 package cmc.mellyserver.user.presentation.dto.common;
 
-import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.scrap.application.dto.response.ScrapedPlaceResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Slice;

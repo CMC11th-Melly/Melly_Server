@@ -3,11 +3,13 @@ package cmc.mellyserver.group.presentation;
 import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.application.GroupService;
+import cmc.mellyserver.group.application.dto.request.CreateGroupRequestDto;
+import cmc.mellyserver.group.application.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class GroupController {
     @GetMapping("/{groupId}")
     private ResponseEntity<CommonResponse> getGroupInfo(@PathVariable Long groupId)
     {
-        UserGroup group = groupService.getGroupById(groupId);
+        UserGroup group = groupService.findGroupById(groupId);
         return ResponseEntity.ok(new CommonResponse(200,"성공",GroupAssembler.getUserGroupResponse(group)));
     }
 
@@ -36,8 +38,8 @@ public class GroupController {
     @PostMapping
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@Valid @RequestBody GroupCreateRequest groupCreateRequest)
     {
-        UserGroup userGroup = groupService.saveGroup(Long.parseLong(user.getUsername()), groupCreateRequest);
-        GetUserGroupResponseDto userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
+        UserGroup userGroup = groupService.saveGroup(CreateGroupRequestDto.of(Long.parseLong(user.getUsername()), groupCreateRequest));
+        GroupLoginUserParticipatedResponseDto userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
         return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료",new CommonDetailResponse<>(userGroupResponse)));
     }
 
@@ -47,7 +49,7 @@ public class GroupController {
     @PutMapping("/{groupId}")
     private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest)
     {
-        groupService.updateGroup(groupId,groupUpdateRequest);
+        groupService.updateGroup(UpdateGroupRequestDto.of(groupId,groupUpdateRequest));
         return ResponseEntity.ok(new CommonResponse(200,"그룹 수정 완료"));
     }
 
@@ -56,7 +58,7 @@ public class GroupController {
     @DeleteMapping("/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
     {
-        String message = groupService.deleteGroup(Long.parseLong(user.getUsername()), groupId);
+        String message = groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
         return ResponseEntity.ok(new CommonResponse(200,message));
     }
 }
