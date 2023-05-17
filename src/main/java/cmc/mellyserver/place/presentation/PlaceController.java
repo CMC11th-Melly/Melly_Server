@@ -3,9 +3,10 @@ package cmc.mellyserver.place.presentation;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.application.PlaceService;
+import cmc.mellyserver.place.application.impl.PlaceServiceImpl;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.presentation.dto.request.PlaceSimpleRequest;
-import cmc.mellyserver.place.presentation.dto.response.PlaceListReponseDto;
+import cmc.mellyserver.place.presentation.dto.response.MarkedPlaceReponseDto;
 import cmc.mellyserver.place.presentation.dto.response.PlaceListResponseWrapper;
 import cmc.mellyserver.place.presentation.dto.response.PlaceSearchByMemoryResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +30,7 @@ public class PlaceController {
     @GetMapping("/place/list")
     public ResponseEntity<CommonResponse<PlaceListResponseWrapper>> getPlaceList(@AuthenticationPrincipal User user, @RequestParam(value = "groupType") GroupType groupType)
     {
-        List<PlaceListReponseDto> placeList = placeService.displayMarker(Long.parseLong(user.getUsername()), groupType);
+        List<MarkedPlaceReponseDto> placeList = placeService.displayMarkedPlace(Long.parseLong(user.getUsername()), groupType);
         return ResponseEntity.ok(new CommonResponse<>(200, "유저가 메모리 작성한 장소 조회", new PlaceListResponseWrapper(placeList)));
     }
 
@@ -38,7 +39,7 @@ public class PlaceController {
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<CommonResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId) {
 
-        PlaceResponseDto placeResponseDto = placeService.searchPlaceByPlaceId(Long.parseLong(user.getUsername()), placeId);
+        PlaceResponseDto placeResponseDto = placeService.findPlaceByPlaceId(Long.parseLong(user.getUsername()), placeId);
         return ResponseEntity.ok(new CommonResponse(200, "메모리 제목으로 장소 검색", new PlaceSearchByMemoryResponseWrapper(placeResponseDto)));
     }
 
@@ -47,7 +48,7 @@ public class PlaceController {
     @GetMapping("/place")
     public ResponseEntity<CommonResponse> getDetailPlace(@AuthenticationPrincipal User user, PlaceSimpleRequest placeSimpleRequest) {
 
-        PlaceResponseDto placeByPosition = placeService.searchPlaceByPosition(Long.parseLong(user.getUsername()), placeSimpleRequest.getLat(), placeSimpleRequest.getLng());
+        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(Long.parseLong(user.getUsername()), placeSimpleRequest.getLat(), placeSimpleRequest.getLng());
         return ResponseEntity.ok(new CommonResponse(200, "장소 상세 조회", placeByPosition));
     }
 }

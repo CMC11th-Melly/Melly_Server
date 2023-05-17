@@ -4,18 +4,19 @@ import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.ScrapType;
-import cmc.mellyserver.memory.domain.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
 import cmc.mellyserver.scrap.application.PlaceScrapService;
-import cmc.mellyserver.scrap.application.dto.PlaceScrapResponseDto;
-import cmc.mellyserver.scrap.application.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.user.application.UserService;
-import cmc.mellyserver.user.application.dto.SurveyRecommendResponse;
-import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponse;
+import cmc.mellyserver.scrap.application.dto.response.PlaceScrapCountResponseDto;
+import cmc.mellyserver.scrap.application.dto.response.ScrapedPlaceResponseDto;
+import cmc.mellyserver.user.application.impl.UserServiceImpl;
+import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.user.presentation.dto.common.*;
 import cmc.mellyserver.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
+import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public class UserController {
 
     private final PlaceScrapService placeScrapService;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
 
 
@@ -44,7 +45,7 @@ public class UserController {
     @GetMapping("/{userSeq}")
     public ResponseEntity<CommonResponse> getUserNickname(@PathVariable Long userSeq)
     {
-        String nickname = userService.getUserNickname(userSeq);
+        String nickname = userService.findNicknameByUserIdentifier(userSeq);
         return ResponseEntity.ok(new CommonResponse(200,"성공",new CommonDetailResponse<>(nickname)));
     }
 
@@ -65,7 +66,7 @@ public class UserController {
     @GetMapping("/survey")
     public ResponseEntity<CommonResponse> getSurvey(@AuthenticationPrincipal User user)
     {
-        SurveyRecommendResponse result = userService.getSurvey(Long.parseLong(user.getUsername()));
+        SurveyRecommendResponseDto result = userService.getSurveyResult(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"성공", new SurveyRecommendResponseWrapper(result)));
     }
 
@@ -75,7 +76,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<CommonResponse> updateProfileFormData(@AuthenticationPrincipal User user)
     {
-        ProfileUpdateFormResponse profileDataForUpdate = userService.getProfileDataForUpdate(Long.parseLong(user.getUsername()));
+        ProfileUpdateFormResponseDto profileDataForUpdate = userService.getLoginUserProfileDataForUpdate(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200,"유저 프로필 수정을 위한 폼 정보 조회",new ProfileUpdateFormResponseWrapper(profileDataForUpdate)));
     }
 
@@ -85,7 +86,7 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest)
     {
-        userService.updateProfile(Long.parseLong(user.getUsername()), profileUpdateRequest);
+        userService.updateLoginUserProfile(ProfileUpdateRequestDto.of(Long.parseLong(user.getUsername()), profileUpdateRequest));
         return ResponseEntity.ok(new CommonResponse(200, "프로필 수정 완료"));
     }
 
@@ -97,7 +98,7 @@ public class UserController {
                                                          @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable,
                                                          @RequestParam(required = false) GroupType groupType )
     {
-        Slice<MemoryResponseDto> userMemory = userService.getUserMemory(pageable, Long.parseLong(user.getUsername()), groupType);
+        Slice<MemoryResponseDto> userMemory = userService.findMemoriesLoginUserWrite(pageable, Long.parseLong(user.getUsername()), groupType);
         return ResponseEntity.ok(new CommonResponse(200, "유저가 작성한 메모리 조회", new GetUserMemoryResponseWrapper(userMemory)));
     }
 
@@ -107,7 +108,7 @@ public class UserController {
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
     {
-        List<GetUserGroupResponseDto> userGroup = userService.getGroupListLoginUserParticipate(Long.parseLong(user.getUsername()));
+        List<GroupLoginUserParticipatedResponseDto> userGroup = userService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new CommonResponse(200, "성공", new GetUserGroupResponseWrapper(userGroup)));
     }
 
@@ -117,7 +118,7 @@ public class UserController {
     @GetMapping("/group/{groupId}/memory")
     public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long userSeq)
     {
-        Slice<MemoryResponseDto> results = userService.getMemoryBelongToMyGroup(pageable, groupId, userSeq);
+        Slice<MemoryResponseDto> results = userService.findMemoriesUsersBelongToMyGroupWrite(pageable, groupId, userSeq);
         return ResponseEntity.ok(new CommonResponse(200,"유저가 속해있는 그룹의 메모리 조회",results));
     }
 
@@ -127,7 +128,7 @@ public class UserController {
     @GetMapping("/place/scrap/count")
     public ResponseEntity<CommonResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user)
     {
-        List<PlaceScrapResponseDto> scrapedPlaceGroup = placeScrapService.getScrapedPlaceCount(Long.parseLong(user.getUsername()));
+        List<PlaceScrapCountResponseDto> scrapedPlaceGroup = placeScrapService.countByPlaceScrapType(Long.parseLong(user.getUsername()));
         return  ResponseEntity.ok(new CommonResponse(200,"스크랩 타입 별 스크랩 개수 조회",new PlaceScrapResponseWrapper(scrapedPlaceGroup)));
     }
 
@@ -137,7 +138,7 @@ public class UserController {
     @GetMapping("/place/scrap")
     public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, Pageable pageable, @RequestParam(required = false) ScrapType scrapType)
     {
-        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.getScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
+        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.findScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
         return  ResponseEntity.ok(new CommonResponse(200,"스크랩 타입 별 스크랩 조회",new ScrapPlaceResponseWrapper(scrapedPlace)));
     }
 
@@ -147,7 +148,7 @@ public class UserController {
     @GetMapping("/volume")
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
     {
-        int volume = userService.checkUserImageVolume(user.getUsername());
+        int volume = userService.checkImageStorageVolumeLoginUserUse(user.getUsername());
         return ResponseEntity.ok(new CommonResponse(200, "유저가 저장한 사진 총 용량", new UserImageVolumeWrapper(volume)));
     }
 

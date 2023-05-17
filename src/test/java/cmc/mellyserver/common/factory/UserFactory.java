@@ -5,7 +5,6 @@ import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.common.enums.AgeGroup;
 import cmc.mellyserver.common.enums.Gender;
 import cmc.mellyserver.common.enums.RoleType;
-
 import java.util.UUID;
 
 public class UserFactory {
