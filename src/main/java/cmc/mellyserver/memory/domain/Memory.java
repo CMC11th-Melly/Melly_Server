@@ -16,7 +16,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
-@Table(name = "tb_memory")
+@Table(name = "tb_memory", indexes = {
+        @Index(name = "idx__groupType", columnList = "groupType"),
+        @Index(name = "idx__stars", columnList = "stars"),
+        @Index(name = "id__openType", columnList = "openType")
+})
 public class Memory extends JpaBaseEntity {
 
     @Id
@@ -81,11 +85,6 @@ public class Memory extends JpaBaseEntity {
         this.placeId = placeId;
     }
 
-
-    public void isReported(boolean reported)
-    {
-        this.isReported = reported;
-    }
 
     public void updateMemory(String title, String content, List<String> keyword, Long groupId, GroupType groupType, String groupName, OpenType openType, LocalDateTime visitedDate, Long star)
     {

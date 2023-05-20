@@ -1,37 +1,28 @@
 package cmc.mellyserver.user.presentation.dto;
 
-import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
-
-
-import java.util.List;
+import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.ProfileUpdateFormResponse;
+import cmc.mellyserver.user.presentation.dto.response.SurveyRecommendResponse;
 
 public class UserAssembler {
 
-//    public static Page<UserCreatedMemoryListResponse> toUserCreatedMemoryListResponse(Page<UserCreatedMemoryListResponseDto> memories)
-//    {
-//        return memories.map(m -> new UserCreatedMemoryListResponse(m.getPlaceId(),m.getPlaceName(),m.getMemoryId(),m.getMemoryImages(),
-//                m.getTitle(),m.getContent(),m.getGroupType(),m.getGroupName(),m.getStars(),m.getKeyword(),m.isLoginUserWrite(),m.getVisitedDate()
-//        ));
-//    }
+     public static SurveyRecommendResponse surveyRecommendResponse(SurveyRecommendResponseDto surveyRecommendResponseDto)
+     {
+         return SurveyRecommendResponse.builder()
+                 .position(surveyRecommendResponseDto.getPosition())
+                 .words(surveyRecommendResponseDto.getWords())
+                 .build();
+     }
 
 
-
-    // TODO : 조치 필요
-    public static List<MemoryResponseDto> getUserGroupResponses(List<UserGroup> userGroups, Long userSeq)
-    {
-//        return userGroups.stream().map(ug -> new GetUserGroupResponse(ug.getId(),
-//                ug.getGroupIcon(),
-//                ug.getGroupName() == null ? "" : ug.getGroupName(),
-//                ug.getGroupAndUsers().stream().map(gu -> new UserDto(
-//                        gu.getUser().getUserSeq(),
-//                        gu.getUser().getProfileImage(),
-//                        gu.getUser().getNickname(),
-//                        (gu.getUser().getUserId().equals(userId)) ? true : false
-//                )).collect(Collectors.toList()),
-//                ug.getGroupType() == null ? GroupType.ALL : ug.getGroupType(),
-//                ug.getInviteLink()
-//                )).collect(Collectors.toList());
-        return null;
-    }
+     public static ProfileUpdateFormResponse profileUpdateFormResponse(ProfileUpdateFormResponseDto profileUpdateFormResponseDto)
+     {
+         return ProfileUpdateFormResponse.builder()
+                 .nickname(profileUpdateFormResponseDto.getNickname())
+                 .profileImage(profileUpdateFormResponseDto.getProfileImage())
+                 .gender(profileUpdateFormResponseDto.getGender())
+                 .ageGroup(profileUpdateFormResponseDto.getAgeGroup())
+                 .build();
+     }
 }
