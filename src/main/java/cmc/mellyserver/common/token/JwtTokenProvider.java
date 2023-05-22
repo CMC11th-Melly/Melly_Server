@@ -2,7 +2,8 @@ package cmc.mellyserver.common.token;
 
 import cmc.mellyserver.common.exception.TokenValidFailedException;
 import cmc.mellyserver.common.enums.RoleType;
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,44 +25,72 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
 
-    private final Key key;
-    private static final String AUTHORITIES_KEY = "role";
+    protected static final String AUTHORITIES_KEY = "auth";
+    protected final String secret;
+    protected final long tokenValidityInMilliseconds;
 
-    public JwtTokenProvider(@Value("${app.auth.tokenSecret}") String secret) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    protected Key key;
+
+
+    public JwtTokenProvider(@Value("${app.auth.tokenSecret}") String secret, @Value("${app.auth.tokenExpiry}") long tokenValidityInSeconds) {
+        this.secret = secret;
+        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public AuthToken createToken(Long id, RoleType roleType, String expiry) {
-        Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(id, roleType, expiryDate, key);
+    // 토큰 생성
+    public String createToken(Long userSeq, RoleType role) {
+
+        // 현재시간
+        long now = (new Date()).getTime();
+
+        // 만료되는 날짜
+        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(Long.toString(userSeq))
+                .claim(AUTHORITIES_KEY, role.toString())
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+
     }
 
-    public AuthToken convertAuthToken(String token) {
-        return new AuthToken(token, key);
+
+    public Authentication getAuthentication(String token) {
+
+        Claims claims = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        User principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public static Date getExpiryDate(String expiry) {
-        return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
-    }
-
-    public Authentication getAuthentication(AuthToken authToken) {
-
-        if(authToken.validate()) {
-
-            Claims claims = authToken.getTokenClaims();
-            Collection<? extends GrantedAuthority> authorities =
-                    Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-
-            // TODO : 현재 USER 판별은 UID로 진행
-            User principal = new User(claims.getSubject(), "", authorities);
-
-            return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
-        } else {
-            throw new TokenValidFailedException();
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
+        return false;
     }
-
 
 }

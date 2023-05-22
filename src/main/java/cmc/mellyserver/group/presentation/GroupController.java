@@ -1,5 +1,6 @@
 package cmc.mellyserver.group.presentation;
 
+import cmc.mellyserver.common.constants.MessageConstant;
 import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.group.application.GroupService;
@@ -12,6 +13,7 @@ import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -30,7 +32,7 @@ public class GroupController {
     private ResponseEntity<CommonResponse> getGroupInfo(@PathVariable Long groupId)
     {
         UserGroup group = groupService.findGroupById(groupId);
-        return ResponseEntity.ok(new CommonResponse(200,"성공",GroupAssembler.getUserGroupResponse(group)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,GroupAssembler.getUserGroupResponse(group)));
     }
 
 
@@ -40,7 +42,7 @@ public class GroupController {
     {
         UserGroup userGroup = groupService.saveGroup(CreateGroupRequestDto.of(Long.parseLong(user.getUsername()), groupCreateRequest));
         GroupLoginUserParticipatedResponseDto userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
-        return ResponseEntity.ok(new CommonResponse(200,"그룹 추가 완료",new CommonDetailResponse<>(userGroupResponse)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(userGroupResponse)));
     }
 
 
@@ -50,7 +52,7 @@ public class GroupController {
     private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest)
     {
         groupService.updateGroup(UpdateGroupRequestDto.of(groupId,groupUpdateRequest));
-        return ResponseEntity.ok(new CommonResponse(200,"그룹 수정 완료"));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
 
@@ -59,6 +61,6 @@ public class GroupController {
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
     {
         String message = groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
-        return ResponseEntity.ok(new CommonResponse(200,message));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,message));
     }
 }
