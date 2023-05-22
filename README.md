@@ -72,8 +72,7 @@
 
 ## 🏛 DTO Mapping Strategy
 
-
-<img src="https://user-images.githubusercontent.com/82302520/235290535-2a16cac1-f094-43e9-9941-f9dfd7db2f08.png" width="700" height="500">
+<img src="https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/fcd5ce2f-276d-4b7a-8699-403a0610c6a9" width="700" height="500">
 
 
 <br>
