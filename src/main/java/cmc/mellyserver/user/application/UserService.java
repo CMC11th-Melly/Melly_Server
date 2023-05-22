@@ -1,7 +1,7 @@
 package cmc.mellyserver.user.application;
 
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
