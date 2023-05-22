@@ -7,6 +7,8 @@ import cmc.mellyserver.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
@@ -29,6 +31,10 @@ public class PlaceScrap extends JpaBaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ScrapType scrapType;
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
 
     public static PlaceScrap createScrap(User user,Place place,ScrapType scrapType)
     {

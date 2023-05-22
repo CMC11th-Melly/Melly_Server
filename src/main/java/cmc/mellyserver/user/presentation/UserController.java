@@ -146,4 +146,5 @@ public class UserController {
         userService.participateToGroup(Long.parseLong(user.getUsername()), participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
+
 }
