@@ -6,12 +6,12 @@ import cmc.mellyserver.group.domain.GroupAndUser;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.memory.application.dto.response.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.memory.domain.MemoryImage;
-import cmc.mellyserver.memory.infrastructure.data.dto.KeywordResponse;
-import cmc.mellyserver.memory.infrastructure.data.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.domain.repository.dto.KeywordResponseDto;
+import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.common.UserDto;
-import cmc.mellyserver.user.presentation.dto.response.GetUserGroupResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -85,7 +85,7 @@ public class UserGroupQueryRepository {
     }
 
 
-    public List<GetUserGroupResponseDto> getGroupListLoginUserParticipate(Long userSeq)
+    public List<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userSeq)
     {
         List<GroupAndUser> results = query.select(groupAndUser)
                 .from(groupAndUser)
@@ -114,7 +114,7 @@ public class UserGroupQueryRepository {
         }
 
         return results.stream().map(ga -> {
-            GetUserGroupResponseDto getUserGroupResponse = new GetUserGroupResponseDto(ga.getId(), ga.getGroup().getGroupIcon(), ga.getGroup().getGroupName(), ga.getGroup().getGroupType(), ga.getGroup().getInviteLink());
+            GroupLoginUserParticipatedResponseDto getUserGroupResponse = new GroupLoginUserParticipatedResponseDto(ga.getId(), ga.getGroup().getGroupIcon(), ga.getGroup().getGroupName(), ga.getGroup().getGroupType(), ga.getGroup().getInviteLink());
             List<User> users = map.get(getUserGroupResponse.getGroupId());
             List<UserDto> collect = users.stream().map(u -> new UserDto(u.getUserSeq(), u.getProfileImage(), u.getNickname(), u.getUserSeq().equals(userSeq))).collect(Collectors.toList());
             getUserGroupResponse.setUsers(collect);
@@ -166,22 +166,22 @@ public class UserGroupQueryRepository {
     }
 
 
-    private Map<Long, List<KeywordResponse>> findKeywordList(List<Long> memoryIds) {
+    private Map<Long, List<KeywordResponseDto>> findKeywordList(List<Long> memoryIds) {
         List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from keywords_table kt where kt.memory_id in :memoryIds")
                 .setParameter("memoryIds", memoryIds)
                 .getResultList();
 
-        List<KeywordResponse> keywordList = new ArrayList<>();
+        List<KeywordResponseDto> keywordList = new ArrayList<>();
 
         for (Object[] objects : queryResult) {
-            KeywordResponse keywordResponse = new KeywordResponse();
+            KeywordResponseDto keywordResponse = new KeywordResponseDto();
             keywordResponse.setMemoryId(((BigInteger) objects[0]).longValue());
             keywordResponse.setKeyword((String) objects[1]);
             keywordList.add(keywordResponse);
         }
 
         return keywordList.stream()
-                .collect(Collectors.groupingBy(KeywordResponse::getMemoryId));
+                .collect(Collectors.groupingBy(KeywordResponseDto::getMemoryId));
     }
 
 
@@ -219,11 +219,11 @@ public class UserGroupQueryRepository {
 
     private void initMemoryImageAndKeyword(List<MemoryResponseDto> results) {
         Map<Long, List<MemoryImage>> memoryImageList = findMemoryImage(toMemoryIds(results));
-        Map<Long, List<KeywordResponse>> keywordList = findKeywordList(toMemoryIds(results));
+        Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(toMemoryIds(results));
 
         results.forEach(f -> {
             f.setMemoryImages(memoryImageList.get(f.getMemoryId()).stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()));
-            f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponse::getKeyword).collect(Collectors.toList()));
+            f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponseDto::getKeyword).collect(Collectors.toList()));
         });
     }
 }

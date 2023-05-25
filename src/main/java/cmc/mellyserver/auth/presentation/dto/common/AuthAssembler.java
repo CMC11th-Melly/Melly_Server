@@ -1,12 +1,11 @@
 package cmc.mellyserver.auth.presentation.dto.common;
 
-import cmc.mellyserver.auth.application.dto.AuthRequestForSignupDto;
+import cmc.mellyserver.auth.application.dto.request.AuthSignupRequestDto;
+import cmc.mellyserver.auth.application.dto.response.LoginResponseDto;
+import cmc.mellyserver.auth.application.dto.response.SignupResponseDto;
+import cmc.mellyserver.auth.presentation.dto.response.*;
 import cmc.mellyserver.common.enums.Provider;
 import cmc.mellyserver.auth.presentation.dto.request.AuthRequestForSignup;
-import cmc.mellyserver.auth.presentation.dto.response.AccessTokenUserData;
-import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
-import cmc.mellyserver.auth.presentation.dto.response.OAuthLoginResponse;
-import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.RoleType;
 import cmc.mellyserver.user.domain.User;
@@ -16,7 +15,7 @@ import java.util.UUID;
 
 public class AuthAssembler {
 
-   public static User createEmailLoginUser(AuthRequestForSignupDto authRequestForSignupDto, PasswordEncoder passwordEncoder, String filename)
+   public static User createEmailLoginUser(AuthSignupRequestDto authRequestForSignupDto, PasswordEncoder passwordEncoder, String filename)
    {
        String encode = passwordEncoder.encode(authRequestForSignupDto.getPassword());
        return User.builder()
@@ -38,9 +37,9 @@ public class AuthAssembler {
    }
 
 
-   public static AuthRequestForSignupDto authRequestForSignupDto(AuthRequestForSignup authRequestForSignup)
+   public static AuthSignupRequestDto authRequestForSignupDto(AuthRequestForSignup authRequestForSignup)
     {
-        return new AuthRequestForSignupDto(authRequestForSignup.getEmail(),
+        return new AuthSignupRequestDto(authRequestForSignup.getEmail(),
                 authRequestForSignup.getPassword(),
                 authRequestForSignup.getNickname(),
                 authRequestForSignup.getAgeGroup(),
@@ -76,44 +75,36 @@ public class AuthAssembler {
                 accessToken);
     }
 
-    public static SignupResponse signupResponse(String accessToken, User user)
+    public static SignupResponse signupResponse(SignupResponseDto signupResponseDto)
     {
-        return new SignupResponse(new AccessTokenUserData(user.getUserSeq(),
-                user.getUserId(),
-                user.getProvider(),
-                user.getEmail(),
-                user.getNickname(),
-                user.getProfileImage(),
-                user.getGender(),
-                user.getAgeGroup()),
-                accessToken);
+        return SignupResponse.builder()
+                .user(signupResponseDto.getUser())
+                .token(signupResponseDto.getToken())
+                .build();
     }
 
+    public static LoginResponse loginResponse(LoginResponseDto loginResponseDto)
+    {
+        return LoginResponse.builder()
+                .user(loginResponseDto.getUser())
+                .token(loginResponseDto.getToken())
+                .build();
+    }
 
-    public static CommonResponse oAuthLoginResponse(String token, boolean isNewUser, User user)
+    public static CommonResponse departNewUser(String token, boolean isNewUser, User user)
     {
         if(isNewUser == true)
         {
             return new CommonResponse(200,
-                    "회원가입이 필요합니다",
-                    new OAuthLoginResponse(
-                            isNewUser,AccessTokenUserData.builder().uid(user.getUserId()).build())
+                    "회원가입 필요",
+                    new OAuthLoginResponse(AccessTokenUserData.from(user),token,isNewUser)
             );
         }
         else{
             return new CommonResponse(200,
-                    "로그인 완료",
-                    new OAuthLoginResponse(new AccessTokenUserData(user.getUserSeq(),
-                            user.getUserId(),
-                            user.getProvider(),
-                            user.getEmail(),
-                            user.getNickname(),
-                            user.getProfileImage(),
-                            user.getGender(),
-                            user.getAgeGroup()),
-                            token,
-                            isNewUser)
-                    );
+                    "성공",
+                    new OAuthLoginResponse(AccessTokenUserData.from(user), token, isNewUser)
+            );
         }
     }
 }

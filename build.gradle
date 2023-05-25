@@ -154,7 +154,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.3'
+    testImplementation 'org.springframework.security:spring-security-test'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 

@@ -2,7 +2,10 @@ package cmc.mellyserver.auth.presentation;
 
 
 import cmc.mellyserver.auth.application.AuthService;
-import cmc.mellyserver.auth.application.dto.OAuthLoginResponseDto;
+import cmc.mellyserver.auth.application.dto.response.LoginResponseDto;
+import cmc.mellyserver.auth.application.dto.response.OAuthLoginResponseDto;
+import cmc.mellyserver.auth.application.dto.response.SignupResponseDto;
+import cmc.mellyserver.auth.application.impl.AuthServiceImpl;
 import cmc.mellyserver.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.auth.presentation.dto.request.*;
 import cmc.mellyserver.auth.presentation.dto.response.AuthResponseForLogin;
@@ -16,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import cmc.mellyserver.auth.application.OAuthService;
+import cmc.mellyserver.auth.application.impl.OAuthServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,48 +31,31 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthController {
 
-      private final OAuthService oAuthService;
+      private final OAuthServiceImpl oAuthService;
+
       private final AuthService authService;
+
       private final AuthenticatedUserChecker authenticatedUserChecker;
 
-
-      @Operation(summary = "소셜 로그인 시 회원가입")
-      @PostMapping("/social/signup")
-      public ResponseEntity<CommonResponse<AuthResponseForLogin>> socialSignup(AuthRequestForOAuthSignup authRequestForOAuthSignup)
-      {
-          AuthResponseForLogin login = oAuthService.signup(authRequestForOAuthSignup);
-          return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
-      }
-
-
-      @Operation(summary = "소셜 로그인",description = "소셜 로그인 타입에 따라 로그인 방식을 분기")
+      @Operation(summary = "소셜 로그인")
       @PostMapping("/social")
-      public ResponseEntity<CommonResponse<?>> socialLogin(@RequestBody AuthRequest authRequest)
+      public ResponseEntity<CommonResponse> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest)
       {
-          OAuthLoginResponseDto response = oAuthService.login(authRequest);
-
-          return ResponseEntity.ok(AuthAssembler.oAuthLoginResponse(response.getAccessToken(),response.getIsNewUser(),response.getUser()));
+          OAuthLoginResponseDto oAuthLoginResponse = oAuthService.login(oAuthLoginRequest);
+          return ResponseEntity.ok(AuthAssembler.departNewUser(oAuthLoginResponse.getAccessToken(), oAuthLoginResponse.getIsNewUser(), oAuthLoginResponse.getUser()));
       }
 
-
-      @Operation(summary = "일반 이메일 회원가입",description = "- 성별의 경우 true는 남성, false는 여성입니다." +
-                                                              "\n- 데이터 보내주실때 프로필 사진 고려해서 **multipart/formdata** 형식으로 보내주세요! <br />" +
-                                                              "\n- 연령대는 enum으로 처리하기 위해서 10대부터 70대 이상까지 차례대로 **ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN** 으로 설정했습니다."
-      )
-      @PostMapping("/signup")
-      public ResponseEntity<CommonResponse> emailLoginSignup(@Valid AuthRequestForSignup authRequestForSignup)
-      {
-          SignupResponse signup = authService.signup(AuthAssembler.authRequestForSignupDto(authRequestForSignup));
-          return ResponseEntity.ok(new CommonResponse(200, "회원가입 완료",signup));
-      }
-
-
-      @Operation(summary = "일반 이메일 로그인")
       @PostMapping("/login")
-      public ResponseEntity<CommonResponse<AuthResponseForLogin>> emailLogin(@RequestBody AuthRequestForLogin authRequestForLogin)
-      {
-          AuthResponseForLogin login = authService.login(authRequestForLogin.getEmail(), authRequestForLogin.getPassword(),authRequestForLogin.getFcmToken());
-          return ResponseEntity.ok(new CommonResponse<>(200,"로그인 완료",login));
+      public ResponseEntity<CommonResponse> normalLogin(@Valid @RequestBody AuthLoginRequest authLoginRequest) {
+         LoginResponseDto loginResponseDto = authService.login(authLoginRequest.toServiceDto());
+         return ResponseEntity.ok(new CommonResponse<>(200,"성공",AuthAssembler.loginResponse(loginResponseDto)));
+      }
+
+
+      @PostMapping("/signup")
+      public ResponseEntity<CommonResponse> normalSignup(@Valid @RequestBody CommonSignupRequest commonSignupRequest) {
+        SignupResponseDto signupResponseDto = authService.signup(commonSignupRequest.toServiceDto());
+        return ResponseEntity.ok(new CommonResponse(200, "성공",AuthAssembler.signupResponse(signupResponseDto)));
       }
 
 
@@ -77,7 +63,7 @@ public class AuthController {
       @PostMapping("/nickname")
       public ResponseEntity<CommonResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
       {
-          authService.checkNicknameDuplicate(checkDuplicateNicknameRequest.getNickname());
+          authService.checkDuplicatedNickname(checkDuplicateNicknameRequest.getNickname());
           return ResponseEntity.ok(new CommonResponse(200,"사용해도 좋은 닉네임입니다."));
       }
 
@@ -113,13 +99,7 @@ public class AuthController {
       }
 
 
-      @Operation(summary = "유저 정보 조회")
-      @GetMapping("/me")
-      public ResponseEntity<CommonResponse> getUserData(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user)
-      {
-          User userData = authenticatedUserChecker.checkAuthenticatedUserExist(Long.parseLong(user.getUsername()));
-          return ResponseEntity.ok(AuthAssembler.authUserDataResponse(userData));
-      }
+
 
 
 }

@@ -4,12 +4,12 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.memory.domain.Memory;
-import cmc.mellyserver.memory.infrastructure.data.MemoryJpaRepository;
+import cmc.mellyserver.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.common.enums.NotificationType;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.presentation.dto.response.NotificationOnOffResponse;
+import cmc.mellyserver.user.presentation.dto.response.NotificationOnOffResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +18,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class NotificationService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
     private final NotificationRepository notificationRepository;
-    private final MemoryJpaRepository memoryRepository;
+    private final MemoryRepository memoryRepository;
 
-    // TOOD : 조치 필요
+
     public List<Notification> getNotificationList(Long userSeq)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
@@ -68,9 +67,9 @@ public class NotificationService {
         user.setEnableAppPush(false);
     }
 
-    public NotificationOnOffResponse getNotificationOnOff(Long userSeq) {
+    public NotificationOnOffResponseDto getNotificationOnOff(Long userSeq) {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return new NotificationOnOffResponse(user.isEnableAppPush(),user.isEnableCommentLike(),user.isEnableComment());
+        return new NotificationOnOffResponseDto(user.isEnableAppPush(),user.isEnableCommentLike(),user.isEnableComment());
     }
 
     @Transactional
