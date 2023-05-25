@@ -4,6 +4,7 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.common.util.aws.S3FileLoader;
+import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.application.impl.GroupServiceImpl;
 import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.common.enums.GroupType;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     private final MemoryQueryRepository memoryQueryRepository;
 
-    private final GroupServiceImpl groupService;
+    private final GroupService groupService;
 
     private final AmazonS3Client amazonS3Client;
 

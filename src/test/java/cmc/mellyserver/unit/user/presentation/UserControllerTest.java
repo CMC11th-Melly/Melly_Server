@@ -1,4 +1,4 @@
-package cmc.mellyserver.unit.user;
+package cmc.mellyserver.unit.user.presentation;
 
 import cmc.mellyserver.common.WithUser;
 import cmc.mellyserver.common.enums.AgeGroup;
