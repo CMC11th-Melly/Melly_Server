@@ -20,6 +20,8 @@ import cmc.mellyserver.user.presentation.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -36,6 +38,8 @@ import org.springframework.test.web.servlet.MockMvc;
 },excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
 })
+@AutoConfigureMockMvc
+@AutoConfigureRestDocs
 public class ControllerTest {
 
     @MockBean

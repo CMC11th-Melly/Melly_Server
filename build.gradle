@@ -14,6 +14,38 @@ plugins {
     id 'jacoco'
 }
 
+jacoco {
+    // JaCoCo 버전
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        // 원하는 리포트를 켜고 끌 수 있습니다.
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+        }
+    }
+}
+
+
+
 group = 'cmc'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -48,48 +80,6 @@ jar {
     enabled = false
 }
 
-//jacoco {
-//    // JaCoCo 버전
-//    toolVersion = '0.8.5'
-//
-////  테스트결과 리포트를 저장할 경로 변경
-////  default는 "$/jacoco"
-////  reportsDir = file("$buildDir/customJacocoReportDir")
-//}
-
-//jacocoTestReport {
-//    reports {
-//        // 원하는 리포트를 켜고 끌 수 있습니다.
-//        html.enabled true
-//        xml.enabled false
-//        csv.enabled false
-//
-////  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있습니다.
-////  html.destination file("$buildDir/jacocoHtml")
-////  xml.destination file("$buildDir/jacoco.xml")
-//    }
-//    finalizedBy 'jacocoTestCoverageVerification'
-//}
-
-
-//jacocoTestCoverageVerification {
-//    // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
-//    violationRules {
-//        rule {
-//            element = 'CLASS'
-//
-//            limit {
-//                counter = 'BRANCH'
-//                value = 'COVEREDRATIO'
-//                minimum = 0.00
-//            }
-//            excludes = [
-//               '*.test.*',
-//               'Q*.class'
-//            ]
-//        }
-//    }
-//}
 
 repositories {
     mavenCentral()
@@ -160,16 +150,22 @@ dependencies {
     implementation 'com.vdurmont:emoji-java:5.1.1'
 }
 
-tasks.named('test') {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
-//    finalizedBy 'jacocoTestReport'
-}
-
 ext {
     // 아래서 사용할 변수 선언
     snippetsDir = file('build/generated-snippets')
 }
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+//    jacoco {
+//        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+//    }
+    finalizedBy 'jacocoTestReport'
+}
+
+
+
 
 asciidoctor { // asciidoctor 작업 구성
     dependsOn test // test 작업 이후에 작동하도록 하는 설정
@@ -204,17 +200,6 @@ build {
     dependsOn copyDocument
 }
 
-//task testCoverage(type: Test) {
-//    group 'verification'
-//    description 'Runs the unit tests with coverage'
-//
-//    dependsOn(':test',
-//            ':jacocoTestReport',
-//            ':jacocoTestCoverageVerification')
-//
-//    tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
-//    tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-//}
 
 clean {
     delete file('src/main/generated')

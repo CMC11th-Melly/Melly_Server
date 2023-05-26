@@ -12,9 +12,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.util.List;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -42,8 +50,13 @@ public class UserControllerTest extends ControllerTest {
             // then
             perform.andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.data").value("test nickname"))
-                            .andExpect(jsonPath("$.code").value(200))
-                                    .andExpect(jsonPath("$.message").value("성공"));
+                    .andExpect(jsonPath("$.code").value(200))
+                    .andExpect(jsonPath("$.message").value("성공"))
+                    .andDo(document("get-user-profile", responseFields(
+                                                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답코드"),
+                                                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답메세지"),
+                                                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("공통 데이터 포맷"),
+                                                    fieldWithPath("data.data").type(JsonFieldType.STRING).description("세부응답데이터"))));
 
             verify(userService,times(1))
                     .findNicknameByUserIdentifier(anyLong());
