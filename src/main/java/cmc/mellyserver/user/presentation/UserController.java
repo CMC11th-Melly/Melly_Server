@@ -14,7 +14,6 @@ import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
 import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.user.presentation.dto.request.*;
 import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -38,7 +37,6 @@ public class UserController {
     private final UserService userService;
 
 
-    @Operation(summary = "유저 식별자를 통해 유저 정보를 가져옵니다")
     @GetMapping("/{userSeq}")
     public ResponseEntity<CommonResponse> getUserNickname(@PathVariable Long userSeq)
     {
@@ -47,7 +45,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저가 회원가입할때 설문조사를 실시합니다")
     @PostMapping("/survey")
     public ResponseEntity<CommonResponse> addSurvey(@AuthenticationPrincipal User user, @RequestBody SurveyRequest surveyRequest)
     {
@@ -56,7 +53,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "설문조사 결과로 추천 장소 조회")
     @GetMapping("/survey")
     public ResponseEntity<CommonResponse> getSurvey(@AuthenticationPrincipal User user)
     {
@@ -65,7 +61,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "프로필 수정 폼에 필요한 유저 정보 조회")
     @GetMapping("/profile")
     public ResponseEntity<CommonResponse> updateProfileFormData(@AuthenticationPrincipal User user)
     {
@@ -74,7 +69,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "프로필 정보 수정 기능")
     @PutMapping("/profile")
     public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest)
     {
@@ -83,7 +77,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "[마이페이지] 유저가 작성한 메모리 조회")
     @GetMapping("/memory")
     public ResponseEntity<CommonResponse> getUserMemory( @AuthenticationPrincipal User user,
                                                          @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable,
@@ -94,7 +87,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "[마이페이지] 유저가 속해있는 그룹 조회")
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
     {
@@ -103,7 +95,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저가 속해 있는 그룹의 메모리 조회",description = "유저의 그룹 내 구성원들이 해당 그룹을 대상으로 그룹공개/전체공개로 작성한 메모리 목록입니다")
     @GetMapping("/group/{groupId}/memory")
     public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long userSeq)
     {
@@ -112,7 +103,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저가 스크랩한 장소 타입 별 개수 조회")
     @GetMapping("/place/scrap/count")
     public ResponseEntity<CommonResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user)
     {
@@ -121,7 +111,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저가 스크랩한 장소 타입 별 조회")
     @GetMapping("/place/scrap")
     public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, Pageable pageable, @RequestParam(required = false) ScrapType scrapType)
     {
@@ -130,7 +119,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저가 저장한 이미지 용량 조회")
     @GetMapping("/volume")
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
     {
@@ -139,7 +127,6 @@ public class UserController {
     }
 
 
-    @Operation(summary = "초대링크를 받은 후 그룹에 참여")
     @PostMapping("/group")
     public ResponseEntity<CommonResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest)
     {

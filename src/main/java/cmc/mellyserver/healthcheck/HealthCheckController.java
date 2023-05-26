@@ -5,7 +5,6 @@ import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.aws.AWSS3UploadService;
 import cmc.mellyserver.healthcheck.dto.MultipartTestRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ public class HealthCheckController {
     private final AWSS3UploadService uploadService;
 
 
-    @Operation(summary = "헬스 체크용 API")
     @GetMapping("/health")
     public String healthCheck()
     {
@@ -39,7 +36,6 @@ public class HealthCheckController {
 
 
 
-    @Operation(summary = "액세스 토큰 Authorization Header에 추가 시 인증 통과 테스트")
     @GetMapping("/authTest")
     public ResponseEntity<CommonResponse> authCheck()
     {
@@ -49,7 +45,6 @@ public class HealthCheckController {
 
 
 
-    @Operation(summary = "멀티파트 통신 테스트")
     @PostMapping("/imageTest")
     public ResponseEntity<List<String>> multipartTest(MultipartTestRequest multipartTestRequest)
     {

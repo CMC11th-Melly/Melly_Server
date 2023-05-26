@@ -1,10 +1,8 @@
 package cmc.mellyserver.comment.application.dto;
 
 import cmc.mellyserver.comment.domain.Comment;
-import cmc.mellyserver.common.enums.DeleteStatus;
 import cmc.mellyserver.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,15 +19,23 @@ public class CommentDto implements Serializable {
 
 
     private Long id;
+
     private String content;
+
     private boolean loginUserWrite;
+
     private boolean loginUserLike;
+
     private int likeCount;
+
     private String mentionUserName;
+
     private Long writerId;
+
     private String nickname;
+
     private String profileImage;
-    @Schema(example = "202210140920")
+
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyyMMddHHmm")
     private LocalDateTime createdDate;
     private List<CommentDto> children = new ArrayList<>();

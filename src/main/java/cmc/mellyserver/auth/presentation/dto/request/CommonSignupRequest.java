@@ -8,9 +8,7 @@ import cmc.mellyserver.common.enums.Provider;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 

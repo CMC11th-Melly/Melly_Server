@@ -10,6 +10,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'jacoco'
 }
 
@@ -18,6 +19,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
+    asciidoctorExtensions
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -99,10 +101,7 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" // querydsl 라이브러리
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}" //  Querydsl 관련 코드 생성 기능 제공
 
-    // Swagger UI
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-security', version: '1.6.9'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: '1.6.9'
+
 
     // redis config
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -113,11 +112,6 @@ dependencies {
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
     // mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // swagger
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-security', version: '1.6.9'
-
 
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -151,6 +145,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // test
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
@@ -158,13 +153,55 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     // Emoji parser
     implementation 'com.vdurmont:emoji-java:5.1.1'
 }
 
 tasks.named('test') {
+    outputs.dir snippetsDir
     useJUnitPlatform()
 //    finalizedBy 'jacocoTestReport'
+}
+
+ext {
+    // 아래서 사용할 변수 선언
+    snippetsDir = file('build/generated-snippets')
+}
+
+asciidoctor { // asciidoctor 작업 구성
+    dependsOn test // test 작업 이후에 작동하도록 하는 설정
+    configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
+    inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
+
+    // source가 없으면 .adoc파일을 전부 html로 만들어버림
+    // source 지정시 특정 adoc만 HTML로 만든다.
+    sources{
+        include("**/index.adoc","**/common/*.adoc")
+    }
+
+    // 특정 .adoc에 다른 adoc 파일을 가져와서(include) 사용하고 싶을 경우 경로를 baseDir로 맞춰주는 설정입니다.
+    // 개별 adoc으로 운영한다면 필요 없는 옵션입니다.
+    baseDirFollowsSourceFile()
+}
+
+// static/docs 폴더 비우기
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+// asccidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+// build 의 의존작업 명시
+build {
+    dependsOn copyDocument
 }
 
 //task testCoverage(type: Test) {

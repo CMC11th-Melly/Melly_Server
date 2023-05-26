@@ -13,8 +13,6 @@ import cmc.mellyserver.auth.presentation.dto.response.SignupResponse;
 import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.user.domain.User;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +33,7 @@ public class AuthController {
 
       private final AuthService authService;
 
-      private final AuthenticatedUserChecker authenticatedUserChecker;
 
-      @Operation(summary = "소셜 로그인")
       @PostMapping("/social")
       public ResponseEntity<CommonResponse> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest)
       {
@@ -59,7 +55,7 @@ public class AuthController {
       }
 
 
-      @Operation(summary = "중복 닉네임 체크")
+
       @PostMapping("/nickname")
       public ResponseEntity<CommonResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest)
       {
@@ -68,7 +64,7 @@ public class AuthController {
       }
 
 
-      @Operation(summary = "중복 이메일 체크")
+
       @PostMapping ("/email")
       public ResponseEntity<CommonResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest)
       {
@@ -77,9 +73,7 @@ public class AuthController {
       }
 
 
-      @Operation(summary = "로그아웃", description = "- 로그아웃 시 기존의 액세스 토큰은 서버 단에서 재활용 불가 처리를 합니다." +
-                                                  "- 로그아웃 로직은 로그인한 유저가 사용할 수 있는 기능이므로 Header에 토큰 넣어주세요!" +
-                                                  "- 일반 로그인, 소셜 로그인 공통 사용 가능")
+
       @DeleteMapping("/logout")
       public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                                    HttpServletRequest request)
@@ -89,7 +83,6 @@ public class AuthController {
       }
 
 
-      @Operation(summary = "회원 탈퇴")
       @DeleteMapping("/withdraw")
       public ResponseEntity<CommonResponse> withdraw(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                                      HttpServletRequest request)
@@ -97,9 +90,5 @@ public class AuthController {
           authService.withdraw(Long.parseLong(user.getUsername()),HeaderUtil.getAccessToken(request));
           return ResponseEntity.ok(new CommonResponse(200,"회원탈퇴 완료"));
       }
-
-
-
-
 
 }

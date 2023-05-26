@@ -6,11 +6,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * AuthRequest.java
- *
- * @author jemlog
- */
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuthLoginRequest {

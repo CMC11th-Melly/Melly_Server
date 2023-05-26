@@ -9,5 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentResponseDto {
     private int commentCount;
+
     private List<CommentDto> comments;
 }

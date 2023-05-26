@@ -11,7 +11,6 @@ import cmc.mellyserver.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,6 @@ public class GroupController {
     }
 
 
-    @Operation(summary = "그룹 추가")
     @PostMapping
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@Valid @RequestBody GroupCreateRequest groupCreateRequest)
     {
@@ -47,7 +45,6 @@ public class GroupController {
 
 
 
-    @Operation(summary = "그룹 편집")
     @PutMapping("/{groupId}")
     private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest)
     {
@@ -56,7 +53,6 @@ public class GroupController {
     }
 
 
-    @Operation(summary = "그룹 삭제")
     @DeleteMapping("/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
     {
