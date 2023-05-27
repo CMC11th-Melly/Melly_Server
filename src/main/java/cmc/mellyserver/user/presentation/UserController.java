@@ -1,19 +1,20 @@
 package cmc.mellyserver.user.presentation;
 
 import cmc.mellyserver.common.constants.MessageConstant;
-import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.ScrapType;
 import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
+import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.scrap.application.PlaceScrapService;
 import cmc.mellyserver.scrap.application.dto.response.PlaceScrapCountResponseDto;
 import cmc.mellyserver.scrap.application.dto.response.ScrapedPlaceResponseDto;
 import cmc.mellyserver.user.application.UserService;
-import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
-import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.user.application.dto.response.SurveyRecommendResponseDto;
+import cmc.mellyserver.user.application.dto.response.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.user.presentation.dto.UserAssembler;
 import cmc.mellyserver.user.presentation.dto.request.*;
-import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -41,7 +42,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getUserNickname(@PathVariable Long userSeq)
     {
         String nickname = userService.findNicknameByUserIdentifier(userSeq);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(nickname)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,nickname));
     }
 
 
@@ -57,7 +58,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getSurvey(@AuthenticationPrincipal User user)
     {
         SurveyRecommendResponseDto surveyRecommendResponseDto = userService.getSurveyResult(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(surveyRecommendResponseDto)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, surveyRecommendResponseDto));
     }
 
 
@@ -65,7 +66,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> updateProfileFormData(@AuthenticationPrincipal User user)
     {
         ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userService.getLoginUserProfileDataForUpdate(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(profileUpdateFormResponseDto)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,profileUpdateFormResponseDto));
     }
 
 
@@ -80,18 +81,18 @@ public class UserController {
     @GetMapping("/memory")
     public ResponseEntity<CommonResponse> getUserMemory( @AuthenticationPrincipal User user,
                                                          @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC,size = 10) Pageable pageable,
-                                                         @RequestParam(required = false) GroupType groupType )
+                                                         @RequestParam(required = false) GroupType groupType)
     {
-        Slice<MemoryResponseDto> userMemory = userService.findMemoriesLoginUserWrite(pageable, Long.parseLong(user.getUsername()), groupType);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(userMemory)));
+        Slice<MemoryResponseDto> results = userService.findMemoriesLoginUserWrite(pageable, Long.parseLong(user.getUsername()), groupType);
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,MemoryAssembler.memoryResponses(results)));
     }
 
 
     @GetMapping("/group")
     public ResponseEntity<CommonResponse> getUserGroup(@AuthenticationPrincipal User user)
     {
-        List<GroupLoginUserParticipatedResponseDto> userGroup = userService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(userGroup)));
+        List<GroupLoginUserParticipatedResponseDto> results = userService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results)));
     }
 
 
@@ -99,23 +100,23 @@ public class UserController {
     public ResponseEntity<CommonResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false,name = "userId") Long userSeq)
     {
         Slice<MemoryResponseDto> results = userService.findMemoriesUsersBelongToMyGroupWrite(pageable, groupId, userSeq);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,results));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.memoryResponses(results)));
     }
 
 
     @GetMapping("/place/scrap/count")
     public ResponseEntity<CommonResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user)
     {
-        List<PlaceScrapCountResponseDto> scrapedPlaceGroup = placeScrapService.countByPlaceScrapType(Long.parseLong(user.getUsername()));
-        return  ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(scrapedPlaceGroup)));
+        List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(Long.parseLong(user.getUsername()));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.placeScrapCountResponses(results)));
     }
 
 
     @GetMapping("/place/scrap")
     public ResponseEntity<CommonResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, Pageable pageable, @RequestParam(required = false) ScrapType scrapType)
     {
-        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.findScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
-        return  ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(scrapedPlace)));
+        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.scrapedPlaceResponses(results)));
     }
 
 
@@ -123,7 +124,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> getUserImageVolume(@AuthenticationPrincipal User user)
     {
         Integer volume = userService.checkImageStorageVolumeLoginUserUse(user.getUsername());
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(volume)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, volume));
     }
 
 
@@ -133,5 +134,4 @@ public class UserController {
         userService.participateToGroup(Long.parseLong(user.getUsername()), participateGroupRequest.getGroupId());
         return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
-
 }

@@ -1,9 +1,11 @@
 package cmc.mellyserver.unit.user.infrastructure;
 
+import cmc.mellyserver.common.enums.RecommendActivity;
 import cmc.mellyserver.common.enums.RecommendGroup;
+import cmc.mellyserver.common.enums.RecommendPlace;
 import cmc.mellyserver.common.factory.UserFactory;
 import cmc.mellyserver.place.domain.Position;
-import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.infrastructure.SurveyRecommender;
 import org.assertj.core.api.Assertions;
@@ -24,7 +26,7 @@ public class SurveyRecommenderTest {
 
             // given
             User emailLoginUser = UserFactory.createEmailLoginUser();
-            emailLoginUser.addSurveyData(RecommendGroup.FRIEND,"홍대","액티비티");
+            emailLoginUser.addSurveyData(RecommendGroup.FRIEND, RecommendPlace.PLACE1, RecommendActivity.CAFE);
             SurveyRecommender surveyRecommender = new SurveyRecommender();
 
             // when

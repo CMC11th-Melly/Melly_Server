@@ -1,4 +1,4 @@
-package cmc.mellyserver.user.presentation.dto.response;
+package cmc.mellyserver.user.application.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

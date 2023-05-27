@@ -9,7 +9,7 @@ import cmc.mellyserver.notification.domain.Notification;
 import cmc.mellyserver.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.common.enums.NotificationType;
 import cmc.mellyserver.user.domain.User;
-import cmc.mellyserver.user.presentation.dto.response.NotificationOnOffResponseDto;
+import cmc.mellyserver.user.application.dto.response.NotificationOnOffResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

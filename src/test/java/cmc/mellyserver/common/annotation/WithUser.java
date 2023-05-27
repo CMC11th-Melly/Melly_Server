@@ -1,4 +1,4 @@
-package cmc.mellyserver.common;
+package cmc.mellyserver.common.annotation;
 
 import org.springframework.security.test.context.support.WithMockUser;
 

@@ -1,9 +1,5 @@
 package cmc.mellyserver.user.domain;
-import cmc.mellyserver.common.enums.Provider;
-import cmc.mellyserver.common.enums.AgeGroup;
-import cmc.mellyserver.common.enums.Gender;
-import cmc.mellyserver.common.enums.RecommendGroup;
-import cmc.mellyserver.common.enums.RoleType;
+import cmc.mellyserver.common.enums.*;
 import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import lombok.*;
 import javax.persistence.*;
@@ -77,7 +73,7 @@ public class User extends JpaBaseEntity {
     }
 
     // 초기 회원가입시, 회원 맞춤 정보를 제공하기 위함
-    public void addSurveyData(RecommendGroup recommendGroup, String recommendPlace, String recommendActivity)
+    public void addSurveyData(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
     }

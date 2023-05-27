@@ -10,7 +10,7 @@ import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

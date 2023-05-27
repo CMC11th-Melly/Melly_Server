@@ -2,11 +2,11 @@ package cmc.mellyserver.user.application;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.user.application.dto.ProfileUpdateFormResponseDto;
-import cmc.mellyserver.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.user.application.dto.response.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequestDto;
-import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

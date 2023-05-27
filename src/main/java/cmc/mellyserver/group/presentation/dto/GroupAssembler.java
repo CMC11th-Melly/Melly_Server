@@ -1,7 +1,7 @@
 package cmc.mellyserver.group.presentation.dto;
 
 import cmc.mellyserver.group.domain.UserGroup;
-import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 
 
 public class GroupAssembler {

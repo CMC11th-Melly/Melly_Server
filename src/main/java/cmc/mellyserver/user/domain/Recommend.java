@@ -1,6 +1,8 @@
 package cmc.mellyserver.user.domain;
 
+import cmc.mellyserver.common.enums.RecommendActivity;
 import cmc.mellyserver.common.enums.RecommendGroup;
+import cmc.mellyserver.common.enums.RecommendPlace;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,8 @@ public class Recommend {
     @Enumerated(EnumType.STRING)
     private RecommendGroup recommendGroup;
 
-    private String recommendPlace;
+    private RecommendPlace recommendPlace;
 
-    private String recommendActivity;
+    private RecommendActivity recommendActivity;
 
 }

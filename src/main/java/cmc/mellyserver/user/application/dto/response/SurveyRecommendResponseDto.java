@@ -1,4 +1,4 @@
-package cmc.mellyserver.user.application.dto;
+package cmc.mellyserver.user.application.dto.response;
 
 import cmc.mellyserver.place.domain.Position;
 import lombok.AllArgsConstructor;

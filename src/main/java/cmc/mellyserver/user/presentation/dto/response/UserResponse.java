@@ -5,5 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PlaceScrapCountResponseDto {
+public class UserResponse {
+
+    private String uid;
+    private String profileImage;
+    private String nickname;
 }

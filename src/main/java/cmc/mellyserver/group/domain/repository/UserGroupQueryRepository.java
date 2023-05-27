@@ -11,7 +11,7 @@ import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.common.UserDto;
-import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
