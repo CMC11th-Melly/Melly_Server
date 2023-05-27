@@ -16,9 +16,4 @@ public enum AgeGroup {
     {
         this.ageGroup =age;
     }
-
-    public int getAgeGroup()
-    {
-        return ageGroup;
-    }
 }

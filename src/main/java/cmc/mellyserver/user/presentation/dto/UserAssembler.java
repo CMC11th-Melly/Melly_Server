@@ -13,24 +13,6 @@ import java.util.stream.Collectors;
 
 public class UserAssembler {
 
-     public static SurveyRecommendResponse surveyRecommendResponse(SurveyRecommendResponseDto surveyRecommendResponseDto)
-     {
-         return SurveyRecommendResponse.builder()
-                 .position(surveyRecommendResponseDto.getPosition())
-                 .words(surveyRecommendResponseDto.getWords())
-                 .build();
-     }
-
-
-     public static ProfileUpdateFormResponse profileUpdateFormResponse(ProfileUpdateFormResponseDto profileUpdateFormResponseDto)
-     {
-         return ProfileUpdateFormResponse.builder()
-                 .nickname(profileUpdateFormResponseDto.getNickname())
-                 .profileImage(profileUpdateFormResponseDto.getProfileImage())
-                 .gender(profileUpdateFormResponseDto.getGender())
-                 .ageGroup(profileUpdateFormResponseDto.getAgeGroup())
-                 .build();
-     }
 
      public static List<GroupLoginUserParticipatedResponse> groupLoginUserParticipatedResponses(List<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos)
      {
