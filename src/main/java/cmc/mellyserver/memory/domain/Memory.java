@@ -58,7 +58,7 @@ public class Memory extends JpaBaseEntity {
 
     @ElementCollection
     @CollectionTable(
-            name = "keywords_table",
+            name = "tb_keywords_table",
             joinColumns = @JoinColumn(name = "memory_id"))
     @Column(name = "keyword") // 컬럼명 지정 (예외)
     private List<String> keyword = new ArrayList<>();
@@ -123,10 +123,11 @@ public class Memory extends JpaBaseEntity {
     }
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, String title, String content, OpenType openType, LocalDateTime visitedDate) {
+    public Memory(Long stars, GroupInfo groupInfo,Long userId, String title, String content, OpenType openType, LocalDateTime visitedDate) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;
+        this.userId = userId;
         this.content = content;
         this.openType = openType;
         this.visitedDate = visitedDate;

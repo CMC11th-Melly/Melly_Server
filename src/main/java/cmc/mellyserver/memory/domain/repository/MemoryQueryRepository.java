@@ -20,8 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
+import java.awt.*;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import static cmc.mellyserver.group.domain.QGroupAndUser.groupAndUser;
 import static cmc.mellyserver.memory.domain.QMemory.*;
@@ -103,10 +105,10 @@ public class MemoryQueryRepository {
                 .where(memory.id.eq(memoryId))
                 .fetchFirst();
 
-        Map<Long, List<MemoryImage>> memoryImageList = findMemoryImage(toMemoryIds(List.of(results)));
+        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(List.of(results)));
         Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(toMemoryIds(List.of(results)));
 
-        results.setMemoryImages(memoryImageList.get(results.getMemoryId()).stream().map(mi->new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()));
+        results.setMemoryImages(memoryImageList.get(results.getMemoryId()));
         results.setKeyword(keywordList.get(results.getMemoryId()).stream().map(KeywordResponseDto::getKeyword).collect(Collectors.toList()));
 
         return results;
@@ -263,7 +265,7 @@ public class MemoryQueryRepository {
 
     private Map<Long, List<KeywordResponseDto>> findKeywordList(List<Long> memoryIds) {
 
-        List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from keywords_table kt where kt.memory_id in :memoryIds")
+        List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from tb_keywords_table kt where kt.memory_id in :memoryIds")
                 .setParameter("memoryIds", memoryIds)
                 .getResultList();
 
@@ -281,13 +283,15 @@ public class MemoryQueryRepository {
     }
 
 
-    private Map<Long, List<MemoryImage>> findMemoryImage(List<Long> memoryIds) {
+    private Map<Long, List<ImageDto>> findMemoryImage(List<Long> memoryIds) {
 
-          List<MemoryImage> result = query.selectFrom(memoryImage)
-                  .where(memoryImage.memory.id.in(memoryIds))
-                  .fetch();
+        List<ImageDto> results = query.select(Projections.constructor(ImageDto.class, memoryImage.id, memoryImage.memory.id, memoryImage.imagePath))
+                .from(memoryImage)
+                .where(memoryImage.memory.id.in(memoryIds))
+                .fetch();
 
-          return result.stream().collect(Collectors.groupingBy(MemoryImage::getId));
+        return results.stream()
+                .collect(Collectors.groupingBy(ImageDto::getMemoryId));
     }
 
 
@@ -299,11 +303,11 @@ public class MemoryQueryRepository {
 
 
     private void initMemoryImageAndKeyword(List<MemoryResponseDto> results) {
-        Map<Long, List<MemoryImage>> memoryImageList = findMemoryImage(toMemoryIds(results));
+        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(results));
         Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(toMemoryIds(results)); // 키워드 모음
 
         results.forEach(f -> {
-            f.setMemoryImages(memoryImageList.get(f.getMemoryId()).stream().map(mi->new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()));
+            f.setMemoryImages(memoryImageList.get(f.getMemoryId()));
             f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponseDto::getKeyword).collect(Collectors.toList()));
         });
     }

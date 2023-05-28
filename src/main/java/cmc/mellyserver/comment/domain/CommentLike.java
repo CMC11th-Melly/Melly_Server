@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tb_comment_like")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike {
 

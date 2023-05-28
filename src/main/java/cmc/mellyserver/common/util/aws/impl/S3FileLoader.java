@@ -1,8 +1,10 @@
-package cmc.mellyserver.common.util.aws;
+package cmc.mellyserver.common.util.aws.impl;
 
 import cmc.mellyserver.common.exception.GlobalServerException;
+import cmc.mellyserver.common.util.aws.FileUploader;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,9 +16,12 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class S3FileLoader {
+@Profile({"local","prod"})
+public class S3FileLoader implements FileUploader {
+
     private final AWSS3UploadService uploadService;
 
+    @Override
     public List<String> getMultipartFileNames(String uid, List<MultipartFile> multipartFiles) {
 
         if(multipartFiles != null)
@@ -41,6 +46,7 @@ public class S3FileLoader {
         return null;
     }
 
+    @Override
     public String getMultipartFileName(MultipartFile file) {
 
         if(file != null)

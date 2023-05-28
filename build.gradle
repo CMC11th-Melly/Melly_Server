@@ -26,10 +26,38 @@ jacocoTestReport {
         xml.enabled false
         csv.enabled false
     }
+
+    def Qdomains = []
+    for(qPattern in "**/QA" .. "**/QZ"){
+        Qdomains.add(qPattern+"*")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            '**/MellyServerApplication*',
+                            '**/*Request*',
+                            '**/*Response*',
+                            '**/*Dto*',
+                            '**/*Client*',
+                            '**/common*',
+                            '**/*Exception*',
+                            '**/*Config*'
+                    ] + Qdomains)
+        }
+        ))}
+
+
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
+    def Qdomains = []
+    // 패키지 + 클래스명
+    for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        Qdomains.add(qPattern + '*')
+    }
     // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
     violationRules {
         rule {
@@ -40,6 +68,17 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 0.00
             }
+
+            excludes = [
+                    '**.*MellyServerApplication*',
+                    '**.*Request*',
+                    '**.*Response*',
+                    '**.*Dto*',
+                    '**.*Client*',
+                    '**.*Interceptor*',
+                    '**.*Exception*',
+                    '**.*Config*'
+            ] + Qdomains
         }
     }
 }
@@ -145,7 +184,7 @@ dependencies {
 
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
+    runtimeOnly 'com.h2database:h2'
     // Emoji parser
     implementation 'com.vdurmont:emoji-java:5.1.1'
 }
@@ -158,9 +197,11 @@ ext {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
-//    jacoco {
-//        destinationFile = file("$buildDir/jacoco/jacoco.exec")
-//    }
+    jacoco {
+        exclude("*equals", "*hashCode")
+    }
+
+
     finalizedBy 'jacocoTestReport'
 }
 

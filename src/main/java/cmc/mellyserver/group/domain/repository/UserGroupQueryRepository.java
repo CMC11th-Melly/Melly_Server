@@ -167,7 +167,7 @@ public class UserGroupQueryRepository {
 
 
     private Map<Long, List<KeywordResponseDto>> findKeywordList(List<Long> memoryIds) {
-        List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from keywords_table kt where kt.memory_id in :memoryIds")
+        List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from tb_keywords_table kt where kt.memory_id in :memoryIds")
                 .setParameter("memoryIds", memoryIds)
                 .getResultList();
 
@@ -185,15 +185,15 @@ public class UserGroupQueryRepository {
     }
 
 
-    private Map<Long, List<MemoryImage>> findMemoryImage(List<Long> memoryIds) {
+    private Map<Long, List<ImageDto>> findMemoryImage(List<Long> memoryIds) {
 
-        List<MemoryImage> results = query.select(Projections.constructor(MemoryImage.class, memoryImage.memory.id, memoryImage.id, memoryImage.imagePath))
+        List<ImageDto> results = query.select(Projections.constructor(ImageDto.class, memoryImage.id, memoryImage.memory.id, memoryImage.imagePath))
                 .from(memoryImage)
                 .where(memoryImage.memory.id.in(memoryIds))
                 .fetch();
 
         return results.stream()
-                .collect(Collectors.groupingBy(MemoryImage::getId));
+                .collect(Collectors.groupingBy(ImageDto::getMemoryId));
     }
 
 
@@ -218,11 +218,11 @@ public class UserGroupQueryRepository {
 
 
     private void initMemoryImageAndKeyword(List<MemoryResponseDto> results) {
-        Map<Long, List<MemoryImage>> memoryImageList = findMemoryImage(toMemoryIds(results));
+        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(results));
         Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(toMemoryIds(results));
 
         results.forEach(f -> {
-            f.setMemoryImages(memoryImageList.get(f.getMemoryId()).stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()));
+            f.setMemoryImages(memoryImageList.get(f.getMemoryId()));
             f.setKeyword(keywordList.get(f.getMemoryId()).stream().map(KeywordResponseDto::getKeyword).collect(Collectors.toList()));
         });
     }

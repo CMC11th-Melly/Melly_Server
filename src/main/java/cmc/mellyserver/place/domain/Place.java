@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "tb_place")
 @Getter
 @AllArgsConstructor
 public class Place extends JpaBaseEntity {

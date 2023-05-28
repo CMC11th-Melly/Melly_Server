@@ -15,41 +15,41 @@ public class User extends JpaBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_seq")
-    private Long userSeq; // 유저 DB 식별자
+    private Long userSeq;
 
     @Column(name = "user_id")
-    private String userId; // 유저 OAuth 아이디
+    private String userId;
 
-    private String email; // 유저 이메일
+    private String email;
 
-    private String password; // 유저 비밀번호
+    private String password;
 
-    private String nickname; // 유저 닉네임
+    private String nickname;
 
-    private String profileImage; // 유저 프로필 이미지
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender; // 유저 성별
+    private String profileImage;
 
     @Enumerated(EnumType.STRING)
-    private AgeGroup ageGroup; // 유저 연령
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    private Provider provider; // 유저 제공자
+    private AgeGroup ageGroup;
 
     @Enumerated(EnumType.STRING)
-    private RoleType roleType; // 유저 역할
+    private Provider provider;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
     @Embedded
-    private Recommend recommend; // 유저 추천 정보
+    private Recommend recommend;
 
     @Column(name = "store_capacity")
-    private Double storeCapacity;  // 저장한 이미지 용량
+    private Double storeCapacity;
 
-    private String fcmToken; // 푸시 위한 토큰
+    @Enumerated(EnumType.STRING)
+    private DeleteStatus isDeleted;
 
-    private boolean isdeleted;
+    private String fcmToken;
 
-    // 푸시 알림 목록
     private boolean enableAppPush;
 
     private boolean enableCommentLike;
@@ -72,7 +72,6 @@ public class User extends JpaBaseEntity {
         this.fcmToken = fcmToken;
     }
 
-    // 초기 회원가입시, 회원 맞춤 정보를 제공하기 위함
     public void addSurveyData(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity)
     {
         this.recommend = new Recommend(recommendGroup,recommendPlace,recommendActivity);
@@ -91,7 +90,7 @@ public class User extends JpaBaseEntity {
     }
 
     @Builder
-    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String fcmToken,String uid,Provider provider,String nickname,boolean enableAppPush,boolean enableCommentLike, boolean enableComment)
+    public User(String email,String password,RoleType roleType,String profileImage,AgeGroup ageGroup,Gender gender,String fcmToken,String uid,Provider provider,String nickname,boolean enableAppPush,boolean enableCommentLike, boolean enableComment, DeleteStatus isDeleted)
     {
         this.email = email;
         this.password = password;
@@ -106,6 +105,7 @@ public class User extends JpaBaseEntity {
         this.enableAppPush = enableAppPush;
         this.enableComment = enableComment;
         this.enableCommentLike = enableCommentLike;
+        this.isDeleted = isDeleted;
     }
 
     public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup) {
@@ -133,7 +133,12 @@ public class User extends JpaBaseEntity {
     @PrePersist
     private void init()
     {
-        this.isdeleted = false;
+        this.isDeleted = DeleteStatus.N;
+    }
+
+    public void removeUser()
+    {
+        this.isDeleted = DeleteStatus.Y;
     }
 
     public void setEnableAppPush(boolean enableAppPush) {

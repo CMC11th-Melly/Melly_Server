@@ -11,7 +11,7 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserAssembler {
+public abstract class UserAssembler {
 
 
      public static List<GroupLoginUserParticipatedResponse> groupLoginUserParticipatedResponses(List<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos)

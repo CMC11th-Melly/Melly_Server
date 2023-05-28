@@ -8,5 +8,6 @@ import lombok.Data;
 public class ImageDto {
 
     private Long imageId;
+    private Long memoryId;
     private String memoryImage;
 }

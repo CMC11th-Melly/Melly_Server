@@ -5,7 +5,7 @@ import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedR
 import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 
 
-public class GroupAssembler {
+public abstract class GroupAssembler {
 
 
     public static GroupLoginUserParticipatedResponse getUserGroupResponse(UserGroup userGroup)

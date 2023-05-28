@@ -5,14 +5,12 @@ import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.factory.UserFactory;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.common.util.aws.S3FileLoader;
+import cmc.mellyserver.common.util.aws.impl.AwsServiceImpl;
+import cmc.mellyserver.common.util.aws.impl.S3FileLoader;
 import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.memory.presentation.dto.common.MemoryAssembler;
-import cmc.mellyserver.memory.presentation.dto.response.MemoryResponse;
-import cmc.mellyserver.user.application.UserService;
 import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.user.application.dto.response.SurveyRecommendResponseDto;
@@ -24,9 +22,6 @@ import cmc.mellyserver.user.infrastructure.SurveyRecommender;
 import cmc.mellyserver.user.presentation.dto.common.UserDto;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequestDto;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,14 +36,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -81,7 +73,7 @@ public class UserServiceTest {
     private S3FileLoader s3FileLoader;
 
     @Mock
-    private AmazonS3Client amazonS3Client;
+    private AwsServiceImpl awsService;
 
     @Mock
     private SurveyRecommender surveyRecommender;
@@ -236,17 +228,15 @@ public class UserServiceTest {
     void checkImageStorageVolumeLoginUserUse() {
 
         // given
-        ObjectListing objectListing = new ObjectListing();
-
-        given(amazonS3Client.listObjects(anyString(), anyString()))
-                .willReturn(objectListing);
+        given(awsService.calculateImageVolume(anyString(), anyString()))
+                .willReturn(1L);
 
         // when
         Integer volume = userService.checkImageStorageVolumeLoginUserUse("jemin");
 
         // then
-        verify(amazonS3Client, times(1))
-                .listObjects(anyString(), anyString());
+        verify(awsService, times(1))
+                .calculateImageVolume(anyString(), anyString());
     }
 
 

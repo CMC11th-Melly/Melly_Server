@@ -9,12 +9,13 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "tb_user_group")
 @AllArgsConstructor
 public class UserGroup extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "groups_id")
+    @Column(name = "group_id")
     private Long id; // 그룹 id
 
     private String groupName; // 그룹 이름

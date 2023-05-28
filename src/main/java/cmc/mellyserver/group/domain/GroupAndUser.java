@@ -14,6 +14,7 @@ import java.util.Objects;
  */
 @Entity
 @NoArgsConstructor
+@Table(name = "tb_group_and_user")
 @Getter
 public class GroupAndUser {
 

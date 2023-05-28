@@ -12,11 +12,13 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(name = "tb_notification")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notification extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notification_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)

@@ -13,6 +13,7 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "tb_place_scrap")
 @Getter
 public class PlaceScrap extends JpaBaseEntity {
 

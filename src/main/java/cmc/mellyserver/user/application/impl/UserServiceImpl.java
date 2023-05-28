@@ -3,7 +3,8 @@ package cmc.mellyserver.user.application.impl;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.common.util.aws.S3FileLoader;
+import cmc.mellyserver.common.util.aws.AwsService;
+import cmc.mellyserver.common.util.aws.FileUploader;
 import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.common.enums.GroupType;
@@ -18,9 +19,6 @@ import cmc.mellyserver.user.infrastructure.SurveyRecommender;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequestDto;
 import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -39,9 +37,9 @@ public class UserServiceImpl implements UserService {
 
     private final GroupService groupService;
 
-    private final AmazonS3Client amazonS3Client;
+    private final AwsService awsService;
 
-    private final S3FileLoader s3FileLoader;
+    private final FileUploader fileUploader;
 
     private final UserGroupQueryRepository userGroupQueryRepository;
 
@@ -81,10 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer checkImageStorageVolumeLoginUserUse(String username)
     {
-        ObjectListing mellyimage = amazonS3Client.listObjects("mellyimage", username);
-        List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
-        Long sum = objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
-        return  sum.intValue();
+        return awsService.calculateImageVolume("mellyimage",username).intValue();
     }
 
 
@@ -96,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override // ok
+    @Override
     public String findNicknameByUserIdentifier(Long userSeq) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
@@ -106,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override  // ok
+    @Override
     @Transactional
     public void createSurvey(SurveyRequestDto surveyRequestDto)
     {
@@ -115,7 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override   // ok
+    @Override
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId)
     {
@@ -130,6 +125,6 @@ public class UserServiceImpl implements UserService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(profileUpdateRequestDto.getUserSeq());
         user.updateProfile(profileUpdateRequestDto.getNickname(),profileUpdateRequestDto.getGender(),profileUpdateRequestDto.getAgeGroup());
         if (profileUpdateRequestDto.isDeleteImage()) user.chnageProfileImage(null);
-        else user.chnageProfileImage(s3FileLoader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
+        else user.chnageProfileImage(fileUploader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
     }
 }

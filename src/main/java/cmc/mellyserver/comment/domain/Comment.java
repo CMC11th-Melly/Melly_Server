@@ -14,11 +14,13 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "tb_comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
 
     @Column(nullable = false)

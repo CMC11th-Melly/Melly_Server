@@ -32,6 +32,7 @@ public class UserFactory {
                 .ageGroup(AgeGroup.TWO)
                 .profileImage("cmc11th.jpg")
                 .nickname("떡잎마을방범대")
+                .isDeleted(DeleteStatus.N)
                 .build();
     }
 

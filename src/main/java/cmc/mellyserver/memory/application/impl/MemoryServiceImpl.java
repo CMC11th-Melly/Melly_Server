@@ -4,7 +4,7 @@ import cmc.mellyserver.common.enums.OpenType;
 import cmc.mellyserver.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.common.util.auth.AuthenticatedUserChecker;
-import cmc.mellyserver.common.util.aws.S3FileLoader;
+import cmc.mellyserver.common.util.aws.FileUploader;
 import cmc.mellyserver.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.group.domain.repository.GroupRepository;
 import cmc.mellyserver.group.domain.UserGroup;
@@ -46,7 +46,7 @@ public class MemoryServiceImpl implements MemoryService {
     private final MemoryRepository memoryRepository;
     private final MemoryQueryRepository memoryQueryRepository;
     private final PlaceRepository placeRepository;
-    private final S3FileLoader s3FileLoader;
+    private final FileUploader fileUploader;
     private final GroupRepository groupRepository;
     private final UserGroupQueryRepository userGroupQueryRepository;
     private final GroupAndUserRepository groupAndUserRepository;
@@ -57,7 +57,7 @@ public class MemoryServiceImpl implements MemoryService {
     public void createMemory(CreateMemoryRequestDto createMemoryRequestDto)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getUserSeq());
-        List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(user.getUserId(), createMemoryRequestDto.getMultipartFiles());
+        List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(), createMemoryRequestDto.getMultipartFiles());
 
         Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(createMemoryRequestDto.getLat(),createMemoryRequestDto.getLng())); // 해당 좌표를 가진 장소 정보가 기존에 존재하는지 체크
 
@@ -198,7 +198,7 @@ public class MemoryServiceImpl implements MemoryService {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getUserSeq());
         removeMemoryImages(updateMemoryRequestDto, memory);
 
-        List<String> multipartFileNames = s3FileLoader.getMultipartFileNames(user.getUserId(), updateMemoryRequestDto.getImages());
+        List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(), updateMemoryRequestDto.getImages());
 
         memory.updateMemory(updateMemoryRequestDto.getTitle(),
                 updateMemoryRequestDto.getContent(),
