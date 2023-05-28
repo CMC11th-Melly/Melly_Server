@@ -11,6 +11,7 @@ import cmc.mellyserver.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.user.application.dto.response.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class GroupController {
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,@Valid @RequestBody GroupCreateRequest groupCreateRequest)
     {
         UserGroup userGroup = groupService.saveGroup(CreateGroupRequestDto.of(Long.parseLong(user.getUsername()), groupCreateRequest));
-        GroupLoginUserParticipatedResponseDto userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
+        GroupLoginUserParticipatedResponse userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
         return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(userGroupResponse)));
     }
 

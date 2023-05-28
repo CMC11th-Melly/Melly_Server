@@ -1,9 +1,12 @@
 package cmc.mellyserver.common.factory;
 
 import cmc.mellyserver.common.enums.*;
+import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.user.application.dto.response.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.user.domain.User;
 import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequest;
+import cmc.mellyserver.user.presentation.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.user.presentation.dto.request.SurveyRequestDto;
 import org.springframework.mock.web.MockMultipartFile;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class UserFactory {
@@ -50,13 +54,12 @@ public class UserFactory {
                 .build();
     }
 
-    public static ProfileUpdateRequest mockProfileUpdateRequest() throws IOException {
-        return ProfileUpdateRequest.builder()
-                .deleteImage(false)
-                .nickname("test nickname")
-                .gender(Gender.MALE)
-                .ageGroup(AgeGroup.ONE)
-                .profileImage(new MockMultipartFile("content","filename","multipart/form-data", new FileInputStream("/Users/seojemin/IdeaProjects/Melly_Server/src/test/resources/image/testimage.jpg")))
+    public static SurveyRecommendResponseDto mockSurveyRecommendResponseDto()
+    {
+        return SurveyRecommendResponseDto.builder()
+                .position(new Position(1.234,1.234))
+                .words(List.of("재밌어요","기뻐요"))
                 .build();
     }
+
 }

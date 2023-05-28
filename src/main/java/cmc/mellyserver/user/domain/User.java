@@ -108,15 +108,11 @@ public class User extends JpaBaseEntity {
         this.enableCommentLike = enableCommentLike;
     }
 
-    public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup, String image) {
+    public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup) {
        if(nickname != null)
        {
            this.nickname = nickname;
        }
-
-
-       this.profileImage = image;
-
 
        if(gender != null)
        {
@@ -127,6 +123,11 @@ public class User extends JpaBaseEntity {
        {
            this.ageGroup = ageGroup;
        }
+    }
+
+    public void chnageProfileImage(String image)
+    {
+        this.profileImage = image;
     }
 
     @PrePersist

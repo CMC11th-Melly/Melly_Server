@@ -14,8 +14,11 @@ public class SurveyRequestDto {
     private Long userSeq;
 
     private RecommendGroup recommendGroup;
+
     private RecommendPlace recommendPlace;
+
     private RecommendActivity recommendActivity;
+
 
     @Builder
     public SurveyRequestDto(Long userSeq, RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity) {

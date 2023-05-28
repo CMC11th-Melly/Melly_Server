@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
+    @Override // ok
     public String findNicknameByUserIdentifier(Long userSeq) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
+    @Override  // ok
     @Transactional
     public void createSurvey(SurveyRequestDto surveyRequestDto)
     {
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
+    @Override   // ok
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId)
     {
@@ -128,14 +128,8 @@ public class UserServiceImpl implements UserService {
     public void updateLoginUserProfile(ProfileUpdateRequestDto profileUpdateRequestDto)
     {
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(profileUpdateRequestDto.getUserSeq());
-
-        if(profileUpdateRequestDto.isDeleteImage())
-        {
-            user.updateProfile(profileUpdateRequestDto.getNickname(),profileUpdateRequestDto.getGender(),profileUpdateRequestDto.getAgeGroup(), null);
-        }
-        else
-        {
-            user.updateProfile(profileUpdateRequestDto.getNickname(),profileUpdateRequestDto.getGender(),profileUpdateRequestDto.getAgeGroup(), s3FileLoader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
-        }
+        user.updateProfile(profileUpdateRequestDto.getNickname(),profileUpdateRequestDto.getGender(),profileUpdateRequestDto.getAgeGroup());
+        if (profileUpdateRequestDto.isDeleteImage()) user.chnageProfileImage(null);
+        else user.chnageProfileImage(s3FileLoader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
     }
 }
