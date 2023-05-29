@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public abstract class UserAssembler {
 
-
      public static List<GroupLoginUserParticipatedResponse> groupLoginUserParticipatedResponses(List<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos)
      {
          return groupLoginUserParticipatedResponseDtos.stream().map(response ->
@@ -51,4 +50,5 @@ public abstract class UserAssembler {
                  .collect(Collectors.toList());
      }
 
+    private UserAssembler(){}
 }

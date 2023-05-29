@@ -42,7 +42,8 @@ public class Place extends JpaBaseEntity {
     }
 
     @Builder
-    public Place(Position position,String placeImage,String placeCategory,String placeName) {
+    public Place(Long id, Position position,String placeImage,String placeCategory,String placeName) {
+        this.id = id;
         this.position = position;
         this.placeName = placeName;
         this.placeImage = placeImage;

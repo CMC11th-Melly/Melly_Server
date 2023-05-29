@@ -31,16 +31,6 @@ public class GroupAndUser {
     @JoinColumn(name = "groups_id")
     private UserGroup group;
 
-    public void setGroup(UserGroup group)
-    {
-        this.group = group;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
 
     public GroupAndUser(User user, UserGroup group) {
         this.user = user;

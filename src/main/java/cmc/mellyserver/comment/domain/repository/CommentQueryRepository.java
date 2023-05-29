@@ -24,23 +24,23 @@ public class CommentQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Comment> findComment(Long memoryId) {
-
-//        return query.selectFrom(comment)
-//                .leftJoin(comment.parent)
-//                .fetchJoin()
-//                .where(
-//                        comment.memoryId.eq(memoryId),
-//                        comment.isReported.eq(false)
-//                      //  commentBlocked(userBlockedCommentId).not()
-//                        )
-//                .orderBy(
-//                        comment.parent.id.asc().nullsFirst(),
-//                        comment.createdDate.asc()
-//                ).fetch();
-        return null;
-
-    }
+//    public List<Comment> findComment(Long memoryId) {
+//
+////        return query.selectFrom(comment)
+////                .leftJoin(comment.parent)
+////                .fetchJoin()
+////                .where(
+////                        comment.memoryId.eq(memoryId),
+////                        comment.isReported.eq(false)
+////                      //  commentBlocked(userBlockedCommentId).not()
+////                        )
+////                .orderBy(
+////                        comment.parent.id.asc().nullsFirst(),
+////                        comment.createdDate.asc()
+////                ).fetch();
+//        return null;
+//
+//    }
 
 //    private BooleanExpression commentBlocked(List<Long> compare) {
 //

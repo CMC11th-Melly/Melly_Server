@@ -4,10 +4,7 @@ import cmc.mellyserver.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.common.enums.ScrapType;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -42,6 +39,7 @@ public class PlaceScrap extends JpaBaseEntity {
         return new PlaceScrap(user,place,scrapType);
     }
 
+    @Builder
     public PlaceScrap(User user, Place place, ScrapType scrapType) {
         this.user = user;
         this.place = place;

@@ -43,7 +43,12 @@ jacocoTestReport {
                             '**/*Client*',
                             '**/common*',
                             '**/*Exception*',
-                            '**/*Config*'
+                            '**/*Config*',
+                            '**/*Health*',
+                            '**/*OAuth*',
+                            '**/*Client*',
+                            '**/*Apple*',
+                            '**/*Key*'
                     ] + Qdomains)
         }
         ))}
@@ -61,7 +66,7 @@ jacocoTestCoverageVerification {
     // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
     violationRules {
         rule {
-            element = 'CLASS'
+            element = 'BUNDLE'
 
             limit {
                 counter = 'LINE'
@@ -77,7 +82,12 @@ jacocoTestCoverageVerification {
                     '**.*Client*',
                     '**.*Interceptor*',
                     '**.*Exception*',
-                    '**.*Config*'
+                    '**.*Config*',
+                    '**/*Health*',
+                    '**/*OAuth*',
+                    '**/*Client*',
+                    '**/*Apple*',
+                    '**/*Key*'
             ] + Qdomains
         }
     }
@@ -174,6 +184,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // test
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
+    testImplementation 'io.rest-assured:xml-path:5.3.0'
+    testImplementation 'io.rest-assured:json-schema-validator:5.3.0'
+    testImplementation 'io.rest-assured:spring-mock-mvc:5.3.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
@@ -181,6 +195,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+
 
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'

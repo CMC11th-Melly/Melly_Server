@@ -18,4 +18,5 @@ public abstract class GroupAssembler {
         );
     }
 
+    private GroupAssembler(){}
 }
