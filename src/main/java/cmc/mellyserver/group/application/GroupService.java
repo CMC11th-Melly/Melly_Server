@@ -14,5 +14,5 @@ public interface GroupService {
 
     void updateGroup(UpdateGroupRequestDto updateGroupRequestDto);
 
-    String removeGroup(Long groupOwnerUserSeq, Long groupId);
+    void removeGroup(Long groupOwnerUserSeq, Long groupId);
 }

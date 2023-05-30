@@ -7,7 +7,6 @@ import cmc.mellyserver.group.application.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.group.domain.UserGroup;
 import cmc.mellyserver.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.group.presentation.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.scrap.application.dto.request.CreatePlaceScrapRequestDto;
 import cmc.mellyserver.unit.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -154,7 +153,7 @@ public class UserGroupControllerTest extends ControllerTest {
     void remove_group() throws Exception {
 
         // given
-        given(groupService.removeGroup(anyLong(),anyLong())).willReturn("성공");
+        Mockito.doNothing().when(groupService).removeGroup(anyLong(),anyLong());
 
         // when
         ResultActions perform = mockMvc.perform(delete("/api/group/1")
@@ -176,7 +175,7 @@ public class UserGroupControllerTest extends ControllerTest {
                 responseFields(
                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답코드"),
                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답메세지"),
-                        fieldWithPath("data").type(JsonFieldType.STRING).description("성공 메세지")
+                        fieldWithPath("data").type(JsonFieldType.NULL).description("성공 메세지")
                 )));
 
     }

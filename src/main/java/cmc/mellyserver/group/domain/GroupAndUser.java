@@ -1,6 +1,7 @@
 package cmc.mellyserver.group.domain;
 
 import cmc.mellyserver.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +33,7 @@ public class GroupAndUser {
     private UserGroup group;
 
 
+    @Builder
     public GroupAndUser(User user, UserGroup group) {
         this.user = user;
         this.group = group;

@@ -57,7 +57,7 @@ public class GroupController {
     @DeleteMapping("/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,@PathVariable Long groupId)
     {
-        String message = groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,message));
+        groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 }

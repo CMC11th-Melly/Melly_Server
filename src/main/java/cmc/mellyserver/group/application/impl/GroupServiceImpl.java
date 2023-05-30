@@ -72,19 +72,22 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public String removeGroup(Long userSeq, Long groupId)
+    public void removeGroup(Long userSeq, Long groupId)
     {
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
 
-
-        // 만약 해당 그룹을 만든 사람이라면 삭제 가능
-        if (userGroup.getCreatorId().equals(userSeq))
+        if (!hasPermissionToRemove(userGroup,userSeq))
         {
-            userGroup.remove();
-            return "그룹 삭제 완료";
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_AUTHORITY_TO_REMOVE);
         }
-        return "삭제 권한이 없습니다";
+
+        userGroup.remove();
+    }
+
+    private boolean hasPermissionToRemove(UserGroup userGroup,Long userSeq)
+    {
+        return userGroup.getCreatorId().equals(userSeq);
     }
 }
