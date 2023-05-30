@@ -36,11 +36,6 @@ public class Place extends JpaBaseEntity {
         this.isDeleted = false;
     }
 
-    public void delete()
-    {
-        this.isDeleted = true;
-    }
-
     @Builder
     public Place(Long id, Position position,String placeImage,String placeCategory,String placeName) {
         this.id = id;

@@ -11,7 +11,7 @@ import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.domain.Position;
 import cmc.mellyserver.place.domain.repository.PlaceQueryRepository;
 import cmc.mellyserver.place.domain.repository.PlaceRepository;
-import cmc.mellyserver.place.application.dto.MarkedPlaceReponseDto;
+import cmc.mellyserver.place.application.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.place.presentation.dto.PlaceAssembler;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class PlaceServiceImpl implements PlaceService {
 
 
     @Override
-    public List<MarkedPlaceReponseDto> displayMarkedPlace(Long userSeq, GroupType groupType)
+    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long userSeq, GroupType groupType)
     {
         List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq);
         return PlaceAssembler.markedPlaceResponseDto(placeUserMemoryExist);

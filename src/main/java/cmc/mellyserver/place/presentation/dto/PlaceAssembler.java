@@ -1,7 +1,7 @@
 package cmc.mellyserver.place.presentation.dto;
 
 import cmc.mellyserver.common.enums.GroupType;
-import cmc.mellyserver.place.application.dto.MarkedPlaceReponseDto;
+import cmc.mellyserver.place.application.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.place.domain.Place;
 import cmc.mellyserver.place.presentation.dto.response.MarkedPlaceReponse;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PlaceAssembler {
 
-    public static List<MarkedPlaceReponse> markedPlaceReponse(List<MarkedPlaceReponseDto> markedPlaceReponseDtos)
+    public static List<MarkedPlaceReponse> markedPlaceReponse(List<MarkedPlaceResponseDto> markedPlaceReponseDtos)
     {
         return markedPlaceReponseDtos.stream().map(each -> MarkedPlaceReponse.builder().placeId(each.getPlaceId()).position(each.getPosition()).groupType(each.getGroupType()).memoryCount(each.getMemoryCount()).build()).collect(Collectors.toList());
     }
@@ -42,7 +42,7 @@ public class PlaceAssembler {
                 .build();
     }
 
-    public static List<MarkedPlaceReponseDto> markedPlaceResponseDto(List<Place> placeUserMemoryExist) {
-        return placeUserMemoryExist.stream().map(each -> new MarkedPlaceReponseDto(each.getPosition(),null,null,null)).collect(Collectors.toList());
+    public static List<MarkedPlaceResponseDto> markedPlaceResponseDto(List<Place> placeUserMemoryExist) {
+        return placeUserMemoryExist.stream().map(each -> new MarkedPlaceResponseDto(each.getPosition(),null,null,null)).collect(Collectors.toList());
     }
 }

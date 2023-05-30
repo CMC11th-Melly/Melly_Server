@@ -3,6 +3,7 @@ package cmc.mellyserver.place.application.dto;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.place.domain.Position;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -25,6 +26,7 @@ public class PlaceResponseDto {
 
     }
 
+    @Builder
     private PlaceResponseDto(Position position, Long myMemoryCount, Long otherMemoryCount, Boolean isScraped) {
 
         this.position = position;
