@@ -15,6 +15,17 @@ public class UserGroupFactory {
         return new UserGroup(1L,"동기",1,"http://naver.com",2L, GroupType.FRIEND,false);
     }
 
+    public static UserGroup userGroup()
+    {
+        return UserGroup.builder()
+                .groupName("테스트 그룹")
+                .groupType(GroupType.FRIEND)
+                .groupIcon(1)
+                .inviteLink("http://naver.com")
+                .build();
+    }
+
+
     public static GroupCreateRequest mockGroupCreateRequest()
     {
         return GroupCreateRequest.builder()

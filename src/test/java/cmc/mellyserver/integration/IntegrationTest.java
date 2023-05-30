@@ -1,6 +1,7 @@
 package cmc.mellyserver.integration;
 
 import cmc.mellyserver.config.DatabaseCleanup;
+import cmc.mellyserver.group.application.GroupService;
 import cmc.mellyserver.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.group.domain.repository.GroupRepository;
 import cmc.mellyserver.memory.domain.repository.MemoryRepository;
@@ -34,6 +35,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected MemoryRepository memoryRepository;
+
+    @Autowired
+    protected GroupService groupService;
 
     @Autowired
     protected PlaceRepository placeRepository;
