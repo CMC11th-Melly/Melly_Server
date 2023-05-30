@@ -41,7 +41,7 @@ public class GroupController {
     {
         UserGroup userGroup = groupService.saveGroup(CreateGroupRequestDto.of(Long.parseLong(user.getUsername()), groupCreateRequest));
         GroupLoginUserParticipatedResponse userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(userGroupResponse)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, userGroupResponse));
     }
 
 

@@ -258,6 +258,4 @@ public class PlaceScrapServiceTest {
             verify(placeRepository,times(1)).findPlaceByPosition(any(Position.class));
         }
     }
-
-
 }

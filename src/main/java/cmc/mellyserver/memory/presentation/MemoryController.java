@@ -44,7 +44,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user)
     {
         List<GroupListForSaveMemoryResponseDto> userGroup = memoryService.findGroupListLoginUserParticipate(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(MemoryAssembler.groupListForSaveMemoryResponse(userGroup))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.groupListForSaveMemoryResponse(userGroup)));
     }
 
 
@@ -54,7 +54,7 @@ public class MemoryController {
     {
         Slice<MemoryResponseDto> userMemory = memoryService.findLoginUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(userMemory);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(new GetMemoryForPlaceResponseWrapper(memoryResponses.getContent().stream().count(),memoryResponses))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetMemoryForPlaceResponseWrapper(memoryResponses.getContent().stream().count(),memoryResponses)));
     }
 
 
@@ -64,7 +64,7 @@ public class MemoryController {
     {
         Slice<MemoryResponseDto> otherMemory = memoryService.findOtherUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(otherMemory);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new CommonDetailResponse<>(new GetOtherMemoryForPlaceResponseWrapper(memoryResponses.stream().count(),memoryResponses))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetOtherMemoryForPlaceResponseWrapper(memoryResponses.stream().count(),memoryResponses)));
     }
 
 
@@ -74,7 +74,7 @@ public class MemoryController {
     {
         Slice<MemoryResponseDto> results = memoryService.findMyGroupMemberWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(results);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(new GetMyGroupMemoryForPlaceResponseWrapper(memoryResponses.stream().count(),memoryResponses))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new GetMyGroupMemoryForPlaceResponseWrapper(memoryResponses.stream().count(),memoryResponses)));
     }
 
 
@@ -98,7 +98,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> getFormForUpdateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
     {
         MemoryUpdateFormResponseDto formForUpdateMemory = memoryService.findMemoryUpdateFormData(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(MemoryAssembler.memoryUpdateFormResponse(formForUpdateMemory))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.memoryUpdateFormResponse(formForUpdateMemory)));
     }
 
 
@@ -114,7 +114,7 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> findMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId)
     {
         MemoryResponseDto memoryByMemoryId = memoryService.findMemoryByMemoryId(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(MemoryAssembler.memoryResponse(memoryByMemoryId))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.memoryResponse(memoryByMemoryId)));
     }
 
 
@@ -122,6 +122,6 @@ public class MemoryController {
     public ResponseEntity<CommonResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName)
     {
         List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos = memoryService.findPlaceInfoByMemoryName(Long.parseLong(user.getUsername()), memoryName);
-        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,new CommonDetailResponse<>(MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos))));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos)));
     }
 }

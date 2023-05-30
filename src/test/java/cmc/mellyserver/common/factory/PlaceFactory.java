@@ -15,4 +15,15 @@ public class PlaceFactory {
                 .placeImage("testImage")
                 .build();
     }
+
+    public static Place place()
+    {
+        return Place.builder()
+                .position(new Position(1.234,1.234))
+                .placeCategory("카페")
+                .placeName("스타벅스")
+                .placeImage("testImage")
+                .build();
+    }
+
 }

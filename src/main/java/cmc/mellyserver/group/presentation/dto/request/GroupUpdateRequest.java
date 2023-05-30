@@ -1,6 +1,7 @@
 package cmc.mellyserver.group.presentation.dto.request;
 
 import cmc.mellyserver.common.enums.GroupType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,4 +14,11 @@ public class GroupUpdateRequest {
     private String groupName;
     private GroupType groupType;
     private Integer groupIcon;
+
+    @Builder
+    public GroupUpdateRequest(String groupName, GroupType groupType, Integer groupIcon) {
+        this.groupName = groupName;
+        this.groupType = groupType;
+        this.groupIcon = groupIcon;
+    }
 }
