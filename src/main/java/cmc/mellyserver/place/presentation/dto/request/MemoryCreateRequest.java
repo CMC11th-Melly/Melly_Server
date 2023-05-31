@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlaceInfoRequest {
+public class MemoryCreateRequest {
 
     private Double lat;
 
