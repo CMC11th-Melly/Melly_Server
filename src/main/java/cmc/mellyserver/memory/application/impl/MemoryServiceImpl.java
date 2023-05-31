@@ -33,6 +33,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,13 +44,21 @@ import java.util.stream.Collectors;
 public class MemoryServiceImpl implements MemoryService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
+
     private final MemoryRepository memoryRepository;
+
     private final MemoryQueryRepository memoryQueryRepository;
+
     private final PlaceRepository placeRepository;
+
     private final FileUploader fileUploader;
+
     private final GroupRepository groupRepository;
+
     private final UserGroupQueryRepository userGroupQueryRepository;
+
     private final GroupAndUserRepository groupAndUserRepository;
+
 
 
     @Override
@@ -196,21 +205,15 @@ public class MemoryServiceImpl implements MemoryService {
         });
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getUserSeq());
+
         removeMemoryImages(updateMemoryRequestDto, memory);
 
         List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(), updateMemoryRequestDto.getImages());
 
-        memory.updateMemory(updateMemoryRequestDto.getTitle(),
-                updateMemoryRequestDto.getContent(),
-                updateMemoryRequestDto.getKeyword(),
-                userGroup.getId(),
-                userGroup.getGroupType(),
-                userGroup.getGroupName(),
-                updateMemoryRequestDto.getOpenType(),
-                updateMemoryRequestDto.getVisitedDate(),
-                updateMemoryRequestDto.getStar());
+        memory.updateMemory(updateMemoryRequestDto.getTitle(), updateMemoryRequestDto.getContent(), updateMemoryRequestDto.getKeyword(), userGroup.getId(),
+                userGroup.getGroupType(), userGroup.getGroupName(), updateMemoryRequestDto.getOpenType(), updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar());
 
-        if(multipartFileNames != null)
+        if(!Objects.isNull(multipartFileNames))
         {
             memory.updateMemoryImages(multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
         }

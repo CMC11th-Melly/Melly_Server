@@ -123,7 +123,7 @@ public class Memory extends JpaBaseEntity {
     }
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo,Long userId, String title, String content, OpenType openType, LocalDateTime visitedDate) {
+    public Memory(Long stars, GroupInfo groupInfo,Long userId, String title, String content, OpenType openType, LocalDateTime visitedDate,boolean isDelete) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;
@@ -131,5 +131,6 @@ public class Memory extends JpaBaseEntity {
         this.content = content;
         this.openType = openType;
         this.visitedDate = visitedDate;
+        this.isDelete = isDelete;
     }
 }

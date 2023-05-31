@@ -47,7 +47,7 @@ public class PlaceScrapServiceTest {
     private PlaceRepository placeRepository;
 
     @Mock
-    PlaceQueryRepository placeQueryRepository;
+    private PlaceQueryRepository placeQueryRepository;
 
     @Mock
     private PlaceScrapRepository scrapRepository;
