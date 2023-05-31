@@ -2,6 +2,7 @@ package cmc.mellyserver.memory.domain.repository.dto;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.presentation.dto.common.ImageDto;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class MemoryResponseDto {
     private LocalDateTime visitedDate;
 
 
+    @Builder
     public MemoryResponseDto(Long placeId, String placeName, Long memoryId, String title, String content, GroupType groupType, String groupName, Long stars, boolean loginUserWrite, LocalDateTime visitedDate) {
         this.placeId = placeId;
         this.placeName = placeName;

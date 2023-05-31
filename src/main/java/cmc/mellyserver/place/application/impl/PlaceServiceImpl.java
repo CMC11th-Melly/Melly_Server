@@ -29,8 +29,11 @@ import java.util.Optional;
 public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceQueryRepository placeQueryRepository;
+
     private final PlaceRepository placeRepository;
+
     private final PlaceScrapQueryRepository placeScrapQueryRepository;
+
     private final MemoryQueryRepository memoryQueryRepository;
 
 

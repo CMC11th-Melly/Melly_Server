@@ -1,9 +1,7 @@
 package cmc.mellyserver.memory.application.dto.request;
 
-import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.OpenType;
-import cmc.mellyserver.place.presentation.dto.request.PlaceInfoRequest;
-import lombok.AllArgsConstructor;
+import cmc.mellyserver.place.presentation.dto.request.MemoryCreateRequest;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +43,7 @@ public class CreateMemoryRequestDto {
         this.multipartFiles = multipartFiles;
     }
 
-    public static CreateMemoryRequestDto of(Long userSeq, List<MultipartFile> images, PlaceInfoRequest placeInfoRequest)
+    public static CreateMemoryRequestDto of(Long userSeq, List<MultipartFile> images, MemoryCreateRequest placeInfoRequest)
     {
         return CreateMemoryRequestDto.builder()
                 .userSeq(userSeq)

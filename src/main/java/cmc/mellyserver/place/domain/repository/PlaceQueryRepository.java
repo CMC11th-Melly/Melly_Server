@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static cmc.mellyserver.memory.domain.QMemory.*;
@@ -201,5 +202,6 @@ public class PlaceQueryRepository {
 
         return placeScrap.scrapType.eq(scrapType);
     }
+
 
 }

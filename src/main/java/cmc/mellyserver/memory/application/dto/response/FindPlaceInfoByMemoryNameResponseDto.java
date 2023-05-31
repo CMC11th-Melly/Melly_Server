@@ -1,13 +1,19 @@
 package cmc.mellyserver.memory.application.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class FindPlaceInfoByMemoryNameResponseDto {
     private Long placeId;
     private String memoryName;
+
+    @Builder
+    public FindPlaceInfoByMemoryNameResponseDto(Long placeId, String memoryName) {
+        this.placeId = placeId;
+        this.memoryName = memoryName;
+    }
 }

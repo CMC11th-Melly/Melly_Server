@@ -3,6 +3,7 @@ package cmc.mellyserver.place.presentation.dto.request;
 import cmc.mellyserver.common.enums.OpenType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -43,4 +44,18 @@ public class MemoryCreateRequest {
 
     private Long star;
 
+    @Builder
+    public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory, String title, String content, List<String> keyword, Long groupId, OpenType openType, LocalDateTime visitedDate, Long star) {
+        this.lat = lat;
+        this.lng = lng;
+        this.placeName = placeName;
+        this.placeCategory = placeCategory;
+        this.title = title;
+        this.content = content;
+        this.keyword = keyword;
+        this.groupId = groupId;
+        this.openType = openType;
+        this.visitedDate = visitedDate;
+        this.star = star;
+    }
 }

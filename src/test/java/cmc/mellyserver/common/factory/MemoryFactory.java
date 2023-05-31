@@ -2,6 +2,7 @@ package cmc.mellyserver.common.factory;
 
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.common.enums.OpenType;
+import cmc.mellyserver.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.memory.domain.Memory;
 import cmc.mellyserver.memory.domain.vo.GroupInfo;
 
@@ -21,4 +22,5 @@ public class MemoryFactory {
                 .visitedDate(LocalDateTime.of(2023,5,29,10,20))
                 .build();
     }
+
 }

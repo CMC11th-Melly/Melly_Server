@@ -1,7 +1,6 @@
 package cmc.mellyserver.memory.presentation;
 
 import cmc.mellyserver.common.constants.MessageConstant;
-import cmc.mellyserver.common.response.CommonDetailResponse;
 import cmc.mellyserver.common.response.CommonResponse;
 import cmc.mellyserver.common.enums.GroupType;
 import cmc.mellyserver.memory.application.MemoryService;
@@ -17,7 +16,7 @@ import cmc.mellyserver.memory.presentation.dto.common.wrapper.GetMyGroupMemoryFo
 import cmc.mellyserver.memory.presentation.dto.common.wrapper.GetOtherMemoryForPlaceResponseWrapper;
 import cmc.mellyserver.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.memory.presentation.dto.response.MemoryResponse;
-import cmc.mellyserver.place.presentation.dto.request.PlaceInfoRequest;
+import cmc.mellyserver.place.presentation.dto.request.MemoryCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -79,9 +78,9 @@ public class MemoryController {
 
 
     @PostMapping
-    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images, @Valid @RequestPart(name = "memoryData") PlaceInfoRequest placeInfoRequest)
+    public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images",required = false)  List<MultipartFile> images, @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest)
     {
-        memoryService.createMemory(CreateMemoryRequestDto.of(Long.parseLong(user.getUsername()),images,placeInfoRequest));
+        memoryService.createMemory(CreateMemoryRequestDto.of(Long.parseLong(user.getUsername()),images,memoryCreateRequest));
         return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
