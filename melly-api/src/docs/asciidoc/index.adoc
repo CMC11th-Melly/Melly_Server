@@ -1,0 +1,37 @@
+= Melly Server Rest Docs
+jemlog.github.com
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+[[User-API]]
+== User API
+
+[[User-프로필-조회]]
+=== User 프로필 조회
+
+operation::get-user-profile[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[User-설문조사-결과-저장]]
+=== User 설문조사 결과 저장
+
+operation::add-survey-result[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[User-설문조사-결과-조회]]
+=== User 설문조사 결과 조회
+
+operation::get-survey-result[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[User-그룹리스트-조회]]
+=== User가 속해있는 그룹 리스트 조회
+
+operation::get-group-list[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[User가-스크랩한-장소-조회]]
+=== User가 스크랩한 장소 조회
+
+operation::get-scraped-place[snippets='http-request,path-parameters,http-response,response-fields']
+
