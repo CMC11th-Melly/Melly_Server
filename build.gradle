@@ -1,263 +1,229 @@
-buildscript {
-    ext {
-        queryDslVersion = "5.0.0"
-    }
-}
-
-
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'org.springframework.boot' version '2.7.12'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id 'jacoco'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // 원하는 모듈에서만 선택해서 사용 가능하다.
 }
 
-jacoco {
-    // JaCoCo 버전
-    toolVersion = '0.8.7'
-}
+sourceCompatibility = 11
 
-jacocoTestReport {
-    reports {
-        // 원하는 리포트를 켜고 끌 수 있습니다.
-        html.enabled true
-        xml.enabled false
-        csv.enabled false
-    }
-
-    def Qdomains = []
-    for(qPattern in "**/QA" .. "**/QZ"){
-        Qdomains.add(qPattern+"*")
-    }
-
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: [
-                            '**/MellyServerApplication*',
-                            '**/*Request*',
-                            '**/*Response*',
-                            '**/*Dto*',
-                            '**/*Client*',
-                            '**/common*',
-                            '**/*Exception*',
-                            '**/*Config*',
-                            '**/*Health*',
-                            '**/*OAuth*',
-                            '**/*Client*',
-                            '**/*Apple*',
-                            '**/*Key*'
-                    ] + Qdomains)
-        }
-        ))}
-
-
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
-jacocoTestCoverageVerification {
-    def Qdomains = []
-    // 패키지 + 클래스명
-    for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
-        Qdomains.add(qPattern + '*')
-    }
-    // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
-    violationRules {
-        rule {
-            element = 'BUNDLE'
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.00
-            }
-
-            excludes = [
-                    '**.*MellyServerApplication*',
-                    '**.*Request*',
-                    '**.*Response*',
-                    '**.*Dto*',
-                    '**.*Client*',
-                    '**.*Interceptor*',
-                    '**.*Exception*',
-                    '**.*Config*',
-                    '**/*Health*',
-                    '**/*OAuth*',
-                    '**/*Client*',
-                    '**/*Apple*',
-                    '**/*Key*'
-            ] + Qdomains
-        }
-    }
-}
-
-
-
-group = 'cmc'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-    asciidoctorExtensions
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-//querydsl 추가 시작 (위에 plugin 추가 부분과 맞물림)
-def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
-sourceSets { // IDE의 소스 폴더에 자동으로 넣어준다.
-    main.java.srcDir querydslDir
-}
-
-configurations {
-    querydsl.extendsFrom compileClasspath // 컴파일이 될때 같이 수행
-}
-
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl // Q파일을 생성해준다.
-}
-
-jar {
-    enabled = false
-}
-
+// 조건에 맞는 서브 모듈만 선택하는 작업
+def coreProjects = subprojects.findAll {it.name.endsWith('core')}
+def apiProjects = subprojects.findAll {it.name.endsWith('api')}
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-
-    // QueryDSL
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" // querydsl 라이브러리
-    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}" //  Querydsl 관련 코드 생성 기능 제공
-
-
-
-    // redis config
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'it.ozimov:embedded-redis:0.7.2'
-
-    // webflux
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
-    // mail
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.76.Final:osx-aarch_64")
-    // AWS
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
-    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
-
-    // FCM
-    implementation 'com.google.firebase:firebase-admin:7.1.1'
-
-    // Authentication
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    // Data
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
-    runtimeOnly 'mysql:mysql-connector-java'
-    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.10.Final'
-    
-    // Core
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // test
-    testImplementation 'io.rest-assured:rest-assured:5.3.0'
-    testImplementation 'io.rest-assured:xml-path:5.3.0'
-    testImplementation 'io.rest-assured:json-schema-validator:5.3.0'
-    testImplementation 'io.rest-assured:spring-mock-mvc:5.3.0'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-
-
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    runtimeOnly 'com.h2database:h2'
-    // Emoji parser
-    implementation 'com.vdurmont:emoji-java:5.1.1'
+bootJar { // 따로 실행은 안된다.
+    enabled = false
 }
 
-ext {
-    // 아래서 사용할 변수 선언
-    snippetsDir = file('build/generated-snippets')
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
-test {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
+// melly-core 설정
+configure(coreProjects) {
+
+    apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+    dependencies {
+
+        // DB
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'mysql:mysql-connector-java:8.0.32'
+        compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation "org.springframework.boot:spring-boot-starter-cache"
+        implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+        // queryDsl
+        implementation "com.querydsl:querydsl-jpa:5.0.0"
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
+    }
+
+    // querydsl 세팅
+    def querydslDir = "$buildDir/generated/querydsl"
+
+    querydsl {
+        jpa = true
+        querydslSourcesDir = querydslDir
+    }
+    sourceSets {
+        main.java.srcDir querydslDir
+    }
+    compileQuerydsl{
+        options.annotationProcessorPath = configurations.querydsl
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+        querydsl.extendsFrom compileClasspath
+    }
+
+
+}
+
+
+subprojects {
+
+    group 'cmc.mellyserver'
+    version '1.0'
+    sourceCompatibility = 11
+
+    apply plugin: 'java'
+    apply plugin: 'java-library' // api() 사용 위한 것
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.asciidoctor.jvm.convert'
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    // Rest-Docs 설정 시작
+    ext {
+        snippetsDir = file('build/generated-snippets')
+    }
+
+    test {
+        outputs.dir snippetsDir // snippetsDir 부분에 결괏값을 출력한다.
+        print('before')
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport' // 마지막에는 jacocoReport를 작성한다.
+    }
+
+    asciidoctor { // asciidoctor 작업 구성
+        dependsOn test // test 작업 이후에 작동하도록 하는 설정
+        print('hello')
+        configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
+        inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
+
+        // source가 없으면 .adoc파일을 전부 html로 만들어버림
+        // source 지정시 특정 adoc만 HTML로 만든다.
+        sources{
+            include("**/index.adoc","**/common/*.adoc")
+        }
+    }
+
+    configurations {
+        asciidoctorExtensions
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+
+        // Lombok
+        compileOnly 'org.projectlombok:lombok:1.18.20'
+        annotationProcessor 'org.projectlombok:lombok:1.18.20'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
+        testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
+
+        asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+        testImplementation 'io.rest-assured:rest-assured:5.3.0'
+        testImplementation 'io.rest-assured:xml-path:5.3.0'
+        testImplementation 'io.rest-assured:json-schema-validator:5.3.0'
+        testImplementation 'io.rest-assured:spring-mock-mvc:5.3.0'
+        testImplementation 'org.springframework.security:spring-security-test'
+        testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+        // redis
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    }
+
+
     jacoco {
-        exclude("*equals", "*hashCode")
+        toolVersion = '0.8.7'
+    }
+
+    jacocoTestReport {
+        reports {
+            // 원하는 리포트를 켜고 끌 수 있습니다.
+            html.enabled true
+            xml.enabled false
+            csv.enabled false
+        }
+
+        def Qdomains = []
+        for(qPattern in "**/QA" .. "**/QZ"){
+            Qdomains.add(qPattern+"*")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it,
+                        exclude: [
+                                '**/MellyServerApplication*',
+                                '**/*Request*',
+                                '**/*Response*',
+                                '**/*Dto*',
+                                '**/*Client*',
+                                '**/common*',
+                                '**/*Exception*',
+                                '**/*Config*',
+                                '**/*Health*',
+                                '**/*OAuth*',
+                                '**/*Client*',
+                                '**/*Apple*',
+                                '**/*Key*'
+                        ] + Qdomains)
+            }
+            ))}
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        def Qdomains = []
+        // 패키지 + 클래스명
+        for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+            Qdomains.add(qPattern + '*')
+        }
+        // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
+        violationRules {
+            rule {
+                element = 'BUNDLE'
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.00
+                }
+
+                excludes = [
+                        '**.*MellyServerApplication*',
+                        '**.*Request*',
+                        '**.*Response*',
+                        '**.*Dto*',
+                        '**.*Client*',
+                        '**.*Interceptor*',
+                        '**.*Exception*',
+                        '**.*Config*',
+                        '**/*Health*',
+                        '**/*OAuth*',
+                        '**/*Client*',
+                        '**/*Apple*',
+                        '**/*Key*'
+                ] + Qdomains
+            }
+        }
     }
 
 
-    finalizedBy 'jacocoTestReport'
 }
 
 
 
-
-asciidoctor { // asciidoctor 작업 구성
-    dependsOn test // test 작업 이후에 작동하도록 하는 설정
-    configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
-    inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
-
-    // source가 없으면 .adoc파일을 전부 html로 만들어버림
-    // source 지정시 특정 adoc만 HTML로 만든다.
-    sources{
-        include("**/index.adoc","**/common/*.adoc")
-    }
-
-    // 특정 .adoc에 다른 adoc 파일을 가져와서(include) 사용하고 싶을 경우 경로를 baseDir로 맞춰주는 설정입니다.
-    // 개별 adoc으로 운영한다면 필요 없는 옵션입니다.
-    baseDirFollowsSourceFile()
-}
-
-// static/docs 폴더 비우기
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-// asccidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
-
-// build 의 의존작업 명시
-build {
-    dependsOn copyDocument
-}
-
-
-clean {
-    delete file('src/main/generated')
-}
