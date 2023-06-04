@@ -12,4 +12,8 @@ public class NotificationAssembler {
 		//                noti.getMemory().getMemoryImages().stream().map(mi -> new ImageDto(mi.getId(),mi.getImagePath())).collect(Collectors.toList()),noti.getMemory().getTitle(),
 		//                noti.getMemory().getContent(),noti.getMemory().getGroupInfo().getGroupType(),noti.getMemory().getGroupInfo().getGroupName(),noti.getMemory().getStars(),noti.getMemory().getKeyword(),noti.getMemory().getId().equals(noti.getMemory().getId()),noti.getMemory().getVisitedDate()))).collect(Collectors.toList());
 	}
+
+	private NotificationAssembler() {
+
+	}
 }

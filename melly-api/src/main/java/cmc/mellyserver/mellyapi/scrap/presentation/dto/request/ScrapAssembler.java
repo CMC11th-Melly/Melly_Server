@@ -14,4 +14,7 @@ public abstract class ScrapAssembler {
 			.placeCategory(scrapRequest.getPlaceCategory())
 			.build();
 	}
+
+	private ScrapAssembler() {
+	}
 }

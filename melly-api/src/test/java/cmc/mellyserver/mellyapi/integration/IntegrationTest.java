@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.mellyapi.config.DatabaseCleanup;
 import cmc.mellyserver.mellyapi.group.application.GroupService;
+import cmc.mellyserver.mellyapi.memory.application.MemoryService;
+import cmc.mellyserver.mellyapi.place.application.PlaceService;
 import cmc.mellyserver.mellyapi.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellyapi.user.application.UserService;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
@@ -32,6 +34,9 @@ public abstract class IntegrationTest {
 	protected GroupRepository groupRepository;
 
 	@Autowired
+	protected MemoryService memoryService;
+
+	@Autowired
 	protected GroupAndUserRepository groupAndUserRepository;
 
 	@Autowired
@@ -39,6 +44,9 @@ public abstract class IntegrationTest {
 
 	@Autowired
 	protected GroupService groupService;
+
+	@Autowired
+	protected PlaceService placeService;
 
 	@Autowired
 	protected PlaceRepository placeRepository;

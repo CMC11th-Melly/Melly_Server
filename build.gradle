@@ -9,8 +9,8 @@ plugins {
 sourceCompatibility = 11
 
 // 조건에 맞는 서브 모듈만 선택하는 작업
-def coreProjects = subprojects.findAll {it.name.endsWith('core')}
-def apiProjects = subprojects.findAll {it.name.endsWith('api')}
+def coreProjects = subprojects.findAll { it.name.endsWith('core') }
+def apiProjects = subprojects.findAll { it.name.endsWith('api') }
 
 repositories {
     mavenCentral()
@@ -55,7 +55,7 @@ configure(coreProjects) {
     sourceSets {
         main.java.srcDir querydslDir
     }
-    compileQuerydsl{
+    compileQuerydsl {
         options.annotationProcessorPath = configurations.querydsl
     }
 
@@ -108,8 +108,8 @@ subprojects {
 
         // source가 없으면 .adoc파일을 전부 html로 만들어버림
         // source 지정시 특정 adoc만 HTML로 만든다.
-        sources{
-            include("**/index.adoc","**/common/*.adoc")
+        sources {
+            include("**/index.adoc", "**/common/*.adoc")
         }
     }
 
@@ -158,8 +158,8 @@ subprojects {
         }
 
         def Qdomains = []
-        for(qPattern in "**/QA" .. "**/QZ"){
-            Qdomains.add(qPattern+"*")
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
         }
 
         afterEvaluate {
@@ -181,7 +181,8 @@ subprojects {
                                 '**/*Key*'
                         ] + Qdomains)
             }
-            ))}
+            ))
+        }
 
         finalizedBy 'jacocoTestCoverageVerification'
     }
@@ -204,7 +205,7 @@ subprojects {
                 }
 
                 excludes = [
-                        '**.*MellyServerApplication*',
+                        '**.*Application*',
                         '**.*Request*',
                         '**.*Response*',
                         '**.*Dto*',
