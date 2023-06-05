@@ -1,10 +1,12 @@
-package cmc.mellyserver.mellyapi.comment.application.dto;
+package cmc.mellyserver.mellyapi.comment.application.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 public class CommentRequestDto {
+
+	private Long userId;
 
 	private String content;
 
@@ -15,7 +17,8 @@ public class CommentRequestDto {
 	private Long mentionUserId;
 
 	@Builder
-	public CommentRequestDto(String content, Long memoryId, Long parentId, Long mentionUserId) {
+	public CommentRequestDto(Long userId, String content, Long memoryId, Long parentId, Long mentionUserId) {
+		this.userId = userId;
 		this.content = content;
 		this.memoryId = memoryId;
 		this.parentId = parentId;

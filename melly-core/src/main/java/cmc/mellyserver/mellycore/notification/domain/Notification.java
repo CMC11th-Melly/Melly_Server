@@ -11,8 +11,6 @@ import javax.persistence.Table;
 
 import cmc.mellyserver.mellycore.common.enums.NotificationType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.mellycore.memory.domain.Memory;
-import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,8 +44,8 @@ public class Notification extends JpaBaseEntity {
 	}
 
 	public static Notification createNotification(NotificationType title, String message, boolean checked,
-		Memory memory, User user) {
-		Notification notification = new Notification(title, message, checked, user.getUserSeq(), memory.getId());
+		Long memoryId, Long userId) {
+		Notification notification = new Notification(title, message, checked, userId, memoryId);
 		return notification;
 	}
 

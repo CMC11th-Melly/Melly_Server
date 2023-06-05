@@ -6,14 +6,14 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.mellyapi.notification.application.FCMService;
+import cmc.mellyserver.mellyapi.notification.infrastructure.FCMSender;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class CustomEventListener {
 
-	private final FCMService fcmService;
+	private final FCMSender fcmService;
 
 	@Async
 	@EventListener

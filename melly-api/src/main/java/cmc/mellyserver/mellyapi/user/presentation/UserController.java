@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.common.MemoryAssembler;
 import cmc.mellyserver.mellyapi.scrap.application.PlaceScrapService;
@@ -28,7 +29,6 @@ import cmc.mellyserver.mellyapi.user.presentation.dto.UserAssembler;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.common.enums.ScrapType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;

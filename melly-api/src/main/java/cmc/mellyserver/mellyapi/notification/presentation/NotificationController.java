@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.mellyapi.common.response.CommonDetailResponse;
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
-import cmc.mellyserver.mellyapi.notification.application.NotificationService;
+import cmc.mellyserver.mellyapi.notification.application.dto.response.NotificationOnOffResponseDto;
+import cmc.mellyserver.mellyapi.notification.application.impl.NotificationServiceImpl;
 import cmc.mellyserver.mellyapi.notification.presentation.dto.NotificationAssembler;
-import cmc.mellyserver.mellyapi.notification.presentation.dto.NotificationCheckRequest;
-import cmc.mellyserver.mellyapi.user.application.dto.response.NotificationOnOffResponseDto;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.notification.presentation.dto.request.NotificationCheckRequest;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
 import lombok.RequiredArgsConstructor;
 
@@ -28,14 +27,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/notification")
 public class NotificationController {
 
-	private final NotificationService notificationService;
+	private final NotificationServiceImpl notificationService;
 
 	@GetMapping("/setting")
 	public ResponseEntity<CommonResponse> getNotificationOnOff(@AuthenticationPrincipal User user) {
 		NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationOnOff(
 			Long.parseLong(user.getUsername()));
-		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-			new CommonDetailResponse<>(notificationOnOff)));
+		return ResponseEntity.ok(
+			new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, notificationOnOff));
 	}
 
 	@GetMapping
@@ -43,18 +42,18 @@ public class NotificationController {
 		List<Notification> notificationList = notificationService.getNotificationList(
 			Long.parseLong(user.getUsername()));
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-			new CommonDetailResponse<>(NotificationAssembler.notificationResponses(notificationList))));
+			NotificationAssembler.notificationResponses(notificationList)));
 	}
 
-	@PostMapping("/setting/comment/like")
+	@PostMapping("/setting")
 	public ResponseEntity<CommonResponse> appPushOn(@AuthenticationPrincipal User user) {
-		notificationService.setPushCommentLikeOn(Long.parseLong(user.getUsername()));
+		notificationService.setAppPushOn(Long.parseLong(user.getUsername()));
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
-	@DeleteMapping("/setting/comment/like")
+	@DeleteMapping("/setting")
 	public ResponseEntity<CommonResponse> appPushOff(@AuthenticationPrincipal User user) {
-		notificationService.setPushCommentLikeOff(Long.parseLong(user.getUsername()));
+		notificationService.setAppPushOff(Long.parseLong(user.getUsername()));
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
@@ -70,15 +69,15 @@ public class NotificationController {
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
-	@PostMapping("/setting")
+	@PostMapping("/setting/comment/like")
 	public ResponseEntity<CommonResponse> appPushCommentLikeOn(@AuthenticationPrincipal User user) {
-		notificationService.setAppPushOn(Long.parseLong(user.getUsername()));
+		notificationService.setPushCommentLikeOn(Long.parseLong(user.getUsername()));
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
-	@DeleteMapping("/setting")
+	@DeleteMapping("/setting/comment/like")
 	public ResponseEntity<CommonResponse> appPushCommentLikeOff(@AuthenticationPrincipal User user) {
-		notificationService.setAppPushOff(Long.parseLong(user.getUsername()));
+		notificationService.setPushCommentLikeOff(Long.parseLong(user.getUsername()));
 		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 

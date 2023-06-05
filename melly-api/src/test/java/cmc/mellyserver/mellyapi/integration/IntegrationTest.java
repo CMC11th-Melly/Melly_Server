@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import cmc.mellyserver.mellyapi.comment.application.impl.CommentServiceImpl;
 import cmc.mellyserver.mellyapi.config.DatabaseCleanup;
 import cmc.mellyserver.mellyapi.group.application.GroupService;
 import cmc.mellyserver.mellyapi.memory.application.MemoryService;
@@ -27,6 +28,8 @@ public abstract class IntegrationTest {
 	@Autowired
 	protected UserService userService;
 
+	@Autowired
+	protected CommentServiceImpl commentService;
 	@Autowired
 	protected UserRepository userRepository;
 

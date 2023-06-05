@@ -2,6 +2,10 @@ package cmc.mellyserver.mellyapi.integration.place;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,47 +15,54 @@ import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellyapi.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellyapi.memory.application.dto.response.MemoryUpdateFormResponseDto;
+import cmc.mellyserver.mellyapi.place.application.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.mellyapi.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.mellyapi.scrap.application.dto.request.CreatePlaceScrapRequestDto;
+import cmc.mellyserver.mellycore.common.enums.GroupType;
+import cmc.mellyserver.mellycore.common.enums.OpenType;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
+import cmc.mellyserver.mellycore.memory.domain.MemoryImage;
+import cmc.mellyserver.mellycore.memory.domain.vo.GroupInfo;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.user.domain.User;
 
 public class PlaceServiceIntegrationTest extends IntegrationTest {
 
-	// @DisplayName("사용자가 메모리를 하나 이상 남긴 장소 리스트를 지도 위에 마커로 보여준다.")
-	// @Test
-	// void show_place_where_login_user_write_memory() {
-	// 	// given
-	// 	User user = userRepository.save(UserFactory.createEmailLoginUser());
-	//
-	// 	Memory memory = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
-	// 		.groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
-	// 		.openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
-	// 		.build();
-	//
-	// 	memory.setMemoryImages(List.of(new MemoryImage("testImage")));
-	// 	memory.setKeyword(List.of("기뻐요", "좋아요"));
-	//
-	// 	CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-	// 		.userSeq(user.getUserSeq())
-	// 		.title("테스트 제목")
-	// 		.content("테스트 컨텐츠")
-	// 		.lat(1.234)
-	// 		.lng(1.234)
-	// 		.build();
-	//
-	// 	memoryService.createMemory(createMemoryRequestDto);
-	//
-	// 	// when
-	// 	List<MarkedPlaceResponseDto> markedPlaceResponseDtos = placeService.displayMarkedPlace(user.getUserSeq(), null);
-	//
-	// 	// then
-	// 	assertThat(markedPlaceResponseDtos).hasSize(1);
-	// 	assertThat(markedPlaceResponseDtos).extracting("position", "memoryCount")
-	// 		.containsExactlyInAnyOrder(Tuple.tuple(new Position(1.234, 1.234), 1));
-	//
-	// }
+	@DisplayName("사용자가 메모리를 하나 이상 남긴 장소 리스트를 지도 위에 마커로 보여준다.")
+	@Test
+	void show_place_where_login_user_write_memory() {
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+
+		Memory memory = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+			.groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
+			.openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
+			.build();
+
+		memory.setMemoryImages(List.of(new MemoryImage("testImage")));
+		memory.setKeyword(List.of("기뻐요", "좋아요"));
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq())
+			.title("테스트 제목")
+			.content("테스트 컨텐츠")
+			.placeName("테스트 장소")
+			.placeCategory("카페")
+			.lat(1.234)
+			.lng(1.234)
+			.build();
+
+		memoryService.createMemory(createMemoryRequestDto);
+
+		// when
+		List<MarkedPlaceResponseDto> markedPlaceResponseDtos = placeService.displayMarkedPlace(user.getUserSeq(), null);
+
+		// then
+		assertThat(markedPlaceResponseDtos).hasSize(1);
+		assertThat(markedPlaceResponseDtos).extracting("placeId", "position")
+			.containsExactlyInAnyOrder(Tuple.tuple(1L, new Position(1.234, 1.234)));
+
+	}
 
 	@DisplayName("장소 식별자로 장소 정보를 가지고 올 수 있다.")
 	@Test

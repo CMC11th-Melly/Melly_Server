@@ -2,6 +2,7 @@ package cmc.mellyserver.mellyapi.notification.presentation.dto;
 
 import java.util.List;
 
+import cmc.mellyserver.mellyapi.notification.presentation.dto.response.NotificationResponse;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
 
 public class NotificationAssembler {
