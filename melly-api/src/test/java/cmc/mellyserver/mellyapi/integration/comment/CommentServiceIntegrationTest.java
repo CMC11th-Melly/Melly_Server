@@ -2,6 +2,8 @@ package cmc.mellyserver.mellyapi.integration.comment;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +14,9 @@ import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellyapi.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
+import cmc.mellyserver.mellycore.comment.domain.CommentLike;
 import cmc.mellyserver.mellycore.common.enums.AgeGroup;
+import cmc.mellyserver.mellycore.common.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.user.domain.User;
 
@@ -110,4 +114,285 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 			.hasMessage(ExceptionCodeAndDetails.NO_SUCH_MEMORY.getMessage());
 
 	}
+
+	@DisplayName("댓글을 수정할 수 있다.")
+	@Test
+	void update_comment() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when
+		Comment updatedComment = commentService.updateComment(comment.getId(), "수정된 내용");
+
+		// then
+		assertThat(updatedComment.getContent()).isEqualTo("수정된 내용");
+	}
+
+	@DisplayName("댓글을 수정할때 해당 댓글이 DB에 없으면 예외를 반환한다.")
+	@Test
+	void update_comment_not_exist_comment_exception() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when then
+		assertThatThrownBy(() -> commentService.updateComment(-1L, "수정된 내용"))
+			.isInstanceOf(GlobalBadRequestException.class)
+			.hasMessage(ExceptionCodeAndDetails.NO_SUCH_COMMENT.getMessage());
+	}
+
+	@DisplayName("자식이 없는 댓글은 완전 삭제를 한다.")
+	@Test
+	void remove_comment() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when
+		commentService.deleteComment(comment.getId());
+
+		// then
+		Optional<Comment> deleted = commentRepository.findById(comment.getId());
+		assertThat(deleted).isEmpty();
+	}
+
+	@DisplayName("자식이 있는 부모 댓글은 삭제 처리만 한다.")
+	@Test
+	void remove_comment_with_child() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		CommentRequestDto commentRequestDto2 = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(comment.getId())
+			.build();
+
+		Comment comment2 = commentService.saveComment(commentRequestDto2);
+
+		// when
+		commentService.deleteComment(comment.getId());
+
+		// then
+		Comment deletedComment = commentRepository.findById(comment.getId()).get();
+		assertThat(deletedComment.getIsDeleted()).isEqualTo(DeleteStatus.Y);
+	}
+
+	@DisplayName("댓글에 좋아요를 취소한다.")
+	@Test
+	void cancel_comment_like() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+		commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+		// when
+		commentService.deleteCommentLike(user.getUserSeq(), comment.getId());
+
+		// then
+		Optional<CommentLike> result = commentLikeRepository.findCommentLikeByCommentIdAndUserId(
+			comment.getId(), user.getUserSeq());
+
+		assertThat(result).isEmpty();
+	}
+
+	@DisplayName("댓글의 좋아요를 취소할때 좋아요 정보가 DB에 존재하지 않는다면 예외가 발생한다.")
+	@Test
+	void cancel_comment_like_not_exist_commentLike() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when then
+		assertThatThrownBy(() -> commentService.deleteCommentLike(user.getUserSeq(), comment.getId()))
+			.isInstanceOf(GlobalBadRequestException.class)
+			.hasMessage(ExceptionCodeAndDetails.NO_SUCH_COMMENT_LIKE.getMessage());
+	}
+
+	@DisplayName("댓글에 좋아요를 단다.")
+	@Test
+	void add_comment_like() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when
+		CommentLike commentLike = commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+
+		// then
+		assertThat(commentLike.getComment().getId()).isEqualTo(comment.getId());
+		assertThat(commentLike.getUserId()).isEqualTo(user.getUserSeq());
+	}
+
+	@DisplayName("댓글에 좋아요를 달려고 할때 이미 좋아요를 한 적이 있다면 중복 예외가 발생한다.")
+	@Test
+	void add_comment_like_duplicated_exception() {
+
+		// given
+		User user = userRepository.save(UserFactory.createEmailLoginUser());
+		User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
+
+		CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
+			.userSeq(user.getUserSeq()).title("테스트 제목")
+			.content("테스트 컨텐츠").placeName("테스트 장소")
+			.placeCategory("카페").lat(1.234).lng(1.234)
+			.build();
+
+		Memory memory = memoryService.createMemory(createMemoryRequestDto);
+
+		CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.userId(user.getUserSeq())
+			.mentionUserId(mentionedUser.getUserSeq())
+			.memoryId(memory.getId())
+			.parentId(null)
+			.build();
+
+		Comment comment = commentService.saveComment(commentRequestDto);
+
+		// when
+		commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+
+		// then
+		assertThatThrownBy(() -> commentService.saveCommentLike(user.getUserSeq(), comment.getId()))
+			.isInstanceOf(GlobalBadRequestException.class)
+			.hasMessage(ExceptionCodeAndDetails.DUPLICATED_COMMENT_LIKE.getMessage());
+	}
+
 }

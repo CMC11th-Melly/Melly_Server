@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,53 +50,62 @@ public class CommentServiceImpl {
 	@Transactional
 	public Comment saveComment(CommentRequestDto commentRequestDto) {
 
-		// 기존에 메모리가 존재하는지 체크
 		Memory memory = memoryRepository.findById(commentRequestDto.getMemoryId()).orElseThrow(() -> {
 			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
 		});
 
-		Comment parent = commentRequestDto.getParentId() != null ?
+		Comment parentComment = commentRequestDto.getParentId() != null ?
 			commentRepository.findById(commentRequestDto.getParentId()).orElseThrow(() -> {
 				throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
 			}) : null;
 
-		return commentRepository.save(
-			Comment.createComment(commentRequestDto.getContent(), commentRequestDto.getUserId(),
-				memory.getId(), parent,
-				commentRequestDto.getMentionUserId()));
+		if (Objects.isNull(parentComment)) {
+			return commentRepository.save(
+				Comment.createComment(commentRequestDto.getContent(), commentRequestDto.getUserId(), memory.getId(),
+					parentComment, commentRequestDto.getMentionUserId()));
+		} else {
+			Comment childComment = commentRepository.save(
+				Comment.createComment(commentRequestDto.getContent(), commentRequestDto.getUserId(), memory.getId(),
+					parentComment, commentRequestDto.getMentionUserId()));
+
+			parentComment.getChildren().add(childComment);
+			return childComment;
+		}
 	}
 
 	@Transactional
-	public void updateComment(Long commentId, String content) {
+	public Comment updateComment(Long commentId, String content) {
 		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
 			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
 		});
 		comment.updateComment(content);
+		return comment;
 	}
 
 	@Transactional
 	public void deleteComment(Long commentId) {
 
-		Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(
-			() -> {
-				throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
-			});
+		Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(() -> {
+			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
+		});
 
-		if (comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
-			comment.changeDeletedStatus(DeleteStatus.Y);
-		} else { // 삭제 가능한 조상 댓글을 구해서 삭제
-			commentRepository.delete(getDeletableAncestorComment(comment));
-		}
+		removeCommentAccordingToChildComment(comment);
 	}
 
 	@Transactional
-	public void saveCommentLike(Long userSeq, Long commentId) {
+	public CommentLike saveCommentLike(Long userSeq, Long commentId) {
 
 		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
 			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_COMMENT);
 		});
+
+		commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, userSeq)
+			.ifPresent((commentLike -> {
+				throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_COMMENT_LIKE);
+			}));
+
 		CommentLike commentLike = CommentLike.createCommentLike(userSeq, comment);
-		commentLikeRepository.save(commentLike);
+		return commentLikeRepository.save(commentLike);
 	}
 
 	@Transactional
@@ -154,6 +164,14 @@ public class CommentServiceImpl {
 
 		return new CommentResponseDto(cnt, result);
 
+	}
+
+	private void removeCommentAccordingToChildComment(Comment comment) {
+		if (comment.getChildren().isEmpty()) {
+			commentRepository.delete(getDeletableAncestorComment(comment));
+		} else { // 삭제 가능한 조상 댓글을 구해서 삭제
+			comment.changeDeletedStatus(DeleteStatus.Y);
+		}
 	}
 
 }

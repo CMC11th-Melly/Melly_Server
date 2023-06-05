@@ -40,7 +40,8 @@ public enum ExceptionCodeAndDetails {
 	NO_SUCH_COMMENT_LIKE("2006", "댓글에 좋아요가 존재하지 않습니다."),
 	NO_SUCH_NOTIFICATION("2007", "알림이 존재하지 않습니다."),
 	DUPLICATED_GROUP("2008", "이미 수락한 그룹입니다"),
-	NO_AUTHORITY_TO_REMOVE("2009", "그룹을 삭제할 권한이 없습니다");
+	NO_AUTHORITY_TO_REMOVE("2009", "그룹을 삭제할 권한이 없습니다"),
+	DUPLICATED_COMMENT_LIKE("2010", "댓글에 좋아요가 중복되었습니다.");
 	private final String code;
 	private final String message;
 }

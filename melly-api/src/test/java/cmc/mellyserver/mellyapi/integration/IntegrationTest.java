@@ -13,6 +13,8 @@ import cmc.mellyserver.mellyapi.memory.application.MemoryService;
 import cmc.mellyserver.mellyapi.place.application.PlaceService;
 import cmc.mellyserver.mellyapi.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellyapi.user.application.UserService;
+import cmc.mellyserver.mellycore.comment.domain.repository.CommentLikeRepository;
+import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
@@ -30,6 +32,13 @@ public abstract class IntegrationTest {
 
 	@Autowired
 	protected CommentServiceImpl commentService;
+
+	@Autowired
+	protected CommentLikeRepository commentLikeRepository;
+
+	@Autowired
+	protected CommentRepository commentRepository;
+
 	@Autowired
 	protected UserRepository userRepository;
 

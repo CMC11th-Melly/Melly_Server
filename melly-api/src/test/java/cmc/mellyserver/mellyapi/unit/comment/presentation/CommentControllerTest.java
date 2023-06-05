@@ -22,6 +22,7 @@ import cmc.mellyserver.mellyapi.comment.presentation.dto.request.LikeRequest;
 import cmc.mellyserver.mellyapi.common.annotation.WithUser;
 import cmc.mellyserver.mellyapi.unit.ControllerTest;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
+import cmc.mellyserver.mellycore.comment.domain.CommentLike;
 
 public class CommentControllerTest extends ControllerTest {
 
@@ -30,7 +31,8 @@ public class CommentControllerTest extends ControllerTest {
 	@Test
 	void add_comment_like() throws Exception {
 
-		doNothing().when(commentService).saveCommentLike(anyLong(), anyLong());
+		CommentLike commentLike = CommentLike.createCommentLike(1L, null);
+		given(commentService.saveCommentLike(anyLong(), anyLong())).willReturn(commentLike);
 
 		// when
 		ResultActions perform = mockMvc.perform(post("/api/comment/like")
@@ -134,7 +136,9 @@ public class CommentControllerTest extends ControllerTest {
 
 		// given
 		CommentUpdateRequest commentUpdateRequest = new CommentUpdateRequest("수정된 내용");
-		doNothing().when(commentService).updateComment(anyLong(), anyString());
+		Comment comment = Comment.createComment("테스트 내용", 1L, 2L, null, 3L);
+
+		given(commentService.updateComment(anyLong(), anyString())).willReturn(comment);
 
 		// when
 		ResultActions perform = mockMvc.perform(put("/api/comment/1")
@@ -192,10 +196,4 @@ public class CommentControllerTest extends ControllerTest {
 			)));
 	}
 
-	@DisplayName("메모리에 달린 댓글 리스트를 가지고 온다.")
-	@WithUser
-	@Test
-	void get_comment_list() throws Exception {
-
-	}
 }
