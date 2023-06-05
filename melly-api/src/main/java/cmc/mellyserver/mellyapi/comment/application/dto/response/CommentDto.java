@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellyapi.comment.application.dto;
+package cmc.mellyserver.mellyapi.comment.application.dto.response;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -57,19 +57,19 @@ public class CommentDto implements Serializable {
 	// TODO : 조치 필요
 	public static CommentDto convertCommentToDto(Comment comment, User user, String mentionUserName) {
 
-		//        CommentDto commentDto =  comment.getIsDeleted() == DeleteStatus.Y ?
-		//                new CommentDto(comment.getId(), "삭제된 댓글입니다.", false,false,0,null, null,null,null,null) :
-		//                new CommentDto(comment.getId(), comment.getContent(),false,false,comment.getCommentLikes().size(),mentionUserName,comment.getWriterId(), comment.getWriter().getNickname(),comment.getWriter().getProfileImage(),comment.getCreatedDate());
-
-		//        if(comment.getWriter().getUserId().equals(user.getUserId()))
-		//        {
-		//            commentDto.setLoginUserWrite(true);
-		//        }
-		//        if(comment.getCommentLikes().stream().anyMatch(cl -> user.getCommentLikes().contains(cl)))
-		//        {
-		//            commentDto.setLoginUserLike(true);
-		//        }
-		//        return commentDto;
+		// CommentDto commentDto =  comment.getIsDeleted() == DeleteStatus.Y ?
+		//         new CommentDto(comment.getId(), "삭제된 댓글입니다.", false,false,0,null, null,null,null,null) :
+		//         new CommentDto(comment.getId(), comment.getContent(),false,false,comment.getCommentLikes().size(),mentionUserName,comment.getWriterId(), comment.getWriter().getNickname(),comment.getWriter().getProfileImage(),comment.getCreatedDate());
+		//
+		// if(comment.getWriterId().equals(user.getUserId()))
+		// {
+		//     commentDto.setLoginUserWrite(true);
+		// }
+		// if(comment.getCommentLikes().stream().anyMatch(cl -> user.getCommentLikes().contains(cl)))
+		// {
+		//     commentDto.setLoginUserLike(true);
+		// }
+		// return commentDto;
 		return null;
 	}
 }

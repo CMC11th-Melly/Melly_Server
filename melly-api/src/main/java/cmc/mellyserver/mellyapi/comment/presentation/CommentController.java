@@ -1,5 +1,6 @@
 package cmc.mellyserver.mellyapi.comment.presentation;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.mellyapi.comment.application.CommentService;
-import cmc.mellyserver.mellyapi.comment.application.dto.CommentResponseDto;
+import cmc.mellyserver.mellyapi.comment.application.dto.response.CommentResponseDto;
+import cmc.mellyserver.mellyapi.comment.application.impl.CommentServiceImpl;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.CommentAssembler;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentUpdateRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.LikeRequest;
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -26,20 +28,21 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/comment")
 public class CommentController {
 
-	private final CommentService commentService;
+	private final CommentServiceImpl commentService;
+
+	@DeleteMapping("/{commentId}/like")
+	public ResponseEntity<CommonResponse> removeCommentLike(@AuthenticationPrincipal User user,
+		@PathVariable Long commentId) {
+		commentService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
+		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+	}
 
 	@PostMapping("/like")
 	public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user,
 		@RequestBody LikeRequest likeRequest) {
+		System.out.println("hello");
 		commentService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
-		return ResponseEntity.ok(new CommonResponse(200, "댓글에 좋아요 추가 완료"));
-	}
-
-	@DeleteMapping("/{commentId}/like")
-	public ResponseEntity<CommonResponse> saveCommentLike(@AuthenticationPrincipal User user,
-		@PathVariable Long commentId) {
-		commentService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
-		return ResponseEntity.ok(new CommonResponse(200, "댓글에 좋아요 삭제 완료"));
+		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
 	@PostMapping
@@ -47,7 +50,7 @@ public class CommentController {
 		@RequestBody CommentRequest commentRequest) {
 		commentService.saveComment(
 			CommentAssembler.commentRequestDto(Long.parseLong(user.getUsername()), commentRequest));
-		return ResponseEntity.ok(new CommonResponse(200, "댓글 추가 완료"));
+		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
 	@GetMapping("/memory/{memoryId}")
@@ -59,13 +62,13 @@ public class CommentController {
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<CommonResponse> removeComment(@PathVariable Long commentId) {
 		commentService.deleteComment(commentId);
-		return ResponseEntity.ok(new CommonResponse(200, "댓글 삭제 완료"));
+		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 
 	@PutMapping("/{commentId}")
 	public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,
 		@RequestBody CommentUpdateRequest commentUpdateRequest) {
 		commentService.updateComment(commentId, commentUpdateRequest.getContent());
-		return ResponseEntity.ok(new CommonResponse(200, "성공"));
+		return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
 	}
 }

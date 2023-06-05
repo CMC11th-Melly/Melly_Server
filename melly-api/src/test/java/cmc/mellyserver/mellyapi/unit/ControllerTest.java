@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cmc.mellyserver.mellyapi.auth.application.OAuthService;
+import cmc.mellyserver.mellyapi.comment.application.impl.CommentServiceImpl;
+import cmc.mellyserver.mellyapi.comment.presentation.CommentController;
 import cmc.mellyserver.mellyapi.common.annotation.EnableMockMvc;
 import cmc.mellyserver.mellyapi.common.utils.DataExtractor;
 import cmc.mellyserver.mellyapi.config.SecurityConfig;
@@ -19,7 +21,7 @@ import cmc.mellyserver.mellyapi.group.application.GroupService;
 import cmc.mellyserver.mellyapi.group.presentation.GroupController;
 import cmc.mellyserver.mellyapi.memory.application.MemoryService;
 import cmc.mellyserver.mellyapi.memory.presentation.MemoryController;
-import cmc.mellyserver.mellyapi.notification.application.NotificationService;
+import cmc.mellyserver.mellyapi.notification.application.impl.NotificationServiceImpl;
 import cmc.mellyserver.mellyapi.notification.presentation.NotificationController;
 import cmc.mellyserver.mellyapi.place.application.PlaceService;
 import cmc.mellyserver.mellyapi.place.presentation.PlaceController;
@@ -27,12 +29,14 @@ import cmc.mellyserver.mellyapi.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellyapi.scrap.presentation.PlaceScrapController;
 import cmc.mellyserver.mellyapi.user.application.UserService;
 import cmc.mellyserver.mellyapi.user.presentation.UserController;
+import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
 
 @AutoConfigureRestDocs
 @WebMvcTest(value = {
 	UserController.class,
 	MemoryController.class,
 	GroupController.class,
+	CommentController.class,
 	PlaceController.class,
 	PlaceScrapController.class,
 	NotificationController.class
@@ -47,6 +51,9 @@ public class ControllerTest {
 	protected OAuthService oAuthService;
 
 	@MockBean
+	protected CommentServiceImpl commentService;
+
+	@MockBean
 	protected UserService userService;
 
 	@MockBean
@@ -56,10 +63,13 @@ public class ControllerTest {
 	protected PlaceService placeService;
 
 	@MockBean
+	protected NotificationRepository notificationRepository;
+
+	@MockBean
 	protected GroupService groupService;
 
 	@MockBean
-	protected NotificationService notificationService;
+	protected NotificationServiceImpl notificationService;
 
 	@MockBean
 	protected PlaceScrapService placeScrapService;

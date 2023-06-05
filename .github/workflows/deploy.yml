@@ -1,4 +1,4 @@
-name: KIYO CI
+name: Melly Prod CI
 
 on:
   workflow_dispatch

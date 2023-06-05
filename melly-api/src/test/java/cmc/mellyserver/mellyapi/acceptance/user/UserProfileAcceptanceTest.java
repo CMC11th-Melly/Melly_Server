@@ -12,7 +12,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
-public class UserProfileAcceptanceTest extends AcceptanceTest {
+class UserProfileAcceptanceTest extends AcceptanceTest {
 
 	@DisplayName("로그인하지 않은 사용자는 프로필을 수정할 수 없다.")
 	@Test

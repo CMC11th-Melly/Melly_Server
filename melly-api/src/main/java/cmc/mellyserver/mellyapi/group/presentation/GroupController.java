@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.group.application.GroupService;
 import cmc.mellyserver.mellyapi.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import lombok.RequiredArgsConstructor;
 

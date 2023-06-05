@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.constants;
+package cmc.mellyserver.mellyapi.common.constants;
 
 public abstract class MessageConstant {
 

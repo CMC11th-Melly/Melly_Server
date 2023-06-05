@@ -12,7 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -43,23 +45,15 @@ public class Comment extends JpaBaseEntity {
 
 	private Long metionUser;
 
-	private Long parentId; // 부모 id
-
-	private int step; // depth
-
-	private int childNum; // 자식 댓글 수
-
-	private int ref;
-
 	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommentLike> commentLikes = new ArrayList<>();
 
-	//    @ManyToOne(fetch = FetchType.LAZY)
-	//    @JoinColumn(name = "parent_id")
-	//    private Comment parent;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	private Comment parent;
 
-	//    @OneToMany(mappedBy = "parent",orphanRemoval = true)
-	//    private List<Comment> children = new ArrayList<>();
+	@OneToMany(mappedBy = "parent", orphanRemoval = true)
+	private List<Comment> children = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
 	private DeleteStatus isDeleted;
@@ -70,11 +64,12 @@ public class Comment extends JpaBaseEntity {
 		this.content = content;
 	}
 
-	public static Comment createComment(String content, Long writerId, Long memoryId, Long parentId, Long mentionUser) {
+	public static Comment createComment(String content, Long writerId, Long memoryId, Comment parent,
+		Long mentionUser) {
 		Comment comment = new Comment(content);
 		comment.memoryId = memoryId;
 		comment.writerId = writerId;
-		comment.parentId = parentId;
+		comment.parent = parent;
 		comment.isDeleted = DeleteStatus.N;
 		comment.setMentionUser(mentionUser);
 		return comment;
@@ -88,15 +83,13 @@ public class Comment extends JpaBaseEntity {
 		this.isDeleted = deleteStatus;
 	}
 
-	//    private void setParent(Comment parent)
-	//    {
-	//        this.parent = parent;
-	//        if(parent != null)
-	//        {
-	//            parent.getChildren().add(this);
-	//        }
-	//
-	//    }
+	private void setParent(Comment parent) {
+		this.parent = parent;
+		if (parent != null) {
+			parent.getChildren().add(this);
+		}
+
+	}
 
 	public void updateComment(String content) {
 		if (content != null) {
