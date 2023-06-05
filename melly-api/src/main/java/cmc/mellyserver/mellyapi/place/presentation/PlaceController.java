@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.place.application.PlaceService;
 import cmc.mellyserver.mellyapi.place.application.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.mellyapi.place.application.dto.PlaceResponseDto;
 import cmc.mellyserver.mellyapi.place.presentation.dto.PlaceAssembler;
 import cmc.mellyserver.mellyapi.place.presentation.dto.request.PlaceSimpleRequest;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

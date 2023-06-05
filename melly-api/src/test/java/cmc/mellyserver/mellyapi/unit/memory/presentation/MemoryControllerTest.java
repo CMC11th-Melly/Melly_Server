@@ -31,6 +31,7 @@ import cmc.mellyserver.mellyapi.place.presentation.dto.request.MemoryCreateReque
 import cmc.mellyserver.mellyapi.unit.ControllerTest;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 
@@ -262,10 +263,11 @@ public class MemoryControllerTest extends ControllerTest {
 			.title("메모리 제목")
 			.content("메모리 컨텐츠입니다. 20자 이상 들어가는지 테스트 중입니다")
 			.build();
+
 		MockMultipartFile memoryData = new MockMultipartFile("memoryData", "other-file-name.data", "application/json",
 			objectMapper.writeValueAsString(memoryCreateRequest).getBytes());
 
-		Mockito.doNothing().when(memoryService).createMemory(any(CreateMemoryRequestDto.class));
+		given(memoryService.createMemory(any(CreateMemoryRequestDto.class))).willReturn(any(Memory.class));
 
 		// when
 		ResultActions perform = mockMvc.perform(multipart(HttpMethod.POST, "/api/memory")

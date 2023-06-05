@@ -149,27 +149,23 @@ public class MemoryQueryRepository {
 
 		List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-		List<MemoryResponseDto> results = query.select(
+		List<MemoryResponseDto> result = query.select(
 				Projections.constructor(MemoryResponseDto.class, place.id, place.placeName, memory.id, memory.title,
 					memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName, memory.stars,
-					memory.userId.eq(userSeq), memory.visitedDate)) //  다른 사람이 작성한 메모리 가져오기
+					memory.userId.eq(userSeq), memory.visitedDate))
 			.from(memory)
 			.leftJoin(place).on(place.id.eq(memory.placeId))
 			.where(
-				memory.placeId.eq(placeId),  // 특정 장소에 속해있는지 체크
-				memory.userId.ne(userSeq), // 로그인 유저가 아닌 다른 사람이 작성했는지 체크
-				eqGroup(groupType), // 그룹 타입 체크
-				memory.isReported.isFalse(), // 신고되지 않은 메모리 조회
-				memory.isDelete.isFalse(),   // 삭제되지 않은 메모리 조회
-				memory.openType.eq(OpenType.ALL) // 다른 사람이 전체 공개로 올린 메모리만 보여주기
+				memory.userId.ne(userSeq), // 내가 작성자인 메모리
+				eqGroup(groupType)// 그룹 타입 필터링 용
 			)
 			.orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
-		initMemoryImageAndKeyword(results);
-		return transferToSlice(pageable, results);
+		initMemoryImageAndKeyword(result);
+		return transferToSlice(pageable, result);
 	}
 
 	// 해당 장소에 대해 내 그룹 사람들이 쓴 메모리 조회
@@ -178,7 +174,7 @@ public class MemoryQueryRepository {
 
 		List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-		List<MemoryResponseDto> results = query.select(
+		List<MemoryResponseDto> result = query.select(
 				Projections.constructor(MemoryResponseDto.class, place.id, place.placeName, memory.id, memory.title,
 					memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName, memory.stars,
 					memory.userId.eq(userSeq), memory.visitedDate))
@@ -192,7 +188,7 @@ public class MemoryQueryRepository {
 								.where(groupAndUser.user.userSeq.eq(userSeq))
 						)).distinct()
 				),
-				memory.placeId.eq(placeId),
+				memory.userId.ne(userSeq),
 				eqGroup(groupType),
 				memory.openType.ne(OpenType.PRIVATE)
 			)
@@ -201,8 +197,8 @@ public class MemoryQueryRepository {
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
-		initMemoryImageAndKeyword(results);
-		return transferToSlice(pageable, results);
+		initMemoryImageAndKeyword(result);
+		return transferToSlice(pageable, result);
 	}
 
 	public HashMap<String, Long> countMemoryOfPlace(Long placeId, Long userSeq) {

@@ -1,7 +1,6 @@
 package cmc.mellyserver.mellyapi.comment.presentation.dto.request;
 
-import org.springframework.lang.Nullable;
-
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +10,11 @@ public class LikeRequest {
 
 	private Long commentId;
 
-	@Nullable
 	private Long userId;
+
+	@Builder
+	public LikeRequest(Long commentId, Long userId) {
+		this.commentId = commentId;
+		this.userId = userId;
+	}
 }

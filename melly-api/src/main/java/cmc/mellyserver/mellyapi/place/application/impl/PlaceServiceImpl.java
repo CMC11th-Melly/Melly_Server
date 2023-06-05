@@ -39,7 +39,7 @@ public class PlaceServiceImpl implements PlaceService {
 	public List<MarkedPlaceResponseDto> displayMarkedPlace(Long userSeq, GroupType groupType) {
 		List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq);
 		return placeUserMemoryExist.stream()
-			.map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, null, null))
+			.map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), null))
 			.collect(Collectors.toList());
 	}
 

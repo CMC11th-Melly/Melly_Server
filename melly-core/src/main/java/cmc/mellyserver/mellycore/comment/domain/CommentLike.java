@@ -11,9 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "tb_comment_like")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike {

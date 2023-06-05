@@ -1,17 +1,18 @@
-package cmc.mellyserver.mellyapi.notification.application;
+package cmc.mellyserver.mellyapi.notification.infrastructure;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 
+import cmc.mellyserver.mellyapi.notification.application.impl.NotificationServiceImpl;
 import cmc.mellyserver.mellycore.common.enums.NotificationType;
 import cmc.mellyserver.mellycore.notification.domain.FCMMessage;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
-public class FCMService {
+public class FCMSender {
 
 	private static final String API_URL = "https://fcm.googleapis.com/v1/projects/melly-fdd90/messages:send";
-	private final NotificationService notificationService;
+	private final NotificationServiceImpl notificationService;
 	private final ObjectMapper objectMapper;
 
 	private String getAccessToken() throws IOException {

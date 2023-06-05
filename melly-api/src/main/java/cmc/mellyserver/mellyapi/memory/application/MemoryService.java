@@ -10,12 +10,13 @@ import cmc.mellyserver.mellyapi.memory.application.dto.request.UpdateMemoryReque
 import cmc.mellyserver.mellyapi.memory.application.dto.response.MemoryUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 
 public interface MemoryService {
 
-	void createMemory(CreateMemoryRequestDto createMemoryRequestDto);
+	Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto);
 
 	void removeMemory(Long memoryId);
 

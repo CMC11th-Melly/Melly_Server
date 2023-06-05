@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.memory.application.MemoryService;
 import cmc.mellyserver.mellyapi.memory.application.dto.response.MemoryUpdateFormResponseDto;
@@ -33,7 +34,6 @@ import cmc.mellyserver.mellyapi.memory.presentation.dto.common.wrapper.GetOtherM
 import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryResponse;
 import cmc.mellyserver.mellyapi.place.presentation.dto.request.MemoryCreateRequest;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;

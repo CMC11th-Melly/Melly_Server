@@ -62,8 +62,10 @@ public class MemoryServiceImpl implements MemoryService {
 
 	@Override
 	@Transactional
-	public void createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
+	public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
+
 		User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getUserSeq());
+
 		List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(),
 			createMemoryRequestDto.getMultipartFiles());
 
@@ -116,7 +118,7 @@ public class MemoryServiceImpl implements MemoryService {
 			// 키워드 등록
 			memory.setKeyword(createMemoryRequestDto.getKeyword());
 			// 트렌드 분석에 사용되는 장소 이름 추가
-			memoryRepository.save(memory);
+			return memoryRepository.save(memory);
 		} else {
 
 			Memory memory;
@@ -154,7 +156,7 @@ public class MemoryServiceImpl implements MemoryService {
 
 			memory.setPlaceId(placeOpt.get().getId());
 			memory.setKeyword(createMemoryRequestDto.getKeyword());
-			memoryRepository.save(memory);
+			return memoryRepository.save(memory);
 		}
 	}
 
@@ -165,7 +167,6 @@ public class MemoryServiceImpl implements MemoryService {
 
 	@Override
 	public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
-
 		return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
 	}
 
@@ -229,7 +230,7 @@ public class MemoryServiceImpl implements MemoryService {
 	@Transactional
 	public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
 
-		Memory memory = memoryRepository.findById(updateMemoryRequestDto.getGroupId()).orElseThrow(() -> {
+		Memory memory = memoryRepository.findById(updateMemoryRequestDto.getMemoryId()).orElseThrow(() -> {
 			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
 		});
 
@@ -256,7 +257,8 @@ public class MemoryServiceImpl implements MemoryService {
 	}
 
 	private void removeMemoryImages(UpdateMemoryRequestDto updateMemoryRequestDto, Memory memory) {
-		if (!updateMemoryRequestDto.getDeleteImageList().isEmpty()) {
+		if (!Objects.isNull(updateMemoryRequestDto.getDeleteImageList()) && !updateMemoryRequestDto.getDeleteImageList()
+			.isEmpty()) {
 			for (Long deleteId : updateMemoryRequestDto.getDeleteImageList()) {
 				memory.getMemoryImages().removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
 			}

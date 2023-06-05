@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellyapi.notification.presentation.dto;
+package cmc.mellyserver.mellyapi.notification.presentation.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;

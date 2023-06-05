@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.request.ScrapAssembler;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.request.ScrapCancelRequest;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.request.ScrapRequest;
-import cmc.mellyserver.mellycore.common.constants.MessageConstant;
 import lombok.RequiredArgsConstructor;
 
 @RestController

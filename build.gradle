@@ -3,14 +3,15 @@ plugins {
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'jacoco-report-aggregation'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // 원하는 모듈에서만 선택해서 사용 가능하다.
 }
 
 sourceCompatibility = 11
 
 // 조건에 맞는 서브 모듈만 선택하는 작업
-def coreProjects = subprojects.findAll {it.name.endsWith('core')}
-def apiProjects = subprojects.findAll {it.name.endsWith('api')}
+def coreProjects = subprojects.findAll { it.name.endsWith('core') }
+def apiProjects = subprojects.findAll { it.name.endsWith('api') }
 
 repositories {
     mavenCentral()
@@ -55,7 +56,7 @@ configure(coreProjects) {
     sourceSets {
         main.java.srcDir querydslDir
     }
-    compileQuerydsl{
+    compileQuerydsl {
         options.annotationProcessorPath = configurations.querydsl
     }
 
@@ -81,6 +82,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
+    apply plugin: 'jacoco-report-aggregation'
     apply plugin: 'org.asciidoctor.jvm.convert'
 
 
@@ -108,8 +110,8 @@ subprojects {
 
         // source가 없으면 .adoc파일을 전부 html로 만들어버림
         // source 지정시 특정 adoc만 HTML로 만든다.
-        sources{
-            include("**/index.adoc","**/common/*.adoc")
+        sources {
+            include("**/index.adoc", "**/common/*.adoc")
         }
     }
 
@@ -131,7 +133,6 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-
         asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
         testImplementation 'io.rest-assured:rest-assured:5.3.0'
         testImplementation 'io.rest-assured:xml-path:5.3.0'
@@ -150,16 +151,18 @@ subprojects {
     }
 
     jacocoTestReport {
+
         reports {
             // 원하는 리포트를 켜고 끌 수 있습니다.
             html.enabled true
             xml.enabled false
             csv.enabled false
         }
+        
 
         def Qdomains = []
-        for(qPattern in "**/QA" .. "**/QZ"){
-            Qdomains.add(qPattern+"*")
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
         }
 
         afterEvaluate {
@@ -181,7 +184,8 @@ subprojects {
                                 '**/*Key*'
                         ] + Qdomains)
             }
-            ))}
+            ))
+        }
 
         finalizedBy 'jacocoTestCoverageVerification'
     }
@@ -204,7 +208,7 @@ subprojects {
                 }
 
                 excludes = [
-                        '**.*MellyServerApplication*',
+                        '**.*Application*',
                         '**.*Request*',
                         '**.*Response*',
                         '**.*Dto*',

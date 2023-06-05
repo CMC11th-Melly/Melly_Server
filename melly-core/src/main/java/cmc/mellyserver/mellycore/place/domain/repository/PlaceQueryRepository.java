@@ -39,10 +39,6 @@ public class PlaceQueryRepository {
 		this.query = new JPAQueryFactory(em);
 	}
 
-	/**
-	 * 추천 장소 조회 -> 차후에 추천 로직으로 변경 예정
-	 * TODO : 최종 수정
-	 */
 	public List<Place> getTrendingPlace(List<Long> placeIds) {
 		return query.select(place)
 			.from(place)
@@ -50,10 +46,6 @@ public class PlaceQueryRepository {
 			.fetch();
 	}
 
-	/**
-	 * 트렌딩 장소 조회 -> 차후에 레디스 기반 트렌딩 로직으로 변경 예정
-	 * TODO : 최종 수정
-	 */
 	public List<Place> getRecommendPlace(List<Long> placeIds) {
 		return query.select(place)
 			.from(place)
@@ -61,38 +53,17 @@ public class PlaceQueryRepository {
 			.fetch();
 	}
 
-	/**
-	 * placeId로 장소 조회
-	 */
+	public List<Place> getPlaceUserMemoryExist(Long userSeq) {
 
-	//
-	public Place searchPlaceByPlaceId(Long placeId) {
 		return query.select(place)
 			.from(place)
-			.where(place.id.eq(placeId))
-			.fetchOne();
-	}
-
-	/** TODO : 수정 완료
-	 * 로그인 유저의 메모리가 존재하는 장소 조회 (최적화 완료), 나의 메모리는 신고 당해도 나한테 보이도록 하기!
-	 * 차단 당해도 내 메모리는 보여야 하니 해당사항 없음! (차단 필터링 x)
-	 */
-	public List<Place> getPlaceUserMemoryExist(Long userSeq) {
-		List<Tuple> result = query.select(place.position, place.id)
-			.from(place)
-			.leftJoin(memory).on(memory.placeId.eq(place.id))
 			.where(
-				memory.userId.eq(userSeq)
+				JPAExpressions.selectFrom(memory).where(memory.placeId.eq(place.id), memory.userId.eq(userSeq)).exists()
 			)
-			.distinct()
 			.fetch();
-		return null;
+
 	}
 
-	/**
-	 * 스크랩 타입별 유저가 스크랩한 장소 개수 조회(최적화 완료, projection 사용으로 fetch join 불가)
-	 * TODO : 수정 완료
-	 */
 	public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(User user) {
 		return query.select(
 				Projections.fields(PlaceScrapCountResponseDto.class, placeScrap.scrapType, place.count().as("scrapCount")))
@@ -103,9 +74,6 @@ public class PlaceQueryRepository {
 			.fetch();
 	}
 
-	/**
-	 * 유저가 스크랩한 장소 조회
-	 */
 	public Slice<ScrapedPlaceResponseDto> getScrapedPlace(Pageable pageable, Long userSeq, ScrapType scrapType) {
 		List<ScrapedPlaceResponseDto> results = query.select(
 				Projections.constructor(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory,

@@ -9,7 +9,7 @@ import cmc.mellyserver.mellyapi.common.aws.FileUploader;
 public class MockFileUploader implements FileUploader {
 	@Override
 	public List<String> getMultipartFileNames(String uid, List<MultipartFile> multipartFiles) {
-		return List.of("file1.png", "file2.png");
+		return List.of("file1.png");
 	}
 
 	@Override
