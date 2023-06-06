@@ -1,5 +1,7 @@
 package cmc.mellyserver.mellycore.user.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -49,6 +51,22 @@ public class User extends JpaBaseEntity {
 
 	private String profileImage;
 
+	@Embedded
+	private Recommend recommend;
+
+	@Column(name = "store_capacity")
+	private Double storeCapacity;
+
+	private String fcmToken;
+
+	private boolean enableAppPush;
+
+	private boolean enableCommentLike;
+
+	private boolean enableComment;
+
+	private LocalDateTime passwordInitDate;
+
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
@@ -60,22 +78,15 @@ public class User extends JpaBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private RoleType roleType;
-	@Embedded
-	private Recommend recommend;
-
-	@Column(name = "store_capacity")
-	private Double storeCapacity;
 
 	@Enumerated(EnumType.STRING)
 	private DeleteStatus isDeleted;
 
-	private String fcmToken;
+	@Enumerated(EnumType.STRING)
+	private UserStatus userStatus;
 
-	private boolean enableAppPush;
-
-	private boolean enableCommentLike;
-
-	private boolean enableComment;
+	@Enumerated(EnumType.STRING)
+	private PwChangeNeedStatus pwChangeNeedStatus;
 
 	public User(String uid, Provider provider, RoleType roleType, String password) {
 		this.userId = uid;
@@ -124,22 +135,10 @@ public class User extends JpaBaseEntity {
 		this.recommend = new Recommend(recommendGroup, recommendPlace, recommendActivity);
 	}
 
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
 	public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup) {
-		if (nickname != null) {
-			this.nickname = nickname;
-		}
-
-		if (gender != null) {
-			this.gender = gender;
-		}
-
-		if (ageGroup != null) {
-			this.ageGroup = ageGroup;
-		}
+		this.nickname = nickname;
+		this.gender = gender;
+		this.ageGroup = ageGroup;
 	}
 
 	public void chnageProfileImage(String image) {
@@ -149,6 +148,12 @@ public class User extends JpaBaseEntity {
 	@PrePersist
 	private void init() {
 		this.isDeleted = DeleteStatus.N;
+		this.userStatus = UserStatus.ACTIVE;
+		if (this.provider.equals(Provider.DEFAULT)) {
+			this.passwordInitDate = LocalDateTime.now();
+			this.pwChangeNeedStatus = PwChangeNeedStatus.N;
+		}
+
 	}
 
 	public void removeUser() {
@@ -165,5 +170,15 @@ public class User extends JpaBaseEntity {
 
 	public void setEnableComment(boolean enableComment) {
 		this.enableComment = enableComment;
+	}
+
+	public User setInactive() {
+		this.userStatus = UserStatus.INACTIVE;
+		return this;
+	}
+
+	public User setPasswordChangeNeedStatus() {
+		this.pwChangeNeedStatus = PwChangeNeedStatus.Y;
+		return this;
 	}
 }
