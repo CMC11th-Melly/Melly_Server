@@ -13,7 +13,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cmc.mellyserver.mellybatch.common.AccountPolicy;
+import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
 import cmc.mellyserver.mellycore.user.domain.PwChangeNeedStatus;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
@@ -31,10 +31,7 @@ public class PasswordChangeJobConfig {
 
 	@Bean
 	public Job passwordChangeJob() {
-		return jobBuilderFactory.get("passwordChangeJob")
-			.preventRestart()
-			.start(passwordChangeStep())
-			.build();
+		return jobBuilderFactory.get("passwordChangeJob").preventRestart().start(passwordChangeStep()).build();
 	}
 
 	@Bean
@@ -45,18 +42,15 @@ public class PasswordChangeJobConfig {
 			// (2) chunk 사이즈 입력
 			.<User, User>chunk(10)
 			// (3) reader, processor, writer를 각각 설정
-			.reader(passwordChangeReader())
-			.processor(passwordChangeProcessor())
-			.writer(passwordChangeWriter())
-			.build();
+			.reader(passwordChangeReader()).processor(passwordChangeProcessor()).writer(passwordChangeWriter()).build();
 	}
 
 	@Bean
-	@StepScope // (1) Step의 주기에 따라 새로운 빈 생성
+	@StepScope
 	public QueueItemReader<User> passwordChangeReader() {
-		List<User> oldUsers =
-			userRepository.findByPasswordInitDateBeforeAndPwChangeNeedStatusEquals(
-				LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION), PwChangeNeedStatus.N);
+
+		List<User> oldUsers = userRepository.findByPasswordInitDateBeforeAndPwChangeNeedStatusEquals(
+			LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION), PwChangeNeedStatus.N);
 		return new QueueItemReader<>(oldUsers);
 	}
 
@@ -64,7 +58,7 @@ public class PasswordChangeJobConfig {
 		return new ItemProcessor<User, User>() {
 			@Override
 			public User process(User user) throws Exception {
-				return user.setPasswordChangeNeedStatus();
+				return user.setPwChangeStatusAndUpdateLastChangedDate(LocalDateTime.now());
 			}
 		};
 	}

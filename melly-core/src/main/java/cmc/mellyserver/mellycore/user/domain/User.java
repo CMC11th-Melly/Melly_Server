@@ -177,8 +177,9 @@ public class User extends JpaBaseEntity {
 		return this;
 	}
 
-	public User setPasswordChangeNeedStatus() {
+	public User setPwChangeStatusAndUpdateLastChangedDate(LocalDateTime localDateTime) {
 		this.pwChangeNeedStatus = PwChangeNeedStatus.Y;
+		this.passwordInitDate = localDateTime;
 		return this;
 	}
 }

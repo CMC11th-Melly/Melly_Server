@@ -13,6 +13,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.UserStatus;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
@@ -55,7 +56,7 @@ public class InactiveUserJobConfig {
 	public QueueItemReader<User> inactiveUserReader() {
 		List<User> oldUsers =
 			userRepository.findByLastModifiedDateBeforeAndUserStatusEquals(
-				LocalDateTime.now().minusYears(1), UserStatus.ACTIVE);
+				LocalDateTime.now().minusYears(AccountPolicy.INACTIVE_USER_DURATION), UserStatus.ACTIVE);
 		return new QueueItemReader<>(oldUsers);
 	}
 
