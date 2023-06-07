@@ -18,8 +18,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
-@Import(JpaTestConfiguration.class)
 @DataJpaTest
+@Import(JpaTestConfiguration.class)
+
 public class UserRepositoryTest {
 
     @Autowired
