@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import cmc.mellyserver.mellycore.common.enums.AgeGroup;
 import cmc.mellyserver.mellycore.common.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.enums.Gender;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.common.enums.RecommendActivity;
 import cmc.mellyserver.mellycore.common.enums.RecommendGroup;
 import cmc.mellyserver.mellycore.common.enums.RecommendPlace;
@@ -34,7 +35,12 @@ public class UserTest {
 	void update_user_profile() {
 
 		// given
-		User user = User.builder().nickname("원래 닉네임").gender(Gender.MALE).ageGroup(AgeGroup.TWO).build();
+		User user = User.builder()
+			.nickname("원래 닉네임")
+			.gender(Gender.MALE)
+			.provider(Provider.GOOGLE)
+			.ageGroup(AgeGroup.TWO)
+			.build();
 
 		// when
 		user.updateProfile("원래 닉네임", Gender.FEMALE, AgeGroup.THREE);

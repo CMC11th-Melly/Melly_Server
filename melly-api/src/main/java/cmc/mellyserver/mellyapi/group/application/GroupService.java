@@ -6,13 +6,13 @@ import cmc.mellyserver.mellycore.group.domain.UserGroup;
 
 public interface GroupService {
 
-	UserGroup findGroupById(Long groupId);
+    UserGroup findGroupById(Long groupId);
 
-	UserGroup saveGroup(CreateGroupRequestDto createGroupRequestDto);
+    UserGroup saveGroup(CreateGroupRequestDto createGroupRequestDto);
 
-	void participateToGroup(Long loginUserSeq, Long groupId);
+    void participateToGroup(Long loginUserSeq, Long groupId);
 
-	void updateGroup(UpdateGroupRequestDto updateGroupRequestDto);
+    void updateGroup(UpdateGroupRequestDto updateGroupRequestDto);
 
-	void removeGroup(Long groupOwnerUserSeq, Long groupId);
+    void removeGroup(Long groupOwnerUserSeq, Long groupId);
 }

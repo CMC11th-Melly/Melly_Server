@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NaverUserData {
-	private String resultcode;
-	private String message;
-	private Response response;
 
-	@Data
-	@NoArgsConstructor
-	public class Response {
+    private String resultcode;
+    private String message;
+    private Response response;
 
-		private String id;
-		private String email;
-		private String nickname;
+    @Data
+    @NoArgsConstructor
+    public class Response {
 
-	}
+        private String id;
+        private String email;
+        private String nickname;
+
+    }
 }

@@ -6,12 +6,12 @@ import lombok.Data;
 @Data
 public class LoginResponse {
 
-	private AccessTokenUserData user;
-	private String token;
+    private AccessTokenUserData user;
+    private String token;
 
-	@Builder
-	public LoginResponse(AccessTokenUserData user, String token) {
-		this.user = user;
-		this.token = token;
-	}
+    @Builder
+    public LoginResponse(AccessTokenUserData user, String token) {
+        this.user = user;
+        this.token = token;
+    }
 }

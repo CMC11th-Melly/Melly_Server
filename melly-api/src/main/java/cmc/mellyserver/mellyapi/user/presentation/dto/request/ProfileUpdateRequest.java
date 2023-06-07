@@ -1,26 +1,25 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto.request;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import cmc.mellyserver.mellycore.common.enums.AgeGroup;
 import cmc.mellyserver.mellycore.common.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class ProfileUpdateRequest {
 
-	private MultipartFile profileImage;
+    private MultipartFile profileImage;
 
-	private String nickname;
+    private String nickname;
 
-	private Gender gender;
+    private Gender gender;
 
-	private AgeGroup ageGroup;
+    private AgeGroup ageGroup;
 
-	private boolean deleteImage;
+    private boolean deleteImage;
 
 }

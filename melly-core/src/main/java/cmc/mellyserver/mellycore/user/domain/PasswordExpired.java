@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-public enum PwChangeNeedStatus {
+public enum PasswordExpired {
 	Y,
 	N
 }

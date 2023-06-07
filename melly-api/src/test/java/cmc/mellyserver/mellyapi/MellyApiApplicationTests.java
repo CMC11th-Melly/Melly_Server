@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 public class MellyApiApplicationTests {
 
-	@Test
-	void contextLoads() {
+    @Test
+    void contextLoads() {
 
-	}
+    }
 }

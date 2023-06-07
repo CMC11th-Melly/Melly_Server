@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GoogleUserData {
 
-	private String sub;
-	private String email;
-	private Boolean email_verified;
+    private String sub;
+    private String email;
+    private Boolean email_verified;
 
 }

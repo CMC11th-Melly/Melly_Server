@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SurveyRequest {
 
-	private RecommendGroup recommendGroup;
-	private RecommendPlace recommendPlace;
-	private RecommendActivity recommendActivity;
+    private RecommendGroup recommendGroup;
+    private RecommendPlace recommendPlace;
+    private RecommendActivity recommendActivity;
 
-	@Builder
-	public SurveyRequest(RecommendGroup recommendGroup, RecommendPlace recommendPlace,
-		RecommendActivity recommendActivity) {
-		this.recommendGroup = recommendGroup;
-		this.recommendPlace = recommendPlace;
-		this.recommendActivity = recommendActivity;
-	}
+    @Builder
+    public SurveyRequest(RecommendGroup recommendGroup, RecommendPlace recommendPlace,
+            RecommendActivity recommendActivity) {
+        this.recommendGroup = recommendGroup;
+        this.recommendPlace = recommendPlace;
+        this.recommendActivity = recommendActivity;
+    }
 }

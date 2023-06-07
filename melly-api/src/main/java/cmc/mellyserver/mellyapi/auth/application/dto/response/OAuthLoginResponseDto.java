@@ -14,7 +14,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class OAuthLoginResponseDto {
-	private String accessToken;
-	private Boolean isNewUser;
-	private User user;
+
+    private String accessToken;
+    private Boolean isNewUser;
+    private User user;
 }

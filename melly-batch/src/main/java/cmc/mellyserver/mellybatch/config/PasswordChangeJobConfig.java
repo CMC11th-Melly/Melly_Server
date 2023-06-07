@@ -1,8 +1,13 @@
 package cmc.mellyserver.mellybatch.config;
 
+import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
+import cmc.mellyserver.mellycore.user.domain.PasswordExpired;
+import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -13,57 +18,53 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
-import cmc.mellyserver.mellycore.user.domain.PwChangeNeedStatus;
-import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class PasswordChangeJobConfig {
 
-	private final UserRepository userRepository;
-	private final JobBuilderFactory jobBuilderFactory;
-	private final StepBuilderFactory stepBuilderFactory;
+    private final UserRepository userRepository;
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
-	@Bean
-	public Job passwordChangeJob() {
-		return jobBuilderFactory.get("passwordChangeJob").preventRestart().start(passwordChangeStep()).build();
-	}
+    @Bean
+    public Job passwordChangeJob() {
+        return jobBuilderFactory.get("passwordChangeJob").preventRestart()
+                .start(passwordChangeStep()).build();
+    }
 
-	@Bean
-	public Step passwordChangeStep() {
+    @Bean
+    public Step passwordChangeStep() {
 
-		// (1)  StepBuilderFactory 주입
-		return stepBuilderFactory.get("passwordChangeStep")
-			// (2) chunk 사이즈 입력
-			.<User, User>chunk(10)
-			// (3) reader, processor, writer를 각각 설정
-			.reader(passwordChangeReader()).processor(passwordChangeProcessor()).writer(passwordChangeWriter()).build();
-	}
+        // (1)  StepBuilderFactory 주입
+        return stepBuilderFactory.get("passwordChangeStep")
+                // (2) chunk 사이즈 입력
+                .<User, User>chunk(10)
+                // (3) reader, processor, writer를 각각 설정
+                .reader(passwordChangeReader()).processor(passwordChangeProcessor())
+                .writer(passwordChangeWriter()).build();
+    }
 
-	@Bean
-	@StepScope
-	public QueueItemReader<User> passwordChangeReader() {
+    @Bean
+    @StepScope
+    public QueueItemReader<User> passwordChangeReader() {
 
-		List<User> oldUsers = userRepository.findByPasswordInitDateBeforeAndPwChangeNeedStatusEquals(
-			LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION), PwChangeNeedStatus.N);
-		return new QueueItemReader<>(oldUsers);
-	}
+        List<User> oldUsers = userRepository.findByPasswordInitDateBeforeAndPasswordExpiredEquals(
+                LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION),
+                PasswordExpired.N);
+        return new QueueItemReader<>(oldUsers);
+    }
 
-	public ItemProcessor<User, User> passwordChangeProcessor() {
-		return new ItemProcessor<User, User>() {
-			@Override
-			public User process(User user) throws Exception {
-				return user.setPwChangeStatusAndUpdateLastChangedDate(LocalDateTime.now());
-			}
-		};
-	}
+    public ItemProcessor<User, User> passwordChangeProcessor() {
+        return new ItemProcessor<User, User>() {
+            @Override
+            public User process(User user) throws Exception {
+                return user.setPwChangeStatusAndUpdateLastChangedDate(LocalDateTime.now());
+            }
+        };
+    }
 
-	public ItemWriter<User> passwordChangeWriter() {
-		return ((List<? extends User> users) -> userRepository.saveAll(users));
-	}
+    public ItemWriter<User> passwordChangeWriter() {
+        return ((List<? extends User> users) -> userRepository.saveAll(users));
+    }
 }
