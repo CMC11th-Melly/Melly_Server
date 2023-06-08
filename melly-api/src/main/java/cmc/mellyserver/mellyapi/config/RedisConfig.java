@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.config;
+package cmc.mellyserver.mellyapi.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
