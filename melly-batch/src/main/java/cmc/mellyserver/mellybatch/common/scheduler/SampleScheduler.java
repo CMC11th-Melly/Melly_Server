@@ -1,7 +1,6 @@
 package cmc.mellyserver.mellybatch.common.scheduler;
 
 import java.util.Collections;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -17,30 +16,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class SampleScheduler {
 
-	@Autowired
-	private Job inactiveUserJob;
+    @Autowired
+    private Job inactiveUserJob;
 
-	@Autowired
-	private Job passwordChangeJob;
+    @Autowired
+    private Job passwordChangeJob;
 
-	@Autowired
-	private JobLauncher jobLauncher;
+    @Autowired
+    private JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 */1 * * * *")
-	public void passwordChangeJobRun() throws
-		JobInstanceAlreadyCompleteException,
-		JobExecutionAlreadyRunningException,
-		JobParametersInvalidException,
-		JobRestartException {
+    @Scheduled(cron = "0 */1 * * * *")
+    public void passwordChangeJobRun() throws
+            JobInstanceAlreadyCompleteException,
+            JobExecutionAlreadyRunningException,
+            JobParametersInvalidException,
+            JobRestartException {
 
-		JobParameters jobParameters = new JobParameters(
-			Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis()))
-		);
+        JobParameters jobParameters = new JobParameters(
+                Collections.singletonMap("requestTime",
+                        new JobParameter(System.currentTimeMillis()))
+        );
 
-		jobLauncher.run(passwordChangeJob, jobParameters);
-	}
+        jobLauncher.run(passwordChangeJob, jobParameters);
+    }
 
-	public void inactiveUserJobRun() {
+    @Scheduled(cron = "0 */1 * * * *")
+    public void inactiveUserJobRun()
+            throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
-	}
+        JobParameters jobParameters = new JobParameters(
+                Collections.singletonMap("requestTime",
+                        new JobParameter(System.currentTimeMillis()))
+        );
+
+        jobLauncher.run(inactiveUserJob, jobParameters);
+    }
 }
