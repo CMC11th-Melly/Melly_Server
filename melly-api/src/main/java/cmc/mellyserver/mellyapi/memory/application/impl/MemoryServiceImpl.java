@@ -1,15 +1,5 @@
 package cmc.mellyserver.mellyapi.memory.application.impl;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import cmc.mellyserver.mellyapi.common.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellyapi.common.aws.FileUploader;
 import cmc.mellyserver.mellyapi.common.exception.ExceptionCodeAndDetails;
@@ -37,231 +27,272 @@ import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.mellycore.user.domain.User;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemoryServiceImpl implements MemoryService {
 
-	private final AuthenticatedUserChecker authenticatedUserChecker;
+    private final AuthenticatedUserChecker authenticatedUserChecker;
 
-	private final MemoryRepository memoryRepository;
+    private final MemoryRepository memoryRepository;
 
-	private final MemoryQueryRepository memoryQueryRepository;
+    private final MemoryQueryRepository memoryQueryRepository;
 
-	private final PlaceRepository placeRepository;
+    private final PlaceRepository placeRepository;
 
-	private final FileUploader fileUploader;
+    private final FileUploader fileUploader;
 
-	private final GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-	private final UserGroupQueryRepository userGroupQueryRepository;
+    private final UserGroupQueryRepository userGroupQueryRepository;
 
-	private final GroupAndUserRepository groupAndUserRepository;
+    private final GroupAndUserRepository groupAndUserRepository;
 
-	@Override
-	@Transactional
-	public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
+    @Override
+    @Transactional
+    public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
 
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getUserSeq());
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(
+                createMemoryRequestDto.getUserSeq());
 
-		List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(),
-			createMemoryRequestDto.getMultipartFiles());
+        List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(),
+                createMemoryRequestDto.getMultipartFiles());
 
-		Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(createMemoryRequestDto.getLat(),
-			createMemoryRequestDto.getLng())); // 해당 좌표를 가진 장소 정보가 기존에 존재하는지 체크
+        Optional<Place> placeOpt = placeRepository.findPlaceByPosition(
+                new Position(createMemoryRequestDto.getLat(),
+                        createMemoryRequestDto.getLng())); // 해당 좌표를 가진 장소 정보가 기존에 존재하는지 체크
 
-		// 만약 아직 장소가 없다면?
-		if (placeOpt.isEmpty()) {
-			Place savePlace = placeRepository.save(Place.builder()
-				.position(new Position(createMemoryRequestDto.getLat(), createMemoryRequestDto.getLng()))
-				.placeCategory(createMemoryRequestDto.getPlaceCategory())
-				.placeName(createMemoryRequestDto.getPlaceName())
-				.build());
+        // 만약 아직 장소가 없다면?
+        if (placeOpt.isEmpty()) {
+            Place savePlace = placeRepository.save(Place.builder()
+                    .position(new Position(createMemoryRequestDto.getLat(),
+                            createMemoryRequestDto.getLng()))
+                    .placeCategory(createMemoryRequestDto.getPlaceCategory())
+                    .placeName(createMemoryRequestDto.getPlaceName())
+                    .build());
 
-			Memory memory;
+            Memory memory;
 
-			// 1. 만약 그룹이 없다면?
-			if (createMemoryRequestDto.getGroupId() == null || createMemoryRequestDto.getGroupId() == -1L) {
-				memory = Memory.builder()
-					.title(createMemoryRequestDto.getTitle())
-					.content(createMemoryRequestDto.getContent())
-					.openType(OpenType.ALL)
-					.groupInfo(new GroupInfo("그룹 미설정", GroupType.ALL, -1L))
-					.openType(createMemoryRequestDto.getOpenType())
-					.stars(createMemoryRequestDto.getStar())
-					.visitedDate(createMemoryRequestDto.getVisitedDate())
-					.build();
-			} else {
-				UserGroup userGroup = groupRepository.findById(createMemoryRequestDto.getGroupId()).orElseThrow(() -> {
-					throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
-				});
-				memory = Memory.builder()
-					.title(createMemoryRequestDto.getTitle())
-					.content(createMemoryRequestDto.getContent())
-					.groupInfo(new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
-						createMemoryRequestDto.getGroupId()))
-					.visitedDate(createMemoryRequestDto.getVisitedDate())
-					.openType(createMemoryRequestDto.getOpenType())
-					.stars(createMemoryRequestDto.getStar())
-					.build();
-			}
+            // 1. 만약 그룹이 없다면?
+            if (createMemoryRequestDto.getGroupId() == null
+                    || createMemoryRequestDto.getGroupId() == -1L) {
+                memory = Memory.builder()
+                        .title(createMemoryRequestDto.getTitle())
+                        .content(createMemoryRequestDto.getContent())
+                        .openType(OpenType.ALL)
+                        .groupInfo(new GroupInfo("그룹 미설정", GroupType.ALL, -1L))
+                        .openType(createMemoryRequestDto.getOpenType())
+                        .stars(createMemoryRequestDto.getStar())
+                        .visitedDate(createMemoryRequestDto.getVisitedDate())
+                        .build();
+            } else {
+                UserGroup userGroup = groupRepository.findById(createMemoryRequestDto.getGroupId())
+                        .orElseThrow(() -> {
+                            throw new GlobalBadRequestException(
+                                    ExceptionCodeAndDetails.NO_SUCH_GROUP);
+                        });
+                memory = Memory.builder()
+                        .title(createMemoryRequestDto.getTitle())
+                        .content(createMemoryRequestDto.getContent())
+                        .groupInfo(new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
+                                createMemoryRequestDto.getGroupId()))
+                        .visitedDate(createMemoryRequestDto.getVisitedDate())
+                        .openType(createMemoryRequestDto.getOpenType())
+                        .stars(createMemoryRequestDto.getStar())
+                        .build();
+            }
 
-			// user 세팅
-			memory.setUserId(createMemoryRequestDto.getUserSeq());
-			// memoryImage 세팅
-			memory.setMemoryImages(
-				multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
-			// 연관된 장소 세팅
-			memory.setPlaceId(savePlace.getId());
-			// 키워드 등록
-			memory.setKeyword(createMemoryRequestDto.getKeyword());
-			// 트렌드 분석에 사용되는 장소 이름 추가
-			return memoryRepository.save(memory);
-		} else {
+            // user 세팅
+            memory.setUserId(createMemoryRequestDto.getUserSeq());
+            // memoryImage 세팅
+            memory.setMemoryImages(
+                    multipartFileNames.stream().map(m -> new MemoryImage(m))
+                            .collect(Collectors.toList()));
+            // 연관된 장소 세팅
+            memory.setPlaceId(savePlace.getId());
+            // 키워드 등록
+            memory.setKeyword(createMemoryRequestDto.getKeyword());
+            // 트렌드 분석에 사용되는 장소 이름 추가
+            return memoryRepository.save(memory);
+        } else {
 
-			Memory memory;
+            Memory memory;
 
-			if (createMemoryRequestDto.getGroupId() == null || createMemoryRequestDto.getGroupId() == -1L) {
-				memory = Memory.builder()
-					.title(createMemoryRequestDto.getTitle())
-					.content(createMemoryRequestDto.getContent())
-					.groupInfo(new GroupInfo("그룹 미설정", GroupType.ALL, -1L))
-					.openType(createMemoryRequestDto.getOpenType())
-					.stars(createMemoryRequestDto.getStar())
-					.visitedDate(createMemoryRequestDto.getVisitedDate())
-					.build();
-			} else {
-				UserGroup userGroup = groupRepository.findById(createMemoryRequestDto.getGroupId()).orElseThrow(() -> {
-					throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
-				});
-				memory = Memory.builder()
-					.title(createMemoryRequestDto.getTitle())
-					.content(createMemoryRequestDto.getContent())
-					.groupInfo(new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
-						createMemoryRequestDto.getGroupId()))
-					.openType(createMemoryRequestDto.getOpenType())
-					.stars(createMemoryRequestDto.getStar())
-					.visitedDate(createMemoryRequestDto.getVisitedDate())
-					.build();
-			}
+            if (createMemoryRequestDto.getGroupId() == null
+                    || createMemoryRequestDto.getGroupId() == -1L) {
+                memory = Memory.builder()
+                        .title(createMemoryRequestDto.getTitle())
+                        .content(createMemoryRequestDto.getContent())
+                        .groupInfo(new GroupInfo("그룹 미설정", GroupType.ALL, -1L))
+                        .openType(createMemoryRequestDto.getOpenType())
+                        .stars(createMemoryRequestDto.getStar())
+                        .visitedDate(createMemoryRequestDto.getVisitedDate())
+                        .build();
+            } else {
+                UserGroup userGroup = groupRepository.findById(createMemoryRequestDto.getGroupId())
+                        .orElseThrow(() -> {
+                            throw new GlobalBadRequestException(
+                                    ExceptionCodeAndDetails.NO_SUCH_GROUP);
+                        });
+                memory = Memory.builder()
+                        .title(createMemoryRequestDto.getTitle())
+                        .content(createMemoryRequestDto.getContent())
+                        .groupInfo(new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
+                                createMemoryRequestDto.getGroupId()))
+                        .openType(createMemoryRequestDto.getOpenType())
+                        .stars(createMemoryRequestDto.getStar())
+                        .visitedDate(createMemoryRequestDto.getVisitedDate())
+                        .build();
+            }
 
-			memory.setUserId(createMemoryRequestDto.getUserSeq());
+            memory.setUserId(createMemoryRequestDto.getUserSeq());
 
-			if (multipartFileNames != null) {
-				memory.setMemoryImages(
-					multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
-			}
+            if (multipartFileNames != null) {
+                memory.setMemoryImages(
+                        multipartFileNames.stream().map(m -> new MemoryImage(m))
+                                .collect(Collectors.toList()));
+            }
 
-			memory.setPlaceId(placeOpt.get().getId());
-			memory.setKeyword(createMemoryRequestDto.getKeyword());
-			return memoryRepository.save(memory);
-		}
-	}
+            memory.setPlaceId(placeOpt.get().getId());
+            memory.setKeyword(createMemoryRequestDto.getKeyword());
+            return memoryRepository.save(memory);
+        }
+    }
 
-	@Override
-	public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipate(Long userSeq) {
-		return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
-	}
+    @Cacheable(value = "findGroups", key = "#userSeq")
+    @Override
+    public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipate(Long userSeq) {
+        return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
+    }
 
-	@Override
-	public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
-		return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
-	}
+    @Cacheable(value = "memory")
+    @Override
+    public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
+        return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
+    }
 
-	@Override
-	public Slice<MemoryResponseDto> findLoginUserWriteMemoryBelongToPlace(Pageable pageable, Long userSeq, Long placeId,
-		GroupType groupType) {
-		return memoryQueryRepository.searchMemoryUserCreatedForPlace(pageable, userSeq, placeId, groupType);
-	}
 
-	@Override
-	public Slice<MemoryResponseDto> findOtherUserWriteMemoryBelongToPlace(Pageable pageable, Long userSeq, Long placeId,
-		GroupType groupType) {
-		return memoryQueryRepository.searchMemoryOtherCreate(pageable, userSeq, placeId, groupType);
-	}
+    @Override
+    public Slice<MemoryResponseDto> findLoginUserWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq, Long placeId,
+            GroupType groupType) {
+        return memoryQueryRepository.searchMemoryUserCreatedForPlace(pageable, userSeq, placeId,
+                groupType);
+    }
 
-	public Slice<MemoryResponseDto> findMyGroupMemberWriteMemoryBelongToPlace(Pageable pageable, Long userSeq,
-		Long placeId, GroupType groupType) {
-		return memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId, groupType);
-	}
+    @Override
+    public Slice<MemoryResponseDto> findOtherUserWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq, Long placeId,
+            GroupType groupType) {
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable, userSeq, placeId, groupType);
+    }
 
-	@Override
-	@Transactional
-	public void removeMemory(Long memoryId) {
+    public Slice<MemoryResponseDto> findMyGroupMemberWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq,
+            Long placeId, GroupType groupType) {
+        return memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId, groupType);
+    }
 
-		Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
-		});
-		memory.delete();
-	}
+    @CacheEvict(value = "memory")
+    @Override
+    @Transactional
+    public void removeMemory(Long userSeq, Long memoryId) {
 
-	@Override
-	public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long userSeq, Long memoryId) {
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
+        memory.delete();
+    }
 
-		Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
-		});
+    @Override
+    public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long userSeq, Long memoryId) {
 
-		List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(userSeq);
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
 
-		return new MemoryUpdateFormResponseDto(
-			memory.getMemoryImages()
-				.stream()
-				.map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
-				.collect(Collectors.toList()),
-			memory.getTitle(),
-			memory.getContent(),
-			userGroupLoginUserAssociated.stream()
-				.map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(), ug.getGroupName(), ug.getGroupType()))
-				.collect(Collectors.toList()),
-			memory.getStars(),
-			memory.getKeyword()
-		);
-	}
+        List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(
+                userSeq);
 
-	@Override
-	public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq, String memoryName) {
-		return memoryQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
-	}
+        return new MemoryUpdateFormResponseDto(
+                memory.getMemoryImages()
+                        .stream()
+                        .map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
+                        .collect(Collectors.toList()),
+                memory.getTitle(),
+                memory.getContent(),
+                userGroupLoginUserAssociated.stream()
+                        .map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(),
+                                ug.getGroupName(), ug.getGroupType()))
+                        .collect(Collectors.toList()),
+                memory.getStars(),
+                memory.getKeyword()
+        );
+    }
 
-	@Override
-	@Transactional
-	public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
+    @Override
+    public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq,
+            String memoryName) {
+        return memoryQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
+    }
 
-		Memory memory = memoryRepository.findById(updateMemoryRequestDto.getMemoryId()).orElseThrow(() -> {
-			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
-		});
+    @CacheEvict(value = "memory", key = "{#updateMemoryRequestDto.userSeq,#updateMemoryRequestDto.memoryId}")
+    @Override
+    @Transactional
+    public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
 
-		UserGroup userGroup = groupRepository.findById(updateMemoryRequestDto.getGroupId()).orElseThrow(() -> {
-			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
-		});
+        Memory memory = memoryRepository.findById(updateMemoryRequestDto.getMemoryId())
+                .orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+                });
 
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getUserSeq());
+        UserGroup userGroup = groupRepository.findById(updateMemoryRequestDto.getGroupId())
+                .orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+                });
 
-		removeMemoryImages(updateMemoryRequestDto, memory);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(
+                updateMemoryRequestDto.getUserSeq());
 
-		List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(),
-			updateMemoryRequestDto.getImages());
+        removeMemoryImages(updateMemoryRequestDto, memory);
 
-		memory.updateMemory(updateMemoryRequestDto.getTitle(), updateMemoryRequestDto.getContent(),
-			updateMemoryRequestDto.getKeyword(), userGroup.getId(),
-			userGroup.getGroupType(), userGroup.getGroupName(), updateMemoryRequestDto.getOpenType(),
-			updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar());
+        List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(),
+                updateMemoryRequestDto.getImages());
 
-		if (!Objects.isNull(multipartFileNames)) {
-			memory.updateMemoryImages(
-				multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
-		}
-	}
+        memory.updateMemory(updateMemoryRequestDto.getTitle(), updateMemoryRequestDto.getContent(),
+                updateMemoryRequestDto.getKeyword(), userGroup.getId(),
+                userGroup.getGroupType(), userGroup.getGroupName(),
+                updateMemoryRequestDto.getOpenType(),
+                updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar());
 
-	private void removeMemoryImages(UpdateMemoryRequestDto updateMemoryRequestDto, Memory memory) {
-		if (!Objects.isNull(updateMemoryRequestDto.getDeleteImageList()) && !updateMemoryRequestDto.getDeleteImageList()
-			.isEmpty()) {
-			for (Long deleteId : updateMemoryRequestDto.getDeleteImageList()) {
-				memory.getMemoryImages().removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
-			}
-		}
-	}
+        if (!Objects.isNull(multipartFileNames)) {
+            memory.updateMemoryImages(
+                    multipartFileNames.stream().map(m -> new MemoryImage(m))
+                            .collect(Collectors.toList()));
+        }
+
+    }
+
+    private void removeMemoryImages(UpdateMemoryRequestDto updateMemoryRequestDto, Memory memory) {
+        if (!Objects.isNull(updateMemoryRequestDto.getDeleteImageList())
+                && !updateMemoryRequestDto.getDeleteImageList()
+                .isEmpty()) {
+            for (Long deleteId : updateMemoryRequestDto.getDeleteImageList()) {
+                memory.getMemoryImages()
+                        .removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
+            }
+        }
+    }
 }
