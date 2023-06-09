@@ -98,6 +98,7 @@ public class User extends JpaBaseEntity {
     public User(Long userSeq, String email, String password, RoleType roleType, String profileImage,
             AgeGroup ageGroup, Gender gender, UserStatus userStatus,
             String fcmToken, String uid, Provider provider, String nickname, boolean enableAppPush,
+            PasswordExpired passwordExpired, LocalDateTime passwordInitDate,
             boolean enableCommentLike, boolean enableComment, DeleteStatus isDeleted) {
         this.userSeq = userSeq;
         this.email = email;
@@ -114,6 +115,8 @@ public class User extends JpaBaseEntity {
         this.enableAppPush = enableAppPush;
         this.enableComment = enableComment;
         this.enableCommentLike = enableCommentLike;
+        this.passwordExpired = passwordExpired;
+        this.passwordInitDate = passwordInitDate;
         this.isDeleted = isDeleted;
     }
 

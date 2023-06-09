@@ -13,7 +13,6 @@ import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMem
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.KeywordResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.mellycore.user.domain.User;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -209,30 +208,6 @@ public class MemoryQueryRepository {
         return transferToSlice(pageable, result);
     }
 
-    public HashMap<String, Long> countMemoryOfPlace(Long placeId, Long userSeq) {
-
-        Long myMemoryCount = query.select(memory.count())
-                .from(memory)
-                .where(
-                        memory.placeId.eq(placeId),
-                        memory.userId.eq(userSeq)
-                )
-                .fetchOne();
-
-        Long otherMemoryCount = query.select(memory.count())
-                .from(memory)
-                .where(
-                        memory.placeId.eq(placeId), // 해당 장소에 속해 있지만
-                        memory.userId.ne(userSeq)  // 해당 유저의 아이디를 가지고 있지 않고
-                )
-                .fetchOne();
-
-        HashMap<String, Long> map = new HashMap<>();
-        map.put("myMemoryCount", myMemoryCount);
-        map.put("otherMemoryCount", otherMemoryCount);
-
-        return map;
-    }
 
     public HashMap<String, Long> countMemoriesBelongToPlace(Long userSeq, Long placeId) {
 
@@ -354,26 +329,6 @@ public class MemoryQueryRepository {
         return memory.placeId.eq(placeId);
     }
 
-    private BooleanExpression eqUserId(Long userSeq) {
-        if (userSeq == null) {
-            return null;
-        }
-        return memory.userId.eq(userSeq);
-    }
-
-    private BooleanExpression neUser(User user) {
-        if (user == null) {
-            return null;
-        }
-        return memory.userId.ne(user.getUserSeq());
-    }
-
-    private BooleanExpression neUserId(Long userSeq) {
-        if (userSeq == null) {
-            return null;
-        }
-        return memory.userId.ne(userSeq);
-    }
 
     private static SliceImpl<MemoryResponseDto> transferToSlice(Pageable pageable,
             List<MemoryResponseDto> results) {

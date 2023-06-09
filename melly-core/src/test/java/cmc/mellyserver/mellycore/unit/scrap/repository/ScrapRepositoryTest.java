@@ -18,9 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-//	Optional<PlaceScrap> findByUserUserSeqAndPlaceId(Long userSeq, Long placeId);
-//
-//        void deleteByUserUserSeqAndPlacePosition(Long userSeq, Position position);
 
 public class ScrapRepositoryTest extends RepositoryTest {
 
