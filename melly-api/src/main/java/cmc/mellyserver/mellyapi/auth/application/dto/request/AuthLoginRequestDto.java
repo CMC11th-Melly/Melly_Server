@@ -11,16 +11,16 @@ import lombok.Data;
 @Data
 public class AuthLoginRequestDto {
 
-	private String email;
+    private String email;
 
-	private String password;
+    private String password;
 
-	private String fcmToken;
+    private String fcmToken;
 
-	@Builder
-	public AuthLoginRequestDto(String email, String password, String fcmToken) {
-		this.email = email;
-		this.password = password;
-		this.fcmToken = fcmToken;
-	}
+    @Builder
+    public AuthLoginRequestDto(String email, String password, String fcmToken) {
+        this.email = email;
+        this.password = password;
+        this.fcmToken = fcmToken;
+    }
 }

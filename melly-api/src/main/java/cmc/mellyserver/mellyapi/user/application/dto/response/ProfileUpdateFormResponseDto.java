@@ -11,8 +11,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ProfileUpdateFormResponseDto {
 
-	private String profileImage;
-	private String nickname;
-	private Gender gender;
-	private AgeGroup ageGroup;
+    private String profileImage;
+    private String nickname;
+    private Gender gender;
+    private AgeGroup ageGroup;
 }

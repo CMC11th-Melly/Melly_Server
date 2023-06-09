@@ -1,9 +1,8 @@
 package cmc.mellyserver.mellycore.memory.domain.repository.dto;
 
+import cmc.mellyserver.mellycore.common.enums.GroupType;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import cmc.mellyserver.mellycore.common.enums.GroupType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,40 +14,46 @@ import lombok.Data;
 @Data
 public class MemoryResponseDto {
 
-	private Long placeId;
+    private Long placeId;
 
-	private String placeName;
+    private String placeName;
 
-	private Long memoryId;
+    private Long memoryId;
 
-	private List<ImageDto> memoryImages;
-	private String title;
+    private List<ImageDto> memoryImages;
 
-	private String content;
+    private String title;
 
-	private GroupType groupType;
+    private String content;
 
-	private String groupName;
+    private GroupType groupType;
 
-	private Long stars;
+    private String groupName;
 
-	private List<String> keyword;
-	private boolean loginUserWrite;
+    private Long stars;
 
-	private LocalDateTime visitedDate;
+    private List<String> keyword;
 
-	@Builder
-	public MemoryResponseDto(Long placeId, String placeName, Long memoryId, String title, String content,
-		GroupType groupType, String groupName, Long stars, boolean loginUserWrite, LocalDateTime visitedDate) {
-		this.placeId = placeId;
-		this.placeName = placeName;
-		this.memoryId = memoryId;
-		this.title = title;
-		this.content = content;
-		this.groupType = groupType;
-		this.groupName = groupName;
-		this.stars = stars;
-		this.loginUserWrite = loginUserWrite;
-		this.visitedDate = visitedDate;
-	}
+    private boolean loginUserWrite;
+
+    private LocalDateTime visitedDate;
+
+    @Builder
+    public MemoryResponseDto(Long placeId, String placeName, Long memoryId, String title,
+            String content,
+            GroupType groupType, String groupName, Long stars, boolean loginUserWrite,
+            LocalDateTime visitedDate) {
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.memoryId = memoryId;
+        this.title = title;
+        this.content = content;
+        this.groupType = groupType;
+        this.groupName = groupName;
+        this.stars = stars;
+        this.loginUserWrite = loginUserWrite;
+        this.visitedDate = visitedDate;
+    }
+
+
 }

@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthLoginRequest {
 
-	private String email;
+    private String email;
 
-	private String password;
+    private String password;
 
-	private String fcmToken;
+    private String fcmToken;
 
-	public AuthLoginRequestDto toServiceDto() {
-		return new AuthLoginRequestDto(email, password, fcmToken);
-	}
+    public AuthLoginRequestDto toServiceDto() {
+        return new AuthLoginRequestDto(email, password, fcmToken);
+    }
 
 }

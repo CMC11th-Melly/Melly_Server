@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class GetScrapedMemoryCond {
-	private GroupType groupType;
+
+    private GroupType groupType;
 }

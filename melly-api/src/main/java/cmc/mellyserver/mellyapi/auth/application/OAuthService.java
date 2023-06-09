@@ -5,5 +5,5 @@ import cmc.mellyserver.mellyapi.auth.application.dto.response.OAuthLoginResponse
 
 public interface OAuthService {
 
-	OAuthLoginResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto);
+    OAuthLoginResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto);
 }

@@ -8,19 +8,19 @@ import lombok.Data;
 @Data
 public class LoginResponseDto {
 
-	private AccessTokenUserData user;
-	private String token;
+    private AccessTokenUserData user;
+    private String token;
 
-	@Builder
-	public LoginResponseDto(AccessTokenUserData user, String token) {
-		this.user = user;
-		this.token = token;
-	}
+    @Builder
+    public LoginResponseDto(AccessTokenUserData user, String token) {
+        this.user = user;
+        this.token = token;
+    }
 
-	public static LoginResponseDto of(User user, String token) {
-		return LoginResponseDto.builder()
-			.user(AccessTokenUserData.from(user))
-			.token(token)
-			.build();
-	}
+    public static LoginResponseDto of(User user, String token) {
+        return LoginResponseDto.builder()
+                .user(AccessTokenUserData.from(user))
+                .token(token)
+                .build();
+    }
 }

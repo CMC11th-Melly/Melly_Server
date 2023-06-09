@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CheckDuplicateEmailResponse {
 
-	private int code;
-	private String message;
+    private int code;
+    private String message;
 
 }
