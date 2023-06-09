@@ -1,8 +1,8 @@
-package cmc.mellyserver.mellycore.unit.user;
+package cmc.mellyserver.mellycore.unit.user.repository;
 
 import cmc.mellyserver.mellycore.common.enums.Gender;
-import cmc.mellyserver.mellycore.unit.common.factory.UserFactory;
-import cmc.mellyserver.mellycore.unit.config.JpaTestConfiguration;
+import cmc.mellyserver.mellycore.unit.RepositoryTest;
+import cmc.mellyserver.mellycore.unit.common.fixtures.UserFixtures;
 import cmc.mellyserver.mellycore.user.domain.PasswordExpired;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.UserStatus;
@@ -14,14 +14,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import(JpaTestConfiguration.class)
 
-public class UserRepositoryTest {
+public class UserRepositoryTest extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,7 +30,7 @@ public class UserRepositoryTest {
     @BeforeEach
     void setUp() {
         // given
-        users = UserFactory.mockLikeUsersWithId();
+        users = UserFixtures.mockLikeUsersWithId();
         users.forEach(user -> userRepository.save(user));
         testEntityManager.flush();
         testEntityManager.clear();

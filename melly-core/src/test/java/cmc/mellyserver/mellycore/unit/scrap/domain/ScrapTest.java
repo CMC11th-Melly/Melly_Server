@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.unit.scrap;
+package cmc.mellyserver.mellycore.unit.scrap.domain;
 
 import cmc.mellyserver.mellycore.common.enums.ScrapType;
 import cmc.mellyserver.mellycore.place.domain.Place;

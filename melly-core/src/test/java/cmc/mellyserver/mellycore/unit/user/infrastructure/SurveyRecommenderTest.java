@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.unit.user;
+package cmc.mellyserver.mellycore.unit.user.infrastructure;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -74,12 +74,14 @@ public class Memory extends JpaBaseEntity {
     private List<String> keyword = new ArrayList<>();
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, Long userId, String title, String content,
+    public Memory(Long stars, GroupInfo groupInfo, Long userId, Long placeId, String title,
+            String content,
             OpenType openType,
             LocalDateTime visitedDate, boolean isDelete) {
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;
+        this.placeId = placeId;
         this.userId = userId;
         this.content = content;
         this.openType = openType;

@@ -1,11 +1,27 @@
-package cmc.mellyserver.mellycore.unit.common.factory;
+package cmc.mellyserver.mellycore.unit.common.fixtures;
 
 import cmc.mellyserver.mellycore.common.enums.Gender;
 import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.User;
 import java.util.List;
 
-public class UserFactory {
+public class UserFixtures {
+
+    public static final String 제민_이메일 = "jemin3161@naver.com";
+    public static final String 제민_닉네임 = "제민";
+    public static final String 재현_이메일 = "jaehyon3161@naver.com";
+    public static final String 재현_닉네임 = "재현";
+
+    // 일반 유저
+    public static User 제민() {
+        return User.builder().nickname(제민_닉네임).email(제민_이메일).provider(Provider.DEFAULT)
+                .gender(Gender.MALE).build();
+    }
+
+    public static User 재현() {
+        return User.builder().nickname(재현_닉네임).email(재현_이메일).provider(Provider.DEFAULT)
+                .gender(Gender.MALE).build();
+    }
 
     public static List<User> mockLikeUsersWithId() {
         User user1 = User.builder().uid("test1").email("jemin3161@naver.com").userSeq(1L)
