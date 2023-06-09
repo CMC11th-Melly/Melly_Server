@@ -1,13 +1,5 @@
 package cmc.mellyserver.mellyapi.user.application.impl;
 
-import java.util.List;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import cmc.mellyserver.mellyapi.common.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellyapi.common.aws.AwsService;
 import cmc.mellyserver.mellyapi.common.aws.FileUploader;
@@ -27,96 +19,112 @@ import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommender;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	private final AuthenticatedUserChecker authenticatedUserChecker;
+    private final AuthenticatedUserChecker authenticatedUserChecker;
 
-	private final MemoryQueryRepository memoryQueryRepository;
+    private final MemoryQueryRepository memoryQueryRepository;
 
-	private final GroupService groupService;
+    private final GroupService groupService;
 
-	private final AwsService awsService;
+    private final AwsService awsService;
 
-	private final FileUploader fileUploader;
+    private final FileUploader fileUploader;
 
-	private final RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
-	private final UserGroupQueryRepository userGroupQueryRepository;
+    private final UserGroupQueryRepository userGroupQueryRepository;
 
-	private final SurveyRecommender surveyRecommender;
+    private final SurveyRecommender surveyRecommender;
 
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-	@Override
-	public SurveyRecommendResponseDto getSurveyResult(Long userSeq) {
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-		return surveyRecommender.getRecommend(user);
-	}
+    @Override
+    public SurveyRecommendResponseDto getSurveyResult(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
+    }
 
-	@Override
-	public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) {
-		return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
-	}
+    @Override
+    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(
+            Long userSeq) {
+        return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
+    }
 
-	@Override
-	public Slice<MemoryResponseDto> findMemoriesLoginUserWrite(Pageable pageable, Long userSeq, GroupType groupType) {
-		return memoryQueryRepository.searchMemoryUserCreatedForMyPage(pageable, userSeq, groupType);
-	}
+    @Override
+    public Slice<MemoryResponseDto> findMemoriesLoginUserWrite(Pageable pageable, Long userSeq,
+            GroupType groupType) {
+        return memoryQueryRepository.searchMemoryUserCreatedForMyPage(pageable, userSeq, groupType);
+    }
 
-	@Override
-	public Slice<MemoryResponseDto> findMemoriesUsersBelongToMyGroupWrite(Pageable pageable, Long groupId,
-		Long userSeq) {
-		return userGroupQueryRepository.getMyGroupMemory(pageable, groupId, userSeq);
-	}
+    @Override
+    public Slice<MemoryResponseDto> findMemoriesUsersBelongToMyGroupWrite(Pageable pageable,
+            Long groupId,
+            Long userSeq) {
+        return userGroupQueryRepository.getMyGroupMemory(pageable, groupId, userSeq);
+    }
 
-	@Override
-	public Integer checkImageStorageVolumeLoginUserUse(String username) {
-		return awsService.calculateImageVolume("mellyimage", username).intValue();
-	}
+    @Override
+    public Integer checkImageStorageVolumeLoginUserUse(String username) {
+        return awsService.calculateImageVolume("mellyimage", username).intValue();
+    }
 
-	@Override
-	public ProfileUpdateFormResponseDto getLoginUserProfileDataForUpdate(Long userSeq) {
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-		return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(),
-			user.getAgeGroup());
-	}
+    @Override
+    public ProfileUpdateFormResponseDto getLoginUserProfileDataForUpdate(Long userSeq) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(),
+                user.getGender(),
+                user.getAgeGroup());
+    }
 
-	@Override
-	public String findNicknameByUserIdentifier(Long userSeq) {
+    @Override
+    public String findNicknameByUserIdentifier(Long userSeq) {
 
-		User user = userRepository.findById(userSeq).orElseThrow(() -> {
-			throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
-		});
-		return user.getNickname();
-	}
+        User user = userRepository.findById(userSeq).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+        });
+        return user.getNickname();
+    }
 
-	@Override
-	@Transactional
-	public void createSurvey(SurveyRequestDto surveyRequestDto) {
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(surveyRequestDto.getUserSeq());
-		user.addSurveyData(surveyRequestDto.getRecommendGroup(), surveyRequestDto.getRecommendPlace(),
-			surveyRequestDto.getRecommendActivity());
-	}
+    @Override
+    @Transactional
+    public void createSurvey(SurveyRequestDto surveyRequestDto) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(
+                surveyRequestDto.getUserSeq());
+        user.addSurveyData(surveyRequestDto.getRecommendGroup(),
+                surveyRequestDto.getRecommendPlace(),
+                surveyRequestDto.getRecommendActivity());
+    }
 
-	@Override
-	@Transactional
-	public void participateToGroup(Long userSeq, Long groupId) {
-		groupService.participateToGroup(userSeq, groupId);
-	}
+    @Override
+    @Transactional
+    public void participateToGroup(Long userSeq, Long groupId) {
+        groupService.participateToGroup(userSeq, groupId);
+    }
 
-	@Override
-	@Transactional
-	public void updateLoginUserProfile(ProfileUpdateRequestDto profileUpdateRequestDto) {
-		User user = authenticatedUserChecker.checkAuthenticatedUserExist(profileUpdateRequestDto.getUserSeq());
-		user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(),
-			profileUpdateRequestDto.getAgeGroup());
-		if (profileUpdateRequestDto.isDeleteImage())
+    @Override
+    @Transactional
+    public void updateLoginUserProfile(ProfileUpdateRequestDto profileUpdateRequestDto) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(
+                profileUpdateRequestDto.getUserSeq());
+        user.updateProfile(profileUpdateRequestDto.getNickname(),
+                profileUpdateRequestDto.getGender(),
+                profileUpdateRequestDto.getAgeGroup());
+		if (profileUpdateRequestDto.isDeleteImage()) {
 			user.chnageProfileImage(null);
-		else
-			user.chnageProfileImage(fileUploader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
-	}
+		} else {
+			user.chnageProfileImage(
+					fileUploader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
+		}
+    }
 }

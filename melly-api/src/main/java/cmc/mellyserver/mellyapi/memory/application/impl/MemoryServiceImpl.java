@@ -278,7 +278,7 @@ public class MemoryServiceImpl implements MemoryService {
                 updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar());
 
         if (!Objects.isNull(multipartFileNames)) {
-            memory.updateMemoryImages(
+            memory.setMemoryImages(
                     multipartFileNames.stream().map(m -> new MemoryImage(m))
                             .collect(Collectors.toList()));
         }
