@@ -7,10 +7,12 @@ import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class AccessTokenUserData {
 
     private Long userSeq;

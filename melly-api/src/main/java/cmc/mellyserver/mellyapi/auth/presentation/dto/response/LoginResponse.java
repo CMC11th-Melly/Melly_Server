@@ -1,9 +1,13 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.response;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class LoginResponse {
 
     private AccessTokenUserData user;

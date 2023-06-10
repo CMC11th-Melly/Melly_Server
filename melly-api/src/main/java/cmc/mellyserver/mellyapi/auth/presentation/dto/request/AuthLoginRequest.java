@@ -19,4 +19,8 @@ public class AuthLoginRequest {
         return new AuthLoginRequestDto(email, password, fcmToken);
     }
 
+    public AuthLoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
