@@ -22,7 +22,7 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        // Lettuce라는 오픈 소스 라이브러리 사용함
+
         return new LettuceConnectionFactory(host, port);
     }
 

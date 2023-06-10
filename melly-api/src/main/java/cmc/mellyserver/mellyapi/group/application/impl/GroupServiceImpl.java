@@ -12,6 +12,7 @@ import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class GroupServiceImpl implements GroupService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
+    @Cacheable(value = "groupInfo", key = "#groupId")
     @Override
     public UserGroup findGroupById(Long groupId) {
         return groupRepository.findById(groupId).orElseThrow(() -> {
