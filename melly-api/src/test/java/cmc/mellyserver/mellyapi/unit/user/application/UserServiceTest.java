@@ -1,14 +1,5 @@
 package cmc.mellyserver.mellyapi.unit.user.application;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
-
 import cmc.mellyserver.mellyapi.common.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellyapi.common.aws.impl.AwsServiceImpl;
 import cmc.mellyserver.mellyapi.common.aws.impl.S3FileLoader;
@@ -20,12 +11,7 @@ import cmc.mellyserver.mellyapi.user.application.dto.request.SurveyRequestDto;
 import cmc.mellyserver.mellyapi.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellyapi.user.application.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.mellyapi.user.application.impl.UserServiceImpl;
-import cmc.mellyserver.mellycore.common.enums.AgeGroup;
-import cmc.mellyserver.mellycore.common.enums.Gender;
-import cmc.mellyserver.mellycore.common.enums.GroupType;
-import cmc.mellyserver.mellycore.common.enums.RecommendActivity;
-import cmc.mellyserver.mellycore.common.enums.RecommendGroup;
-import cmc.mellyserver.mellycore.common.enums.RecommendPlace;
+import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
@@ -36,11 +22,6 @@ import cmc.mellyserver.mellycore.user.domain.repository.UserDto;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommender;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -55,6 +36,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -347,9 +338,7 @@ public class UserServiceTest {
             User user = UserFactory.createEmailLoginUser();
 
             MockMultipartFile mockMultipartFile = new MockMultipartFile("testImage", "test",
-                    "multipart/form-data",
-                    new FileInputStream(
-                            "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                    "multipart/form-data", "testImage".getBytes());
             ProfileUpdateRequestDto profileImageDeleteDto = ProfileUpdateRequestDto.builder()
                     .profileImage(mockMultipartFile)
                     .userSeq(1L)
@@ -378,9 +367,7 @@ public class UserServiceTest {
             User user = UserFactory.createEmailLoginUser();
 
             MockMultipartFile mockMultipartFile = new MockMultipartFile("testImage", "test",
-                    "multipart/form-data",
-                    new FileInputStream(
-                            "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                    "multipart/form-data", "testImage".getBytes());
             ProfileUpdateRequestDto profileImageDeleteDto = ProfileUpdateRequestDto.builder()
                     .profileImage(mockMultipartFile)
                     .userSeq(1L)
