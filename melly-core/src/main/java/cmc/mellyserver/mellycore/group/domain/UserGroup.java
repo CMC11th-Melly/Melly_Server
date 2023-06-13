@@ -1,22 +1,11 @@
 package cmc.mellyserver.mellycore.group.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-
+import cmc.mellyserver.mellycore.common.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,50 +14,61 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserGroup extends JpaBaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "group_id")
-	private Long id; // 그룹 id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String groupName; // 그룹 이름
+    private String groupName;
 
-	private int groupIcon; // 그룹 아이콘 구분하는 번호
+    private Integer groupIcon;
 
-	private String inviteLink; // 초대 링크
+    private String inviteLink;
 
-	private Long creatorId; // 초기에 그룹을 만든 사람
+    private Long creatorId;
 
-	@Enumerated(EnumType.STRING)
-	private GroupType groupType; // 그룹 종류
+    @Enumerated(EnumType.STRING)
+    private GroupType groupType;
 
-	private boolean isDeleted; // 삭제 여부
+    private DeleteStatus isDeleted;
 
-	@Builder
-	public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon, Long userSeq) {
-		this.groupName = groupName;
-		this.inviteLink = inviteLink;
-		this.groupType = groupType;
-		this.groupIcon = groupIcon;
-		this.creatorId = userSeq;
-	}
+    @Builder
+    public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon,
+                     Long userSeq) {
+        this.groupName = groupName;
+        this.inviteLink = inviteLink;
+        this.groupType = groupType;
+        this.groupIcon = groupIcon;
+        this.creatorId = userSeq;
+    }
 
-	public void updateUserGroup(String groupName, GroupType groupType, Integer groupIcon) {
-		this.groupName = groupName;
-		this.groupType = groupType;
-		this.groupIcon = groupIcon;
-	}
+    public void remove(Long userId) {
 
-	@PrePersist
-	private void init() {
-		this.isDeleted = false;
-	}
+        if (!isGroupOwner(userId)) {
+            throw new IllegalArgumentException("그룹 생성자가 아니기에 삭제 권한이 없습니다.");
+        }
+        this.isDeleted = DeleteStatus.Y;
+    }
 
-	public void remove() {
-		this.isDeleted = true;
-	}
+    public void updateUserGroup(Long userId, String groupName, GroupType groupType, Integer groupIcon) {
 
-	public void setCreatorId(Long userId) {
-		this.creatorId = userId;
-	}
+        if (!isGroupOwner(userId)) {
+            throw new IllegalArgumentException("그룹 생성자가 아니기에 수정 권한이 없습니다.");
+        }
+        this.groupName = groupName;
+        this.groupType = groupType;
+        this.groupIcon = groupIcon;
+    }
 
+    public void assignGroupOwner(Long userId) {
+        this.creatorId = userId;
+    }
+
+    private boolean isGroupOwner(Long userId) {
+        return this.creatorId.equals(userId);
+    }
+
+    @PrePersist
+    private void init() {
+        this.isDeleted = DeleteStatus.N;
+    }
 }

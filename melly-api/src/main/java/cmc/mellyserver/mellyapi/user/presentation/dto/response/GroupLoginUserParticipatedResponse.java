@@ -5,8 +5,10 @@ import cmc.mellyserver.mellycore.user.domain.repository.UserDto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class GroupLoginUserParticipatedResponse {
 
     private Long groupId;

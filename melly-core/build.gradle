@@ -1,9 +1,7 @@
-// bootJar 속성은 실행 가능한 jar를 만들기 때문에 main 메서드를 반드시 필요로 한다. 따로 실행하지 않는 melly-core에서는 false를 줘야 함
 bootJar {
     enabled = false
 }
 
-// 하지만 jar 파일은 생성이 되서 빌드에 포함되야 함으로 jar 옵션은 true를 줘야 한다.
 jar {
     enabled = true
 }

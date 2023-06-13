@@ -15,8 +15,6 @@ import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import java.util.List;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,16 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,35 +38,27 @@ public class MemoryController {
     private final MemoryService memoryService;
 
     @GetMapping("/group")
-    public ResponseEntity<CommonResponse> getGroupListForSaveMemory(
-            @AuthenticationPrincipal User user) {
-        List<GroupListForSaveMemoryResponseDto> userGroup = memoryService.findGroupListLoginUserParticipate(
-                Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(
-                new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-                        MemoryAssembler.groupListForSaveMemoryResponse(userGroup)));
+    public ResponseEntity<CommonResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user) {
+
+        List<GroupListForSaveMemoryResponseDto> userGroup = memoryService.findGroupListLoginUserParticipate(Long.parseLong(user.getUsername()));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
+                MemoryAssembler.groupListForSaveMemoryResponse(userGroup)));
     }
 
     @GetMapping("/user/place/{placeId}")
-    public ResponseEntity<CommonResponse> getUserMemory(
-            @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable,
-            @AuthenticationPrincipal User user, @PathVariable Long placeId,
-            @RequestParam(required = false) GroupType groupType) {
-        Slice<MemoryResponseDto> userMemory = memoryService.findLoginUserWriteMemoryBelongToPlace(
-                pageable,
-                Long.parseLong(user.getUsername()), placeId, groupType);
+    public ResponseEntity<CommonResponse> getUserMemory(@PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable,
+                                                        @AuthenticationPrincipal User user, @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
+
+        Slice<MemoryResponseDto> userMemory = memoryService.findLoginUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(userMemory);
-        return ResponseEntity.ok(
-                new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-                        new GetMemoryForPlaceResponseWrapper(
-                                memoryResponses.getContent().stream().count(), memoryResponses)));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetMemoryForPlaceResponseWrapper(memoryResponses.getContent().stream().count(), memoryResponses)));
     }
 
     @GetMapping("/other/place/{placeId}")
     public ResponseEntity<CommonResponse> getOtherMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long placeId,
-            @RequestParam(required = false) GroupType groupType,
-            @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable) {
+                                                         @PathVariable Long placeId,
+                                                         @RequestParam(required = false) GroupType groupType,
+                                                         @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable) {
         Slice<MemoryResponseDto> otherMemory = memoryService.findOtherUserWriteMemoryBelongToPlace(
                 pageable,
                 Long.parseLong(user.getUsername()), placeId, groupType);
@@ -86,8 +71,8 @@ public class MemoryController {
 
     @GetMapping("/group/place/{placeId}")
     public ResponseEntity<CommonResponse> getMyGroupMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long placeId, Pageable pageable,
-            @RequestParam(required = false) GroupType groupType) {
+                                                           @PathVariable Long placeId, Pageable pageable,
+                                                           @RequestParam(required = false) GroupType groupType) {
         Slice<MemoryResponseDto> results = memoryService.findMyGroupMemberWriteMemoryBelongToPlace(
                 pageable,
                 Long.parseLong(user.getUsername()), placeId, groupType);
@@ -100,8 +85,8 @@ public class MemoryController {
 
     @PostMapping
     public ResponseEntity<CommonResponse> save(@AuthenticationPrincipal User user,
-            @RequestPart(name = "images", required = false) List<MultipartFile> images,
-            @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
+                                               @RequestPart(name = "images", required = false) List<MultipartFile> images,
+                                               @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
         memoryService.createMemory(
                 MemoryAssembler.createMemoryRequestDto(Long.parseLong(user.getUsername()), images,
                         memoryCreateRequest));
@@ -111,9 +96,9 @@ public class MemoryController {
 
     @PutMapping("/{memoryId}")
     public ResponseEntity<CommonResponse> updateMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long memoryId,
-            @RequestPart(name = "images", required = false) List<MultipartFile> images,
-            @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
+                                                       @PathVariable Long memoryId,
+                                                       @RequestPart(name = "images", required = false) List<MultipartFile> images,
+                                                       @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
         memoryService.updateMemory(
                 MemoryAssembler.updateMemoryRequestDto(Long.parseLong(user.getUsername()), memoryId,
                         memoryUpdateRequest,
@@ -124,7 +109,7 @@ public class MemoryController {
 
     @GetMapping("/{memoryId}/update")
     public ResponseEntity<CommonResponse> getFormForUpdateMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long memoryId) {
+                                                                 @PathVariable Long memoryId) {
         MemoryUpdateFormResponseDto formForUpdateMemory = memoryService.findMemoryUpdateFormData(
                 Long.parseLong(user.getUsername()), memoryId);
         return ResponseEntity.ok(
@@ -134,15 +119,16 @@ public class MemoryController {
 
     @DeleteMapping("/{memoryId}")
     public ResponseEntity<CommonResponse> deleteMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long memoryId) {
+                                                       @PathVariable Long memoryId) {
         memoryService.removeMemory(Long.parseLong(user.getUsername()), memoryId);
         return ResponseEntity.ok(
                 new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
+
     @GetMapping("/{memoryId}")
     public ResponseEntity<CommonResponse> findMemory(@AuthenticationPrincipal User user,
-            @PathVariable Long memoryId) {
+                                                     @PathVariable Long memoryId) {
         MemoryResponseDto memoryByMemoryId = memoryService.findMemoryByMemoryId(
                 Long.parseLong(user.getUsername()),
                 memoryId);

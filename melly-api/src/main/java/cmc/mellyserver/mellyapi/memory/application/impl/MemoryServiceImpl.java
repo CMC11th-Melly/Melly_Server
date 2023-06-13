@@ -60,6 +60,76 @@ public class MemoryServiceImpl implements MemoryService {
 
     private final GroupAndUserRepository groupAndUserRepository;
 
+
+    @Cacheable(value = "findGroups", key = "#userSeq")
+    @Override
+    public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipate(Long userSeq) {
+        return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
+    }
+
+
+    @Cacheable(value = "memory", key = "'memoryId'")
+    @Override
+    public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
+        return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
+    }
+
+
+    @Override
+    public Slice<MemoryResponseDto> findLoginUserWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq, Long placeId, GroupType groupType) {
+        return memoryQueryRepository.searchMemoryUserCreatedForPlace(pageable, userSeq, placeId,
+                groupType);
+    }
+
+
+    @Override
+    public Slice<MemoryResponseDto> findOtherUserWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq, Long placeId, GroupType groupType) {
+        return memoryQueryRepository.searchMemoryOtherCreate(pageable, userSeq, placeId, groupType);
+    }
+
+    @Override
+    public Slice<MemoryResponseDto> findMyGroupMemberWriteMemoryBelongToPlace(Pageable pageable,
+            Long userSeq,
+            Long placeId, GroupType groupType) {
+        return memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId, groupType);
+    }
+
+
+    @Override
+    public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long userSeq, Long memoryId) {
+
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
+        });
+
+        List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(
+                userSeq);
+
+        return new MemoryUpdateFormResponseDto(
+                memory.getMemoryImages()
+                        .stream()
+                        .map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
+                        .collect(Collectors.toList()),
+                memory.getTitle(),
+                memory.getContent(),
+                userGroupLoginUserAssociated.stream()
+                        .map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(),
+                                ug.getGroupName(), ug.getGroupType()))
+                        .collect(Collectors.toList()),
+                memory.getStars(),
+                memory.getKeyword()
+        );
+    }
+
+    @Override
+    public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq,
+            String memoryName) {
+        return memoryQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
+    }
+
+
     @Override
     @Transactional
     public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
@@ -171,39 +241,6 @@ public class MemoryServiceImpl implements MemoryService {
         }
     }
 
-    @Cacheable(value = "findGroups", key = "#userSeq")
-    @Override
-    public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipate(Long userSeq) {
-        return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
-    }
-
-    @Cacheable(value = "memory")
-    @Override
-    public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
-        return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
-    }
-
-
-    @Override
-    public Slice<MemoryResponseDto> findLoginUserWriteMemoryBelongToPlace(Pageable pageable,
-            Long userSeq, Long placeId,
-            GroupType groupType) {
-        return memoryQueryRepository.searchMemoryUserCreatedForPlace(pageable, userSeq, placeId,
-                groupType);
-    }
-
-    @Override
-    public Slice<MemoryResponseDto> findOtherUserWriteMemoryBelongToPlace(Pageable pageable,
-            Long userSeq, Long placeId,
-            GroupType groupType) {
-        return memoryQueryRepository.searchMemoryOtherCreate(pageable, userSeq, placeId, groupType);
-    }
-
-    public Slice<MemoryResponseDto> findMyGroupMemberWriteMemoryBelongToPlace(Pageable pageable,
-            Long userSeq,
-            Long placeId, GroupType groupType) {
-        return memoryQueryRepository.getMyGroupMemory(pageable, userSeq, placeId, groupType);
-    }
 
     @CacheEvict(value = "memory")
     @Override
@@ -216,37 +253,6 @@ public class MemoryServiceImpl implements MemoryService {
         memory.delete();
     }
 
-    @Override
-    public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long userSeq, Long memoryId) {
-
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_MEMORY);
-        });
-
-        List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(
-                userSeq);
-
-        return new MemoryUpdateFormResponseDto(
-                memory.getMemoryImages()
-                        .stream()
-                        .map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
-                        .collect(Collectors.toList()),
-                memory.getTitle(),
-                memory.getContent(),
-                userGroupLoginUserAssociated.stream()
-                        .map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(),
-                                ug.getGroupName(), ug.getGroupType()))
-                        .collect(Collectors.toList()),
-                memory.getStars(),
-                memory.getKeyword()
-        );
-    }
-
-    @Override
-    public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq,
-            String memoryName) {
-        return memoryQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
-    }
 
     @CacheEvict(value = "memory", key = "{#updateMemoryRequestDto.userSeq,#updateMemoryRequestDto.memoryId}")
     @Override

@@ -1,31 +1,12 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-import cmc.mellyserver.mellycore.common.enums.AgeGroup;
-import cmc.mellyserver.mellycore.common.enums.DeleteStatus;
-import cmc.mellyserver.mellycore.common.enums.Gender;
-import cmc.mellyserver.mellycore.common.enums.Provider;
-import cmc.mellyserver.mellycore.common.enums.RecommendActivity;
-import cmc.mellyserver.mellycore.common.enums.RecommendGroup;
-import cmc.mellyserver.mellycore.common.enums.RecommendPlace;
-import cmc.mellyserver.mellycore.common.enums.RoleType;
+import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
+import lombok.*;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -96,10 +77,10 @@ public class User extends JpaBaseEntity {
 
     @Builder
     public User(Long userSeq, String email, String password, RoleType roleType, String profileImage,
-            AgeGroup ageGroup, Gender gender, UserStatus userStatus,
-            String fcmToken, String uid, Provider provider, String nickname, boolean enableAppPush,
-            PasswordExpired passwordExpired, LocalDateTime passwordInitDate,
-            boolean enableCommentLike, boolean enableComment, DeleteStatus isDeleted) {
+                AgeGroup ageGroup, Gender gender, UserStatus userStatus,
+                String fcmToken, String uid, Provider provider, String nickname, boolean enableAppPush,
+                PasswordExpired passwordExpired, LocalDateTime passwordInitDate,
+                boolean enableCommentLike, boolean enableComment, DeleteStatus isDeleted) {
         this.userSeq = userSeq;
         this.email = email;
         this.password = password;
@@ -121,7 +102,7 @@ public class User extends JpaBaseEntity {
     }
 
     public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,
-            boolean enableAppPush, boolean enableCommentLike, boolean enableComment) {
+                           boolean enableAppPush, boolean enableCommentLike, boolean enableComment) {
         this.nickname = nickname;
         this.gender = gender;
         this.profileImage = profileImage;
@@ -131,12 +112,16 @@ public class User extends JpaBaseEntity {
         this.enableCommentLike = enableCommentLike;
     }
 
+    public void remove() {
+        this.isDeleted = DeleteStatus.Y;
+    }
+
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }
 
     public void addSurveyData(RecommendGroup recommendGroup, RecommendPlace recommendPlace,
-            RecommendActivity recommendActivity) {
+                              RecommendActivity recommendActivity) {
         this.recommend = new Recommend(recommendGroup, recommendPlace, recommendActivity);
     }
 

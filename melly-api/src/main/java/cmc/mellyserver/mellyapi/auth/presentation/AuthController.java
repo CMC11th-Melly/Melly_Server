@@ -6,24 +6,20 @@ import cmc.mellyserver.mellyapi.auth.application.dto.response.LoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.OAuthLoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.SignupResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.AuthAssembler;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.AuthLoginRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CheckDuplicateEmailRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CheckDuplicateNicknameRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CommonSignupRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.OAuthLoginRequest;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.*;
+import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.CommonResponse;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -36,63 +32,53 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/social")
-    public ResponseEntity<CommonResponse> socialLogin(
-            @Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
-        OAuthLoginResponseDto oAuthLoginResponse = oAuthService.login(
-                AuthAssembler.oAuthLoginRequestDto(oAuthLoginRequest));
-        return ResponseEntity.ok(
-                AuthAssembler.departNewUser(oAuthLoginResponse.getAccessToken(),
-                        oAuthLoginResponse.getIsNewUser(),
-                        oAuthLoginResponse.getUser()));
+    public ResponseEntity<CommonResponse> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
+
+        OAuthLoginResponseDto oAuthLoginResponse = oAuthService.login(AuthAssembler.oAuthLoginRequestDto(oAuthLoginRequest));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
+                AuthAssembler.departNewUser(oAuthLoginResponse.getAccessToken(), oAuthLoginResponse.getIsNewUser(), oAuthLoginResponse.getUser())));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse> normalLogin(
-            @Valid @RequestBody AuthLoginRequest authLoginRequest) {
-        LoginResponseDto loginResponseDto = authService.login(
-                AuthAssembler.authLoginRequestDto(authLoginRequest));
-        return ResponseEntity.ok(
-                new CommonResponse<>(200, "성공", AuthAssembler.loginResponse(loginResponseDto)));
+    public ResponseEntity<CommonResponse> normalLogin(@Valid @RequestBody AuthLoginRequest authLoginRequest) {
+
+        LoginResponseDto loginResponseDto = authService.login(AuthAssembler.authLoginRequestDto(authLoginRequest));
+        return ResponseEntity.ok(new CommonResponse<>(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, AuthAssembler.loginResponse(loginResponseDto)));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse> normalSignup(
-            @Valid CommonSignupRequest commonSignupRequest) {
-        SignupResponseDto signupResponseDto = authService.signup(
-                AuthAssembler.authSignupRequestDto(commonSignupRequest));
-        return ResponseEntity.ok(
-                new CommonResponse(200, "성공", AuthAssembler.signupResponse(signupResponseDto)));
+    public ResponseEntity<CommonResponse> normalSignup(@Valid CommonSignupRequest commonSignupRequest) {
+
+        SignupResponseDto signupResponseDto = authService.signup(AuthAssembler.authSignupRequestDto(commonSignupRequest));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, AuthAssembler.signupResponse(signupResponseDto)));
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<CommonResponse> checkNicknameDuplicate(
-            @RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest) {
+    public ResponseEntity<CommonResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest) {
+
         authService.checkDuplicatedNickname(checkDuplicateNicknameRequest.getNickname());
-        return ResponseEntity.ok(new CommonResponse(200, "사용해도 좋은 닉네임입니다."));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
     @PostMapping("/email")
-    public ResponseEntity<CommonResponse> checkEmailDuplicate(
-            @RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest) {
+    public ResponseEntity<CommonResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest) {
+
         authService.checkDuplicatedEmail(checkDuplicateEmailRequest.getEmail());
-        return ResponseEntity.ok(new CommonResponse(200, "사용해도 좋은 이메일입니다."));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
-    @DeleteMapping("/logout")
-    public ResponseEntity<CommonResponse> logout(
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-            HttpServletRequest request) {
+    @PutMapping("/logout")
+    public ResponseEntity<CommonResponse> logout(@AuthenticationPrincipal User user, HttpServletRequest request) {
+
         authService.logout(Long.parseLong(user.getUsername()), HeaderUtil.getAccessToken(request));
-        return ResponseEntity.ok(new CommonResponse(200, "로그아웃 완료"));
+        return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
-    @DeleteMapping("/withdraw")
-    public ResponseEntity<CommonResponse> withdraw(
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-            HttpServletRequest request) {
-        authService.withdraw(Long.parseLong(user.getUsername()),
-                HeaderUtil.getAccessToken(request));
-        return ResponseEntity.ok(new CommonResponse(200, "회원탈퇴 완료"));
+    @PutMapping("/withdraw")
+    public ResponseEntity withdraw(@AuthenticationPrincipal User user, HttpServletRequest request) {
+
+        authService.withdraw(Long.parseLong(user.getUsername()), HeaderUtil.getAccessToken(request));
+        return ResponseEntity.noContent().build();
     }
 
 }

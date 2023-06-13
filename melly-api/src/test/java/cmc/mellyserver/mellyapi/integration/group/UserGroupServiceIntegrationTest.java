@@ -1,20 +1,21 @@
 package cmc.mellyserver.mellyapi.integration.group;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
 import cmc.mellyserver.mellyapi.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.mellyapi.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellyapi.common.factory.UserGroupFactory;
 import cmc.mellyserver.mellyapi.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
+import cmc.mellyserver.mellycore.common.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
@@ -57,7 +58,7 @@ public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
         // then
         UserGroup removeGroup = groupService.findGroupById(savedGroup.getId());
-        assertThat(removeGroup.isDeleted()).isTrue();
+        assertThat(removeGroup.getIsDeleted()).isEqualTo(DeleteStatus.Y);
     }
 
     @DisplayName("그룹을 식별자를 통해 그룹 정보를 조회하려고 할때")

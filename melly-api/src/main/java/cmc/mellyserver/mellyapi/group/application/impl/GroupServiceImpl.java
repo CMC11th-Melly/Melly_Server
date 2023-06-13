@@ -29,6 +29,7 @@ public class GroupServiceImpl implements GroupService {
     @Cacheable(value = "groupInfo", key = "#groupId")
     @Override
     public UserGroup findGroupById(Long groupId) {
+
         return groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
@@ -37,56 +38,48 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public UserGroup saveGroup(CreateGroupRequestDto createGroupRequestDto) {
-        UserGroup userGroup = new UserGroup(createGroupRequestDto.getGroupName(), "-",
-                createGroupRequestDto.getGroupType(), createGroupRequestDto.getGroupIcon(),
-                createGroupRequestDto.getUserSeq());
-        userGroup.setCreatorId(createGroupRequestDto.getUserSeq());
+
+        UserGroup userGroup = new UserGroup(createGroupRequestDto.getGroupName(), "-", createGroupRequestDto.getGroupType(), createGroupRequestDto.getGroupIcon(), createGroupRequestDto.getUserSeq());
+        userGroup.assignGroupOwner(createGroupRequestDto.getUserSeq());
         return groupRepository.save(userGroup);
     }
 
     @Override
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
 
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
-
-        if (groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup).isPresent()) {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
-        }
+        checkUserAlreadyParticipatedInGroup(user, userGroup);
         groupAndUserRepository.save(new GroupAndUser(user, userGroup));
     }
 
+
     @Override
     @Transactional
-    public void updateGroup(UpdateGroupRequestDto updateGroupRequestDto) {
+    public void updateGroup(Long userSeq, UpdateGroupRequestDto updateGroupRequestDto) {
 
-        UserGroup userGroup = groupRepository.findById(updateGroupRequestDto.getGroupId())
-                .orElseThrow(() -> {
-                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
-                });
-        userGroup.updateUserGroup(updateGroupRequestDto.getGroupName(),
-                updateGroupRequestDto.getGroupType(),
-                updateGroupRequestDto.getGroupIcon());
+        UserGroup userGroup = groupRepository.findById(updateGroupRequestDto.getGroupId()).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
+        });
+        userGroup.updateUserGroup(userSeq, updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
 
     @Override
     @Transactional
     public void removeGroup(Long userSeq, Long groupId) {
+
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_GROUP);
         });
-
-        if (!hasPermissionToRemove(userGroup, userSeq)) {
-            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_AUTHORITY_TO_REMOVE);
-        }
-
-        userGroup.remove();
+        userGroup.remove(userSeq);
     }
 
-    private boolean hasPermissionToRemove(UserGroup userGroup, Long userSeq) {
-        return userGroup.getCreatorId().equals(userSeq);
+    private void checkUserAlreadyParticipatedInGroup(User user, UserGroup userGroup) {
+        if (groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup).isPresent()) {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATED_GROUP);
+        }
     }
 }

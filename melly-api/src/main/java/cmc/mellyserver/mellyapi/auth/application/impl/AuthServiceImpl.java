@@ -13,7 +13,6 @@ import cmc.mellyserver.mellyapi.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,62 +39,65 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
-        checkDuplicatedEmail(authSignupRequestDto.getEmail());
-        String filename = fileUploader.getMultipartFileName(
-                authSignupRequestDto.getProfile_image());
 
-        User savedUser = userRepository.save(
-                AuthAssembler.createEmailLoginUser(authSignupRequestDto, passwordEncoder,
-                        filename));
-        String token = jwtTokenProvider.createToken(savedUser.getUserSeq(),
-                savedUser.getRoleType());
-        return SignupResponseDto.of(savedUser, token);
+        checkDuplicatedEmail(authSignupRequestDto.getEmail());
+        String filename = fileUploader.getMultipartFileName(authSignupRequestDto.getProfile_image());
+        User savedUser = userRepository.save(AuthAssembler.createEmailLoginUser(authSignupRequestDto, passwordEncoder, filename));
+        return SignupResponseDto.of(savedUser, jwtTokenProvider.createToken(savedUser.getUserSeq(), savedUser.getRoleType()));
     }
 
     @Override
     public LoginResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
-        User user = userRepository.findUserByEmail(authLoginRequestDto.getEmail())
-                .orElseThrow(() -> {
-                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);
-                });
 
+        User user = checkEmailExist(authLoginRequestDto);
         checkPassword(authLoginRequestDto.getPassword(), user);
-
         user.setFcmToken(authLoginRequestDto.getFcmToken());
-        String token = jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType());
-        return LoginResponseDto.of(user, token);
+        return LoginResponseDto.of(user, jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType()));
     }
+
 
     @Override
     public void logout(Long userSeq, String accessToken) {
+
         authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         redisTemplate.opsForValue().set(accessToken, "blackList");
     }
 
     @Override
     public void withdraw(Long userSeq, String accessToken) {
-        userRepository.delete(authenticatedUserChecker.checkAuthenticatedUserExist(userSeq));
-        redisTemplate.opsForValue().set(accessToken, "blackList");
+
+        User user = userRepository.findById(userSeq).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+        });
+        user.remove();
     }
 
     @Override
     public void checkDuplicatedNickname(String nickname) {
-        Optional<User> member = userRepository.findUserByNickname(nickname);
-        if (member.isPresent()) {
+
+        if (userRepository.findUserByNickname(nickname).isPresent()) {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_NICKNAME);
         }
     }
 
     @Override
     public void checkDuplicatedEmail(String email) {
-        Optional<User> member = userRepository.findUserByEmail(email);
 
-        if (member.isPresent()) {
+        if (userRepository.findUserByEmail(email).isPresent()) {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.DUPLICATE_EMAIL);
         }
     }
 
+    private User checkEmailExist(AuthLoginRequestDto authLoginRequestDto) {
+
+        return userRepository.findUserByEmail(authLoginRequestDto.getEmail())
+                .orElseThrow(() -> {
+                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_EMAIL);
+                });
+    }
+
     private void checkPassword(String password, User user) {
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new GlobalBadRequestException(ExceptionCodeAndDetails.INVALID_PASSWORD);
         }

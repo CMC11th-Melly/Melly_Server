@@ -8,20 +8,14 @@ import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupCreateReques
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +34,7 @@ public class GroupController {
 
     @PostMapping
     private ResponseEntity<CommonResponse> addGroup(@AuthenticationPrincipal User user,
-            @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
+                                                    @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
         UserGroup userGroup = groupService.saveGroup(
                 GroupAssembler.createGroupRequestDto(Long.parseLong(user.getUsername()),
                         groupCreateRequest));
@@ -52,16 +46,16 @@ public class GroupController {
     }
 
     @PutMapping("/{groupId}")
-    private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId,
-            @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
-        groupService.updateGroup(GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
+    private ResponseEntity<CommonResponse> updateGroup(@PathVariable Long groupId, @AuthenticationPrincipal User user,
+                                                       @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
+        groupService.updateGroup(Long.parseLong(user.getUsername()), GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
         return ResponseEntity.ok(
                 new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
     @DeleteMapping("/{groupId}")
     private ResponseEntity<CommonResponse> deleteGroup(@AuthenticationPrincipal User user,
-            @PathVariable Long groupId) {
+                                                       @PathVariable Long groupId) {
         groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
         return ResponseEntity.ok(
                 new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));

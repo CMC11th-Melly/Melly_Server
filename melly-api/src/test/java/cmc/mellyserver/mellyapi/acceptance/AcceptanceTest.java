@@ -37,7 +37,7 @@ public abstract class AcceptanceTest {
         RestAssured.port = port;
         userRepository.save(
                 User.builder().email("jemin3161@naver.com").nickname("제민")
-                        .password(passwordEncoder.encode("1234"))
+                        .password(passwordEncoder.encode("1234mm1234"))
                         .roleType(
                                 RoleType.USER)
                         .build());

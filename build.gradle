@@ -12,7 +12,6 @@ repositories {
     mavenCentral()
 }
 
-// 루트 프로젝트는 src를 삭제했기 때문에 main이 존재하지 않는다.
 bootJar {
     enabled = false
 }
@@ -76,12 +75,11 @@ subprojects {
 
     // Rest-Docs 설정 시작
     ext {
-        snippetsDir = file('build/generated-snippets')
+        snippetsDir = file('build/generated-snippets') // 스니펫들이 생성되는 위치 지정
     }
 
     test {
-        outputs.dir snippetsDir // snippetsDir 부분에 결괏값을 출력한다.
-        print('before')
+        outputs.dir snippetsDir // 위에서 지정한 snippetsDir에 결과를 출력하도록 한다.
         useJUnitPlatform()
         finalizedBy 'jacocoTestReport' // 마지막에는 jacocoReport를 작성한다.
     }
@@ -90,7 +88,7 @@ subprojects {
         dependsOn test // test 작업 이후에 작동하도록 하는 설정
         print('hello')
         configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
-        inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
+        inputs.dir snippetsDir // snippectsDir에서 스니펫들을 불러온다.
 
         // source가 없으면 .adoc파일을 전부 html로 만들어버림
         // source 지정시 특정 adoc만 HTML로 만든다.

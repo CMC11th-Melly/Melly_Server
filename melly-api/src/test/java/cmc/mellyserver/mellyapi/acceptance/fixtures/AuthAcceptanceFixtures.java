@@ -17,7 +17,7 @@ public class AuthAcceptanceFixtures {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new AuthLoginRequest("jemin3161@naver.com", "1234"))
+                .body(new AuthLoginRequest("jemin3161@naver.com", "1234mm1234"))
                 .when().post("/auth/login")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())

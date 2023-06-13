@@ -21,6 +21,7 @@ import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.infrastructure.SurveyRecommender;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService {
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }
 
+    @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
     @Override
     public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(
             Long userSeq) {
@@ -120,11 +122,11 @@ public class UserServiceImpl implements UserService {
         user.updateProfile(profileUpdateRequestDto.getNickname(),
                 profileUpdateRequestDto.getGender(),
                 profileUpdateRequestDto.getAgeGroup());
-		if (profileUpdateRequestDto.isDeleteImage()) {
-			user.chnageProfileImage(null);
-		} else {
-			user.chnageProfileImage(
-					fileUploader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
-		}
+        if (profileUpdateRequestDto.isDeleteImage()) {
+            user.chnageProfileImage(null);
+        } else {
+            user.chnageProfileImage(
+                    fileUploader.getMultipartFileName(profileUpdateRequestDto.getProfileImage()));
+        }
     }
 }

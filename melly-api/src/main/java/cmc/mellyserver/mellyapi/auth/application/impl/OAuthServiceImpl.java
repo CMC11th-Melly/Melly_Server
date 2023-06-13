@@ -15,11 +15,12 @@ import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycore.common.enums.RoleType;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -64,11 +65,10 @@ public class OAuthServiceImpl implements OAuthService {
     public AuthResponseForLogin signup(AuthRequestForOAuthSignup authRequestForOAuthSignup) {
 
         // 일단 유저 찾고
-        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUid())
-                .orElseThrow(() -> {
-                    throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
-                });
-        // 있으면 업데이트 하고
+        User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUid()).orElseThrow(() -> {
+            throw new GlobalBadRequestException(ExceptionCodeAndDetails.NO_SUCH_USER);
+        });
+
         user.updateUser(authRequestForOAuthSignup.getNickname(),
                 authRequestForOAuthSignup.getGender(),
                 fileUploader.getMultipartFileName(authRequestForOAuthSignup.getProfileImage()),

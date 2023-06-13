@@ -12,7 +12,7 @@ public interface GroupService {
 
     void participateToGroup(Long loginUserSeq, Long groupId);
 
-    void updateGroup(UpdateGroupRequestDto updateGroupRequestDto);
+    void updateGroup(Long loginUserSeq, UpdateGroupRequestDto updateGroupRequestDto);
 
     void removeGroup(Long groupOwnerUserSeq, Long groupId);
 }
