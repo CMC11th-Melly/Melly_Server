@@ -24,7 +24,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.FileInputStream;
 import java.util.List;
 
 import static org.mockito.BDDMockito.*;
@@ -304,20 +303,16 @@ public class MemoryControllerTest extends ControllerTest {
                 .createMemory(any(CreateMemoryRequestDto.class));
     }
 
-    @DisplayName("메모리를 추가합니다.")
+    @DisplayName("메모리를 수정합니다.")
     @WithUser
     @Test
     void update_memory() throws Exception {
 
         // given
         MockMultipartFile mockFile1 = new MockMultipartFile("content", "filename",
-                "multipart/form-data",
-                new FileInputStream(
-                        "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                "multipart/form-data", "test".getBytes());
         MockMultipartFile mockFile2 = new MockMultipartFile("content", "filename",
-                "multipart/form-data",
-                new FileInputStream(
-                        "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                "multipart/form-data", "test".getBytes());
 
         MemoryUpdateRequest memoryUpdateRequest = MemoryUpdateRequest.builder().groupId(1L)
                 .title("제목").build();
