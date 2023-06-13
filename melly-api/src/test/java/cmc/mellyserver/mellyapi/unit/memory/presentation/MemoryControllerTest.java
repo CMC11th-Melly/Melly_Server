@@ -1,21 +1,5 @@
 package cmc.mellyserver.mellyapi.unit.memory.presentation;
 
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.anyLong;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import cmc.mellyserver.mellyapi.common.annotation.WithUser;
 import cmc.mellyserver.mellyapi.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellyapi.memory.application.dto.request.UpdateMemoryRequestDto;
@@ -28,8 +12,6 @@ import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMem
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import java.io.FileInputStream;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,6 +23,18 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.io.FileInputStream;
+import java.util.List;
+
+import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemoryControllerTest extends ControllerTest {
 
@@ -271,14 +265,6 @@ public class MemoryControllerTest extends ControllerTest {
     void saveMemory() throws Exception {
 
         // given
-        MockMultipartFile mockFile1 = new MockMultipartFile("content", "filename",
-                "multipart/form-data",
-                new FileInputStream(
-                        "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
-        MockMultipartFile mockFile2 = new MockMultipartFile("content", "filename",
-                "multipart/form-data",
-                new FileInputStream(
-                        "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
 
         MemoryCreateRequest memoryCreateRequest = MemoryCreateRequest.builder()
                 .title("메모리 제목")
@@ -294,8 +280,8 @@ public class MemoryControllerTest extends ControllerTest {
 
         // when
         ResultActions perform = mockMvc.perform(multipart(HttpMethod.POST, "/api/memory")
-                .file(mockFile1)
-                .file(mockFile2)
+                .file("images", "testImage1".getBytes())
+                .file("images2", "testImage1".getBytes())
                 .file(memoryData)
                 .with(csrf())
                 .accept(MediaType.ALL));

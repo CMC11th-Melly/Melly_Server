@@ -1,8 +1,5 @@
 package cmc.mellyserver.mellyapi.integration.memory;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import cmc.mellyserver.mellyapi.common.exception.ExceptionCodeAndDetails;
 import cmc.mellyserver.mellyapi.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellyapi.common.factory.UserFactory;
@@ -19,9 +16,6 @@ import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,6 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MemoryServiceIntegrationTest extends IntegrationTest {
 
@@ -111,9 +111,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             MockMultipartFile mockMultipartFile = new MockMultipartFile("testImage", "test",
-                    "multipart/form-data",
-                    new FileInputStream(
-                            "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                    "multipart/form-data", "testImage1".getBytes());
 
             CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
                     .userSeq(user.getUserSeq()).title("테스트 제목3")
