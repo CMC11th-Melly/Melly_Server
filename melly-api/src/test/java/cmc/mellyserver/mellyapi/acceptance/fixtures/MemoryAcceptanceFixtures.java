@@ -5,10 +5,10 @@ import cmc.mellyserver.mellycore.common.enums.OpenType;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.io.FileInputStream;
+import org.springframework.mock.web.MockMultipartFile;
+
 import java.io.IOException;
 import java.util.List;
-import org.springframework.mock.web.MockMultipartFile;
 
 //@RequestPart(name = "images", required = false) List<MultipartFile> images,
 //@Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest
@@ -17,8 +17,7 @@ public class MemoryAcceptanceFixtures {
     public static ExtractableResponse<Response> 새로운_메모리를_등록한다(final String accessToken)
             throws IOException {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("testImage", "test",
-                "multipart/form-data", new FileInputStream(
-                "/Users/seojemin/IdeaProjects/Melly_Server/melly-api/src/test/java/resources/image/testimage.png"));
+                "multipart/form-data", "image".getBytes());
 
         MemoryCreateRequest memoryCreateRequest = MemoryCreateRequest.builder().lng(1.234)
                 .lat(1.234)
