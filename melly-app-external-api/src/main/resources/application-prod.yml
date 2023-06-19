@@ -13,9 +13,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
-      format_sql: true
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
