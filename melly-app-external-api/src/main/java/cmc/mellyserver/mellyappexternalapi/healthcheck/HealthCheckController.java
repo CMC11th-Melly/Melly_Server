@@ -16,7 +16,7 @@ public class HealthCheckController {
 
     @GetMapping("/health")
     public String healthCheck() {
-        return "떡잎마을방범대 파이어~~~";
+        return "떡잎마을방범대 파이어~~*~";
     }
 
     @GetMapping("/authTest")
