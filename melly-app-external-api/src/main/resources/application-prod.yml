@@ -1,0 +1,43 @@
+spring:
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  #  redis:
+  #    host: 127.0.0.1
+  #    port: 6379
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      format_sql: true
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+    database: mysql
+  main:
+    allow-bean-definition-overriding: true
+
+
+app:
+  auth:
+    tokenExpiry: 1000000
+    tokenSecret: Y21jMTF0aGFub3RoZXJjbWNzdXJmbWF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
+
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: ${S3_BUCKET}
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
