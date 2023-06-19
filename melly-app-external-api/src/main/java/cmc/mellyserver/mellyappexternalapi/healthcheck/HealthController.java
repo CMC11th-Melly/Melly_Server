@@ -10,6 +10,6 @@ public class HealthController {
 
     @GetMapping("/")
     public String test() {
-        return "check3";
+        return "check4";
     }
 }
