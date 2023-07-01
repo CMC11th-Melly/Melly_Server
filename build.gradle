@@ -52,6 +52,7 @@ subprojects {
     dependencies {
 
         // Lombok
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
         compileOnly 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
         testCompileOnly 'org.projectlombok:lombok'

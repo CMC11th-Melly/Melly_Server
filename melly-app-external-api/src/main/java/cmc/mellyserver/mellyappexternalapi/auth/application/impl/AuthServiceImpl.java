@@ -24,25 +24,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final FileUploader fileUploader;
+
     private final RedisTemplate redisTemplate;
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 
+    @Transactional
     @Override
-    public SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
+    public SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) throws InterruptedException {
 
         checkDuplicatedEmail(authSignupRequestDto.getEmail());
         String filename = fileUploader.getMultipartFileName(authSignupRequestDto.getProfile_image());
+        log.info("들어갑니다~");
         User savedUser = userRepository.save(AuthAssembler.createEmailLoginUser(authSignupRequestDto, passwordEncoder, filename));
+        Thread.sleep(3000);
+
         return SignupResponseDto.of(savedUser, jwtTokenProvider.createToken(savedUser.getUserSeq(), savedUser.getRoleType()));
     }
 

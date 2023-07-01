@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     private final FileUploader fileUploader;
 
-    private final RedisTemplate redisTemplate;
+    // private final RedisTemplate redisTemplate;
 
     private final UserGroupQueryRepository userGroupQueryRepository;
 
@@ -57,6 +56,7 @@ public class UserServiceImpl implements UserService {
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
     @Override
     public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(
@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
                 user.getAgeGroup());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String findNicknameByUserIdentifier(Long userSeq) {
 

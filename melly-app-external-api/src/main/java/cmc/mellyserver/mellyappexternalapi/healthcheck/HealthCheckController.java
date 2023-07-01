@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class HealthCheckController {
 
+    private final HealthCheckService healthCheckService;
+
     @GetMapping("/health")
-    public String healthCheck() {
-        return "떡잎마을방범대 파이어~~*~";
+    public String healthCheck() throws InterruptedException {
+        return healthCheckService.check();
     }
 
     @GetMapping("/authTest")

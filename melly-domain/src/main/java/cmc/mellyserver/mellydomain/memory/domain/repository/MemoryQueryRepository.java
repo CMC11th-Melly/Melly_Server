@@ -1,10 +1,5 @@
 package cmc.mellyserver.mellydomain.memory.domain.repository;
 
-import static cmc.mellyserver.mellydomain.group.domain.QGroupAndUser.groupAndUser;
-import static cmc.mellyserver.mellydomain.memory.domain.QMemory.memory;
-import static cmc.mellyserver.mellydomain.memory.domain.QMemoryImage.memoryImage;
-import static cmc.mellyserver.mellydomain.place.domain.QPlace.place;
-import static org.springframework.util.ObjectUtils.isEmpty;
 
 import cmc.mellyserver.mellydomain.common.enums.GroupType;
 import cmc.mellyserver.mellydomain.common.enums.OpenType;
@@ -19,18 +14,25 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Repository;
+
+import static cmc.mellyserver.mellydomain.group.domain.QGroupAndUser.groupAndUser;
+import static cmc.mellyserver.mellydomain.memory.domain.QMemory.memory;
+import static cmc.mellyserver.mellydomain.memory.domain.QMemoryImage.memoryImage;
+import static cmc.mellyserver.mellydomain.place.domain.QPlace.place;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 
 @Repository
@@ -46,7 +48,7 @@ public class MemoryQueryRepository {
 
 
     public List<FindPlaceInfoByMemoryNameResponseDto> searchPlaceByContainMemoryName(Long userSeq,
-            String memoryName) {
+                                                                                     String memoryName) {
 
         return query.select(
                         Projections.constructor(FindPlaceInfoByMemoryNameResponseDto.class, memory.placeId,
@@ -62,8 +64,8 @@ public class MemoryQueryRepository {
 
     // [장소 상세] - 나의 메모리, 마이페이지 - 내가 작성한 메모리 조회 (최적화 완료, 인덱스 추가 필요)
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForPlace(Pageable pageable, Long userSeq,
-            Long placeId,
-            GroupType groupType) {
+                                                                    Long placeId,
+                                                                    GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
@@ -91,8 +93,8 @@ public class MemoryQueryRepository {
 
     // [마이 페이지] - 내가 작성한 메모리 목록 조회
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForMyPage(Pageable pageable,
-            Long userSeq,
-            GroupType groupType) {
+                                                                     Long userSeq,
+                                                                     GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
@@ -145,8 +147,8 @@ public class MemoryQueryRepository {
 
     // [장소 상세] - 다른 사람이 작성한 메모리
     public Slice<MemoryResponseDto> searchMemoryOtherCreate(Pageable pageable, Long userSeq,
-            Long placeId,
-            GroupType groupType) {
+                                                            Long placeId,
+                                                            GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
@@ -173,7 +175,7 @@ public class MemoryQueryRepository {
 
     // 해당 장소에 대해 내 그룹 사람들이 쓴 메모리 조회
     public Slice<MemoryResponseDto> getMyGroupMemory(Pageable pageable, Long userSeq, Long placeId,
-            GroupType groupType) {
+                                                     GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
@@ -331,7 +333,7 @@ public class MemoryQueryRepository {
 
 
     private static SliceImpl<MemoryResponseDto> transferToSlice(Pageable pageable,
-            List<MemoryResponseDto> results) {
+                                                                List<MemoryResponseDto> results) {
         boolean hasNext = false;
 
         if (results.size() > pageable.getPageSize()) {

@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse> normalSignup(@Valid CommonSignupRequest commonSignupRequest) {
+    public ResponseEntity<CommonResponse> normalSignup(@Valid CommonSignupRequest commonSignupRequest) throws InterruptedException {
 
         SignupResponseDto signupResponseDto = authService.signup(AuthAssembler.authSignupRequestDto(commonSignupRequest));
         return ResponseEntity.ok(new CommonResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, AuthAssembler.signupResponse(signupResponseDto)));

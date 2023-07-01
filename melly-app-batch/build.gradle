@@ -1,4 +1,8 @@
-sourceCompatibility = '11'
+bootJar
+        {
+            enabled = true
+        }
+
 
 dependencies {
 
@@ -12,6 +16,6 @@ dependencies {
     implementation project(':melly-domain') // core의 도메인 정보를 사용해야 한다.
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}

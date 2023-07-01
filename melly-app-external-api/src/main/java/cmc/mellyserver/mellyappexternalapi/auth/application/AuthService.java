@@ -7,7 +7,7 @@ import cmc.mellyserver.mellyappexternalapi.auth.application.dto.response.SignupR
 
 public interface AuthService {
 
-    SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto);
+    SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) throws InterruptedException;
 
     LoginResponseDto login(AuthLoginRequestDto authLoginRequestDto);
 
