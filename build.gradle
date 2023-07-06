@@ -52,24 +52,25 @@ subprojects {
     dependencies {
 
         // Lombok
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
         compileOnly 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
         testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        testImplementation 'org.jeasy:easy-random-core:5.0.0'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'com.tngtech.archunit:archunit-junit4:1.0.0-rc1'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
         asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-        testImplementation 'io.rest-assured:rest-assured:4.4.0'
-        testImplementation 'io.rest-assured:xml-path:4.4.0'
-        testImplementation 'io.rest-assured:json-schema-validator:4.4.0'
-        testImplementation 'io.rest-assured:spring-mock-mvc:4.4.0'
-        testImplementation 'org.springframework.security:spring-security-test'
-        testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-        // redis
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+        implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+        implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+        runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+        runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+        // redis
         testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
     }
 

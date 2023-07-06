@@ -19,7 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 
-/melly-core/src/main/resources/application-local.yml
+
 
 .idea
 *.iws
@@ -28,8 +28,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-/melly-app-external-api/src/main/resources/application-local.yml
-/melly-app-batch/src/main/resources/application-local.yml
+/melly-domain/src/main/resources/application-local.yml
+/melly-api/src/main/resources/application-local.yml
+/melly-batch/src/main/resources/application-local.yml
 
 
 ### NetBeans ###
