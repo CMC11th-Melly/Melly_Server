@@ -39,23 +39,11 @@
 
 ## 📚 Folder Structure
 ```
-├── MellyServerApplication.java
-├── auth                                 # 인증 관련 도메인
-├── block                                # 메모리 및 댓글 차단 도메인
-├── comment                              # 메모리 댓글 도메인
-├── common                               # 공통 응답 형식 및 유틸리티 모음
-├── config                               # 인증, 문서화 등 설정 모음
-├── group                                # 유저 그룹 도메인
-├── healthcheck                          # 헬스 체크
-├── memory                               # 메모리 도메인
-├── memoryScrap                          # 메모리 스크랩 도메인
-├── notification                         # 푸시 알림 도메인
-├── place                                # 장소 도메인
-├── placeScrap                           # 장소 스크랩 도메인
-├── recommend                            # 추천 장소 도메인
-├── report                               # 메모리 및 댓글 신고 도메인
-├── trend                                # 핫한 장소 도메인
-└── user                                 # 유저 도메인
+├── melly-api                     # 모바일 어플리케이션과 통신하는 REST API
+├── melly-batch                   # 내부 배치 서비스        
+├── melly-core                    # 서비스 로직, 도메인          
+├── melly-common                  # Enum, Utils           
+└── melly-infra                   # AWS, FCM 등의 외부 모듈    
 
 ```
 
