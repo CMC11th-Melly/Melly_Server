@@ -44,7 +44,6 @@
 ├── melly-core                    # 서비스 로직, 도메인          
 ├── melly-common                  # Enum, Utils           
 └── melly-infra                   # AWS, FCM 등의 외부 모듈    
-
 ```
 
 <br>
