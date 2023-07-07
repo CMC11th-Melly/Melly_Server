@@ -18,11 +18,10 @@ import java.net.BindException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //
     @ExceptionHandler(GlobalBadRequestException.class)
-    public ResponseEntity<GlobalExceptionResponse> badRequestException(GlobalBadRequestException e) {
-        return ResponseEntity.badRequest()
-                .body(new GlobalExceptionResponse(e.getErrorCode().getCode(),
-                        e.getErrorCode().getMessage()));
+    public ResponseEntity<ErrorResponse> badRequestException(GlobalBadRequestException e) {
+        return ResponseEntity.badRequest().body(new ErrorResponse(e.getErrorCode().getCode(), e.getErrorCode().getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -33,17 +32,16 @@ public class GlobalExceptionHandler {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    public ResponseEntity<GlobalExceptionResponse> badRequest(Exception e) {
+    public ResponseEntity<ErrorResponse> badRequest(Exception e) {
 
-        return ResponseEntity.badRequest()
-                .body(new GlobalExceptionResponse(ErrorCode.BAD_REQUEST.getCode(), e.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorResponse(ErrorCode.BAD_REQUEST.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<GlobalExceptionResponse> handleError404() {
+    public ResponseEntity<ErrorResponse> handleError404() {
         String code = ErrorCode.NOT_FOUND_API.getCode();
         String message = ErrorCode.NOT_FOUND_API.getCode();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GlobalExceptionResponse(code, message));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(code, message));
     }
 
     @ExceptionHandler(org.springframework.validation.BindException.class)

@@ -17,6 +17,7 @@ public abstract class GroupAssembler {
                 userGroup.getGroupIcon(),
                 userGroup.getGroupName(),
                 userGroup.getGroupType(),
+                null,
                 userGroup.getInviteLink()
         );
     }

@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,18 +41,18 @@ public class GroupService {
         });
     }
 
-    //    @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
+
+    @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
     @Transactional(readOnly = true)
-    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) throws InterruptedException {
-        Thread.sleep(3000);
+    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) {
         return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
     }
 
-    @Cacheable(value = "findGroups", key = "#userSeq")
+    @Cacheable(value = "findGroups", key = "#userSeq", cacheManager = "redisCacheManager")
+    @Transactional(readOnly = true)
     public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userSeq) {
         return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
     }
-
 
     @Transactional
     public UserGroup saveGroup(CreateGroupRequestDto createGroupRequestDto) {

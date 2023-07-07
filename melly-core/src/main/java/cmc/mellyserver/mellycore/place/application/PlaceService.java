@@ -37,10 +37,9 @@ public class PlaceService {
 
     @Transactional(readOnly = true)
     public List<MarkedPlaceResponseDto> displayMarkedPlace(Long userSeq, GroupType groupType) {
-        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq);
-        return placeUserMemoryExist.stream()
-                .map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(),
-                        null))
+
+        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq, groupType);
+        return placeUserMemoryExist.stream().map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), null))
                 .collect(Collectors.toList());
     }
 

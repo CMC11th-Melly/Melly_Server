@@ -18,6 +18,7 @@ public class UserSurveyService {
 
     @Transactional(readOnly = true)
     public SurveyRecommendResponseDto getSurveyResult(Long userSeq) {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }

@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @GetMapping("/group")
-    public ResponseEntity<ApiResponse> getUserGroup(@AuthenticationPrincipal User user) throws InterruptedException {
+    public ResponseEntity<ApiResponse> getUserGroup(@AuthenticationPrincipal User user) {
 
         List<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results)));

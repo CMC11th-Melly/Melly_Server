@@ -33,10 +33,9 @@ public class UserProfileService {
 
     @Transactional(readOnly = true)
     public ProfileUpdateFormResponseDto getLoginUserProfileDataForUpdate(Long userSeq) {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(),
-                user.getGender(),
-                user.getAgeGroup());
+        return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(), user.getAgeGroup());
     }
 
     @Transactional(readOnly = true)
@@ -50,6 +49,7 @@ public class UserProfileService {
 
     @Transactional
     public void updateLoginUserProfile(ProfileUpdateRequestDto profileUpdateRequestDto) {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(profileUpdateRequestDto.getUserSeq());
         user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
 

@@ -57,7 +57,7 @@ public class MemoryService {
     private final GroupAndUserRepository groupAndUserRepository;
 
 
-    @Cacheable(value = "memory", key = "'memoryId'")
+    @Cacheable(value = "memory", key = "#memoryId", cacheManager = "redisCacheManager")
     @Transactional(readOnly = true)
     public MemoryResponseDto findMemoryByMemoryId(Long userSeq, Long memoryId) {
         return memoryQueryRepository.getMemoryByMemoryId(userSeq, memoryId);
@@ -214,7 +214,7 @@ public class MemoryService {
     }
 
 
-    @CacheEvict(value = "memory")
+    @CacheEvict(value = "memory", key = "#memoryId", cacheManager = "redisCacheManager")
     @Transactional
     public void removeMemory(Long userSeq, Long memoryId) {
 

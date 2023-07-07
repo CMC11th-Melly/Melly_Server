@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import static cmc.mellyserver.mellycore.config.datasource.DataSourceKey.KeyName.REPLICA_SERVER_1;
 import static cmc.mellyserver.mellycore.config.datasource.DataSourceKey.KeyName.SOURCE_SERVER;
 
 @Slf4j
@@ -21,7 +20,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
 
         if (isReadOnly) {
 //            return randomReplicaKeys.next();
-            return REPLICA_SERVER_1;
+            return SOURCE_SERVER;
         }
 
         return SOURCE_SERVER;

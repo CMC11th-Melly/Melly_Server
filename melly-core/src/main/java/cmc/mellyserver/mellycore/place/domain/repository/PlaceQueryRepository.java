@@ -36,7 +36,7 @@ public class PlaceQueryRepository {
     }
 
 
-    public List<Place> getPlaceUserMemoryExist(Long userSeq) {
+    public List<Place> getPlaceUserMemoryExist(Long userSeq, GroupType groupType) {
 
         return query.select(place)
                 .from(place)

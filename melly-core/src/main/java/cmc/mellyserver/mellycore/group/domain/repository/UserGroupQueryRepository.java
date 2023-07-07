@@ -62,9 +62,8 @@ public class UserGroupQueryRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(
-            Long userSeq) {
-        System.out.println("쿼리 시작");
+    public List<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userSeq) {
+
         List<GroupAndUser> results = query.select(groupAndUser)
                 .from(groupAndUser)
                 .join(groupAndUser.group, userGroup).fetchJoin()

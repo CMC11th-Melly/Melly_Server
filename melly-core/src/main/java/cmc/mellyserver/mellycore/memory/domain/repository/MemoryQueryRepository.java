@@ -182,6 +182,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
+                        memory.placeId.eq(placeId),
                         memory.userId.ne(userSeq), // 내가 작성자인 메모리
                         eqGroup(groupType)// 그룹 타입 필터링 용
                 )
@@ -218,6 +219,7 @@ public class MemoryQueryRepository {
                                                                 userSeq))
                                         )).distinct()
                         ),
+                        memory.placeId.eq(placeId),
                         memory.userId.ne(userSeq),
                         eqGroup(groupType),
                         memory.openType.ne(OpenType.PRIVATE)
