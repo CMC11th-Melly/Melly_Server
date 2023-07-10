@@ -17,9 +17,8 @@ import static cmc.mellyserver.mellycore.config.datasource.DataSourceKey.KeyName.
 @Configuration
 public class DataSourceConfig {
 
-
     @Bean
-    @Qualifier(SOURCE_SERVER) // 같은 타입의 빈이라도 이름 지정 가능하다
+    @Qualifier(SOURCE_SERVER)
     @ConfigurationProperties(prefix = "spring.datasource.source")
     public DataSource sourceDataSource() {
         return DataSourceBuilder.create()
@@ -33,35 +32,19 @@ public class DataSourceConfig {
         return DataSourceBuilder.create()
                 .build();
     }
-//
-//    @Bean
-//    @Qualifier(REPLICA_SERVER_2)
-//    @ConfigurationProperties(prefix = "spring.datasource.replica2")
-//    public DataSource replica2DataSource() {
-//        return DataSourceBuilder.create().type(HikariDataSource.class)
-//                .build();
-//    }
 
     @Bean
-    public DataSource routingDataSource(
-            @Qualifier(SOURCE_SERVER) DataSource sourceDataSource,
-            @Qualifier(REPLICA_SERVER_1) DataSource replica1DataSource
-//            @Qualifier(REPLICA_SERVER_2) DataSource replica2DataSource
-    ) {
+    public DataSource routingDataSource(@Qualifier(SOURCE_SERVER) DataSource sourceDataSource, @Qualifier(REPLICA_SERVER_1) DataSource replica1DataSource) {
+
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
-        // dataSource 리스트를 맵으로 routingDataSource에 넘겨준다.
         HashMap<Object, Object> dataSourceMap = new HashMap<>();
         dataSourceMap.put(SOURCE_SERVER, sourceDataSource);
         dataSourceMap.put(REPLICA_SERVER_1, replica1DataSource);
-//        dataSourceMap.put(REPLICA_SERVER_2, replica2DataSource);
 
-        // 목표로 하는 데이터 소스 맵을 넘겨준다.
         routingDataSource.setTargetDataSources(dataSourceMap);
-        // 기본이 되는 데이터 소스를 지정한다.
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);
         routingDataSource.afterPropertiesSet();
-
 
         return routingDataSource;
     }
@@ -71,6 +54,4 @@ public class DataSourceConfig {
     public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
-
-
 }

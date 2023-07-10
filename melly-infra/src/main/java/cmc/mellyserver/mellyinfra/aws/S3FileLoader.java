@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Profile({"local", "prod"})
 @Component
 @RequiredArgsConstructor
-@Profile({"local", "prod"})
 public class S3FileLoader implements FileUploader {
 
     private final AWSS3UploadService uploadService;
@@ -67,20 +67,21 @@ public class S3FileLoader implements FileUploader {
     }
 
     private String createFileNames(String uid, String fileName) {
+
         return uid + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String createFileName(String fileName) {
+
         return "profile/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
     private String getFileExtension(String fileName) {
+
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new IllegalArgumentException("잘못된 형식 입니다.");
         }
     }
-
 }

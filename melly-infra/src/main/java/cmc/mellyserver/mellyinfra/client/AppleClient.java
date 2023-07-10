@@ -55,7 +55,6 @@ public class AppleClient implements LoginClient {
                 .block();
 
         try {
-
             String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
             Map<String, String> header = new ObjectMapper().readValue(
@@ -103,7 +102,5 @@ public class AppleClient implements LoginClient {
         }
 
         return null;
-
     }
-
 }

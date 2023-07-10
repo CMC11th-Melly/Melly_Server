@@ -1,5 +1,6 @@
-package cmc.mellyserver.mellyapi.common.mockapi;
+package cmc.mellyserver.mellycore.unit.config.mockapi;
 
+import cmc.mellyserver.mellycore.common.aws.FileUploader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

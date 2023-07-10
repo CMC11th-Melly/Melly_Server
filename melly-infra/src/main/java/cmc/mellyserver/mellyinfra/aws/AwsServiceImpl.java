@@ -10,17 +10,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Profile({"local", "prod"})
 @Component
 @RequiredArgsConstructor
-@Profile({"local", "prod"})
 public class AwsServiceImpl implements AwsService {
 
     private final AmazonS3Client amazonS3Client;
 
     @Override
     public Long calculateImageVolume(String bucketName, String username) {
+
         ObjectListing mellyimage = amazonS3Client.listObjects(bucketName, username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
+
         return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
     }
 }

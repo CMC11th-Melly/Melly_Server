@@ -38,6 +38,7 @@ public class UserGroup extends JpaBaseEntity {
     @CollectionTable
     private Set<Long> groupManagers = new HashSet<>();
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "group_type", nullable = false)
     private GroupType groupType;
@@ -52,6 +53,7 @@ public class UserGroup extends JpaBaseEntity {
         this.groupType = groupType;
         this.groupIcon = groupIcon;
     }
+
 
     public void remove(Long userId) {
 
@@ -70,7 +72,7 @@ public class UserGroup extends JpaBaseEntity {
         this.groupType = groupType;
         this.groupIcon = groupIcon;
     }
-    
+
     public void assignGroupManager(Long userId) {
         this.groupManagers.add(userId);
     }

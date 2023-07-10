@@ -4,7 +4,6 @@ import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.mellycore.user.domain.QUser;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import static cmc.mellyserver.mellycore.place.domain.QPlace.place;
 import static cmc.mellyserver.mellycore.scrap.domain.QPlaceScrap.placeScrap;
+import static cmc.mellyserver.mellycore.user.domain.QUser.user;
 
 @Repository
 public class PlaceScrapQueryRepository {
@@ -24,16 +24,17 @@ public class PlaceScrapQueryRepository {
     private final EntityManager em;
     private final JPAQueryFactory query;
 
-    // 인텔리제이 인식 오류, 무시하고 진행하면 된다.
     public PlaceScrapQueryRepository(EntityManager em) {
         this.em = em;
         this.query = new JPAQueryFactory(em);
     }
 
     public Boolean checkCurrentLoginUserScrapedPlaceByPosition(Long userSeq, Position position) {
+
         Integer result = query.selectOne()
                 .from(placeScrap)
-                .leftJoin(place).on(place.id.eq(placeScrap.place.id))
+                .innerJoin(place).on(place.id.eq(placeScrap.place.id)).fetchJoin()
+                .innerJoin(user).on(placeScrap.user.userSeq.eq(user.userSeq)).fetchJoin()
                 .where(
                         place.position.eq(position),
                         placeScrap.user.userSeq.eq(userSeq)
@@ -44,9 +45,11 @@ public class PlaceScrapQueryRepository {
     }
 
     public Boolean checkCurrentLoginUserScrapedPlaceByPlaceId(Long userSeq, Long placeId) {
+
         Integer result = query.selectOne()
                 .from(placeScrap)
-                .leftJoin(place).on(place.id.eq(placeScrap.place.id))
+                .innerJoin(place).on(place.id.eq(placeScrap.place.id)).fetchJoin()
+                .innerJoin(user).on(placeScrap.user.userSeq.eq(user.userSeq)).fetchJoin()
                 .where(
                         place.id.eq(placeId),
                         placeScrap.user.userSeq.eq(userSeq)
@@ -57,24 +60,29 @@ public class PlaceScrapQueryRepository {
     }
 
     public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userSeq) {
-        return query.select(
-                        Projections.fields(PlaceScrapCountResponseDto.class, placeScrap.scrapType, placeScrap.count().as("scrapCount"))
+
+        return query.select(Projections.fields(PlaceScrapCountResponseDto.class,
+                        placeScrap.scrapType,
+                        placeScrap.count().as("scrapCount"))
                 )
                 .from(placeScrap)
-                .groupBy(placeScrap.scrapType)
+                .innerJoin(user).on(placeScrap.user.userSeq.eq(user.userSeq)).fetchJoin()
                 .where(placeScrap.user.userSeq.eq(userSeq))
+                .groupBy(placeScrap.scrapType)
                 .fetch();
     }
 
     public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Pageable pageable, Long userSeq, ScrapType scrapType) {
 
         List<ScrapedPlaceResponseDto> results = query.select(Projections.constructor(ScrapedPlaceResponseDto.class,
-                        place.id, place.position,
+                        place.id,
+                        place.position,
                         place.placeCategory,
-                        place.placeName, place.placeImage))
+                        place.placeName,
+                        place.placeImage))
                 .from(placeScrap)
-                .leftJoin(placeScrap.place, place)
-                .leftJoin(placeScrap.user, QUser.user)
+                .innerJoin(placeScrap.place, place).fetchJoin()
+                .innerJoin(placeScrap.user, user).fetchJoin()
                 .where(
                         placeScrap.user.userSeq.eq(userSeq),
                         placeScrap.scrapType.eq(scrapType)

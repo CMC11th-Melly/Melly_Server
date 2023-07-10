@@ -28,7 +28,6 @@ public abstract class UserAssembler {
                         .groupType(response.getGroupType())
                         .groupName(response.getGroupName())
                         .groupIcon(response.getGroupIcon())
-                        .invitationLink(response.getInvitationLink())
                         .build()
         ).collect(Collectors.toList());
     }

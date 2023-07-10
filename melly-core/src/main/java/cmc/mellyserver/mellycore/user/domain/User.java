@@ -3,19 +3,20 @@ package cmc.mellyserver.mellycore.user.domain;
 import cmc.mellyserver.mellycommon.enums.*;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.user.domain.vo.Recommend;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name = "tb_user")
 public class User extends JpaBaseEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +47,13 @@ public class User extends JpaBaseEntity {
     @Column(name = "fcm_token")
     private String fcmToken;
 
-    @Column(name = "enable_app_push", nullable = false)
+    @Column(name = "enable_app_push")
     private boolean enableAppPush;
 
-    @Column(name = "enable_comment_like", nullable = false)
+    @Column(name = "enable_comment_like")
     private boolean enableCommentLike;
 
-    @Column(name = "enable_comment", nullable = false)
+    @Column(name = "enable_comment")
     private boolean enableComment;
 
     @Column(name = "password_init_date")
@@ -92,12 +93,9 @@ public class User extends JpaBaseEntity {
     }
 
     @Builder
-    private User(Long userSeq, String email, String password, RoleType roleType, String profileImage,
-                 AgeGroup ageGroup, Gender gender, UserStatus userStatus,
-                 String fcmToken, String uid, Provider provider, String nickname, boolean enableAppPush,
-                 PasswordExpired passwordExpired, LocalDateTime passwordInitDate,
+    private User(Long userSeq, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup, Gender gender, UserStatus userStatus,
+                 String fcmToken, String uid, Provider provider, String nickname, boolean enableAppPush, PasswordExpired passwordExpired, LocalDateTime passwordInitDate,
                  boolean enableCommentLike, boolean enableComment) {
-
 
         this.userSeq = userSeq;
         this.email = email;
@@ -118,8 +116,7 @@ public class User extends JpaBaseEntity {
         this.passwordInitDate = passwordInitDate;
     }
 
-    public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup,
-                           boolean enableAppPush, boolean enableCommentLike, boolean enableComment) {
+    public void updateUser(String nickname, Gender gender, String profileImage, AgeGroup ageGroup, boolean enableAppPush, boolean enableCommentLike, boolean enableComment) {
         this.nickname = nickname;
         this.gender = gender;
         this.profileImage = profileImage;
@@ -187,7 +184,6 @@ public class User extends JpaBaseEntity {
         this.passwordInitDate = localDateTime;
         return this;
     }
-
 
     private boolean isDefaultEmailUser() {
         return !Objects.isNull(this.provider) && this.provider.equals(Provider.DEFAULT);

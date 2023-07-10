@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tb_place")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "tb_place")
 public class Place extends JpaBaseEntity {
 
     @Id
@@ -27,11 +27,14 @@ public class Place extends JpaBaseEntity {
     @Column(name = "place_name")
     private String placeName;
 
+    @Column(name = "place_image")
     private String placeImage;
 
+    @Column(name = "place_category")
     private String placeCategory;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "is_deleted")
     private DeleteStatus isDeleted;
 
     @Builder
@@ -43,7 +46,6 @@ public class Place extends JpaBaseEntity {
         this.placeCategory = placeCategory;
         this.isDeleted = isDeleted;
     }
-
 
     @PrePersist
     public void init() {

@@ -8,6 +8,7 @@ public class RandomReplicaKeys {
     private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     private final List<DataSourceKey> dataSourceKeys;
+
     private final int size;
 
     public RandomReplicaKeys() {

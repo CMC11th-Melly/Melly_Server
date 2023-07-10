@@ -16,8 +16,8 @@ import reactor.netty.tcp.TcpClient;
 
 import java.util.concurrent.TimeUnit;
 
-@Configuration
 @Slf4j
+@Configuration
 public class WebClientConfig {
 
     @Bean

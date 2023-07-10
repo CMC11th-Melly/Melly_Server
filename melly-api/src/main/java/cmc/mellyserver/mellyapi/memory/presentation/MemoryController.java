@@ -11,7 +11,7 @@ import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryUpdateRequ
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryResponse;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
-import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.application.MemoryService;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
@@ -41,7 +41,7 @@ public class MemoryController {
     @GetMapping("/group")
     public ResponseEntity<ApiResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user) {
 
-        List<GroupListForSaveMemoryResponseDto> userGroup = groupService.findGroupListLoginUserParticipateForMemoryCreate(Long.parseLong(user.getUsername()));
+        List<GroupLoginUserParticipatedResponseDto> userGroup = groupService.findGroupListLoginUserParticipateForMemoryCreate(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.groupListForSaveMemoryResponse(userGroup)));
     }
 
@@ -106,7 +106,7 @@ public class MemoryController {
     public ResponseEntity<ApiResponse> findMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId) {
 
         MemoryResponseDto memoryByMemoryId = memoryService.findMemoryByMemoryId(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.memoryResponse(memoryByMemoryId)));
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryResponse.of(memoryByMemoryId)));
     }
 
 

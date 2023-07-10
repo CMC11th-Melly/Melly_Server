@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tb_place_scrap")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "tb_place_scrap")
 public class PlaceScrap extends JpaBaseEntity {
 
     @Id
@@ -30,19 +30,9 @@ public class PlaceScrap extends JpaBaseEntity {
     @JoinColumn(name = "place_id")
     private Place place;
 
-//	private Long userId;
-//
-//	private Long placeId;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "scrap_type", nullable = false)
     private ScrapType scrapType;
-
-//    @Builder
-//    public PlaceScrap(Long userId, Long placeId, ScrapType scrapType) {
-//        this.userId = userId;
-//        this.placeId = placeId;
-//        this.scrapType = scrapType;
-//    }
 
     @Builder
     public PlaceScrap(User user, Place place, ScrapType scrapType) {
@@ -54,7 +44,4 @@ public class PlaceScrap extends JpaBaseEntity {
     public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType) {
         return new PlaceScrap(user, place, scrapType);
     }
-//	public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType) {
-//		return new PlaceScrap(user.getUserSeq(), place.getId(), scrapType);
-//	}
 }

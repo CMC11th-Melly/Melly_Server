@@ -1,63 +1,56 @@
 package cmc.mellyserver.mellycore.memory.domain;
 
+import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.memory.domain.vo.GroupInfo;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
-@AllArgsConstructor
-@Table(name = "tb_memory", indexes = {
-        @Index(name = "idx__groupType", columnList = "groupType"),
-        @Index(name = "idx__stars", columnList = "stars"),
-        @Index(name = "id__openType", columnList = "openType")
-})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "tb_memory")
 public class Memory extends JpaBaseEntity {
 
-    @Embedded
-    GroupInfo groupInfo;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "memory_id")
     private Long id;
+
+    @Column(name = "stars")
     private Long stars;
+
+    @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "place_id")
     private Long placeId;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "content")
     @Lob
     private String content;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "open_type")
     private OpenType openType;
 
-    private boolean isDelete;
+    @Column(name = "is_deleted")
+    private DeleteStatus is_deleted;
+
+    @Embedded
+    GroupInfo groupInfo;
 
     private boolean isReported = false;
 
@@ -70,14 +63,12 @@ public class Memory extends JpaBaseEntity {
     @CollectionTable(
             name = "tb_keywords_table",
             joinColumns = @JoinColumn(name = "memory_id"))
-    @Column(name = "keyword") // 컬럼명 지정 (예외)
+    @Column(name = "keyword")
     private List<String> keyword = new ArrayList<>();
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, Long userId, Long placeId, String title,
-            String content,
-            OpenType openType,
-            LocalDateTime visitedDate, boolean isDelete) {
+    public Memory(Long stars, GroupInfo groupInfo, Long userId, Long placeId, String title, String content, OpenType openType, LocalDateTime visitedDate) {
+
         this.stars = stars;
         this.groupInfo = groupInfo;
         this.title = title;
@@ -86,16 +77,15 @@ public class Memory extends JpaBaseEntity {
         this.content = content;
         this.openType = openType;
         this.visitedDate = visitedDate;
-        this.isDelete = isDelete;
     }
 
     @PrePersist
     public void init() {
-        this.isDelete = false;
+        this.is_deleted = DeleteStatus.N;
     }
 
     public void delete() {
-        this.isDelete = true;
+        this.is_deleted = DeleteStatus.Y;
     }
 
     public void setUserId(Long userId) {
@@ -106,9 +96,8 @@ public class Memory extends JpaBaseEntity {
         this.placeId = placeId;
     }
 
-    public void updateMemory(String title, String content, List<String> keyword, Long groupId,
-            GroupType groupType,
-            String groupName, OpenType openType, LocalDateTime visitedDate, Long star) {
+    public void updateMemory(String title, String content, List<String> keyword, Long groupId, GroupType groupType, String groupName, OpenType openType, LocalDateTime visitedDate, Long star) {
+
         this.title = title;
         this.content = content;
         this.keyword = keyword;
@@ -119,6 +108,7 @@ public class Memory extends JpaBaseEntity {
     }
 
     public void setMemoryImages(List<MemoryImage> memoryImages) {
+
         this.memoryImages = memoryImages;
         for (MemoryImage memoryImage : memoryImages) {
             memoryImage.setMemory(this);

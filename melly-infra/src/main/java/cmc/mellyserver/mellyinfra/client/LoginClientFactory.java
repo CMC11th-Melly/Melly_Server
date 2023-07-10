@@ -14,6 +14,7 @@ import java.util.Map;
 public class LoginClientFactory {
 
     private final List<LoginClient> loginClientList;
+
     private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
 
     public LoginClient find(Provider provider) {
@@ -28,7 +29,6 @@ public class LoginClientFactory {
                 .orElseThrow();
 
         factoryCache.put(provider, loginClient);
-
         return loginClient;
     }
 }

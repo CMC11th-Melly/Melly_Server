@@ -1,22 +1,19 @@
 package cmc.mellyserver.mellycore.group.domain;
 
+import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.user.domain.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-/**
- * GroupAndUser.java
- *
- * @author jemlog
- */
-@Entity
-@NoArgsConstructor
-@Table(name = "tb_group_and_user")
 @Getter
-public class GroupAndUser {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "tb_group_and_user")
+public class GroupAndUser extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +37,5 @@ public class GroupAndUser {
     public static GroupAndUser of(User user, UserGroup group) {
         return GroupAndUser.builder().user(user).group(group).build();
     }
-
 }
 

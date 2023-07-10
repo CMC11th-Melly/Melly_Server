@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
         User user = checkEmailExist(authLoginRequestDto);
-        checkPassword(authLoginRequestDto.getPassword(), user);
+        checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
         user.setFcmToken(authLoginRequestDto.getFcmToken());
         return LoginResponseDto.of(user, jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType()));
     }
@@ -98,9 +98,9 @@ public class AuthServiceImpl implements AuthService {
                 });
     }
 
-    private void checkPassword(String password, User user) {
+    private void checkPassword(String password, String originPassword) {
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, originPassword)) {
             throw new GlobalBadRequestException(ErrorCode.INVALID_PASSWORD);
         }
     }
