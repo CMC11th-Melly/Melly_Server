@@ -17,19 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class FCMSender {
 
     private static final String API_URL = "https://fcm.googleapis.com/v1/projects/melly-fdd90/messages:send";
+
     private final NotificationService notificationService;
+
     private final ObjectMapper objectMapper;
 
     private String getAccessToken() throws IOException {
+
         String firebaseConfigPath = "firebase/melly-fdd90-firebase-adminsdk-a139l-bd9a957ecb.json";
-        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
-                        new ClassPathResource(firebaseConfigPath).getInputStream())
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
                 .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
         googleCredentials.refreshIfExpired();
@@ -37,8 +39,7 @@ public class FCMSender {
     }
 
     @Transactional
-    public void sendMessageTo(String targetToken, NotificationType notificationType, String body, Long userSeq,
-                              Long memoryId) throws IOException {
+    public void sendMessageTo(String targetToken, NotificationType notificationType, String body, Long userSeq, Long memoryId) throws IOException {
 
         notificationService.createNotification(notificationType, body, userSeq, memoryId);
         String message = makeMessage(targetToken, notificationType, body);
@@ -53,17 +54,17 @@ public class FCMSender {
 
         Response response = okHttpClient.newCall(request).execute();
         log.info(response.body().string());
-
     }
 
-    private String makeMessage(String targetToken, NotificationType notificationType, String body) throws
-            JsonProcessingException {
+    private String makeMessage(String targetToken, NotificationType notificationType, String body) throws JsonProcessingException {
+
         FCMMessage fcmMessage = FCMMessage.builder()
                 .message(FCMMessage.Message.builder()
                         .token(targetToken)
-                        .notification(FCMMessage.Notification.builder()
-                                .title(notificationType).body(body).image(null).build()
-                        ).build()).validateOnly(false).build();
+                        .notification(FCMMessage.Notification.builder().title(notificationType).body(body).image(null).build())
+                        .build())
+                .validateOnly(false).build();
+
         return objectMapper.writeValueAsString(fcmMessage);
     }
 }

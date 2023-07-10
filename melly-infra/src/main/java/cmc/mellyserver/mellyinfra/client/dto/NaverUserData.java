@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 public class NaverUserData {
 
     private String resultcode;
+
     private String message;
+
     private Response response;
 
     @Data
@@ -18,8 +20,9 @@ public class NaverUserData {
     public class Response {
 
         private String id;
-        private String email;
-        private String nickname;
 
+        private String email;
+
+        private String nickname;
     }
 }

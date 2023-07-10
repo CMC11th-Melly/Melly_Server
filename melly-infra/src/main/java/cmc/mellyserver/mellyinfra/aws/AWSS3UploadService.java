@@ -17,12 +17,13 @@ import java.io.InputStream;
 public class AWSS3UploadService {
 
     private final AmazonS3 amazonS3;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String filename) {
-        amazonS3.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata).withCannedAcl(
-                CannedAccessControlList.PublicRead));
+
+        amazonS3.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     public String getFileUrl(String filename) {

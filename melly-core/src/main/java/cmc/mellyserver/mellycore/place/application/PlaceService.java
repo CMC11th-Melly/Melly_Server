@@ -34,7 +34,9 @@ public class PlaceService {
 
     private final MemoryQueryRepository memoryQueryRepository;
 
-
+    /*
+    좌표 기반 검색으로 개선 필요
+     */
     @Transactional(readOnly = true)
     public List<MarkedPlaceResponseDto> displayMarkedPlace(Long userSeq, GroupType groupType) {
 
@@ -43,9 +45,13 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
-
+    /*
+    캐싱 적용 여부 : 불가능
+    이유 : 반환 DTO에 다른 유저가 작성한 메모리 수가 포함된다. 유저가 대규모로 유입되면 데이터 갱신이 자주 발생하여 캐시 효율성이 적다고 판단
+     */
     @Transactional(readOnly = true)
     public PlaceResponseDto findPlaceByPlaceId(Long userSeq, Long placeId) {
+
         Place place = placeRepository.findById(placeId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ErrorCode.NO_SUCH_PLACE);
         });
@@ -60,9 +66,13 @@ public class PlaceService {
                 place.getPlaceImage());
     }
 
-
+    /*
+    캐싱 적용 여부 : 불가능
+    이유 : 반환 DTO에 다른 유저가 작성한 메모리 수가 포함된다. 유저가 대규모로 유입되면 데이터 갱신이 자주 발생하여 캐시 효율성이 적다고 판단
+     */
     @Transactional(readOnly = true)
     public PlaceResponseDto findPlaceByPosition(Long userSeq, Double lat, Double lng) {
+
         Optional<Place> optPlace = placeRepository.findPlaceByPosition(new Position(lat, lng));
 
         if (optPlace.isEmpty()) {
@@ -79,9 +89,12 @@ public class PlaceService {
                 isCurrentLoginUserScraped, place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL, place.getPlaceImage());
     }
 
-
+    /*
+    캐시 적용 여부 : 가능
+     */
     @Transactional(readOnly = true)
     public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq, String memoryName) {
+
         return placeQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
     }
 }

@@ -9,16 +9,15 @@ import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.UserGroupQueryRepository;
-import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,6 +32,9 @@ public class GroupService {
 
     private final UserGroupQueryRepository userGroupQueryRepository;
 
+
+    //
+    @Cacheable(value = "group", key = "#groupId", cacheManager = "redisCacheManager")
     @Transactional(readOnly = true)
     public UserGroup findGroupById(Long groupId) {
 
@@ -41,17 +43,16 @@ public class GroupService {
         });
     }
 
-
     @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
     @Transactional(readOnly = true)
     public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) {
         return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
     }
 
-    @Cacheable(value = "findGroups", key = "#userSeq", cacheManager = "redisCacheManager")
+    // 메모리 추가 시에는 그룹이 반드시 최신으로 업데이트 되있어야 한다.
     @Transactional(readOnly = true)
-    public List<GroupListForSaveMemoryResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userSeq) {
-        return userGroupQueryRepository.getUserGroupListForMemoryEnroll(userSeq);
+    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userSeq) {
+        return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
     }
 
     @Transactional
@@ -62,7 +63,7 @@ public class GroupService {
         return groupRepository.save(userGroup);
     }
 
-
+    @CacheEvict(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId) {
 
@@ -79,7 +80,7 @@ public class GroupService {
         groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
     }
 
-
+    @CacheEvict(value = "group", key = "#updateGroupRequestDto.groupId", cacheManager = "redisCacheManager")
     @Transactional
     public void updateGroup(Long userSeq, UpdateGroupRequestDto updateGroupRequestDto) {
 
@@ -89,7 +90,7 @@ public class GroupService {
         userGroup.update(userSeq, updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
 
-
+    @CacheEvict(value = "groupList", key = "#updateGroupRequestDto.groupId", cacheManager = "redisCacheManager", allEntries = true)
     @Transactional
     public void removeGroup(Long userSeq, Long groupId) {
 

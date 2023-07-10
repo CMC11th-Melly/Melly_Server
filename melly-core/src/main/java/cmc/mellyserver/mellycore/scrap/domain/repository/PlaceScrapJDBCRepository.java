@@ -2,6 +2,7 @@ package cmc.mellyserver.mellycore.scrap.domain.repository;
 
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
+import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,6 +50,41 @@ public class PlaceScrapJDBCRepository {
                     @Override
                     public int getBatchSize() {
                         return placeScraps.size();
+                    }
+                });
+    }
+
+
+    //       .randomize(email(), new StringRandomizer()) // 내가 강제로 주입받은 걸로 바꿀 수 있다.
+//            .randomize(password(), () -> password)
+//            .randomize(ageGroup(), new EnumRandomizer<>(AgeGroup .class))
+//            .randomize(gender(), new EnumRandomizer<>(Gender .class))
+//            .randomize(nickname(), new StringRandomizer())
+//            .randomize(provider(), new EnumRandomizer<>(Provider .class))
+//            .randomize(role_type(), new EnumRandomizer<>(RoleType .class))
+//            .randomize(user_id(), new StringRandomizer())
+//            .randomize(userStatus(), new EnumRandomizer<>(UserStatus .class));
+    public void saveUser(List<User> user) {
+
+        jdbcTemplate.batchUpdate("insert into tb_user(email, password, age_group,gender, nickname, provider, role_type, user_id, user_status) " +
+                        "values(?,?,?,?,?,?,?,?,?)",
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setString(1, user.get(i).getEmail());
+                        ps.setString(2, user.get(i).getPassword());
+                        ps.setString(3, user.get(i).getAgeGroup().name());
+                        ps.setString(4, user.get(i).getGender().name());
+                        ps.setString(5, user.get(i).getNickname());
+                        ps.setString(6, user.get(i).getProvider().name());
+                        ps.setString(7, user.get(i).getRoleType().name());
+                        ps.setString(8, user.get(i).getUserId());
+                        ps.setString(9, user.get(i).getUserStatus().name());
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return user.size();
                     }
                 });
     }

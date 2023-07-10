@@ -6,7 +6,7 @@ import cmc.mellyserver.mellyapi.memory.presentation.dto.response.FindPlaceInfoBy
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.GroupListForSaveMemoryResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryUpdateFormResponse;
-import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.application.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
@@ -20,32 +20,14 @@ import java.util.stream.Collectors;
 
 public class MemoryAssembler {
 
-    public static List<GroupListForSaveMemoryResponse> groupListForSaveMemoryResponse(
-            List<GroupListForSaveMemoryResponseDto> groupListForSaveMemoryResponseDtoList) {
-        return groupListForSaveMemoryResponseDtoList.stream()
-                .map(each ->
-                        GroupListForSaveMemoryResponse.builder().groupId(each.getGroupId())
-                                .groupName(each.getGroupName())
-                                .groupType(each.getGroupType()).build())
+    public static List<GroupListForSaveMemoryResponse> groupListForSaveMemoryResponse(List<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos) {
+        return groupLoginUserParticipatedResponseDtos.stream()
+                .map(GroupListForSaveMemoryResponse::of)
                 .collect(Collectors.toList());
     }
 
-    public static Slice<MemoryResponse> memoryResponses(
-            Slice<MemoryResponseDto> memoryResponseDtos) {
-        return memoryResponseDtos.map(each -> MemoryResponse.builder()
-                .placeId(each.getPlaceId())
-                .placeName(each.getPlaceName())
-                .memoryId(each.getMemoryId())
-                .imageDtos(each.getMemoryImages())
-                .title(each.getTitle())
-                .content(each.getContent())
-                .groupType(each.getGroupType())
-                .groupName(each.getGroupName())
-                .stars(each.getStars())
-                .keyword(each.getKeyword())
-                .loginUserWrite(each.isLoginUserWrite())
-                .visitedDate(each.getVisitedDate())
-                .build());
+    public static Slice<MemoryResponse> memoryResponses(Slice<MemoryResponseDto> memoryResponseDtos) {
+        return memoryResponseDtos.map(MemoryResponse::of);
     }
 
     public static MemoryResponse memoryResponse(MemoryResponseDto memoryResponseDto) {

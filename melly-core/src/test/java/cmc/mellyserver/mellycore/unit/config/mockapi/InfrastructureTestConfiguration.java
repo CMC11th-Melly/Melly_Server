@@ -1,13 +1,14 @@
-package cmc.mellyserver.mellyapi.config;
+package cmc.mellyserver.mellycore.unit.config.mockapi;
 
-import cmc.mellyserver.mellyapi.common.mockapi.MockAwsService;
-import cmc.mellyserver.mellyapi.common.mockapi.MockFileUploader;
+
+import cmc.mellyserver.mellycore.common.aws.AwsService;
+import cmc.mellyserver.mellycore.common.aws.FileUploader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("test")
+@Profile("local")
 public class InfrastructureTestConfiguration {
 
     @Bean

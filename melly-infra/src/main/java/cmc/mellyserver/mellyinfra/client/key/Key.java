@@ -3,10 +3,15 @@ package cmc.mellyserver.mellyinfra.client.key;
 public class Key {
 
     private String kty;
+
     private String kid;
+
     private String use;
+
     private String alg;
+
     private String n;
+
     private String e;
 
     public String getKty() {
@@ -56,5 +61,4 @@ public class Key {
     public void setE(String e) {
         this.e = e;
     }
-
 }

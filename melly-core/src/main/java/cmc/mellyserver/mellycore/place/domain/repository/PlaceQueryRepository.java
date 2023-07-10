@@ -49,18 +49,16 @@ public class PlaceQueryRepository {
 
     }
 
-    public List<FindPlaceInfoByMemoryNameResponseDto> searchPlaceByContainMemoryName(Long userSeq,
-                                                                                     String memoryName) {
+    public List<FindPlaceInfoByMemoryNameResponseDto> searchPlaceByContainMemoryName(Long userSeq, String memoryName) {
 
         return query.select(
-                        Projections.constructor(FindPlaceInfoByMemoryNameResponseDto.class, memory.placeId,
-                                memory.title))
+                        Projections.constructor(FindPlaceInfoByMemoryNameResponseDto.class, memory.placeId, memory.title))
                 .from(memory)
                 .where(
-                        memory.userId.eq(userSeq),  // 본인이 가지고 있는 메모리
-                        memory.isReported.isFalse(),      // 신고되지 않은 메모리
-                        memory.isDelete.isFalse(),        // 삭제 되지 않은 메모리
-                        memory.title.contains(memoryName)) // 메모리 제목으로 검색하는 로직
+                        memory.userId.eq(userSeq),
+                        memory.isDelete.isFalse(),
+                        memory.title.contains(memoryName)
+                )
                 .distinct().fetch();
     }
 

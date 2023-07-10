@@ -1,4 +1,6 @@
-package cmc.mellyserver.mellyapi.common.mockapi;
+package cmc.mellyserver.mellycore.unit.config.mockapi;
+
+import cmc.mellyserver.mellycore.common.aws.AwsService;
 
 public class MockAwsService implements AwsService {
     @Override

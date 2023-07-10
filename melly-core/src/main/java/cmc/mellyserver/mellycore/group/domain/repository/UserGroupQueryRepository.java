@@ -2,15 +2,10 @@ package cmc.mellyserver.mellycore.group.domain.repository;
 
 import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.common.util.jpa.QueryDslUtil;
-import cmc.mellyserver.mellycore.group.domain.GroupAndUser;
-import cmc.mellyserver.mellycore.group.domain.UserGroup;
-import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.KeywordResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.repository.UserDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -25,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,66 +43,22 @@ public class UserGroupQueryRepository {
     }
 
 
-    // ok
-    public List<GroupListForSaveMemoryResponseDto> getUserGroupListForMemoryEnroll(Long userSeq) {
-        return query.select(
-                        Projections.constructor(GroupListForSaveMemoryResponseDto.class, userGroup.id,
-                                userGroup.groupName,
-                                userGroup.groupType))
-                .from(groupAndUser)
-                .join(groupAndUser.group, userGroup)
-                .where(groupAndUser.user.userSeq.eq(userSeq))
-                .fetch();
-    }
-
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // 완료
     public List<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userSeq) {
 
-        List<GroupAndUser> results = query.select(groupAndUser)
+        return query.select(Projections.constructor(GroupLoginUserParticipatedResponseDto.class, userGroup.id, userGroup.groupIcon, userGroup.groupName, userGroup.groupType))
                 .from(groupAndUser)
-                .join(groupAndUser.group, userGroup).fetchJoin()
-                .join(groupAndUser.user, user).fetchJoin()
-                .where(groupAndUser.user.userSeq.eq(userSeq))
+                .innerJoin(groupAndUser.group, userGroup)
+                .innerJoin(groupAndUser.user, user)
+                .where(eqUser(userSeq))
                 .fetch();
-
-        LinkedHashMap<Long, List<User>> map = new LinkedHashMap<>();
-
-        for (GroupAndUser eachGroupAndUser : results) {
-
-            UserGroup group = eachGroupAndUser.getGroup();
-
-            if (map.containsKey(group.getId())) {
-                List<User> users = map.get(group.getId());
-                users.add(eachGroupAndUser.getUser());
-                map.replace(group.getId(), users);
-            } else {
-                List<User> users = new ArrayList<>();
-                users.add(eachGroupAndUser.getUser());
-                map.put(group.getId(), users);
-            }
-        }
-
-        return results.stream().map(ga -> {
-            GroupLoginUserParticipatedResponseDto getUserGroupResponse = new GroupLoginUserParticipatedResponseDto(
-                    ga.getGroup().getId(), ga.getGroup().getGroupIcon(),
-                    ga.getGroup().getGroupName(),
-                    ga.getGroup().getGroupType(),
-                    ga.getGroup().getInviteLink());
-            List<User> users = map.get(getUserGroupResponse.getGroupId());
-            List<UserDto> collect = users.stream()
-                    .map(u -> new UserDto(u.getUserSeq(), u.getProfileImage(), u.getNickname(),
-                            u.getUserSeq().equals(userSeq)))
-                    .collect(Collectors.toList());
-            getUserGroupResponse.setUsers(collect);
-            return getUserGroupResponse;
-        }).collect(Collectors.toList());
     }
 
     private BooleanExpression eqUser(Long userSeq) {
         if (userSeq == null || userSeq == -1) {
             return null;
         }
-        return memory.userId.eq(userSeq);
+        return groupAndUser.user.userSeq.eq(userSeq);
     }
 
     private BooleanExpression checkOpenTypeAllOrGroup() {
@@ -206,3 +156,14 @@ public class UserGroupQueryRepository {
         return new SliceImpl<>(results, pageable, hasNext);
     }
 }
+
+
+//            List<User> users = map.get(getUserGroupResponse.getGroupId());
+//
+//            List<UserDto> collect = users.stream()
+//                    .map(u -> new UserDto(u.getUserSeq(), u.getProfileImage(), u.getNickname(),
+//                            u.getUserSeq().equals(userSeq)))
+//                    .collect(Collectors.toList());
+//
+//            getUserGroupResponse.setUsers(collect);
+//

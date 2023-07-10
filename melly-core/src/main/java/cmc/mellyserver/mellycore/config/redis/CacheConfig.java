@@ -21,42 +21,28 @@ import java.time.Duration;
 @Configuration
 public class CacheConfig {
 
-
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
 
-
     public ObjectMapper objectMapper() {
 
-        PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator
-                .builder().allowIfSubType(Object.class)
+        PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator.builder()
+                .allowIfSubType(Object.class)
                 .build();
 
-        return new ObjectMapper()
-                .findAndRegisterModules()
-                .activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL,
-                        JsonTypeInfo.As.PROPERTY)
+        return new ObjectMapper().findAndRegisterModules()
+                .activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY)
                 .registerModules(new JavaTimeModule());
-
-
     }
 
     @Bean
     public CacheManager redisCacheManager() {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(
-                        new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
-                        new GenericJackson2JsonRedisSerializer(objectMapper())))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())))
                 .entryTtl(Duration.ofMinutes(20));
 
         return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
     }
-
-//    @Bean
-//    public CacheManager cacheManager() {
-//        return new ConcurrentMapCacheManager();
-//    }
-
 }

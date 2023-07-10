@@ -13,10 +13,9 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        log.info("호출");
-        boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
-        System.out.println("Transaction의 Read Only가 " + isReadOnly + " 입니다.");
+        boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+        log.info("Transaction Read Only : {}", isReadOnly);
 
         if (isReadOnly) {
 //            return randomReplicaKeys.next();

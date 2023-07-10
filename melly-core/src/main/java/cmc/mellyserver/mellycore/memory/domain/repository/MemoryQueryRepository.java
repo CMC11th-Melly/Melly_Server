@@ -46,25 +46,27 @@ public class MemoryQueryRepository {
     }
 
 
-    // [장소 상세] - 나의 메모리, 마이페이지 - 내가 작성한 메모리 조회 (최적화 완료, 인덱스 추가 필요)
-    public Slice<MemoryResponseDto> searchMemoryUserCreatedForPlace(Pageable pageable, Long userSeq,
-                                                                    Long placeId,
-                                                                    GroupType groupType) {
+    public Slice<MemoryResponseDto> searchMemoryUserCreatedForPlace(Pageable pageable, Long userSeq, Long placeId, GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<MemoryResponseDto> results = query.select(
-                        Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
-                                memory.id, memory.title,
-                                memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName,
-                                memory.stars,
-                                memory.userId.eq(userSeq), memory.visitedDate))
+        List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class,
+                        place.id,
+                        place.placeName,
+                        memory.id,
+                        memory.title,
+                        memory.content,
+                        memory.groupInfo.groupType,
+                        memory.groupInfo.groupName,
+                        memory.stars,
+                        createdByLoginUser(userSeq),
+                        memory.visitedDate))
                 .from(memory)
-                .leftJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
                 .where(
-                        memory.userId.eq(userSeq), // 로그인한 유저가 작성자인 메모리 조회
-                        eqGroup(groupType), // 그룹 타입 필터링
-                        memory.placeId.eq(placeId) // 특정 장소에 속한 메모리 조회
+                        createdByLoginUser(userSeq),
+                        eqPlace(placeId),
+                        eqGroup(groupType)
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -75,22 +77,26 @@ public class MemoryQueryRepository {
         return transferToSlice(pageable, results);
     }
 
-
-    public Slice<MemoryResponseDto> getMyGroupMemory(Pageable pageable, Long groupId,
-                                                     Long userSeq) {
+    public Slice<MemoryResponseDto> getMyGroupMemory(Pageable pageable, Long groupId, Long userSeq) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<MemoryResponseDto> results = query.select(
-                        Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
-                                memory.id, memory.title, memory.content,
-                                memory.groupInfo.groupType, memory.groupInfo.groupName,
-                                memory.stars, eqUser(userSeq), memory.visitedDate))
+        List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class,
+                        place.id,
+                        place.placeName,
+                        memory.id,
+                        memory.title,
+                        memory.content,
+                        memory.groupInfo.groupType,
+                        memory.groupInfo.groupName,
+                        memory.stars,
+                        createdByLoginUser(userSeq),
+                        memory.visitedDate))
                 .from(memory)
-                .leftJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(place).on(place.id.eq(memory.placeId))
                 .where(
-                        memory.groupInfo.groupId.eq(groupId),  // 지금 그룹에 속한 케이스
-                        checkOpenTypeAllOrGroup() // 비공개가 아닌 케이스
+                        memory.groupInfo.groupId.eq(groupId),
+                        checkOpenTypeAllOrGroup()
                 )
                 .offset(pageable.getOffset())
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
@@ -105,31 +111,27 @@ public class MemoryQueryRepository {
         return memory.openType.ne(OpenType.PRIVATE);
     }
 
-    private BooleanExpression eqUser(Long userSeq) {
-        if (userSeq == null || userSeq == -1) {
-            return null;
-        }
-        return memory.userId.eq(userSeq);
-    }
 
-    // [마이 페이지] - 내가 작성한 메모리 목록 조회
-    public Slice<MemoryResponseDto> searchMemoryUserCreatedForMyPage(Pageable pageable,
-                                                                     Long userSeq,
-                                                                     GroupType groupType) {
+    public Slice<MemoryResponseDto> searchMemoryUserCreatedForMyPage(Pageable pageable, Long userSeq, GroupType groupType) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<MemoryResponseDto> result = query.select(
-                        Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
-                                memory.id, memory.title,
-                                memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName,
-                                memory.stars,
-                                memory.userId.eq(userSeq), memory.visitedDate))
+        List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
+                        place.id,
+                        place.placeName,
+                        memory.id,
+                        memory.title,
+                        memory.content,
+                        memory.groupInfo.groupType,
+                        memory.groupInfo.groupName,
+                        memory.stars,
+                        createdByLoginUser(userSeq),
+                        memory.visitedDate))
                 .from(memory)
-                .leftJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(place).on(place.id.eq(memory.placeId))
                 .where(
-                        memory.userId.eq(userSeq), // 내가 작성자인 메모리
-                        eqGroup(groupType)// 그룹 타입 필터링 용
+                        createdByLoginUser(userSeq),
+                        eqGroup(groupType)
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
@@ -142,15 +144,20 @@ public class MemoryQueryRepository {
 
     public MemoryResponseDto getMemoryByMemoryId(Long userSeq, Long memoryId) {
 
-        MemoryResponseDto results = query.select(
-                        Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
-                                memory.id, memory.title,
-                                memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName,
-                                memory.stars,
-                                memory.userId.eq(userSeq), memory.visitedDate))
+        MemoryResponseDto results = query.select(Projections.constructor(MemoryResponseDto.class,
+                        place.id,
+                        place.placeName,
+                        memory.id,
+                        memory.title,
+                        memory.content,
+                        memory.groupInfo.groupType,
+                        memory.groupInfo.groupName,
+                        memory.stars,
+                        createdByLoginUser(userSeq),
+                        memory.visitedDate))
                 .from(memory)
-                .leftJoin(place).on(place.id.eq(memory.placeId))
-                .where(memory.id.eq(memoryId))
+                .innerJoin(place).on(place.id.eq(memory.placeId))
+                .where(eqMemory(memoryId))
                 .fetchFirst();
 
         Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(List.of(results)));
@@ -165,6 +172,7 @@ public class MemoryQueryRepository {
 
         return results;
     }
+
 
     // [장소 상세] - 다른 사람이 작성한 메모리
     public Slice<MemoryResponseDto> searchMemoryOtherCreate(Pageable pageable, Long userSeq,
@@ -182,8 +190,8 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
-                        memory.placeId.eq(placeId),
-                        memory.userId.ne(userSeq), // 내가 작성자인 메모리
+                        eqPlace(placeId),
+                        createdByNotCurrentLoginUser(userSeq), // 내가 작성자인 메모리
                         eqGroup(groupType)// 그룹 타입 필터링 용
                 )
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
@@ -219,7 +227,7 @@ public class MemoryQueryRepository {
                                                                 userSeq))
                                         )).distinct()
                         ),
-                        memory.placeId.eq(placeId),
+                        eqPlace(placeId),
                         memory.userId.ne(userSeq),
                         eqGroup(groupType),
                         memory.openType.ne(OpenType.PRIVATE)
@@ -239,14 +247,14 @@ public class MemoryQueryRepository {
         Long memoriesBelongToLoginUser = query.select(memory.count())
                 .from(memory)
                 .where(
-                        memory.placeId.eq(placeId),
+                        eqPlace(placeId),
                         memory.userId.eq(userSeq)
                 ).fetchOne();
 
         Long memoriesNotBelongToLoginUser = query.select(memory.count())
                 .from(memory)
                 .where(
-                        memory.placeId.eq(placeId),
+                        eqPlace(placeId),
                         memory.userId.ne(userSeq)
                 ).fetchOne();
 
@@ -257,14 +265,6 @@ public class MemoryQueryRepository {
         return map;
     }
 
-    private BooleanExpression eqGroup(GroupType groupType) {
-
-        if (groupType == null || groupType == GroupType.ALL) {
-            return null;
-        }
-
-        return memory.groupInfo.groupType.eq(groupType);
-    }
 
     private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
 
@@ -296,8 +296,7 @@ public class MemoryQueryRepository {
 
     private Map<Long, List<KeywordResponseDto>> findKeywordList(List<Long> memoryIds) {
 
-        List<Object[]> queryResult = em.createNativeQuery(
-                        "select kt.memory_id,kt.keyword from tb_keywords_table kt where kt.memory_id in :memoryIds")
+        List<Object[]> queryResult = em.createNativeQuery("select kt.memory_id,kt.keyword from tb_keywords_table kt where kt.memory_id in :memoryIds")
                 .setParameter("memoryIds", memoryIds)
                 .getResultList();
 
@@ -310,53 +309,62 @@ public class MemoryQueryRepository {
             keywordList.add(keywordResponse);
         }
 
-        return keywordList.stream()
-                .collect(Collectors.groupingBy(KeywordResponseDto::getMemoryId));
+        return keywordList.stream().collect(Collectors.groupingBy(KeywordResponseDto::getMemoryId));
     }
 
     private Map<Long, List<ImageDto>> findMemoryImage(List<Long> memoryIds) {
 
-        List<ImageDto> results = query.select(
-                        Projections.constructor(ImageDto.class, memoryImage.id, memoryImage.memory.id,
-                                memoryImage.imagePath))
+        List<ImageDto> results = query.select(Projections.constructor(ImageDto.class, memoryImage.id, memoryImage.memory.id, memoryImage.imagePath))
                 .from(memoryImage)
                 .where(memoryImage.memory.id.in(memoryIds))
                 .fetch();
 
-        return results.stream()
-                .collect(Collectors.groupingBy(ImageDto::getMemoryId));
+        return results.stream().collect(Collectors.groupingBy(ImageDto::getMemoryId));
     }
 
     private List<Long> toMemoryIds(List<MemoryResponseDto> result) {
-        return result.stream()
-                .map(o -> o.getMemoryId())
-                .collect(Collectors.toList());
+
+        return result.stream().map(MemoryResponseDto::getMemoryId).collect(Collectors.toList());
     }
 
     private void initMemoryImageAndKeyword(List<MemoryResponseDto> results) {
-        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(results));
-        Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(
-                toMemoryIds(results)); // 키워드 모음
 
-        results.forEach(f -> {
-            f.setMemoryImages(memoryImageList.get(f.getMemoryId()));
-            f.setKeyword(keywordList.get(f.getMemoryId())
-                    .stream()
-                    .map(KeywordResponseDto::getKeyword)
-                    .collect(Collectors.toList()));
+        Map<Long, List<ImageDto>> memoryImageList = findMemoryImage(toMemoryIds(results));
+        Map<Long, List<KeywordResponseDto>> keywordList = findKeywordList(toMemoryIds(results));
+
+        results.forEach(memory -> {
+            memory.setMemoryImages(memoryImageList.get(memory.getMemoryId()));
+            memory.setKeyword(keywordList.get(memory.getMemoryId()).stream().map(KeywordResponseDto::getKeyword).collect(Collectors.toList()));
         });
     }
 
-    private BooleanExpression eqPlace(Long placeId) {
-        if (placeId == null) {
+
+    private BooleanExpression eqGroup(GroupType groupType) {
+
+        if (groupType == null || groupType == GroupType.ALL) {
             return null;
         }
+
+        return memory.groupInfo.groupType.eq(groupType);
+    }
+
+    private static BooleanExpression eqPlace(Long placeId) {
         return memory.placeId.eq(placeId);
     }
 
+    private static BooleanExpression eqMemory(Long memoryId) {
+        return memory.id.eq(memoryId);
+    }
 
-    private static SliceImpl<MemoryResponseDto> transferToSlice(Pageable pageable,
-                                                                List<MemoryResponseDto> results) {
+    private static BooleanExpression createdByLoginUser(Long userSeq) {
+        return memory.userId.eq(userSeq);
+    }
+
+    private static BooleanExpression createdByNotCurrentLoginUser(Long userSeq) {
+        return memory.userId.ne(userSeq);
+    }
+
+    private static SliceImpl<MemoryResponseDto> transferToSlice(Pageable pageable, List<MemoryResponseDto> results) {
         boolean hasNext = false;
 
         if (results.size() > pageable.getPageSize()) {

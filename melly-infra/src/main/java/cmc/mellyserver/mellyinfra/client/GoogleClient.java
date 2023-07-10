@@ -43,6 +43,5 @@ public class GoogleClient implements LoginClient {
                 .provider(Provider.GOOGLE)
                 .password("NO_PASSWORD")
                 .roleType(RoleType.USER).build();
-
     }
 }

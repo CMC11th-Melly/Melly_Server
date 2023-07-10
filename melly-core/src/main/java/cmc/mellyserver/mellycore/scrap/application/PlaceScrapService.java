@@ -36,13 +36,22 @@ public class PlaceScrapService {
 
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
+    /*
+    캐싱 적용 가능 여부 : 불가능
+    이유 : 반환 하는 DTO에 다른 사람이 해당 장소에 작성한 메모리 개수가 포함된다. 대규모 사용자가 유입될 시 자주 업데이트 되는 항목이므로 캐싱 효율성이 적다.
+     */
     @Transactional(readOnly = true)
     public Slice<ScrapedPlaceResponseDto> findScrapedPlace(Pageable pageable, Long userSeq, ScrapType scrapType) {
+
         return placeScrapQueryRepository.getUserScrapedPlace(pageable, userSeq, scrapType);
     }
 
+    /*
+    캐싱 적용 가능 여부 : 가능
+    */
     @Transactional(readOnly = true)
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userSeq) {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         return placeScrapQueryRepository.getScrapedPlaceGrouping(user.getUserSeq());
     }
@@ -56,7 +65,6 @@ public class PlaceScrapService {
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }
 
-
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
@@ -68,12 +76,14 @@ public class PlaceScrapService {
     }
 
     private void checkDuplicatedScrap(Long userSeq, Long placeId) {
+
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).ifPresent(x -> {
             throw new GlobalBadRequestException(ErrorCode.DUPLICATE_SCRAP);
         });
     }
 
     private void checkExistScrap(Long userSeq, Long placeId) {
+
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).orElseThrow(() -> {
             throw new GlobalBadRequestException(ErrorCode.NOT_EXIST_SCRAP);
         });
