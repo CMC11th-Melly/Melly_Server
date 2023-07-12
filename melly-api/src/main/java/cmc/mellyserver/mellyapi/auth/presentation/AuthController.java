@@ -6,7 +6,9 @@ import cmc.mellyserver.mellyapi.auth.application.dto.response.LoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.OAuthLoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.SignupResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.AuthAssembler;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.*;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.AuthLoginRequest;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CommonSignupRequest;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.OAuthLoginRequest;
 import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
@@ -53,17 +55,18 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, AuthAssembler.signupResponse(signupResponseDto)));
     }
 
-    @PostMapping("/nickname")
-    public ResponseEntity<ApiResponse> checkNicknameDuplicate(@RequestBody CheckDuplicateNicknameRequest checkDuplicateNicknameRequest) {
+    // 상태를 변경하는게 아니라 단순 체크이므로 get을 사용하는게 맞다
+    @GetMapping("/user-nicknames/{nickname}/exists")
+    public ResponseEntity<ApiResponse> checkNicknameDuplicate(@PathVariable String nickname) {
 
-        authService.checkDuplicatedNickname(checkDuplicateNicknameRequest.getNickname());
+        authService.checkDuplicatedNickname(nickname);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
-    @PostMapping("/email")
-    public ResponseEntity<ApiResponse> checkEmailDuplicate(@RequestBody CheckDuplicateEmailRequest checkDuplicateEmailRequest) {
+    @GetMapping("/user-emails/{email}/exists")
+    public ResponseEntity<ApiResponse> checkEmailDuplicate(@PathVariable String email) {
 
-        authService.checkDuplicatedEmail(checkDuplicateEmailRequest.getEmail());
+        authService.checkDuplicatedEmail(email);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 

@@ -2,25 +2,14 @@ package cmc.mellyserver.mellycore.comment.domain;
 
 import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,15 +22,15 @@ public class Comment extends JpaBaseEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "content", nullable = false)
     @Lob
     private String content;
 
+    @Column(name = "writer_id")
     private Long writerId;
 
+    @Column(name = "memory_id")
     private Long memoryId;
-
-    private Long metionUser;
 
     @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
@@ -56,25 +45,26 @@ public class Comment extends JpaBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;
 
-    private boolean isReported = false;
-
     public Comment(String content) {
         this.content = content;
     }
 
-    public static Comment createComment(String content, Long writerId, Long memoryId,
-            Comment parent, Long mentionUser) {
-        Comment comment = new Comment(content);
-        comment.memoryId = memoryId;
-        comment.writerId = writerId;
-        comment.parent = parent;
-        comment.isDeleted = DeleteStatus.N;
-        comment.setMentionUser(mentionUser);
-        return comment;
+    public static Comment createComment(String content, Long writerId, Long memoryId, Comment parent) {
+
+        return Comment.builder().content(content).writerId(writerId).memoryId(memoryId).parent(parent).build();
     }
 
-    public void changeDeletedStatus(DeleteStatus deleteStatus) {
-        this.isDeleted = deleteStatus;
+    @Builder
+    public Comment(String content, Long writerId, Long memoryId, Comment parent) {
+        this.content = content;
+        this.writerId = writerId;
+        this.memoryId = memoryId;
+        this.parent = parent;
+    }
+
+
+    public void delete() {
+        this.isDeleted = DeleteStatus.Y;
     }
 
     private void setParent(Comment parent) {
@@ -82,15 +72,10 @@ public class Comment extends JpaBaseEntity {
         if (parent != null) {
             parent.getChildren().add(this);
         }
-
     }
 
     public void updateComment(String content) {
         this.content = content;
-    }
-
-    private void setMentionUser(Long mentionUser) {
-        this.metionUser = mentionUser;
     }
 
 }

@@ -52,5 +52,5 @@ cloud:
     s3:
       bucket: mellyimage
     credentials:
-      access-key: AKIAUNVVDKLX73VXJ35V
-      secret-key: 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
+      access-key:
+      secret-key:

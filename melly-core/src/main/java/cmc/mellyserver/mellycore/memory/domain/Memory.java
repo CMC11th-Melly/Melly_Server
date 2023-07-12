@@ -52,7 +52,6 @@ public class Memory extends JpaBaseEntity {
     @Embedded
     GroupInfo groupInfo;
 
-    private boolean isReported = false;
 
     private LocalDateTime visitedDate;
 

@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellyapi.auth.application.impl;
 
-import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.OAuthLoginRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.OAuthLoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.AuthAssembler;
@@ -22,11 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
 @Slf4j
-@Transactional(readOnly = true)
+@Service
 @RequiredArgsConstructor
-public class OAuthServiceImpl implements OAuthService {
+public class OAuthService {
 
     private final UserRepository userRepository;
 
@@ -36,7 +34,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     private final FileUploader fileUploader;
 
-    @Override
+
     @Transactional
     public OAuthLoginResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
 

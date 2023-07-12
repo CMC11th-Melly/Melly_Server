@@ -16,6 +16,8 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResp
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,7 @@ public class PlaceScrapService {
     /*
     캐싱 적용 가능 여부 : 가능
     */
+    @Cacheable(value = "scrapCount", key = "#userSeq")
     @Transactional(readOnly = true)
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userSeq) {
 
@@ -56,6 +59,10 @@ public class PlaceScrapService {
         return placeScrapQueryRepository.getScrapedPlaceGrouping(user.getUserSeq());
     }
 
+    /*
+    유저별 스크랩 개수 변경으로 인한 Eviction
+     */
+    @CacheEvict(value = "scrapCount", key = "#createPlaceScrapRequestDto.userSeq")
     @Transactional
     public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
@@ -65,6 +72,10 @@ public class PlaceScrapService {
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }
 
+    /*
+    유저별 스크랩 개수 변경으로 인한 Eviction
+    */
+    @CacheEvict(value = "scrapCount", key = "#userSeq")
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
