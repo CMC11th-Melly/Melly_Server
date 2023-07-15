@@ -65,7 +65,7 @@ public class PlaceScrapService {
     @Transactional
     public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-        Optional<Place> placeOpt = placeRepository.findPlaceByPositions(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
+        Optional<Place> placeOpt = placeRepository.findAllByPositions(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(createPlaceScrapRequestDto.getUserSeq());
         Place place = checkPlaceExist(createPlaceScrapRequestDto, placeOpt);
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
@@ -78,7 +78,7 @@ public class PlaceScrapService {
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
-        Optional<Place> place = placeRepository.findPlaceByPositions(new Position(lat, lng));
+        Optional<Place> place = placeRepository.findAllByPositions(new Position(lat, lng));
         checkExistScrap(userSeq, place.get().getId());
         placeScrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq, new Position(lat, lng));
     }
