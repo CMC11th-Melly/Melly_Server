@@ -73,7 +73,7 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public PlaceResponseDto findPlaceByPosition(Long userSeq, Double lat, Double lng) {
 
-        Optional<Place> optPlace = placeRepository.findPlaceByPositions(new Position(lat, lng));
+        Optional<Place> optPlace = placeRepository.findAllByPositions(new Position(lat, lng));
 
         if (optPlace.isEmpty()) {
             return PlaceResponseDto.PlaceNotCreated(new Position(lat, lng), 0L, 0L, false);
