@@ -11,36 +11,36 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
-import static cmc.mellyserver.mellycore.config.datasource.DataSourceKey.KeyName.REPLICA_SERVER_1;
-import static cmc.mellyserver.mellycore.config.datasource.DataSourceKey.KeyName.SOURCE_SERVER;
+import static cmc.mellyserver.mellycore.config.datasource.DatabaseType.SOURCE;
+
 
 @Configuration
 public class DataSourceConfig {
 
     @Bean
-    @Qualifier(SOURCE_SERVER)
+    @Qualifier(SOURCE)
     @ConfigurationProperties(prefix = "spring.datasource.source")
     public DataSource sourceDataSource() {
         return DataSourceBuilder.create()
                 .build();
     }
 
-    @Bean
-    @Qualifier(REPLICA_SERVER_1)
-    @ConfigurationProperties(prefix = "spring.datasource.replica1")
-    public DataSource replica1DataSource() {
-        return DataSourceBuilder.create()
-                .build();
-    }
+//    @Bean
+//    @Qualifier(REPLICA)
+//    @ConfigurationProperties(prefix = "spring.datasource.replica1")
+//    public DataSource replica1DataSource() {
+//        return DataSourceBuilder.create()
+//                .build();
+//    }
 
     @Bean
-    public DataSource routingDataSource(@Qualifier(SOURCE_SERVER) DataSource sourceDataSource, @Qualifier(REPLICA_SERVER_1) DataSource replica1DataSource) {
+    public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource) {
 
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
         HashMap<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(SOURCE_SERVER, sourceDataSource);
-        dataSourceMap.put(REPLICA_SERVER_1, replica1DataSource);
+        dataSourceMap.put(SOURCE, sourceDataSource);
+//        dataSourceMap.put(REPLICA, replica1DataSource);
 
         routingDataSource.setTargetDataSources(dataSourceMap);
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);

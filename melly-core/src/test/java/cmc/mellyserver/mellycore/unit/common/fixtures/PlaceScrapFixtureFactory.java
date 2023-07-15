@@ -7,6 +7,7 @@ import cmc.mellyserver.mellycore.user.domain.User;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.randomizers.misc.EnumRandomizer;
+import org.jeasy.random.randomizers.range.LongRangeRandomizer;
 import org.jeasy.random.randomizers.text.StringRandomizer;
 
 import java.lang.reflect.Field;
@@ -64,16 +65,18 @@ public class PlaceScrapFixtureFactory {
 //        return new EasyRandom(parameter);
 //    }
 
-//    // 사용자는 하나, 장소는 모두 다르게, scrapType은 고르게
-//    public static EasyRandom get() {
-//
-//        EasyRandomParameters parameter = getEasyRandomParameters();
-//
-//        parameter
-//                .randomize(user(), () -> User.builder().userSeq(1L).nickname("jemin").build())
-//                .randomize(scrapType(), new EnumRandomizer<>(ScrapType.class));
-//        return new EasyRandom(parameter);
-//    }
+    // 사용자는 하나, 장소는 모두 다르게, scrapType은 고르게
+    public static EasyRandom getPlaceScrap() {
+
+        EasyRandomParameters parameter = new EasyRandomParameters();
+        LongRangeRandomizer longRangeRandomizer = new LongRangeRandomizer(1L, 30_000_000L);
+        parameter
+                .excludeField(named("id"))
+                .randomize(user(), () -> User.builder().userSeq(longRangeRandomizer.getRandomValue()).nickname("jemin").build())
+                .randomize(scrapType(), new EnumRandomizer<>(ScrapType.class));
+
+        return new EasyRandom(parameter);
+    }
 
 //    public static EasyRandom getUser() {
 //
@@ -85,12 +88,12 @@ public class PlaceScrapFixtureFactory {
 //        return new EasyRandom(parameter);
 //    }
 
-//    private static EasyRandomParameters getEasyRandomParameters() {
-//        return new EasyRandomParameters()
-//                .excludeField(named("id"))
-//                .stringLengthRange(1, 100)
-//                .randomize(Long.class, new LongRangeRandomizer(1L, 10000L));
-//    }
+    private static EasyRandomParameters getEasyRandomParameters() {
+        return new EasyRandomParameters()
+                .excludeField(named("id"))
+                .stringLengthRange(1, 100)
+                .randomize(Long.class, new LongRangeRandomizer(1L, 10000L));
+    }
 
     private static Predicate<Field> user() {
         return named("user").and(ofType(User.class));

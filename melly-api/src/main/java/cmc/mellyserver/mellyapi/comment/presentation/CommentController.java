@@ -49,7 +49,7 @@ public class CommentController {
     @GetMapping("/memory/{memoryId}")
     public ResponseEntity<ApiResponse> getComment(@AuthenticationPrincipal User user, @PathVariable Long memoryId) {
 
-        CommentResponseDto comment = commentService.getComment(Long.parseLong(user.getUsername()), memoryId);
+        CommentResponseDto comment = commentService.getComments(Long.parseLong(user.getUsername()), memoryId);
         return ResponseEntity.ok(new ApiResponse(200, "댓글 조회", comment));
     }
 

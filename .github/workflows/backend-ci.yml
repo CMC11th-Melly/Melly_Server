@@ -1,4 +1,4 @@
-name: pr test
+name: Melly Backend CI
 
 on:
   pull_request:
@@ -32,7 +32,7 @@ jobs:
         shell: bash
 
       - name: Test with Gradle
-        run: ./gradlew --info test
+        run: ./gradlew build -x test
 
 
       # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가

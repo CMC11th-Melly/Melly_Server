@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellyapi.auth.application.impl;
 
-import cmc.mellyserver.mellyapi.auth.application.AuthService;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.LoginResponseDto;
@@ -13,32 +12,39 @@ import cmc.mellyserver.mellycore.common.aws.FileUploader;
 import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JwtTokenProvider jwtTokenProvider;
+
     private final FileUploader fileUploader;
 
-    //    private final RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
+
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
 
     @Transactional
-    @Override
-    public SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) throws InterruptedException {
+    public SignupResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
 
         checkDuplicatedEmail(authSignupRequestDto.getEmail());
         String filename = fileUploader.getMultipartFileName(authSignupRequestDto.getProfile_image());
@@ -48,33 +54,35 @@ public class AuthServiceImpl implements AuthService {
         return SignupResponseDto.of(savedUser, jwtTokenProvider.createToken(savedUser.getUserSeq(), savedUser.getRoleType()));
     }
 
-    @Override
+
     public LoginResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
         User user = checkEmailExist(authLoginRequestDto);
         checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
+
         user.setFcmToken(authLoginRequestDto.getFcmToken());
+        user.updateLastLoginTime(LocalDateTime.now());
+
         return LoginResponseDto.of(user, jwtTokenProvider.createToken(user.getUserSeq(), user.getRoleType()));
     }
 
 
-    @Override
     public void logout(Long userSeq, String accessToken) {
 
         authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-//        redisTemplate.opsForValue().set(accessToken, "blackList");
+        redisTemplate.opsForValue().set(accessToken, "blackList");
     }
 
-    @Override
+
     public void withdraw(Long userSeq, String accessToken) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_USER);
+            throw new UserNotFoundException();
         });
         user.remove();
     }
 
-    @Override
+
     public void checkDuplicatedNickname(String nickname) {
 
         if (userRepository.findUserByNickname(nickname).isPresent()) {
@@ -82,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    @Override
+
     public void checkDuplicatedEmail(String email) {
 
         if (userRepository.findUserByEmail(email).isPresent()) {

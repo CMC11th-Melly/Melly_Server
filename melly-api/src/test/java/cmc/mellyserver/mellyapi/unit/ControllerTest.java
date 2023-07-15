@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellyapi.unit;
 
-import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.comment.presentation.CommentController;
 import cmc.mellyserver.mellyapi.common.annotation.EnableMockMvc;
 import cmc.mellyserver.mellyapi.common.utils.DataExtractor;

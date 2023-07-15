@@ -18,12 +18,10 @@ spring:
     hibernate:
       ddl-auto: none
 
-
-
 app:
   auth:
-    tokenExpiry: 1000000
-    tokenSecret: Y21jMTF0aGFub3RoZXJjbWNzdXJmbWF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
+    tokenExpiry: ${jwt.expiry}
+    tokenSecret: ${jwt.secret}
 
 cloud:
   aws:

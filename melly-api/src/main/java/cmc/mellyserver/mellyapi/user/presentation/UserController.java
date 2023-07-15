@@ -11,7 +11,7 @@ import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
-import cmc.mellyserver.mellycore.memory.application.MemoryService;
+import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.mellycore.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
@@ -35,7 +35,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final PlaceScrapService placeScrapService;
@@ -44,46 +44,46 @@ public class UserController {
 
     private final UserSurveyService userSurveyService;
 
-    private final MemoryService memoryService;
+    private final MemoryReadService memoryService;
 
     private final GroupService groupService;
 
-    @GetMapping("/{userSeq}")
+    @GetMapping("/{userSeq}/nickname")
     public ResponseEntity<ApiResponse> getUserNickname(@PathVariable Long userSeq) {
 
         String nickname = userProfileService.findNicknameByUserIdentifier(userSeq);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, nickname));
     }
 
-    @PostMapping("/survey")
+    @PostMapping("/surveys")
     public ResponseEntity<ApiResponse> addSurvey(@AuthenticationPrincipal User user, @RequestBody SurveyRequest surveyRequest) {
 
         userSurveyService.createSurvey(UserAssembler.surveyRequestDto(Long.parseLong(user.getUsername()), surveyRequest));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
-    @GetMapping("/survey")
+    @GetMapping("/surveys")
     public ResponseEntity<ApiResponse> getSurvey(@AuthenticationPrincipal User user) {
 
         SurveyRecommendResponseDto surveyRecommendResponseDto = userSurveyService.getSurveyResult(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, surveyRecommendResponseDto));
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/my-profile")
     public ResponseEntity<ApiResponse> updateProfileFormData(@AuthenticationPrincipal User user) {
 
         ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userProfileService.getLoginUserProfileDataForUpdate(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, profileUpdateFormResponseDto));
     }
 
-    @PutMapping("/profile")
+    @PutMapping("/my-profile")
     public ResponseEntity<ApiResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest) {
 
         userProfileService.updateLoginUserProfile(UserAssembler.profileUpdateRequestDto(Long.parseLong(user.getUsername()), profileUpdateRequest));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
     }
 
-    @GetMapping("/memory")
+    @GetMapping("/my-memorys")
     public ResponseEntity<ApiResponse> getUserMemory(@AuthenticationPrincipal User user, @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
 
         Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(pageable, Long.parseLong(user.getUsername()), groupType);
@@ -91,14 +91,14 @@ public class UserController {
                 MemoryAssembler.memoryResponses(results)));
     }
 
-    @GetMapping("/group")
+    @GetMapping("/my-groups")
     public ResponseEntity<ApiResponse> getUserGroup(@AuthenticationPrincipal User user) {
 
         List<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results)));
     }
 
-    @GetMapping("/group/{groupId}/memory")
+    @GetMapping("/my-group/{groupId}/memorys")
     public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false, name = "userId") Long userSeq) {
 
         Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(pageable, groupId, userSeq);
@@ -106,14 +106,14 @@ public class UserController {
                 MemoryAssembler.memoryResponses(results)));
     }
 
-    @GetMapping("/place/scrap/count")
+    @GetMapping("/place-scraps/count")
     public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user) {
 
         List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(Long.parseLong(user.getUsername()));
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.placeScrapCountResponses(results)));
     }
 
-    @GetMapping("/place/scrap")
+    @GetMapping("/place-scraps")
     public ResponseEntity<ApiResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
 
         Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
@@ -128,7 +128,7 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, volume));
     }
 
-    @PostMapping("/group")
+    @PostMapping("/groups/participate")
     public ResponseEntity<ApiResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest) {
 
         groupService.participateToGroup(Long.parseLong(user.getUsername()), participateGroupRequest.getGroupId());

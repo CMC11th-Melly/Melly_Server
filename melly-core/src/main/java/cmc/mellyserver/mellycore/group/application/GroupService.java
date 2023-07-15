@@ -33,8 +33,10 @@ public class GroupService {
     private final UserGroupQueryRepository userGroupQueryRepository;
 
 
-    //
-    @Cacheable(value = "group", key = "#groupId", cacheManager = "redisCacheManager")
+    /*
+    캐시 적용 여부 : 가능
+     */
+    @Cacheable(value = "group", key = "#groupId")
     @Transactional(readOnly = true)
     public UserGroup findGroupById(Long groupId) {
 
@@ -43,13 +45,20 @@ public class GroupService {
         });
     }
 
-    @Cacheable(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
+    /*
+    캐시 적용 여부 : 가능
+     */
+    @Cacheable(value = "groupList", key = "#userSeq")
     @Transactional(readOnly = true)
     public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) {
+
         return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
     }
 
-    // 메모리 추가 시에는 그룹이 반드시 최신으로 업데이트 되있어야 한다.
+    /*
+    캐시 적용 여부 : 불가능
+    이유 : 메모리 추가 시에는 유저가 속해있는 그룹 정보가 항상 최신으로 제공되야 한다
+    */
     @Transactional(readOnly = true)
     public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userSeq) {
         return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
@@ -63,7 +72,10 @@ public class GroupService {
         return groupRepository.save(userGroup);
     }
 
-    @CacheEvict(value = "groupList", key = "#userSeq", cacheManager = "redisCacheManager")
+    /*
+    해당 유저가 속해있는 그룹 리스트를 Eviction 해준다
+     */
+    @CacheEvict(value = "groupList", key = "#userSeq")
     @Transactional
     public void participateToGroup(Long userSeq, Long groupId) {
 
@@ -80,7 +92,7 @@ public class GroupService {
         groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
     }
 
-    @CacheEvict(value = "group", key = "#updateGroupRequestDto.groupId", cacheManager = "redisCacheManager")
+    @CacheEvict(value = "group", key = "#updateGroupRequestDto.groupId")
     @Transactional
     public void updateGroup(Long userSeq, UpdateGroupRequestDto updateGroupRequestDto) {
 

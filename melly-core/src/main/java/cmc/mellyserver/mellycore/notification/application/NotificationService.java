@@ -10,6 +10,7 @@ import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
 import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
+import cmc.mellyserver.mellycore.notification.exception.MemoryNotFoundException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -76,11 +77,11 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification createNotification(NotificationType notificationType, String body, Long userSeq,
-                                           Long memoryId) {
+    public Notification createNotification(NotificationType notificationType, String body, Long userSeq, Long memoryId) {
+
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_MEMORY);
+            throw new MemoryNotFoundException();
         });
         return notificationRepository.save(Notification.createNotification(notificationType, body, false, memory.getId(), user.getUserSeq()));
     }
