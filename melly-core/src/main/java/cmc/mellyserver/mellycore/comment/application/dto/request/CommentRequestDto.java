@@ -14,14 +14,13 @@ public class CommentRequestDto {
 
     private Long parentId;
 
-    private Long mentionUserId;
 
     @Builder
-    public CommentRequestDto(Long userId, String content, Long memoryId, Long parentId, Long mentionUserId) {
+    public CommentRequestDto(Long userId, String content, Long memoryId, Long parentId) {
+
         this.userId = userId;
         this.content = content;
         this.memoryId = memoryId;
         this.parentId = parentId;
-        this.mentionUserId = mentionUserId;
     }
 }

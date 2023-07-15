@@ -8,7 +8,6 @@ import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.UserGroupQueryRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
-import cmc.mellyserver.mellycore.memory.application.MemoryService;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;

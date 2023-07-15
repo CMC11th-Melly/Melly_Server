@@ -1,12 +1,15 @@
 package cmc.mellyserver.mellycore.comment.domain.repository;
 
-import static cmc.mellyserver.mellycore.comment.domain.QComment.comment;
-
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+
+import static cmc.mellyserver.mellycore.comment.domain.QComment.comment;
+import static cmc.mellyserver.mellycore.comment.domain.QCommentLike.commentLike;
+import static cmc.mellyserver.mellycore.user.domain.QUser.user;
 
 @Repository
 public class CommentQueryRepository {
@@ -19,11 +22,12 @@ public class CommentQueryRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Comment> findComment(Long memoryId) {
+    public List<Comment> findComment(Long userSeq, Long memoryId) {
 
         return query.selectFrom(comment)
-                .leftJoin(comment.parent)
-                .fetchJoin()
+                .innerJoin(user).on(comment.writerId.eq(user.userSeq)).fetchJoin()
+                .innerJoin(commentLike).on(comment.id.eq(commentLike.comment.id)).fetchJoin()
+                .innerJoin(comment.parent).fetchJoin()
                 .where(
                         comment.memoryId.eq(memoryId),
                         comment.isReported.eq(false)

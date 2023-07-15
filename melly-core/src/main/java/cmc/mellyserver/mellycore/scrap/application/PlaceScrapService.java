@@ -1,19 +1,19 @@
 package cmc.mellyserver.mellycore.scrap.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
+import cmc.mellyserver.mellycore.place.exception.PlaceNotFoundException;
 import cmc.mellyserver.mellycore.scrap.application.dto.request.CreatePlaceScrapRequestDto;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.mellycore.scrap.exception.ScrapNotFoundException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -80,7 +80,7 @@ public class PlaceScrapService {
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
         Place place = placeRepository.findPlaceByPosition(new Position(lat, lng)).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_PLACE);
+            throw new PlaceNotFoundException();
         });
         checkExistScrap(userSeq, place.getId());
         placeScrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq, new Position(lat, lng));
@@ -89,14 +89,14 @@ public class PlaceScrapService {
     private void checkDuplicatedScrap(Long userSeq, Long placeId) {
 
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).ifPresent(x -> {
-            throw new GlobalBadRequestException(ErrorCode.DUPLICATE_SCRAP);
+            throw new ScrapNotFoundException();
         });
     }
 
     private void checkExistScrap(Long userSeq, Long placeId) {
 
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NOT_EXIST_SCRAP);
+            throw new ScrapNotFoundException();
         });
     }
 

@@ -1,10 +1,13 @@
 package cmc.mellyserver.mellycore.memory.application.dto.response;
 
+import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupListForSaveMemoryResponseDto;
+import cmc.mellyserver.mellycore.memory.domain.Memory;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class MemoryUpdateFormResponseDto {
@@ -28,4 +31,20 @@ public class MemoryUpdateFormResponseDto {
         this.keywords = keywords;
     }
 
+    public static MemoryUpdateFormResponseDto of(Memory memory, List<UserGroup> userGroupLoginUserAssociated) {
+        return new MemoryUpdateFormResponseDto(
+                memory.getMemoryImages()
+                        .stream()
+                        .map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
+                        .collect(Collectors.toList()),
+                memory.getTitle(),
+                memory.getContent(),
+                userGroupLoginUserAssociated.stream()
+                        .map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(),
+                                ug.getGroupName(), ug.getGroupType()))
+                        .collect(Collectors.toList()),
+                memory.getStars(),
+                memory.getKeyword()
+        );
+    }
 }

@@ -1,10 +1,10 @@
 package cmc.mellyserver.mellyapi.auth.presentation;
 
-import cmc.mellyserver.mellyapi.auth.application.AuthService;
-import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.LoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.OAuthLoginResponseDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.SignupResponseDto;
+import cmc.mellyserver.mellyapi.auth.application.impl.AuthService;
+import cmc.mellyserver.mellyapi.auth.application.impl.OAuthService;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.AuthAssembler;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.AuthLoginRequest;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CommonSignupRequest;

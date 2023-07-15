@@ -11,10 +11,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Getter
-@Table(name = "tb_comment")
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "tb_comment")
 public class Comment extends JpaBaseEntity {
 
     @Id
