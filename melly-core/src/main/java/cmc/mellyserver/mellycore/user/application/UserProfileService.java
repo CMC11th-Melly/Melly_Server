@@ -1,15 +1,14 @@
 package cmc.mellyserver.mellycore.user.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.aws.AwsService;
 import cmc.mellyserver.mellycore.common.aws.FileUploader;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +48,9 @@ public class UserProfileService {
     public String findNicknameByUserIdentifier(Long userSeq) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_USER);
+            throw new UserNotFoundException();
         });
+
         return user.getNickname();
     }
 

@@ -11,7 +11,6 @@ public abstract class CommentAssembler {
                 .parentId(commentRequest.getParentId())
                 .memoryId(commentRequest.getMemoryId())
                 .content(commentRequest.getContent())
-                .mentionUserId(commentRequest.getMentionUserId())
                 .build();
     }
 

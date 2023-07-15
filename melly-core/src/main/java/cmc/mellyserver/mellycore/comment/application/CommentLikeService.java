@@ -1,11 +1,12 @@
 package cmc.mellyserver.mellycore.comment.application;
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.comment.domain.CommentLike;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentLikeRepository;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.comment.exception.CommentLikeNotFoundException;
+import cmc.mellyserver.mellycore.comment.exception.CommentNotFoundException;
+import cmc.mellyserver.mellycore.comment.exception.DuplicatedCommentLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,26 +22,19 @@ public class CommentLikeService {
     @Transactional
     public CommentLike saveCommentLike(Long userSeq, Long commentId) {
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_COMMENT);
-        });
-
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, userSeq)
-                .ifPresent((commentLike -> {
-                    throw new GlobalBadRequestException(ErrorCode.DUPLICATED_COMMENT_LIKE);
-                }));
-
-        CommentLike commentLike = CommentLike.createCommentLike(userSeq, comment);
-        return commentLikeRepository.save(commentLike);
+                .ifPresent(commentLike -> {
+                    throw new DuplicatedCommentLikeException();
+                });
+        return commentLikeRepository.save(CommentLike.createCommentLike(userSeq, comment));
     }
 
     @Transactional
     public void deleteCommentLike(Long userSeq, Long commentId) {
 
         CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, userSeq)
-                .orElseThrow(() -> {
-                    throw new GlobalBadRequestException(ErrorCode.NO_SUCH_COMMENT_LIKE);
-                });
+                .orElseThrow(CommentLikeNotFoundException::new);
         commentLikeRepository.delete(commentLike);
     }
 }

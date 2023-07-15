@@ -56,8 +56,6 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memory.content,
-                        memory.groupInfo.groupType,
-                        memory.groupInfo.groupName,
                         memory.stars,
                         createdByLoginUser(userSeq),
                         memory.visitedDate))
@@ -87,15 +85,14 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memory.content,
-                        memory.groupInfo.groupType,
-                        memory.groupInfo.groupName,
+
                         memory.stars,
                         createdByLoginUser(userSeq),
                         memory.visitedDate))
                 .from(memory)
                 .innerJoin(place).on(place.id.eq(memory.placeId))
                 .where(
-                        memory.groupInfo.groupId.eq(groupId),
+                        memory.groupId.eq(groupId),
                         checkOpenTypeAllOrGroup()
                 )
                 .offset(pageable.getOffset())
@@ -122,8 +119,6 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memory.content,
-                        memory.groupInfo.groupType,
-                        memory.groupInfo.groupName,
                         memory.stars,
                         createdByLoginUser(userSeq),
                         memory.visitedDate))
@@ -150,8 +145,6 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memory.content,
-                        memory.groupInfo.groupType,
-                        memory.groupInfo.groupName,
                         memory.stars,
                         createdByLoginUser(userSeq),
                         memory.visitedDate))
@@ -184,7 +177,7 @@ public class MemoryQueryRepository {
         List<MemoryResponseDto> result = query.select(
                         Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
                                 memory.id, memory.title,
-                                memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName,
+                                memory.content,
                                 memory.stars,
                                 memory.userId.eq(userSeq), memory.visitedDate))
                 .from(memory)
@@ -212,7 +205,7 @@ public class MemoryQueryRepository {
         List<MemoryResponseDto> result = query.select(
                         Projections.constructor(MemoryResponseDto.class, place.id, place.placeName,
                                 memory.id, memory.title,
-                                memory.content, memory.groupInfo.groupType, memory.groupInfo.groupName,
+                                memory.content,
                                 memory.stars,
                                 memory.userId.eq(userSeq), memory.visitedDate))
                 .from(memory)
@@ -345,7 +338,7 @@ public class MemoryQueryRepository {
             return null;
         }
 
-        return memory.groupInfo.groupType.eq(groupType);
+        return null;
     }
 
     private static BooleanExpression eqPlace(Long placeId) {

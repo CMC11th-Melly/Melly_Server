@@ -1,10 +1,8 @@
 package cmc.mellyserver.mellycore.scrap.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
@@ -14,8 +12,11 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryReposito
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.mellycore.scrap.exception.ScrapNotFoundException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class PlaceScrapService {
     /*
     캐싱 적용 가능 여부 : 가능
     */
+    @Cacheable(value = "scrapCount", key = "#userSeq")
     @Transactional(readOnly = true)
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userSeq) {
 
@@ -56,36 +58,41 @@ public class PlaceScrapService {
         return placeScrapQueryRepository.getScrapedPlaceGrouping(user.getUserSeq());
     }
 
+    /*
+    유저별 스크랩 개수 변경으로 인한 Eviction
+     */
+    @CacheEvict(value = "scrapCount", key = "#createPlaceScrapRequestDto.userSeq")
     @Transactional
     public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-        Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
+        Optional<Place> placeOpt = placeRepository.findPlaceByPositions(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(createPlaceScrapRequestDto.getUserSeq());
         Place place = checkPlaceExist(createPlaceScrapRequestDto, placeOpt);
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }
 
+    /*
+    유저별 스크랩 개수 변경으로 인한 Eviction
+    */
+    @CacheEvict(value = "scrapCount", key = "#userSeq")
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
-        Place place = placeRepository.findPlaceByPosition(new Position(lat, lng)).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_PLACE);
-        });
-        checkExistScrap(userSeq, place.getId());
+        Optional<Place> place = placeRepository.findPlaceByPositions(new Position(lat, lng));
+        checkExistScrap(userSeq, place.get().getId());
         placeScrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq, new Position(lat, lng));
     }
 
     private void checkDuplicatedScrap(Long userSeq, Long placeId) {
 
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).ifPresent(x -> {
-            throw new GlobalBadRequestException(ErrorCode.DUPLICATE_SCRAP);
+            throw new ScrapNotFoundException();
         });
     }
 
     private void checkExistScrap(Long userSeq, Long placeId) {
-
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NOT_EXIST_SCRAP);
+            throw new ScrapNotFoundException();
         });
     }
 

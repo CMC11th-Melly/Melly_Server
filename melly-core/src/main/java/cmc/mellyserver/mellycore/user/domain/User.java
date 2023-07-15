@@ -154,17 +154,13 @@ public class User extends JpaBaseEntity {
         this.profileImage = image;
     }
 
-    @PrePersist
-    private void init() {
-        this.userStatus = UserStatus.ACTIVE;
-        if (isDefaultEmailUser()) {
-            this.passwordInitDate = LocalDateTime.now();
-            this.passwordExpired = PasswordExpired.N;
-        }
-    }
 
     public void updateLastLoginTime(LocalDateTime now) {
         this.lastLoginTime = now;
+    }
+
+    public void block() {
+        this.userStatus = UserStatus.BLOCK;
     }
 
     public void setEnableAppPush(boolean enableAppPush) {
@@ -187,5 +183,14 @@ public class User extends JpaBaseEntity {
 
     private boolean isDefaultEmailUser() {
         return !Objects.isNull(this.provider) && this.provider.equals(Provider.DEFAULT);
+    }
+
+    @PrePersist
+    private void init() {
+        this.userStatus = UserStatus.ACTIVE;
+        if (isDefaultEmailUser()) {
+            this.passwordInitDate = LocalDateTime.now();
+            this.passwordExpired = PasswordExpired.N;
+        }
     }
 }

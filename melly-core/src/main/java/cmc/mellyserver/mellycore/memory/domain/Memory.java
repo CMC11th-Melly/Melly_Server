@@ -1,10 +1,8 @@
 package cmc.mellyserver.mellycore.memory.domain;
 
 import cmc.mellyserver.mellycommon.enums.DeleteStatus;
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.mellycore.memory.domain.vo.GroupInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +12,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +35,9 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "place_id")
     private Long placeId;
 
+    @Column(name = "group_id")
+    private Long groupId;
+
     @Column(name = "title")
     private String title;
 
@@ -49,10 +52,6 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "is_deleted")
     private DeleteStatus is_deleted;
 
-    @Embedded
-    GroupInfo groupInfo;
-
-    private boolean isReported = false;
 
     private LocalDateTime visitedDate;
 
@@ -67,17 +66,19 @@ public class Memory extends JpaBaseEntity {
     private List<String> keyword = new ArrayList<>();
 
     @Builder
-    public Memory(Long stars, GroupInfo groupInfo, Long userId, Long placeId, String title, String content, OpenType openType, LocalDateTime visitedDate) {
+    public Memory(Long stars, Long groupId, Long userId, Long placeId, String title, String content, OpenType openType, LocalDateTime visitedDate, List<String> keyword) {
 
         this.stars = stars;
-        this.groupInfo = groupInfo;
         this.title = title;
+        this.groupId = groupId;
         this.placeId = placeId;
         this.userId = userId;
         this.content = content;
         this.openType = openType;
         this.visitedDate = visitedDate;
+        this.keyword = keyword;
     }
+
 
     @PrePersist
     public void init() {
@@ -96,15 +97,16 @@ public class Memory extends JpaBaseEntity {
         this.placeId = placeId;
     }
 
-    public void updateMemory(String title, String content, List<String> keyword, Long groupId, GroupType groupType, String groupName, OpenType openType, LocalDateTime visitedDate, Long star) {
+    public void updateMemory(String title, String content, List<String> keyword, Long groupId, OpenType openType, LocalDateTime visitedDate, Long star, List<Long> deleteImageList, List<String> multipartNames) {
 
         this.title = title;
         this.content = content;
         this.keyword = keyword;
-        this.groupInfo = new GroupInfo(groupName, groupType, groupId);
+        this.groupId = groupId;
         this.openType = openType;
         this.visitedDate = visitedDate;
         this.stars = star;
+        updateMemoryImage(deleteImageList, multipartNames);
     }
 
     public void setMemoryImages(List<MemoryImage> memoryImages) {
@@ -115,10 +117,16 @@ public class Memory extends JpaBaseEntity {
         }
     }
 
-    public void updateMemoryImages(List<MemoryImage> memoryImages) {
-        for (MemoryImage memoryImage : memoryImages) {
-            this.getMemoryImages().add(memoryImage);
-            memoryImage.setMemory(this);
+    private void updateMemoryImage(List<Long> deleteImageList, List<String> multipartFileNames) {
+
+        if (!Objects.isNull(deleteImageList)) {
+            for (Long deleteId : deleteImageList) {
+                this.memoryImages.removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
+            }
+        }
+
+        if (!Objects.isNull(multipartFileNames)) {
+            setMemoryImages(multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
         }
     }
 

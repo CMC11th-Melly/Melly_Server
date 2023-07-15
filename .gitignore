@@ -28,7 +28,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-/melly-domain/src/main/resources/application-local.yml
+/melly-core/src/main/resources/application-local.yml
 /melly-api/src/main/resources/application-local.yml
 /melly-batch/src/main/resources/application-local.yml
 
