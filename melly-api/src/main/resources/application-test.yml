@@ -18,8 +18,6 @@ spring:
     hibernate:
       ddl-auto: none
 
-
-
 app:
   auth:
     tokenExpiry: ${jwt.expiry}
