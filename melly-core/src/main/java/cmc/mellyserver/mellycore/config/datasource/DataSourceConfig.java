@@ -11,8 +11,8 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
-import static cmc.mellyserver.mellycore.config.datasource.DatabaseType.REPLICA;
 import static cmc.mellyserver.mellycore.config.datasource.DatabaseType.SOURCE;
+
 
 @Configuration
 public class DataSourceConfig {
@@ -25,22 +25,22 @@ public class DataSourceConfig {
                 .build();
     }
 
-    @Bean
-    @Qualifier(REPLICA)
-    @ConfigurationProperties(prefix = "spring.datasource.replica1")
-    public DataSource replica1DataSource() {
-        return DataSourceBuilder.create()
-                .build();
-    }
+//    @Bean
+//    @Qualifier(REPLICA)
+//    @ConfigurationProperties(prefix = "spring.datasource.replica1")
+//    public DataSource replica1DataSource() {
+//        return DataSourceBuilder.create()
+//                .build();
+//    }
 
     @Bean
-    public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource, @Qualifier(REPLICA) DataSource replica1DataSource) {
+    public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource) {
 
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
         HashMap<Object, Object> dataSourceMap = new HashMap<>();
         dataSourceMap.put(SOURCE, sourceDataSource);
-        dataSourceMap.put(REPLICA, replica1DataSource);
+//        dataSourceMap.put(REPLICA, replica1DataSource);
 
         routingDataSource.setTargetDataSources(dataSourceMap);
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);
