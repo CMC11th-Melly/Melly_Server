@@ -56,7 +56,6 @@ public class PlaceQueryRepository {
                 .from(memory)
                 .where(
                         memory.userId.eq(userSeq),
-                        memory.isDelete.isFalse(),
                         memory.title.contains(memoryName)
                 )
                 .distinct().fetch();

@@ -29,8 +29,7 @@ public class CommentQueryRepository {
                 .innerJoin(commentLike).on(comment.id.eq(commentLike.comment.id)).fetchJoin()
                 .innerJoin(comment.parent).fetchJoin()
                 .where(
-                        comment.memoryId.eq(memoryId),
-                        comment.isReported.eq(false)
+                        comment.memoryId.eq(memoryId)
                 )
                 .orderBy(
                         comment.parent.id.asc().nullsFirst(),

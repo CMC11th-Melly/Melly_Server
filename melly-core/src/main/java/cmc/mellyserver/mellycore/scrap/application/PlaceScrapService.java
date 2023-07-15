@@ -6,7 +6,6 @@ import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
-import cmc.mellyserver.mellycore.place.exception.PlaceNotFoundException;
 import cmc.mellyserver.mellycore.scrap.application.dto.request.CreatePlaceScrapRequestDto;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
@@ -66,7 +65,7 @@ public class PlaceScrapService {
     @Transactional
     public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-        Optional<Place> placeOpt = placeRepository.findPlaceByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
+        Optional<Place> placeOpt = placeRepository.findPlaceByPositions(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(createPlaceScrapRequestDto.getUserSeq());
         Place place = checkPlaceExist(createPlaceScrapRequestDto, placeOpt);
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
@@ -79,10 +78,8 @@ public class PlaceScrapService {
     @Transactional
     public void removeScrap(Long userSeq, Double lat, Double lng) {
 
-        Place place = placeRepository.findPlaceByPosition(new Position(lat, lng)).orElseThrow(() -> {
-            throw new PlaceNotFoundException();
-        });
-        checkExistScrap(userSeq, place.getId());
+        Optional<Place> place = placeRepository.findPlaceByPositions(new Position(lat, lng));
+        checkExistScrap(userSeq, place.get().getId());
         placeScrapRepository.deleteByUserUserSeqAndPlacePosition(userSeq, new Position(lat, lng));
     }
 
@@ -94,7 +91,6 @@ public class PlaceScrapService {
     }
 
     private void checkExistScrap(Long userSeq, Long placeId) {
-
         placeScrapRepository.findByUserUserSeqAndPlaceId(userSeq, placeId).orElseThrow(() -> {
             throw new ScrapNotFoundException();
         });
