@@ -10,6 +10,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
     Place findPlaceByPosition(Position position);
 
-    Optional<Place> findAllByPositions(Position position);
+    Optional<Place> findAllByPosition(Position position);
 
 }
