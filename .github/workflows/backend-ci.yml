@@ -2,14 +2,13 @@ name: Melly Backend CI
 
 on:
   pull_request:
-    branches: [ develop ] # develop 브랜치로 PR을 할때 작동한다.
+    branches: [ develop ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: checkout code
         uses: actions/checkout@v2
 
@@ -39,9 +38,3 @@ jobs:
         if: ${{always()}}
         with:
           files: /home/runner/work/Melly_Server/Melly_Server/melly-api/build/test-results/**/*.xml
-
-#      - name: SonarCloud Scan
-#        uses: sonarsource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,15 +1,16 @@
 package cmc.mellyserver.mellyapi.common.response;
 
-import cmc.mellyserver.mellycommon.codes.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
+
     private int code;
     private String message;
     private T data;
@@ -19,10 +20,7 @@ public class ApiResponse<T> {
         this.message = message;
     }
 
-    public static <T> ResponseEntity<ApiResponse<T>> success(SuccessCode successCode, T data) {
-
-        return ResponseEntity
-                .status(successCode.getStatus())
-                .body(new ApiResponse<>(successCode.getStatus(), successCode.getMessage(), data));
+    public static <T> ResponseEntity<ApiResponse> OK(T data) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "OK", data));
     }
 }
