@@ -3,7 +3,6 @@ package cmc.mellyserver.mellyapi.integration.notification;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.NotificationType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;

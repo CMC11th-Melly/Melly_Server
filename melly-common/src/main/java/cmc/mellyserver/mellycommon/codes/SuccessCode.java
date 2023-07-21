@@ -1,19 +1,20 @@
 package cmc.mellyserver.mellycommon.codes;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum SuccessCode {
 
-    SELECT_SUCCESS(200, "200", "SELECT SUCCESS"),
+    SELECT_SUCCESS(HttpStatus.OK.value(), "200", "SELECT SUCCESS"),
 
-    DELETE_SUCCESS(200, "200", "DELETE SUCCESS"),
+    DELETE_SUCCESS(HttpStatus.OK.value(), "200", "DELETE SUCCESS"),
 
-    LOGIN_SUCCESS(200, "200", "LOGIN SUCCESS"),
+    LOGIN_SUCCESS(HttpStatus.OK.value(), "200", "LOGIN SUCCESS"),
 
-    INSERT_SUCCESS(201, "201", "INSERT SUCCESS"),
+    INSERT_SUCCESS(HttpStatus.CREATED.value(), "201", "INSERT SUCCESS"),
 
-    UPDATE_SUCCESS(204, "204", "UPDATE SUCCESS"),
+    UPDATE_SUCCESS(HttpStatus.NO_CONTENT.value(), "204", "UPDATE SUCCESS"),
 
     ;
 

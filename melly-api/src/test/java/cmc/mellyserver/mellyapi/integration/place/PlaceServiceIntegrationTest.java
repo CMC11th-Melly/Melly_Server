@@ -5,7 +5,6 @@ import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;

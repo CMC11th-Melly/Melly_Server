@@ -6,7 +6,6 @@ import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.AgeGroup;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;

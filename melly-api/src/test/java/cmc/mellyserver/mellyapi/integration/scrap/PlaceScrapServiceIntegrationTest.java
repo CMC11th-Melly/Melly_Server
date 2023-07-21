@@ -4,7 +4,6 @@ import cmc.mellyserver.mellyapi.common.factory.PlaceFactory;
 import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.scrap.application.dto.request.CreatePlaceScrapRequestDto;

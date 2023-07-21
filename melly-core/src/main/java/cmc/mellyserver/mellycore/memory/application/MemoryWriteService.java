@@ -4,7 +4,7 @@ package cmc.mellyserver.mellycore.memory.application;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.aws.FileUploader;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.group.exception.GroupNotFoundException;
@@ -90,7 +90,7 @@ public class MemoryWriteService {
     public void removeMemory(Long memoryId) {
 
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_MEMORY);
+            throw new BusinessException(ErrorCode.NO_SUCH_MEMORY);
         });
         memory.delete();
     }

@@ -4,7 +4,6 @@ import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;

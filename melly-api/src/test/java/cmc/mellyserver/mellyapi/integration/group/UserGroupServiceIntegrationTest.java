@@ -6,7 +6,6 @@ import cmc.mellyserver.mellyapi.integration.IntegrationTest;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.user.domain.User;

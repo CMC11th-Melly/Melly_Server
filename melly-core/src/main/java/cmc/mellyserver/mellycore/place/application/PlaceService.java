@@ -3,7 +3,7 @@ package cmc.mellyserver.mellycore.place.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.place.domain.Place;
@@ -53,7 +53,7 @@ public class PlaceService {
     public PlaceResponseDto findPlaceByPlaceId(Long userSeq, Long placeId) {
 
         Place place = placeRepository.findById(placeId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_PLACE);
+            throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
         });
         HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoriesBelongToPlace(userSeq, placeId);
         Boolean checkCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userSeq);

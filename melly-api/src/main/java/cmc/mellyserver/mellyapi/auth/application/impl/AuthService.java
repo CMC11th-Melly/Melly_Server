@@ -9,7 +9,7 @@ import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.aws.FileUploader;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellycore.user.exception.UserNotFoundException;
@@ -86,7 +86,7 @@ public class AuthService {
     public void checkDuplicatedNickname(String nickname) {
 
         if (userRepository.findUserByNickname(nickname).isPresent()) {
-            throw new GlobalBadRequestException(ErrorCode.DUPLICATE_NICKNAME);
+            throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
         }
     }
 
@@ -94,7 +94,7 @@ public class AuthService {
     public void checkDuplicatedEmail(String email) {
 
         if (userRepository.findUserByEmail(email).isPresent()) {
-            throw new GlobalBadRequestException(ErrorCode.DUPLICATE_EMAIL);
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
 
@@ -102,14 +102,14 @@ public class AuthService {
 
         return userRepository.findUserByEmail(authLoginRequestDto.getEmail())
                 .orElseThrow(() -> {
-                    throw new GlobalBadRequestException(ErrorCode.INVALID_EMAIL);
+                    throw new BusinessException(ErrorCode.INVALID_EMAIL);
                 });
     }
 
     private void checkPassword(String password, String originPassword) {
 
         if (!passwordEncoder.matches(password, originPassword)) {
-            throw new GlobalBadRequestException(ErrorCode.INVALID_PASSWORD);
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
     }
 }

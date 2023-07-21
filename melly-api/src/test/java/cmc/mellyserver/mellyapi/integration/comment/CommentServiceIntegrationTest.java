@@ -8,7 +8,6 @@ import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.comment.application.dto.request.CommentRequestDto;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.comment.domain.CommentLike;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.user.domain.User;
