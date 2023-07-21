@@ -36,4 +36,4 @@ jobs:
             docker stop $(docker ps -a -q) 
             docker rm $(docker ps -a -q) 
             docker pull sjmin/melly
-            docker run -d -p 8080:8080 --name melly-prod sjmin/melly
+            docker run -d -p 8081:8080 --name melly-prod sjmin/melly
