@@ -2,7 +2,7 @@ package cmc.mellyserver.mellycore.common;
 
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class AuthenticatedUserChecker {
 
     public User checkAuthenticatedUserExist(Long userSeq) {
         return userRepository.findById(userSeq).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_USER);
+            throw new BusinessException(ErrorCode.NO_SUCH_USER);
         });
     }
 }

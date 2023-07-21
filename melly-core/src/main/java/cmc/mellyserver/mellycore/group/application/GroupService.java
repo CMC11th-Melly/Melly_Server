@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.group.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.domain.GroupAndUser;
@@ -41,7 +41,7 @@ public class GroupService {
     public UserGroup findGroupById(Long groupId) {
 
         return groupRepository.findById(groupId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_GROUP);
+            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
     }
 
@@ -80,11 +80,11 @@ public class GroupService {
     public void participateToGroup(Long userSeq, Long groupId) {
 
         User user = userRepository.findById(userSeq).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_USER);
+            throw new BusinessException(ErrorCode.NO_SUCH_USER);
         });
 
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_GROUP);
+            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
 
         checkUserAlreadyParticipatedInGroup(user, userGroup);
@@ -97,7 +97,7 @@ public class GroupService {
     public void updateGroup(Long userSeq, UpdateGroupRequestDto updateGroupRequestDto) {
 
         UserGroup userGroup = groupRepository.findById(updateGroupRequestDto.getGroupId()).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_GROUP);
+            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
         userGroup.update(userSeq, updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
@@ -107,14 +107,14 @@ public class GroupService {
     public void removeGroup(Long userSeq, Long groupId) {
 
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_GROUP);
+            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
         userGroup.remove(userSeq);
     }
 
     private void checkUserAlreadyParticipatedInGroup(User user, UserGroup userGroup) {
         if (groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup).isPresent()) {
-            throw new GlobalBadRequestException(ErrorCode.DUPLICATED_GROUP);
+            throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
     }
 }

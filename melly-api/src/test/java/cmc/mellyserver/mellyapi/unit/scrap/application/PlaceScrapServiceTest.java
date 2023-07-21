@@ -6,7 +6,6 @@ import cmc.mellyserver.mellyapi.common.factory.UserFactory;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceQueryRepository;

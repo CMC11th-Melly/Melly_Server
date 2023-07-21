@@ -4,7 +4,7 @@ package cmc.mellyserver.mellycore.notification.application;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.NotificationType;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
@@ -90,7 +90,7 @@ public class NotificationService {
     public void checkNotification(Long notificationId) {
 
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_NOTIFICATION);
+            throw new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION);
         });
         notification.checkNotification(true);
 

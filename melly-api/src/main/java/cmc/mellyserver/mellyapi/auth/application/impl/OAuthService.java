@@ -9,7 +9,7 @@ import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.RoleType;
 import cmc.mellyserver.mellycore.common.aws.FileUploader;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellyinfra.client.LoginClient;
@@ -64,7 +64,7 @@ public class OAuthService {
 
         // 일단 유저 찾고
         User user = userRepository.findUserByUserId(authRequestForOAuthSignup.getUid()).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_USER);
+            throw new BusinessException(ErrorCode.NO_SUCH_USER);
         });
 
         user.updateUser(authRequestForOAuthSignup.getNickname(),

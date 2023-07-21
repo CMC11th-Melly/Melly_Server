@@ -5,7 +5,6 @@ import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;

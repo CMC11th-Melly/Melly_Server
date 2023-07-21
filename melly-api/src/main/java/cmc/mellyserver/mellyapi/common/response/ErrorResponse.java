@@ -1,12 +1,17 @@
 package cmc.mellyserver.mellyapi.common.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class ErrorResponse {
 
-    int errorCode;
-    String message;
+    private final String code;
+    private final String message;
+
+    public static ErrorResponse of(String code, String message) {
+        return new ErrorResponse(code, message);
+    }
+
 }
