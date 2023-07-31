@@ -43,11 +43,11 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             Memory memory = Memory.builder().title("테스트 제목").content("테스트 컨텐츠")
-                    .userId(user.getUserSeq()).build();
+                    .userId(user.getId()).build();
             Memory savedMemory = memoryRepository.save(memory);
 
             // when
-            memoryService.removeMemory(user.getUserSeq(), savedMemory.getId());
+            memoryService.removeMemory(user.getId(), savedMemory.getId());
 
             // then
             Memory findMemory = memoryRepository.findById(savedMemory.getId()).get();
@@ -62,11 +62,11 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             Memory memory = Memory.builder().title("테스트 제목").content("테스트 컨텐츠")
-                    .userId(user.getUserSeq()).build();
+                    .userId(user.getId()).build();
             memoryRepository.save(memory);
 
             // when then
-            assertThatThrownBy(() -> memoryService.removeMemory(user.getUserSeq(), 10L))
+            assertThatThrownBy(() -> memoryService.removeMemory(user.getId(), 10L))
                     .isInstanceOf(GlobalBadRequestException.class)
                     .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
 
@@ -80,18 +80,18 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
 
         memoryService.createMemory(createMemoryRequestDto);
-        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(user.getUserSeq(),
+        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(user.getId(),
                 1.234, 1.234);
 
         // when
         List<FindPlaceInfoByMemoryNameResponseDto> memories = memoryService.findPlaceInfoByMemoryName(
-                user.getUserSeq(), createMemoryRequestDto.getTitle());
+                user.getId(), createMemoryRequestDto.getTitle());
 
         // then
         assertThat(memories).hasSize(1);
@@ -113,7 +113,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                     "multipart/form-data", "testImage1".getBytes());
 
             CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목3")
+                    .id(user.getId()).title("테스트 제목3")
                     .content("테스트 컨텐츠3").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .multipartFiles(List.of(mockMultipartFile))
@@ -123,7 +123,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             Memory savedMemory = memoryService.createMemory(createMemoryRequestDto);
 
             CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .groupName("테스트 그룹")
                     .groupType(GroupType.FRIEND)
                     .groupIcon(1)
@@ -132,7 +132,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             UserGroup userGroup = groupService.saveGroup(createGroupRequestDto);
 
             UpdateMemoryRequestDto updateMemoryRequestDto = UpdateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .memoryId(savedMemory.getId())
                     .groupId(userGroup.getId())
                     .title("수정된 제목")
@@ -158,7 +158,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .groupName("테스트 그룹")
                     .groupType(GroupType.FRIEND)
                     .groupIcon(1)
@@ -167,7 +167,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             UserGroup userGroup = groupService.saveGroup(createGroupRequestDto);
 
             UpdateMemoryRequestDto updateMemoryRequestDto = UpdateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .memoryId(1L)
                     .groupId(userGroup.getId())
                     .title("수정된 제목")
@@ -188,11 +188,11 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             Memory memory = Memory.builder().title("테스트 제목").content("테스트 컨텐츠")
-                    .userId(user.getUserSeq()).build();
+                    .userId(user.getId()).build();
             Memory savedMemory = memoryRepository.save(memory);
 
             UpdateMemoryRequestDto updateMemoryRequestDto = UpdateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .memoryId(savedMemory.getId())
                     .groupId(1L)
                     .title("수정된 제목")
@@ -226,21 +226,21 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User nonLoginUser = userRepository.save(noneCurrentLoginuser);
 
             CreateMemoryRequestDto createMemoryRequestDto1 = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목1")
+                    .id(user.getId()).title("테스트 제목1")
                     .content("테스트 컨텐츠1").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto2 = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목2")
+                    .id(user.getId()).title("테스트 제목2")
                     .content("테스트 컨텐츠2").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto3 = CreateMemoryRequestDto.builder()
-                    .userSeq(nonLoginUser.getUserSeq()).title("테스트 제목3")
+                    .id(nonLoginUser.getId()).title("테스트 제목3")
                     .content("테스트 컨텐츠3").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
@@ -250,12 +250,12 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             memoryService.createMemory(createMemoryRequestDto2);
             memoryService.createMemory(createMemoryRequestDto3);
 
-            PlaceResponseDto place = placeService.findPlaceByPosition(user.getUserSeq(), 1.234,
+            PlaceResponseDto place = placeService.findPlaceByPosition(user.getId(), 1.234,
                     1.234);
 
             // when
             Slice<MemoryResponseDto> loginUserWriteMemoryBelongToPlace = memoryService.findLoginUserWriteMemoryBelongToPlace(
-                    PageRequest.of(0, 10), user.getUserSeq(), place.getPlaceId(), null);
+                    PageRequest.of(0, 10), user.getId(), place.getPlaceId(), null);
 
             // then
             assertThat(loginUserWriteMemoryBelongToPlace.getContent()).hasSize(2);
@@ -279,21 +279,21 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             User nonLoginUser = userRepository.save(noneCurrentLoginuser);
 
             CreateMemoryRequestDto createMemoryRequestDto1 = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목1")
+                    .id(user.getId()).title("테스트 제목1")
                     .content("테스트 컨텐츠1").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto2 = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목2")
+                    .id(user.getId()).title("테스트 제목2")
                     .content("테스트 컨텐츠2").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto3 = CreateMemoryRequestDto.builder()
-                    .userSeq(nonLoginUser.getUserSeq()).title("테스트 제목3")
+                    .id(nonLoginUser.getId()).title("테스트 제목3")
                     .content("테스트 컨텐츠3").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
                     .placeCategory("카페").lat(1.234).lng(1.234)
@@ -303,12 +303,12 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             memoryService.createMemory(createMemoryRequestDto2);
             memoryService.createMemory(createMemoryRequestDto3);
 
-            PlaceResponseDto place = placeService.findPlaceByPosition(user.getUserSeq(), 1.234,
+            PlaceResponseDto place = placeService.findPlaceByPosition(user.getId(), 1.234,
                     1.234);
 
             // when
             Slice<MemoryResponseDto> loginUserWriteMemoryBelongToPlace = memoryService.findOtherUserWriteMemoryBelongToPlace(
-                    PageRequest.of(0, 10), user.getUserSeq(), place.getPlaceId(), null);
+                    PageRequest.of(0, 10), user.getId(), place.getPlaceId(), null);
 
             // then
             assertThat(loginUserWriteMemoryBelongToPlace.getContent()).hasSize(1);
@@ -328,18 +328,18 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                             .build());
 
             CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                    .userSeq(user.getUserSeq())
+                    .id(user.getId())
                     .groupName("테스트 그룹")
                     .groupType(GroupType.FRIEND)
                     .groupIcon(1)
                     .build();
             UserGroup userGroup = groupService.saveGroup(createGroupRequestDto);
 
-            groupService.participateToGroup(user.getUserSeq(), userGroup.getId());
-            groupService.participateToGroup(nonLoginUser.getUserSeq(), userGroup.getId());
+            groupService.participateToGroup(user.getId(), userGroup.getId());
+            groupService.participateToGroup(nonLoginUser.getId(), userGroup.getId());
 
             CreateMemoryRequestDto createMemoryRequestDto1 = CreateMemoryRequestDto.builder()
-                    .userSeq(user.getUserSeq()).title("테스트 제목1")
+                    .id(user.getId()).title("테스트 제목1")
                     .groupId(userGroup.getId())
                     .content("테스트 컨텐츠1").placeName("테스트 장소")
                     .keyword(List.of("기뻐요", "좋아요"))
@@ -348,7 +348,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto2 = CreateMemoryRequestDto.builder()
-                    .userSeq(nonLoginUser.getUserSeq()).title("테스트 제목2")
+                    .id(nonLoginUser.getId()).title("테스트 제목2")
                     .content("테스트 컨텐츠2").placeName("테스트 장소")
                     .groupId(userGroup.getId())
                     .keyword(List.of("기뻐요", "좋아요"))
@@ -357,7 +357,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                     .build();
 
             CreateMemoryRequestDto createMemoryRequestDto3 = CreateMemoryRequestDto.builder()
-                    .userSeq(nonLoginUser.getUserSeq()).title("테스트 제목3")
+                    .id(nonLoginUser.getId()).title("테스트 제목3")
                     .content("테스트 컨텐츠3").placeName("테스트 장소")
                     .groupId(userGroup.getId())
                     .keyword(List.of("기뻐요", "좋아요"))
@@ -369,12 +369,12 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
             memoryService.createMemory(createMemoryRequestDto2);
             memoryService.createMemory(createMemoryRequestDto3);
 
-            PlaceResponseDto place = placeService.findPlaceByPosition(user.getUserSeq(), 1.234,
+            PlaceResponseDto place = placeService.findPlaceByPosition(user.getId(), 1.234,
                     1.234);
 
             // when
             Slice<MemoryResponseDto> loginUserWriteMemoryBelongToPlace = memoryService.findMyGroupMemberWriteMemoryBelongToPlace(
-                    PageRequest.of(0, 10), user.getUserSeq(), place.getPlaceId(), null);
+                    PageRequest.of(0, 10), user.getId(), place.getPlaceId(), null);
 
             // then
             assertThat(loginUserWriteMemoryBelongToPlace.getContent()).hasSize(2);
@@ -394,7 +394,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                         .build());
 
         CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                .userSeq(user.getUserSeq())
+                .id(user.getId())
                 .groupName("테스트 그룹")
                 .groupType(GroupType.FRIEND)
                 .groupIcon(1)
@@ -402,11 +402,11 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
 
         UserGroup userGroup = groupService.saveGroup(createGroupRequestDto);
 
-        groupService.participateToGroup(user.getUserSeq(), userGroup.getId());
-        groupService.participateToGroup(nonLoginUser.getUserSeq(), userGroup.getId());
+        groupService.participateToGroup(user.getId(), userGroup.getId());
+        groupService.participateToGroup(nonLoginUser.getId(), userGroup.getId());
 
         CreateMemoryRequestDto createMemoryRequestDto1 = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목1")
+                .id(user.getId()).title("테스트 제목1")
                 .groupId(3L)
                 .content("테스트 컨텐츠1").placeName("테스트 장소")
                 .keyword(List.of("기뻐요", "좋아요"))
@@ -432,7 +432,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
                         .build());
 
         CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                .userSeq(user.getUserSeq())
+                .id(user.getId())
                 .groupName("테스트 그룹")
                 .groupType(GroupType.FRIEND)
                 .groupIcon(1)
@@ -440,11 +440,11 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
 
         UserGroup userGroup = groupService.saveGroup(createGroupRequestDto);
 
-        groupService.participateToGroup(user.getUserSeq(), userGroup.getId());
-        groupService.participateToGroup(nonLoginUser.getUserSeq(), userGroup.getId());
+        groupService.participateToGroup(user.getId(), userGroup.getId());
+        groupService.participateToGroup(nonLoginUser.getId(), userGroup.getId());
 
         CreateMemoryRequestDto resultWithExistGroup = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목1")
+                .id(user.getId()).title("테스트 제목1")
                 .groupId(userGroup.getId())
                 .content("테스트 컨텐츠1").placeName("테스트 장소")
                 .keyword(List.of("기뻐요", "좋아요"))
@@ -456,7 +456,7 @@ public class MemoryServiceIntegrationTest extends IntegrationTest {
 
         // when then
         CreateMemoryRequestDto resultWithoutExistGroup = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목1")
+                .id(user.getId()).title("테스트 제목1")
                 .groupId(3L)
                 .content("테스트 컨텐츠1").placeName("테스트 장소")
                 .keyword(List.of("기뻐요", "좋아요"))

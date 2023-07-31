@@ -1,29 +1,45 @@
 server:
   shutdown: graceful
+  # SIGTERM이나 SIGINT의 정상 종료 시그널을 받았을때 바로 애플리케이션을 종료하지 않고, 기존에 처리중인 요청을 모두 처리 후에 프로세스 종료한다.
+  # 추가 요청 거절 방식 : Tomcat, Jetty, Netty는 네트워크 계층에서 새로운 커넥션 거절 , Undertow는 요청을 받지만 바로 503에러 반환
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+  lifecycle:
+    timeout-per-shutdown-phase: "20s"
+    # 시스템이 종료 될때 기존의 요청이 데드락이 걸리면 graceful shutdown이 종료 안될 수도 있음. 따라서 타임아웃을 설정하는 것이 좋다. default는 30초
   servlet:
     multipart:
       max-request-size: 10MB
       max-file-size: 10MB
   redis:
-    host: localhost
+    host: ${REDIS_HOST}
     port: 6379
   datasource:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 10
     source:
       jdbc-url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
       driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
-    database: mysql
-  main:
-    allow-bean-definition-overriding: true
 
 app:
   auth:

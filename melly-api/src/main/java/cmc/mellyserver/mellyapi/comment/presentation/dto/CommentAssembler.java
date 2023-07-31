@@ -5,9 +5,9 @@ import cmc.mellyserver.mellycore.comment.application.dto.request.CommentRequestD
 
 public abstract class CommentAssembler {
 
-    public static CommentRequestDto commentRequestDto(Long userSeq, CommentRequest commentRequest) {
+    public static CommentRequestDto commentRequestDto(Long id, CommentRequest commentRequest) {
         return CommentRequestDto.builder()
-                .userId(userSeq)
+                .userId(id)
                 .parentId(commentRequest.getParentId())
                 .memoryId(commentRequest.getMemoryId())
                 .content(commentRequest.getContent())

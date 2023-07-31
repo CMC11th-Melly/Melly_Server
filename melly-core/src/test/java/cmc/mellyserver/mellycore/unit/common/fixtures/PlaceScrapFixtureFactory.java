@@ -72,7 +72,7 @@ public class PlaceScrapFixtureFactory {
         LongRangeRandomizer longRangeRandomizer = new LongRangeRandomizer(1L, 30_000_000L);
         parameter
                 .excludeField(named("id"))
-                .randomize(user(), () -> User.builder().userSeq(longRangeRandomizer.getRandomValue()).nickname("jemin").build())
+                .randomize(user(), () -> User.builder().id(longRangeRandomizer.getRandomValue()).nickname("jemin").build())
                 .randomize(scrapType(), new EnumRandomizer<>(ScrapType.class));
 
         return new EasyRandom(parameter);
@@ -83,7 +83,7 @@ public class PlaceScrapFixtureFactory {
 //        EasyRandomParameters parameter = getEasyRandomParameters();
 //
 //        parameter
-//                .randomize(user(), () -> User.builder().userSeq(1L).nickname("jemin").build())
+//                .randomize(user(), () -> User.builder().id(1L).nickname("jemin").build())
 //                .randomize(scrapType(), new EnumRandomizer<>(ScrapType.class));
 //        return new EasyRandom(parameter);
 //    }

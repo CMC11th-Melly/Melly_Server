@@ -4,8 +4,8 @@ import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.mellycommon.enums.*;
 import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.place.domain.Position;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class UserFactory {
 
     public static SurveyRequestDto mockSurveyRequestDto() {
         return SurveyRequestDto.builder()
-                .userSeq(1L)
+                .id(1L)
                 .recommendGroup(RecommendGroup.FRIEND)
                 .recommendPlace(RecommendPlace.PLACE1)
                 .recommendActivity(RecommendActivity.CAFE)

@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.auth.application.dto.response;
 
-import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycommon.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +16,5 @@ import lombok.Data;
 public class OAuthLoginResponseDto {
 
     private String accessToken;
-    private Boolean isNewUser;
-    private User user;
+    private UserStatus userStatus;
 }

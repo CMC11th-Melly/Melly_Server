@@ -24,7 +24,7 @@ public class UserGroupServiceIntegrationTest extends IntegrationTest {
         // given
         User savedUser = userRepository.save(UserFactory.createEmailLoginUser());
         CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.builder()
-                .userSeq(savedUser.getUserSeq())
+                .id(savedUser.getId())
                 .groupType(GroupType.FRIEND)
                 .groupName("테스트 그룹")
                 .groupIcon(1)
@@ -35,7 +35,7 @@ public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
         // then
         assertThat(group.getGroupName()).isEqualTo(createGroupRequestDto.getGroupName());
-        assertThat(group.getCreatorId()).isEqualTo(savedUser.getUserSeq());
+        assertThat(group.getCreatorId()).isEqualTo(savedUser.getId());
         assertThat(group.getGroupIcon()).isEqualTo(createGroupRequestDto.getGroupIcon());
         assertThat(group.getGroupType()).isEqualTo(createGroupRequestDto.getGroupType());
     }
@@ -46,14 +46,14 @@ public class UserGroupServiceIntegrationTest extends IntegrationTest {
         // given
         User savedUser = userRepository.save(UserFactory.createEmailLoginUser());
         UserGroup savedGroup = groupService.saveGroup(CreateGroupRequestDto.builder()
-                .userSeq(savedUser.getUserSeq())
+                .id(savedUser.getId())
                 .groupIcon(1)
                 .groupName("테스트 그룹")
                 .groupType(GroupType.FRIEND)
                 .build());
 
         // when
-        groupService.removeGroup(savedUser.getUserSeq(), savedGroup.getId());
+        groupService.removeGroup(savedUser.getId(), savedGroup.getId());
 
         // then
         UserGroup removeGroup = groupService.findGroupById(savedGroup.getId());

@@ -1,9 +1,13 @@
 package cmc.mellyserver.mellycommon.enums;
 
 public enum UserStatus {
-    ACTIVE("사용"),
+
+    ACTIVE("활성화"),
+
     INACTIVE("휴면"),
-    BLOCK("중지"),
+
+    BLOCK("차단"),
+
     DELETE("탈퇴");
 
     private String type;

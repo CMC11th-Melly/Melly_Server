@@ -30,17 +30,17 @@ public class UserServiceIntegrationTest extends IntegrationTest {
         // given
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
-        UserGroup group1 = groupRepository.save(new UserGroup("테스트그룹1", "invitationLink", GroupType.FRIEND, 1, user.getUserSeq()));
-        UserGroup group2 = groupRepository.save(new UserGroup("테스트그룹2", "invitationLink", GroupType.FAMILY, 2, user.getUserSeq()));
-        UserGroup group3 = groupRepository.save(new UserGroup("테스트그룹3", "invitationLink", GroupType.COMPANY, 3, user.getUserSeq()));
+        UserGroup group1 = groupRepository.save(new UserGroup("테스트그룹1", "invitationLink", GroupType.FRIEND, 1, user.getId()));
+        UserGroup group2 = groupRepository.save(new UserGroup("테스트그룹2", "invitationLink", GroupType.FAMILY, 2, user.getId()));
+        UserGroup group3 = groupRepository.save(new UserGroup("테스트그룹3", "invitationLink", GroupType.COMPANY, 3, user.getId()));
 
-        groupService.participateToGroup(user.getUserSeq(), group1.getId());
-        groupService.participateToGroup(user.getUserSeq(), group2.getId());
-        groupService.participateToGroup(user.getUserSeq(), group3.getId());
+        groupService.participateToGroup(user.getId(), group1.getId());
+        groupService.participateToGroup(user.getId(), group2.getId());
+        groupService.participateToGroup(user.getId(), group3.getId());
 
         // when
         List<GroupLoginUserParticipatedResponseDto> result = userService.findGroupListLoginUserParticiated(
-                user.getUserSeq());
+                user.getId());
 
         // then
         //   assertThat(result)
@@ -59,7 +59,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             // then
-            assertThatCode(() -> groupService.participateToGroup(user.getUserSeq(), 10L))
+            assertThatCode(() -> groupService.participateToGroup(user.getId(), 10L))
                     .isInstanceOf(GlobalBadRequestException.class)
                     .hasMessage("그룹이 존재하지 않습니다.");
         }
@@ -73,10 +73,10 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             UserGroup group = groupRepository.save(new UserGroup("테스트그룹", "invitationLink", GroupType.FRIEND, 1, 1L));
 
             // when
-            groupService.participateToGroup(user.getUserSeq(), group.getId());
+            groupService.participateToGroup(user.getId(), group.getId());
 
             // then
-            List<UserGroup> result = groupAndUserRepository.findUserGroupLoginUserAssociated(user.getUserSeq());
+            List<UserGroup> result = groupAndUserRepository.findUserGroupLoginUserAssociated(user.getId());
             assertThat(result).hasSize(1)
                     .extracting("groupName")
                     .containsExactlyInAnyOrder("테스트그룹");
@@ -94,7 +94,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
             // when
-            String nickname = userService.findNicknameByUserIdentifier(user.getUserSeq());
+            String nickname = userService.findNicknameByUserIdentifier(user.getId());
 
             // then
             assertThat(nickname).isEqualTo(user.getNickname());
@@ -122,7 +122,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             // given
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
-            Memory memory1 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory1 = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -130,7 +130,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             memory1.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory1.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory2 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory2 = Memory.builder().userId(user.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -142,7 +142,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
 
             // when
             Slice<MemoryResponseDto> result = userService.findMemoriesLoginUserWrite(PageRequest.of(0, 10),
-                    user.getUserSeq(), null);
+                    user.getId(), null);
 
             // then
             assertThat(result.getContent()).hasSize(2)
@@ -158,7 +158,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             // given
             User user = userRepository.save(UserFactory.createEmailLoginUser());
 
-            Memory memory1 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory1 = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -166,7 +166,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             memory1.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory1.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory2 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory2 = Memory.builder().userId(user.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -178,7 +178,7 @@ public class UserServiceIntegrationTest extends IntegrationTest {
 
             // when
             Slice<MemoryResponseDto> result = userService.findMemoriesLoginUserWrite(PageRequest.of(0, 10),
-                    user.getUserSeq(), GroupType.FRIEND);
+                    user.getId(), GroupType.FRIEND);
 
             // then
             assertThat(result.getContent()).hasSize(1)
@@ -201,42 +201,42 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             User user2 = userRepository.save(UserFactory.createEmailLoginUser());
             User user3 = userRepository.save(UserFactory.createEmailLoginUser());
 
-            Memory memory1 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory1 = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.GROUP).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory1.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory1.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory2 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory2 = Memory.builder().userId(user.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory2.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory2.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory3 = Memory.builder().userId(user2.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory3 = Memory.builder().userId(user2.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory3.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory3.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory4 = Memory.builder().userId(user2.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory4 = Memory.builder().userId(user2.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory4.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory4.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory5 = Memory.builder().userId(user3.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory5 = Memory.builder().userId(user3.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.GROUP).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory5.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory5.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory6 = Memory.builder().userId(user3.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory6 = Memory.builder().userId(user3.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -247,13 +247,13 @@ public class UserServiceIntegrationTest extends IntegrationTest {
 
             UserGroup group = groupRepository.save(new UserGroup("테스트그룹1", "invitationLink", GroupType.FRIEND, 1, 1L));
 
-            groupService.participateToGroup(user.getUserSeq(), group.getId());
-            groupService.participateToGroup(user2.getUserSeq(), group.getId());
-            groupService.participateToGroup(user3.getUserSeq(), group.getId());
+            groupService.participateToGroup(user.getId(), group.getId());
+            groupService.participateToGroup(user2.getId(), group.getId());
+            groupService.participateToGroup(user3.getId(), group.getId());
 
             // when
             Slice<MemoryResponseDto> result = userService.findMemoriesUsersBelongToMyGroupWrite(PageRequest.of(0, 10),
-                    group.getId(), user.getUserSeq());
+                    group.getId(), user.getId());
 
             // then
             assertThat(result.getContent()).hasSize(6);
@@ -267,42 +267,42 @@ public class UserServiceIntegrationTest extends IntegrationTest {
             User user2 = userRepository.save(UserFactory.createEmailLoginUser());
             User user3 = userRepository.save(UserFactory.createEmailLoginUser());
 
-            Memory memory1 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory1 = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.PRIVATE).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory1.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory1.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory2 = Memory.builder().userId(user.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory2 = Memory.builder().userId(user.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory2.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory2.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory3 = Memory.builder().userId(user2.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory3 = Memory.builder().userId(user2.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory3.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory3.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory4 = Memory.builder().userId(user2.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory4 = Memory.builder().userId(user2.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.PRIVATE).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory4.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory4.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory5 = Memory.builder().userId(user3.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+            Memory memory5 = Memory.builder().userId(user3.getId()).title("테스트 제목").content("테스트 컨텐츠")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                     .openType(OpenType.GROUP).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
             memory5.setMemoryImages(List.of(new MemoryImage("testImage")));
             memory5.setKeyword(List.of("기뻐요", "좋아요"));
 
-            Memory memory6 = Memory.builder().userId(user3.getUserSeq()).title("테스트 제목2").content("테스트 컨텐츠2")
+            Memory memory6 = Memory.builder().userId(user3.getId()).title("테스트 제목2").content("테스트 컨텐츠2")
                     .groupInfo(new GroupInfo("테스트 그룹", GroupType.FAMILY, 1L))
                     .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                     .build();
@@ -313,13 +313,13 @@ public class UserServiceIntegrationTest extends IntegrationTest {
 
             UserGroup group = groupRepository.save(new UserGroup("테스트그룹1", "invitationLink", GroupType.FRIEND, 1, 1L));
 
-            groupService.participateToGroup(user.getUserSeq(), group.getId());
-            groupService.participateToGroup(user2.getUserSeq(), group.getId());
-            groupService.participateToGroup(user3.getUserSeq(), group.getId());
+            groupService.participateToGroup(user.getId(), group.getId());
+            groupService.participateToGroup(user2.getId(), group.getId());
+            groupService.participateToGroup(user3.getId(), group.getId());
 
             // when
             Slice<MemoryResponseDto> result = userService.findMemoriesUsersBelongToMyGroupWrite(PageRequest.of(0, 10),
-                    group.getId(), user.getUserSeq());
+                    group.getId(), user.getId());
 
             // then
             assertThat(result.getContent()).hasSize(4);

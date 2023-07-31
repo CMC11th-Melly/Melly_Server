@@ -37,12 +37,12 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        Place savedPlace = placeRepository.save(place);
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        // when
 //        List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeQueryRepository.searchPlaceByContainMemoryName(
-//                제민.getUserSeq(), savedMemory.getTitle());
+//                제민.getId(), savedMemory.getTitle());
 //
 //        // then
 //        Assertions.assertThat(findPlaceInfoByMemoryNameResponseDtos).hasSize(1);
@@ -60,12 +60,12 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        User 제민 = userRepository.save(제민());
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        Memory savedMemory = memoryRepository.save(memory);
 //        savedMemory.setKeyword(List.of("좋아요"));
 //        // when
 //        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForPlace(
-//                PageRequest.of(0, 10), 제민.getUserSeq(),
+//                PageRequest.of(0, 10), 제민.getId(),
 //                savedPlace.getId(), GroupType.ALL);
 //
 //        // then
@@ -85,18 +85,18 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        User 재현 = userRepository.save(재현());
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(재현.getUserSeq()).build();
+//                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
 //
 //        // when
 //        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForMyPage(
-//                PageRequest.of(0, 10), 제민.getUserSeq(),
+//                PageRequest.of(0, 10), 제민.getId(),
 //                GroupType.ALL);
 //
 //        // then
@@ -116,18 +116,18 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        User 재현 = userRepository.save(재현());
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(재현.getUserSeq()).build();
+//                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
 //
 //        // when
 //        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryOtherCreate(
-//                PageRequest.of(0, 10), 재현.getUserSeq(),
+//                PageRequest.of(0, 10), 재현.getId(),
 //                savedPlace.getId(), GroupType.ALL);
 //
 //        // then
@@ -140,14 +140,14 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 로그인_유저가_속한_그룹에서_작성한_메모리를_모두_조회한다(OpenType openType, int memoryCount) {
 //
 //        // given
-//        Memory memory_제민 = Memory.builder().title("테스트 메모리").userId(제민.getUserSeq())
+//        Memory memory_제민 = Memory.builder().title("테스트 메모리").userId(제민.getId())
 //                .content("테스트 본문")
 //                .groupInfo(new GroupInfo("친구", GroupType.FRIEND, groups.get(0).getId()))
 //                .openType(openType).build();
 //
 //        memory_제민.setKeyword(List.of("좋아요"));
 //
-//        Memory memory_재현 = Memory.builder().title("테스트 메모리").userId(제민.getUserSeq())
+//        Memory memory_재현 = Memory.builder().title("테스트 메모리").userId(제민.getId())
 //                .content("테스트 본문")
 //                .groupInfo(new GroupInfo("친구", GroupType.FRIEND, groups.get(0).getId()))
 //                .openType(openType).build();
@@ -157,7 +157,7 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //
 //        // when
 //        Slice<MemoryResponseDto> myGroupMemory = memoryQueryRepository.getMyGroupMemory(
-//                PageRequest.of(0, 10), groups.get(0).getId(), 제민.getUserSeq());
+//                PageRequest.of(0, 10), groups.get(0).getId(), 제민.getId());
 //
 //        // then
 //        assertThat(myGroupMemory.getContent()).hasSize(memoryCount);
@@ -184,14 +184,14 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        UserGroup userGroup = groupRepository.save(동료_그룹);
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).groupInfo(
+//                .userId(제민.getId()).groupInfo(
 //                        new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
 //                                userGroup.getId())).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(재현.getUserSeq()).groupInfo(
+//                .userId(재현.getId()).groupInfo(
 //                        new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
 //                                userGroup.getId())).build();
 //        memory2.setKeyword(List.of("좋아요"));
@@ -199,7 +199,7 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //
 //        // when
 //        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.getMyGroupMemory(
-//                PageRequest.of(0, 10), 재현.getUserSeq(),
+//                PageRequest.of(0, 10), 재현.getId(),
 //                savedPlace.getId(), GroupType.ALL);
 //
 //        // then
@@ -219,18 +219,18 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        User 재현 = userRepository.save(재현());
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(재현.getUserSeq()).build();
+//                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
 //
 //        // when
 //        HashMap<String, Long> map = memoryQueryRepository.countMemoriesBelongToPlace(
-//                제민.getUserSeq(), savedPlace.getId());
+//                제민.getId(), savedPlace.getId());
 //
 //        // then
 //        Assertions.assertThat(map.get("belongToUser")).isEqualTo(1L);
@@ -250,13 +250,13 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        User 제민 = userRepository.save(제민());
 //
 //        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
-//                .userId(제민.getUserSeq()).build();
+//                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
 //        // when
 //        MemoryResponseDto memoryByMemoryId = memoryQueryRepository.getMemoryByMemoryId(
-//                제민.getUserSeq(), savedMemory.getId());
+//                제민.getId(), savedMemory.getId());
 //
 //        // then
 //        Assertions.assertThat(memoryByMemoryId.getPlaceId()).isEqualTo(savedPlace.getId());

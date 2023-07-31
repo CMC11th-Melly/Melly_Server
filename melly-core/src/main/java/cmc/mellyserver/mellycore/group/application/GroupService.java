@@ -9,17 +9,22 @@ import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.UserGroupQueryRepository;
+import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupDetailResponseDto;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GroupService {
@@ -36,23 +41,23 @@ public class GroupService {
     /*
     캐시 적용 여부 : 가능
      */
-    @Cacheable(value = "group", key = "#groupId")
+    @Cacheable(value = "group:group-id", key = "#groupId")
     @Transactional(readOnly = true)
-    public UserGroup findGroupById(Long groupId) {
+    public GroupDetailResponseDto getGroupDetail(Long groupId) {
 
-        return groupRepository.findById(groupId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
-        });
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.DUPLICATED_GROUP));
+        List<User> usersParticipatedInGroup = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
+
+        return GroupDetailResponseDto.of(userGroup, usersParticipatedInGroup);
     }
 
     /*
-    캐시 적용 여부 : 가능
+    캐시 적용 여부 : 불필요
      */
-    @Cacheable(value = "groupList", key = "#userSeq")
     @Transactional(readOnly = true)
-    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userSeq) {
+    public Slice<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(Long userId, Long groupId, Pageable pageable) {
 
-        return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
+        return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
     }
 
     /*
@@ -60,56 +65,69 @@ public class GroupService {
     이유 : 메모리 추가 시에는 유저가 속해있는 그룹 정보가 항상 최신으로 제공되야 한다
     */
     @Transactional(readOnly = true)
-    public List<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userSeq) {
-        return userGroupQueryRepository.getGroupListLoginUserParticipate(userSeq);
+    public Slice<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticipateForMemoryCreate(Long userId, Long groupId, Pageable pageable) {
+        return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
     }
 
     @Transactional
-    public UserGroup saveGroup(CreateGroupRequestDto createGroupRequestDto) {
-
-        UserGroup userGroup = createGroupRequestDto.toEntity();
-        userGroup.assignGroupManager(createGroupRequestDto.getUserSeq());
-        return groupRepository.save(userGroup);
-    }
-
-    /*
-    해당 유저가 속해있는 그룹 리스트를 Eviction 해준다
-     */
-    @CacheEvict(value = "groupList", key = "#userSeq")
-    @Transactional
-    public void participateToGroup(Long userSeq, Long groupId) {
-
-        User user = userRepository.findById(userSeq).orElseThrow(() -> {
+    public void saveGroup(CreateGroupRequestDto createGroupRequestDto) {
+        UserGroup savedGroup = groupRepository.save(createGroupRequestDto.toEntity());
+        User user = userRepository.findById(createGroupRequestDto.getCreatorId()).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_USER);
         });
+        groupAndUserRepository.save(GroupAndUser.of(user, savedGroup));
+    }
 
-        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
-        });
+
+    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @Transactional
+    public void participateToGroup(Long userId, Long groupId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_USER));
+        UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
+        Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
+
+        if (particiatedUserCount > 9) {
+            throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
+        }
 
         checkUserAlreadyParticipatedInGroup(user, userGroup);
 
         groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
     }
 
-    @CacheEvict(value = "group", key = "#updateGroupRequestDto.groupId")
+    @CacheEvict(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
     @Transactional
-    public void updateGroup(Long userSeq, UpdateGroupRequestDto updateGroupRequestDto) {
+    public void updateGroup(Long id, UpdateGroupRequestDto updateGroupRequestDto) {
 
         UserGroup userGroup = groupRepository.findById(updateGroupRequestDto.getGroupId()).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
-        userGroup.update(userSeq, updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
+        userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
 
-    @CacheEvict(value = "groupList", key = "#updateGroupRequestDto.groupId", cacheManager = "redisCacheManager", allEntries = true)
+    @CacheEvict(value = "group:group-id", key = "#groupId")
     @Transactional
-    public void removeGroup(Long userSeq, Long groupId) {
+    public void removeGroup(Long id, Long groupId) {
 
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
-        userGroup.remove(userSeq);
+        userGroup.remove();
+    }
+
+    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @Transactional
+    public void exitGroup(Long userId, Long groupId) {
+
+        Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
+        log.info("count : {}", particiatedUserCount);
+
+        if (particiatedUserCount < 2) {
+            throw new BusinessException(ErrorCode.EXIT_GROUP_NOT_POSSIBLE);
+        }
+
+        groupAndUserRepository.deleteGroupAndUserByUserIdAndGroupId(userId, groupId);
     }
 
     private void checkUserAlreadyParticipatedInGroup(User user, UserGroup userGroup) {
@@ -117,4 +135,6 @@ public class GroupService {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
     }
+
+
 }

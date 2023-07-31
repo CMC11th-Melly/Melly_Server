@@ -156,7 +156,7 @@ public class PlaceScrapServiceTest {
             given(authenticatedUserChecker.checkAuthenticatedUserExist(anyLong()))
                     .willReturn(UserFactory.createEmailLoginUser());
 
-            given(scrapRepository.findByUserUserSeqAndPlaceId(anyLong(), anyLong()))
+            given(scrapRepository.findByUseridAndPlaceId(anyLong(), anyLong()))
                     .willReturn(Optional.empty());
 
             given(scrapRepository.save(any(PlaceScrap.class))).willReturn(null);
@@ -167,7 +167,7 @@ public class PlaceScrapServiceTest {
             // then
             verify(placeRepository, times(1)).findPlaceByPosition(any(Position.class));
             verify(authenticatedUserChecker, times(1)).checkAuthenticatedUserExist(anyLong());
-            verify(scrapRepository, times(1)).findByUserUserSeqAndPlaceId(anyLong(), anyLong());
+            verify(scrapRepository, times(1)).findByUseridAndPlaceId(anyLong(), anyLong());
         }
 
         @DisplayName("스크랩하려는 장소에 이미 스크랩을 한 상태라면 중복 예외가 발생한다.")
@@ -183,7 +183,7 @@ public class PlaceScrapServiceTest {
             given(authenticatedUserChecker.checkAuthenticatedUserExist(anyLong()))
                     .willReturn(UserFactory.createEmailLoginUser());
 
-            given(scrapRepository.findByUserUserSeqAndPlaceId(anyLong(), anyLong()))
+            given(scrapRepository.findByUseridAndPlaceId(anyLong(), anyLong()))
                     .willReturn(Optional.of(PlaceScrapFactory.mockPlaceScrap()));
 
             // then
@@ -193,7 +193,7 @@ public class PlaceScrapServiceTest {
 
             verify(placeRepository, times(1)).findPlaceByPosition(any(Position.class));
             verify(authenticatedUserChecker, times(1)).checkAuthenticatedUserExist(anyLong());
-            verify(scrapRepository, times(1)).findByUserUserSeqAndPlaceId(anyLong(), anyLong());
+            verify(scrapRepository, times(1)).findByUseridAndPlaceId(anyLong(), anyLong());
 
         }
     }
@@ -210,7 +210,7 @@ public class PlaceScrapServiceTest {
             given(placeRepository.findPlaceByPosition(any(Position.class)))
                     .willReturn(Optional.of(PlaceFactory.mockPlace()));
 
-            given(scrapRepository.findByUserUserSeqAndPlaceId(anyLong(), anyLong()))
+            given(scrapRepository.findByUseridAndPlaceId(anyLong(), anyLong()))
                     .willReturn(Optional.of(PlaceScrapFactory.mockPlaceScrap()));
 
             // when
@@ -218,8 +218,8 @@ public class PlaceScrapServiceTest {
 
             // then
             verify(placeRepository, times(1)).findPlaceByPosition(any(Position.class));
-            verify(scrapRepository, times(1)).findByUserUserSeqAndPlaceId(anyLong(), anyLong());
-            verify(scrapRepository, times(1)).deleteByUserUserSeqAndPlacePosition(anyLong(), any(Position.class));
+            verify(scrapRepository, times(1)).findByUseridAndPlaceId(anyLong(), anyLong());
+            verify(scrapRepository, times(1)).deleteByUseridAndPlacePosition(anyLong(), any(Position.class));
         }
 
         @DisplayName("기존에 스크랩이 존재하지 않는다면 삭제하지 못하고 예외가 발생한다.")
@@ -230,7 +230,7 @@ public class PlaceScrapServiceTest {
             given(placeRepository.findPlaceByPosition(any(Position.class)))
                     .willReturn(Optional.of(PlaceFactory.mockPlace()));
 
-            given(scrapRepository.findByUserUserSeqAndPlaceId(anyLong(), anyLong()))
+            given(scrapRepository.findByUseridAndPlaceId(anyLong(), anyLong()))
                     .willReturn(Optional.empty());
 
             // then
@@ -239,7 +239,7 @@ public class PlaceScrapServiceTest {
                     .hasMessage("스크랩 취소할 수 없습니다.");
 
             verify(placeRepository, times(1)).findPlaceByPosition(any(Position.class));
-            verify(scrapRepository, times(1)).findByUserUserSeqAndPlaceId(anyLong(), anyLong());
+            verify(scrapRepository, times(1)).findByUseridAndPlaceId(anyLong(), anyLong());
         }
 
         @DisplayName("삭제할 스크랩이 할당된 장소가 존재하지 않으면 예외가 발생한다.")

@@ -3,7 +3,7 @@ package cmc.mellyserver.mellycore.memory.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.aws.FileUploader;
+import cmc.mellyserver.mellycore.common.aws.StorageService;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
@@ -37,7 +37,7 @@ public class MemoryWriteService {
 
     private final PlaceRepository placeRepository;
 
-    private final FileUploader fileUploader;
+    private final StorageService storageService;
 
     private final GroupRepository groupRepository;
 
@@ -45,21 +45,23 @@ public class MemoryWriteService {
     @Transactional
     public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getUserSeq());
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getId());
 
-        List<String> multipartFileNames = fileUploader.getMultipartFileNames(user.getUserId(), createMemoryRequestDto.getMultipartFiles());
+        List<String> multipartFileNames = storageService.saveFileList(user.getId(), createMemoryRequestDto.getMultipartFiles());
 
         Memory memory = createMemoryRequestDto.toMemory();
-        memory.setMemoryImages(multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
+
+        memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
 
         Place place = placeRepository.findPlaceByPosition(new Position(createMemoryRequestDto.getLat(), createMemoryRequestDto.getLng()));
+
         setPlaceId(createMemoryRequestDto, memory, place);
 
         return memoryRepository.save(memory);
     }
 
 
-    @CacheEvict(value = "memory", key = "{#updateMemoryRequestDto.userSeq,#updateMemoryRequestDto.memoryId}")
+    @CacheEvict(value = "memory", key = "{#updateMemoryRequestDto.id,#updateMemoryRequestDto.memoryId}")
     @Transactional
     public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
 
@@ -71,21 +73,14 @@ public class MemoryWriteService {
             throw new GroupNotFoundException();
         });
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getUserSeq());
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getId());
 
-        memory.updateMemory(updateMemoryRequestDto.getTitle(),
-                updateMemoryRequestDto.getContent(),
-                updateMemoryRequestDto.getKeyword(),
-                userGroup.getId(),
-                updateMemoryRequestDto.getOpenType(),
-                updateMemoryRequestDto.getVisitedDate(),
-                updateMemoryRequestDto.getStar(),
-                updateMemoryRequestDto.getDeleteImageList(),
-                fileUploader.getMultipartFileNames(user.getUserId(), updateMemoryRequestDto.getImages()));
+        //  memory.updateMemory(updateMemoryRequestDto.getTitle(), updateMemoryRequestDto.getContent(), updateMemoryRequestDto.getKeyword(),
+//                userGroup.getId(), updateMemoryRequestDto.getOpenType(), updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar(), updateMemoryRequestDto.getDeleteImageList(), storageService.saveFileList(user.getId(), updateMemoryRequestDto.getImages()));
     }
 
 
-    @CacheEvict(value = "memory", key = "#memoryId", cacheManager = "redisCacheManager")
+    @CacheEvict(value = "memory", key = "#memoryId")
     @Transactional
     public void removeMemory(Long memoryId) {
 

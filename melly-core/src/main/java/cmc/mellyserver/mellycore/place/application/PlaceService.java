@@ -38,9 +38,9 @@ public class PlaceService {
     좌표 기반 검색으로 개선 필요
      */
     @Transactional(readOnly = true)
-    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long userSeq, GroupType groupType) {
+    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
 
-        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userSeq, groupType);
+        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(id, groupType);
         return placeUserMemoryExist.stream().map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), null))
                 .collect(Collectors.toList());
     }
@@ -50,13 +50,13 @@ public class PlaceService {
     이유 : 반환 DTO에 다른 유저가 작성한 메모리 수가 포함된다. 유저가 대규모로 유입되면 데이터 갱신이 자주 발생하여 캐시 효율성이 적다고 판단
      */
     @Transactional(readOnly = true)
-    public PlaceResponseDto findPlaceByPlaceId(Long userSeq, Long placeId) {
+    public PlaceResponseDto findPlaceByPlaceId(Long id, Long placeId) {
 
         Place place = placeRepository.findById(placeId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
         });
-        HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoriesBelongToPlace(userSeq, placeId);
-        Boolean checkCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userSeq);
+        HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoriesBelongToPlace(id, placeId);
+        Boolean checkCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, id);
 
         return new PlaceResponseDto(place.getId(), place.getPosition(),
                 memoryCounts.get("belongToUSer"),
@@ -71,7 +71,7 @@ public class PlaceService {
     이유 : 반환 DTO에 다른 유저가 작성한 메모리 수가 포함된다. 유저가 대규모로 유입되면 데이터 갱신이 자주 발생하여 캐시 효율성이 적다고 판단
      */
     @Transactional(readOnly = true)
-    public PlaceResponseDto findPlaceByPosition(Long userSeq, Double lat, Double lng) {
+    public PlaceResponseDto findPlaceByPosition(Long id, Double lat, Double lng) {
 
         Optional<Place> optPlace = placeRepository.findAllByPosition(new Position(lat, lng));
 
@@ -81,9 +81,9 @@ public class PlaceService {
         Place place = optPlace.get();
 
         HashMap<String, Long> memoryCounts = memoryQueryRepository.countMemoriesBelongToPlace(
-                place.getId(), userSeq);
+                place.getId(), id);
         Boolean isCurrentLoginUserScraped = placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(
-                userSeq, new Position(lat, lng));
+                id, new Position(lat, lng));
 
         return new PlaceResponseDto(place.getId(), place.getPosition(), memoryCounts.get("belongToUser"), memoryCounts.get("notBelongToUser"),
                 isCurrentLoginUserScraped, place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL, place.getPlaceImage());
@@ -93,8 +93,8 @@ public class PlaceService {
     캐시 적용 여부 : 가능
      */
     @Transactional(readOnly = true)
-    public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long userSeq, String memoryName) {
+    public List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryName(Long id, String memoryName) {
 
-        return placeQueryRepository.searchPlaceByContainMemoryName(userSeq, memoryName);
+        return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
     }
 }

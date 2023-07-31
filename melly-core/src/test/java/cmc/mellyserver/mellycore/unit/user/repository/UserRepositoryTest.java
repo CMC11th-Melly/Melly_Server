@@ -42,7 +42,7 @@ public class UserRepositoryTest extends RepositoryTest {
     void find_user_by_user_id() {
 
         // when
-        User user = userRepository.findUserByUserId(users.get(0).getUserId())
+        User user = userRepository.findUserByUserId(users.get(0).getSocialId())
                 .orElseThrow(IllegalArgumentException::new);
 
         // then

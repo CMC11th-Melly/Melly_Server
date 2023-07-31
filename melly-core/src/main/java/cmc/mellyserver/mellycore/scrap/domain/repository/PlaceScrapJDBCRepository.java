@@ -43,7 +43,7 @@ public class PlaceScrapJDBCRepository {
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setLong(1, placeScraps.get(i).getUser().getUserSeq());
+                        ps.setLong(1, placeScraps.get(i).getUser().getId());
                         ps.setString(2, placeScraps.get(i).getScrapType().name());
                     }
 
@@ -78,7 +78,7 @@ public class PlaceScrapJDBCRepository {
                         ps.setString(5, user.get(i).getNickname());
                         ps.setString(6, user.get(i).getProvider().name());
                         ps.setString(7, user.get(i).getRoleType().name());
-                        ps.setString(8, user.get(i).getUserId());
+                        ps.setString(8, user.get(i).getSocialId());
                         ps.setString(9, user.get(i).getUserStatus().name());
                     }
 

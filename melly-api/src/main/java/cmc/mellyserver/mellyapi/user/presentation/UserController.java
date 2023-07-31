@@ -1,11 +1,13 @@
 package cmc.mellyserver.mellyapi.user.presentation;
 
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.mellyapi.user.presentation.dto.UserAssembler;
-import cmc.mellyserver.mellyapi.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
+import cmc.mellyserver.mellyapi.user.presentation.dto.response.ProfileResponse;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
@@ -17,18 +19,21 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResp
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
 import cmc.mellyserver.mellycore.user.application.UserSurveyService;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.CREATED;
@@ -50,21 +55,15 @@ public class UserController {
 
     private final GroupService groupService;
 
-    @GetMapping("/{userSeq}/nickname")
-    public ResponseEntity<ApiResponse> getUserNickname(@PathVariable Long userSeq) {
-
-        String nickname = userProfileService.findNicknameByUserIdentifier(userSeq);
-        return OK(nickname);
-    }
 
     @PostMapping("/surveys")
-    public ResponseEntity<Void> addSurvey(@AuthenticationPrincipal User user,
-                                          @RequestBody SurveyRequest surveyRequest) {
+    public ResponseEntity<Void> addSurvey(@AuthenticationPrincipal User user, @RequestBody SurveyRequest surveyRequest) {
 
         userSurveyService.createSurvey(
                 UserAssembler.surveyRequestDto(Long.parseLong(user.getUsername()), surveyRequest));
         return CREATED;
     }
+
 
     @GetMapping("/surveys")
     public ResponseEntity<ApiResponse> getSurvey(@AuthenticationPrincipal User user) {
@@ -74,7 +73,8 @@ public class UserController {
         return OK(surveyRecommendResponseDto);
     }
 
-    @GetMapping("/my-profile")
+    // 유저 프로필을 수정에 필요한 데이터 조회
+    @GetMapping("/my-profile/edit-form")
     public ResponseEntity<ApiResponse> updateProfileFormData(@AuthenticationPrincipal User user) {
 
         ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userProfileService.getLoginUserProfileDataForUpdate(
@@ -82,73 +82,72 @@ public class UserController {
         return OK(profileUpdateFormResponseDto);
     }
 
-    @PutMapping("/my-profile")
-    public ResponseEntity<ApiResponse> updateProfile(@AuthenticationPrincipal User user,
-                                                     ProfileUpdateRequest profileUpdateRequest) {
+    // 유저 프로필 조회
+    @GetMapping("/my-profile")
+    public ResponseEntity<ApiResponse> getUserProfile(@CurrentUser LoginUser loginUser) {
 
-        userProfileService.updateLoginUserProfile(
-                UserAssembler.profileUpdateRequestDto(Long.parseLong(user.getUsername()),
-                        profileUpdateRequest));
+        ProfileResponseDto profileResponseDto = userProfileService.getUserProfile(loginUser.getId());
+        Integer volume = userProfileService.checkImageStorageVolumeLoginUserUse(loginUser.getId());
+        return OK(ProfileResponse.of(profileResponseDto, volume));
+    }
+
+    // 유저 프로필 수정
+    @PutMapping("/my-profile")
+    public ResponseEntity<ApiResponse> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) throws IOException {
+
+        userProfileService.updateUserProfile(UserAssembler.profileUpdateRequestDto(loginUser.getId(), profileUpdateRequest));
         return OK;
     }
 
+    @PutMapping("/my-profile/profile-image")
+    public ResponseEntity<ApiResponse> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
+
+        userProfileService.updateUserProfileImage(loginUser.getId(), profileImage);
+        return OK;
+    }
+
+    // 내가 작성한 메모리 조회
     @GetMapping("/my-memorys")
-    public ResponseEntity<ApiResponse> getUserMemory(@AuthenticationPrincipal User user,
-                                                     @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable,
+    public ResponseEntity<ApiResponse> getUserMemory(@CurrentUser LoginUser loginUser,
+                                                     @RequestParam(name = "lastId", required = false) Long lastId,
+                                                     @PageableDefault(size = 10) Pageable pageable,
                                                      @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(pageable,
-                Long.parseLong(user.getUsername()), groupType);
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), groupType);
         return OK(results);
     }
 
+    // 내가 포함된 그룹 조회
     @GetMapping("/my-groups")
-    public ResponseEntity<ApiResponse> getUserGroup(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getUserGroup(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable) {
 
-        List<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(
-                Long.parseLong(user.getUsername()));
+        Slice<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(loginUser.getId(), lastId, pageable);
         return OK(UserAssembler.groupLoginUserParticipatedResponses(results));
     }
 
-    @GetMapping("/my-group/{groupId}/memorys")
-    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(Pageable pageable,
-                                                                @PathVariable Long groupId, @RequestParam(required = false, name = "userId") Long userSeq) {
+    // 내가 속해 있는 그룹의 사람들이 작성한 메모리
+    @GetMapping("/my-groups/{groupId}/memorys")
+    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(@RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(
-                pageable, groupId, userSeq);
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, groupType);
         return OK(MemoryAssembler.memoryResponses(results));
     }
 
+    // 내가 스크랩한 장소의 개수 조회
     @GetMapping("/place-scraps/count")
-    public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@CurrentUser LoginUser loginUser) {
 
-        List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(
-                Long.parseLong(user.getUsername()));
+        List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(loginUser.getId());
         return OK(UserAssembler.placeScrapCountResponses(results));
     }
 
+    // 스크랩 타입별 조회
     @GetMapping("/place-scraps")
-    public ResponseEntity<ApiResponse> getPlaceUserScrap(@AuthenticationPrincipal User user,
-                                                         Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
+    public ResponseEntity<ApiResponse> getPlaceUserScrap(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
 
-        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(pageable,
-                Long.parseLong(user.getUsername()), scrapType);
+        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(lastId, pageable, loginUser.getId(), scrapType);
         return OK(UserAssembler.scrapedPlaceResponses(results));
     }
 
-    @GetMapping("/volume")
-    public ResponseEntity<ApiResponse> getUserImageVolume(@AuthenticationPrincipal User user) {
 
-        Integer volume = userProfileService.checkImageStorageVolumeLoginUserUse(user.getUsername());
-        return OK(volume);
-    }
-
-    @PostMapping("/groups/participate")
-    public ResponseEntity<Void> participateToGroup(@AuthenticationPrincipal User user,
-                                                   @RequestBody ParticipateGroupRequest participateGroupRequest) {
-
-        groupService.participateToGroup(Long.parseLong(user.getUsername()),
-                participateGroupRequest.getGroupId());
-        return CREATED;
-    }
 }

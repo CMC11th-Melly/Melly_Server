@@ -21,8 +21,7 @@ public class PlaceScrapController {
     private final PlaceScrapService scrapService;
 
     @PostMapping("/place/scrap")
-    public ResponseEntity<Void> scrapPlace(@AuthenticationPrincipal User user,
-                                           @RequestBody ScrapRequest scrapRequest) {
+    public ResponseEntity<Void> scrapPlace(@AuthenticationPrincipal User user, @RequestBody ScrapRequest scrapRequest) {
 
         scrapService.createScrap(ScrapAssembler.createPlaceScrapRequestDto(Long.parseLong(user.getUsername()), scrapRequest));
         return CREATED;

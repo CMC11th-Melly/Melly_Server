@@ -40,12 +40,12 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //                .build();
 //        Place savedPlace2 = placeRepository.save(place2);
 //
-//        Memory memory = Memory.builder().userId(savedUser.getUserSeq()).placeId(savedPlace.getId())
+//        Memory memory = Memory.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().userId(savedOtherUser.getUserSeq())
+//        Memory memory2 = Memory.builder().userId(savedOtherUser.getId())
 //                .placeId(savedPlace2.getId())
 //                .title("테스트 메모리2").build();
 //
@@ -53,7 +53,7 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //
 //        // when
 //        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(
-//                user.getUserSeq());
+//                user.getId());
 //
 //        // then
 //        Assertions.assertThat(placeUserMemoryExist).hasSize(1);
@@ -133,12 +133,12 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //                .build();
 //        Place savedPlace4 = placeRepository.save(place4);
 //
-//        Memory memory = Memory.builder().userId(savedUser.getUserSeq()).placeId(savedPlace.getId())
+//        Memory memory = Memory.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //
 //        memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().userId(savedOtherUser.getUserSeq())
+//        Memory memory2 = Memory.builder().userId(savedOtherUser.getId())
 //                .placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //
@@ -157,7 +157,7 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //        // when
 //        Slice<ScrapedPlaceResponseDto> scrapedPlace = placeQueryRepository.getScrapedPlace(
 //                PageRequest.of(0, 10),
-//                user.getUserSeq(), scrapType);
+//                user.getId(), scrapType);
 //
 //        // then
 //        Assertions.assertThat(scrapedPlace.getContent()).hasSize(expected);

@@ -64,7 +64,7 @@ public class UserGroupQueryRepositoryTest extends RepositoryTest {
 //
 //        // when
 //        List<GroupListForSaveMemoryResponseDto> userGroupListForMemoryEnroll = userGroupQueryRepository.getUserGroupListForMemoryEnroll(
-//                제민.getUserSeq());
+//                제민.getId());
 //
 //        // then
 //        assertThat(userGroupListForMemoryEnroll).hasSize(3);
@@ -78,7 +78,7 @@ public class UserGroupQueryRepositoryTest extends RepositoryTest {
 //
 //        // when
 //        List<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = userGroupQueryRepository.getGroupListLoginUserParticipate(
-//                제민.getUserSeq());
+//                제민.getId());
 //
 //        // then
 //        assertThat(groupListLoginUserParticipate).hasSize(3);

@@ -2,35 +2,55 @@ package cmc.mellyserver.mellyapi.memory.presentation.dto.response;
 
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
+import cmc.mellyserver.mellycore.memory.domain.repository.dto.KeywordDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class MemoryResponse {
 
+    // ==== place =====
     private Long placeId;
+
     private String placeName;
+
+    // ==== memory ====
+
     private Long memoryId;
-    private List<ImageDto> memoryImages;
+
     private String title;
+
     private String content;
-    private GroupType groupType;
-    private String groupName;
+
+    private List<ImageDto> memoryImages;
+
+    private List<KeywordDto> keyword;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate visitedDate;
+
     private Long stars;
-    private List<String> keyword;
-    private boolean loginUserWrite;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
-    private LocalDateTime visitedDate;
+
+    // ==== group ====
+
+    private Long groupId;
+
+    private GroupType groupType;
+
+    private String groupName;
+
+    private int groupIcon;
+
 
     @Builder
     public MemoryResponse(Long placeId, String placeName, Long memoryId, List<ImageDto> imageDtos, String title,
-                          String content, GroupType groupType, String groupName, Long stars, List<String> keyword, boolean loginUserWrite,
-                          LocalDateTime visitedDate) {
+                          String content, GroupType groupType, String groupName, Long stars, List<KeywordDto> keyword,
+                          LocalDate visitedDate) {
         this.placeId = placeId;
         this.placeName = placeName;
         this.memoryId = memoryId;
@@ -41,23 +61,14 @@ public class MemoryResponse {
         this.groupName = groupName;
         this.stars = stars;
         this.keyword = keyword;
-        this.loginUserWrite = loginUserWrite;
         this.visitedDate = visitedDate;
     }
 
     public static MemoryResponse of(MemoryResponseDto memoryResponseDto) {
         return MemoryResponse.builder()
-                .placeId(memoryResponseDto.getPlaceId())
-                .placeName(memoryResponseDto.getPlaceName())
                 .memoryId(memoryResponseDto.getMemoryId())
-                .imageDtos(memoryResponseDto.getMemoryImages())
                 .title(memoryResponseDto.getTitle())
-                .content(memoryResponseDto.getContent())
                 .groupType(memoryResponseDto.getGroupType())
-                .groupName(memoryResponseDto.getGroupName())
-                .stars(memoryResponseDto.getStars())
-                .keyword(memoryResponseDto.getKeyword())
-                .loginUserWrite(memoryResponseDto.isLoginUserWrite())
                 .visitedDate(memoryResponseDto.getVisitedDate())
                 .build();
     }

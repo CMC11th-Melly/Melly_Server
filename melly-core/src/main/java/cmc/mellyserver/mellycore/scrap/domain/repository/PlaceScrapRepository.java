@@ -1,16 +1,15 @@
 package cmc.mellyserver.mellycore.scrap.domain.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 public interface PlaceScrapRepository extends JpaRepository<PlaceScrap, Long> {
 
-	Optional<PlaceScrap> findByUserUserSeqAndPlaceId(Long userSeq, Long placeId);
+    Optional<PlaceScrap> findByUserIdAndPlaceId(Long id, Long placeId);
 
-	void deleteByUserUserSeqAndPlacePosition(Long userSeq, Position position);
+    void deleteByUserIdAndPlacePosition(Long id, Position position);
 
 }

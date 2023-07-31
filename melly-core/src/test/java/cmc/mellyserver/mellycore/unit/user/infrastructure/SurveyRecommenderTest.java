@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.unit.user.infrastructure;
 
 import cmc.mellyserver.mellycommon.enums.RecommendGroup;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommender;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommenderImpl;
 import org.assertj.core.api.Assertions;

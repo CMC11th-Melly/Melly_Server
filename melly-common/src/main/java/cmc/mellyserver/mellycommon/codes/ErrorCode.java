@@ -26,6 +26,7 @@ public enum ErrorCode {
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED.value(), "AUTH-006", "인증되지 않은 유저입니다."),
     FORBIDDEN_USER(HttpStatus.FORBIDDEN.value(), "AUTH-007", "접근 권한이 없는 유저입니다."),
 
+    BEFORE_PASSWORD_NOT_EXIST(HttpStatus.BAD_REQUEST.value(), "AUTH-008", "이전 비밀번호가 일치하지 않습니다."),
     // User
     DUPLICATE_EMAIL(HttpStatus.CONFLICT.value(), "USER-001", "중복되는 이메일입니다."),
     DUPLICATE_NICKNAME(HttpStatus.CONFLICT.value(), "USER-002", "중복되는 닉네임입니다."),
@@ -44,6 +45,9 @@ public enum ErrorCode {
     NO_SUCH_GROUP(HttpStatus.NOT_FOUND.value(), "GROUP-001", "그룹이 존재하지 않습니다."),
     NO_AUTHORITY_TO_REMOVE(HttpStatus.FORBIDDEN.value(), "GROUP-002", "그룹을 삭제할 권한이 없습니다"),
     DUPLICATED_GROUP(HttpStatus.CONFLICT.value(), "GROUP-003", "이미 수락한 그룹입니다"),
+    EXIT_GROUP_NOT_POSSIBLE(HttpStatus.CONFLICT.value(), "GROUP-004", "그룹의 인원이 2명 이상일때 그룹에서 나갈 수 있습니다."),
+    PARTICIPATE_GROUP_NOT_POSSIBLE(HttpStatus.CONFLICT.value(), "GROUP-005", "그룹의 인원은 최대 10명 입니다."),
+
 
     // Memory
     NO_SUCH_MEMORY(HttpStatus.NOT_FOUND.value(), "MEMORY-001", "메모리가 존재하지 않습니다."),

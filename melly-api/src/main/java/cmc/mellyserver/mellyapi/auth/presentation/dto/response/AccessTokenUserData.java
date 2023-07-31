@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccessTokenUserData {
 
-    private Long userSeq;
+    private Long id;
     private String uid;
     private Provider provider;
     private String email;
@@ -26,8 +26,8 @@ public class AccessTokenUserData {
 
     public static AccessTokenUserData from(User user) {
         return AccessTokenUserData.builder()
-                .userSeq(user.getUserSeq())
-                .uid(user.getUserId())
+                .id(user.getId())
+                .uid(user.getSocialId())
                 .provider(user.getProvider())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
