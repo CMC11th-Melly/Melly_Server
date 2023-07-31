@@ -26,18 +26,18 @@ jobs:
         run: docker push sjmin/melly
 
 
-      - name: Send deploy.sh
-        uses: appleboy/scp-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.EC2_HOST }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          port: 22
-          source: "./deploy.sh"
-          target: "/home/ubuntu/"
+          #      - name: Send deploy.sh
+          #        uses: appleboy/scp-action@master
+          #        with:
+          #          username: ubuntu
+          #          host: ${{ secrets.EC2_HOST }}
+          #          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          #          port: 22
+          #          source: "./deploy.sh"
+          #          target: "/home/ubuntu/"
 
 
-         
+
       - name: Deploy to Dev
         uses: appleboy/ssh-action@master
         with:
