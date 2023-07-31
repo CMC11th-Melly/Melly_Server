@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellycore.memory.domain.repository;
 
 
+import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
@@ -52,6 +53,7 @@ public class MemoryQueryRepository {
                 .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin()
                 .innerJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
                 .where(
+                        isActive(),
                         ltMemoryId(lastId),
                         createdByLoginUser(userId),
                         eqPlace(placeId),
@@ -75,6 +77,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .innerJoin(place).on(place.id.eq(memory.placeId))
                 .where(
+                        isActive(),
                         ltMemoryId(lastId),
                         memory.groupId.eq(groupId),
                         checkOpenTypeAllOrGroup()
@@ -103,6 +106,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .innerJoin(place).on(place.id.eq(memory.placeId))
                 .where(
+                        isActive(),
                         ltMemoryId(lastId),
                         createdByLoginUser(userId),
                         eqGroup(groupType)
@@ -149,6 +153,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
+                        isActive(),
                         ltMemoryId(lastId),
                         eqPlace(placeId),
                         createdByNotCurrentLoginUser(userId), // 내가 작성자인 메모리
@@ -172,6 +177,7 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
                 .where(
+                        isActive(),
                         ltMemoryId(lastId),
                         inSameGroup(userId),
                         eqPlace(placeId),
@@ -264,6 +270,10 @@ public class MemoryQueryRepository {
 
     private static BooleanExpression createdByLoginUser(Long id) {
         return memory.userId.eq(id);
+    }
+
+    private static BooleanExpression isActive() {
+        return memory.is_deleted.eq(DeleteStatus.N);
     }
 
     private static BooleanExpression createdByNotCurrentLoginUser(Long id) {

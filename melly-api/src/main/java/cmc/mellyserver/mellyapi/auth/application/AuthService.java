@@ -3,6 +3,10 @@ package cmc.mellyserver.mellyapi.auth.application;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.ChangePasswordRequest;
+import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
+import cmc.mellyserver.mellyapi.auth.application.dto.response.TokenResponseDto;
+import cmc.mellyserver.mellyapi.auth.repository.RefreshToken;
+import cmc.mellyserver.mellyapi.auth.repository.RefreshTokenRepository;
 import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.comment.application.event.SignupEvent;
@@ -13,7 +17,6 @@ import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellyinfra.message.FCMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,45 +35,73 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
     private final FCMService fcmService;
 
     private final RedisTemplate redisTemplate;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     private final ApplicationEventPublisher publisher;
 
-    @Value("${app.auth.tokenExpiry}")
-    private String expiry;
-
     @Transactional
-    public String signup(AuthSignupRequestDto authSignupRequestDto) {
+    public TokenResponseDto emailSignup(AuthSignupRequestDto authSignupRequestDto) {
 
+        checkDuplicatedEmail(authSignupRequestDto); // 중복되는 이메일 존재하는지 체크
         String encodedPassword = passwordEncoder.encode(authSignupRequestDto.getPassword()); // 비밀번호 암호화
 
-        User savedUser = userRepository.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(), encodedPassword, authSignupRequestDto.getNickname(), authSignupRequestDto.getAgeGroup(), authSignupRequestDto.getGender()));
+        User savedUser = userRepository.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(),
+                encodedPassword,
+                authSignupRequestDto.getNickname(),
+                authSignupRequestDto.getAgeGroup(),
+                authSignupRequestDto.getGender()));
 
         savedUser.updateLastLoginTime(LocalDateTime.now()); // 회원가입 후, 바로 로그인이기 때문에 마지막 로그인 시간 업데이트
 
+        String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType()); // 액세스 토큰 발행
+        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType()); // 리프레시 토큰 발행
+
+        refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt()); // 리프레시 토큰 레디스에 저장
         fcmService.saveToken(savedUser.getEmail(), authSignupRequestDto.getFcmToken()); // FCM 토큰 업데이트
+        publisher.publishEvent(new SignupEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
 
-        publisher.publishEvent(new SignupEvent(savedUser.getId()));
-
-        return jwtTokenProvider.createToken(savedUser.getId(), savedUser.getRoleType()); // 토큰 값 새로 전송
+        return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
 
     @Transactional
-    public String login(AuthLoginRequestDto authLoginRequestDto) {
+    public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
         User user = checkEmail(authLoginRequestDto.getEmail()); // 이메일 검증
         checkPassword(authLoginRequestDto.getPassword(), user.getPassword()); // 비밀번호 일치 여부 검증
         user.updateLastLoginTime(LocalDateTime.now()); // 마지막 로그인 시간 업데이트
+
+        String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType()); // 액세스 토큰 발행
+        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());// 리프레시 토큰 발행
+
+        //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
+        refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
+
+        // 사용자 FCM 토큰을 Redis에 저장한다. -> 이벤트 처리 생각중
         fcmService.saveToken(user.getEmail(), authLoginRequestDto.getFcmToken());
-        return jwtTokenProvider.createToken(user.getId(), user.getRoleType());
+
+        return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
 
+    public TokenResponseDto reIssueAccessToken(String token) {
+
+        RefreshToken refreshToken = refreshTokenRepository.findById(token).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.RE_LOGIN_REQUIRED);
+        });
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(refreshToken.getUserId());
+
+        String accessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
+        return TokenResponseDto.of(accessToken, null);
+
+    }
 
     public void logout(Long userId, String accessToken) {
 
@@ -139,6 +171,13 @@ public class AuthService {
 
         if (!passwordEncoder.matches(password, originPassword)) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
+    private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
+        Optional<User> userByEmail = userRepository.findUserByEmail(authSignupRequestDto.getEmail());
+        if (userByEmail.isPresent()) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
 }

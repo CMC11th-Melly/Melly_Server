@@ -26,6 +26,8 @@ public enum ErrorCode {
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED.value(), "AUTH-006", "인증되지 않은 유저입니다."),
     FORBIDDEN_USER(HttpStatus.FORBIDDEN.value(), "AUTH-007", "접근 권한이 없는 유저입니다."),
 
+    RE_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED.value(), "AUTH-008", "토큰 기한 만료로 재로그인이 필요합니다."),
+
     BEFORE_PASSWORD_NOT_EXIST(HttpStatus.BAD_REQUEST.value(), "AUTH-008", "이전 비밀번호가 일치하지 않습니다."),
     // User
     DUPLICATE_EMAIL(HttpStatus.CONFLICT.value(), "USER-001", "중복되는 이메일입니다."),

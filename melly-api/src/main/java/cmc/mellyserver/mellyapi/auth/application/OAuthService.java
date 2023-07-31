@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,13 +30,14 @@ public class OAuthService {
 
         User user = userRepository.findUserBySocialId(socialUser.getSocialId()); // 기존에 존재하는 유저가 있는지 찾는다.
 
-        if (Objects.isNull(user)) { // 만약에 기존에 존재하는 유저가 없다면
-            User savedUser = userRepository.save(socialUser); // 새로 만든 유저를 저장한다.
-            return tokenProvider.createToken(savedUser.getId(), savedUser.getRoleType());
-        }
-
-        user.updateSocialLoginInfo(socialUser.getSocialId(), socialUser.getProvider());
-        return tokenProvider.createToken(user.getId(), user.getRoleType());
+//        if (Objects.isNull(user)) { // 만약에 기존에 존재하는 유저가 없다면
+//            User savedUser = userRepository.save(socialUser); // 새로 만든 유저를 저장한다.
+//            return tokenProvider.createToken(savedUser.getId(), savedUser.getRoleType());
+//        }
+//
+//        user.updateSocialLoginInfo(socialUser.getSocialId(), socialUser.getProvider());
+//        return tokenProvider.createToken(user.getId(), user.getRoleType());
+        return null;
     }
 
 

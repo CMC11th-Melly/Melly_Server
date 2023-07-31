@@ -24,6 +24,8 @@ public class S3StorageService implements StorageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.s3.cloud-front-url}")
+    private String CLOUD_FRONT_URL;
     private final AmazonS3Client amazonS3Client;
 
 
@@ -89,17 +91,18 @@ public class S3StorageService implements StorageService {
     }
 
     @Override
-    public Long calculateImageVolume(String bucketName, String username) {
+    public Long calculateImageVolume(String username) {
 
-        ObjectListing mellyimage = amazonS3Client.listObjects(bucketName, username);
+        ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
 
         return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
+
     }
 
     private String createFileName(Long userId, String fileName) {
 
-        return userId + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
+        return "dev/" + userId + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
@@ -117,7 +120,7 @@ public class S3StorageService implements StorageService {
     }
 
     private String getFileUrl(String filename) {
-        return amazonS3Client.getUrl(bucket, filename).toString();
+        return CLOUD_FRONT_URL + "/" + filename;
     }
 
 }

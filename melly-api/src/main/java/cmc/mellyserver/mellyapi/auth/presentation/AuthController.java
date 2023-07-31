@@ -3,11 +3,13 @@ package cmc.mellyserver.mellyapi.auth.presentation;
 import cmc.mellyserver.mellyapi.auth.application.AuthService;
 import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.ChangePasswordRequest;
+import cmc.mellyserver.mellyapi.auth.application.dto.response.TokenResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.AuthLoginRequest;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CommonSignupRequest;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.OAuthLoginRequest;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.ReIssueAccessTokenRequest;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
 import cmc.mellyserver.mellyinfra.email.EmailCertificationRequest;
@@ -49,16 +51,16 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signup(@Valid CommonSignupRequest commonSignupRequest) {
 
-        String authToken = authService.signup(commonSignupRequest.toDto());
-        return OK(authToken);
+        TokenResponseDto signupToken = authService.emailSignup(commonSignupRequest.toDto());
+        return OK(signupToken);
     }
 
     // 이메일 로그인
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody AuthLoginRequest authLoginRequest) {
 
-        String authToken = authService.login(authLoginRequest.toDto());
-        return OK(authToken);
+        TokenResponseDto loginToken = authService.login(authLoginRequest.toDto());
+        return OK(loginToken);
     }
 
     // 이메일 유효성을 파악하기 위해 인증번호 전송
@@ -124,4 +126,10 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/access-token/reissue")
+    public ResponseEntity<ApiResponse> generateAccessToken(@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
+
+        TokenResponseDto tokenResponseDto = authService.reIssueAccessToken(reIssueAccessTokenRequest.getRefreshToken());
+        return OK(tokenResponseDto);
+    }
 }

@@ -22,8 +22,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = HeaderUtil.getAccessToken(request);
 
@@ -36,10 +35,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             logger.debug("Security Context에  인증 정보를 저장했습니다");
-
-        } else {
-
-            logger.debug("유효한 JWT 토큰이 없습니다");
 
         }
 

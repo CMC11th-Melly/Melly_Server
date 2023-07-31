@@ -71,11 +71,15 @@ public class GroupService {
 
     @Transactional
     public void saveGroup(CreateGroupRequestDto createGroupRequestDto) {
-        UserGroup savedGroup = groupRepository.save(createGroupRequestDto.toEntity());
+
         User user = userRepository.findById(createGroupRequestDto.getCreatorId()).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_USER);
         });
+
+        UserGroup savedGroup = groupRepository.save(createGroupRequestDto.toEntity());
         groupAndUserRepository.save(GroupAndUser.of(user, savedGroup));
+
+        // redis에 해당 그룹id로 key와 등록된 유저 id set으로 등록
     }
 
 
@@ -123,8 +127,9 @@ public class GroupService {
         Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
         log.info("count : {}", particiatedUserCount);
 
+        // 현재 그룹에 남아있는 사람이 혼자라면, 본인이 탈퇴시 그룹은 삭제된다.
         if (particiatedUserCount < 2) {
-            throw new BusinessException(ErrorCode.EXIT_GROUP_NOT_POSSIBLE);
+            removeGroup(userId, groupId);
         }
 
         groupAndUserRepository.deleteGroupAndUserByUserIdAndGroupId(userId, groupId);
