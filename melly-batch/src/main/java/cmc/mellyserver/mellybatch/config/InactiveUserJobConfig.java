@@ -63,7 +63,8 @@ public class InactiveUserJobConfig {
         return new ItemProcessor<User, User>() {
             @Override
             public User process(User user) throws Exception {
-                return user.setInactive();
+                user.inActive();
+                return user;
             }
         };
     }

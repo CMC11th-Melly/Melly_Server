@@ -142,6 +142,9 @@ public class User extends JpaBaseEntity {
         return this;
     }
 
+    public void inActive() {
+        this.userStatus = UserStatus.INACTIVE;
+    }
 
     private boolean isDefaultEmailUser() {
         return !Objects.isNull(this.provider) && this.provider.equals(Provider.DEFAULT);
