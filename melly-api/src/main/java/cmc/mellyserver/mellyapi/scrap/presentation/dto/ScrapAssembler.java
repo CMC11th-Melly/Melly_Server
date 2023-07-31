@@ -5,16 +5,16 @@ import cmc.mellyserver.mellycore.scrap.application.dto.request.CreatePlaceScrapR
 
 public abstract class ScrapAssembler {
 
-    public static CreatePlaceScrapRequestDto createPlaceScrapRequestDto(Long userSeq,
-        ScrapRequest scrapRequest) {
+    public static CreatePlaceScrapRequestDto createPlaceScrapRequestDto(Long id,
+                                                                        ScrapRequest scrapRequest) {
         return CreatePlaceScrapRequestDto.builder()
-            .userSeq(userSeq)
-            .lat(scrapRequest.getLat())
-            .lng(scrapRequest.getLng())
-            .scrapType(scrapRequest.getScrapType())
-            .placeName(scrapRequest.getPlaceName())
-            .placeCategory(scrapRequest.getPlaceCategory())
-            .build();
+                .id(id)
+                .lat(scrapRequest.getLat())
+                .lng(scrapRequest.getLng())
+                .scrapType(scrapRequest.getScrapType())
+                .placeName(scrapRequest.getPlaceName())
+                .placeCategory(scrapRequest.getPlaceCategory())
+                .build();
     }
 
     private ScrapAssembler() {

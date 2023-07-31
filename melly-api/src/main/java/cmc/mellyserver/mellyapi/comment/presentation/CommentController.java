@@ -1,5 +1,7 @@
 package cmc.mellyserver.mellyapi.comment.presentation;
 
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.CommentAssembler;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentUpdateRequest;
@@ -16,9 +18,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
+import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -40,17 +45,17 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> saveComment(@AuthenticationPrincipal User user, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<ApiResponse> saveComment(@CurrentUser LoginUser loginUser, @RequestBody CommentRequest commentRequest) {
 
-        commentService.saveComment(CommentAssembler.commentRequestDto(Long.parseLong(user.getUsername()), commentRequest));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
+        return OK;
     }
 
     @GetMapping("/memory/{memoryId}")
-    public ResponseEntity<ApiResponse> getComment(@AuthenticationPrincipal User user, @PathVariable Long memoryId) {
+    public ResponseEntity<ApiResponse> getComment(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId) {
 
-        CommentResponseDto comment = commentService.getComments(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new ApiResponse(200, "댓글 조회", comment));
+        CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
+        return OK(comment);
     }
 
     @DeleteMapping("/{commentId}")

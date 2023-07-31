@@ -44,7 +44,7 @@ public class MemoryUpdateFormResponseDto {
                                 ug.getGroupName(), ug.getGroupType()))
                         .collect(Collectors.toList()),
                 memory.getStars(),
-                memory.getKeyword()
+                null
         );
     }
 }

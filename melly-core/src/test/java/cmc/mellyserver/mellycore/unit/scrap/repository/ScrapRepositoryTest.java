@@ -49,7 +49,7 @@ public class ScrapRepositoryTest extends RepositoryTest {
 
 //    @DisplayName("스크랩을 한 유저의 식별자와 장소 ID로 해당 스크랩을 찾을 수 있다.")
 //    @Test
-//    void find_scrap_by_userseq_and_placeId() {
+//    void find_scrap_by_id_and_placeId() {
 //
 //        // when
 //        PlaceScrap scrap = placeScrapRepository.save(

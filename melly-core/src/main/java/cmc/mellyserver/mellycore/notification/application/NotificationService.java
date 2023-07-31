@@ -10,7 +10,6 @@ import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
 import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
-import cmc.mellyserver.mellycore.notification.exception.MemoryNotFoundException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,62 +27,45 @@ public class NotificationService {
 
     private final MemoryRepository memoryRepository;
 
-    public List<Notification> getNotificationList(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return notificationRepository.getNotificationByUserId(user.getUserSeq());
-    }
 
-    @Transactional
-    public void setPushCommentLikeOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableCommentLike(true);
-    }
-
-    @Transactional
-    public void setPushCommentLikeOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableCommentLike(false);
-    }
-
-    @Transactional
-    public void setPushCommentOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableComment(true);
-    }
-
-    @Transactional
-    public void setPushCommentOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableComment(false);
-    }
-
-    @Transactional
-    public void setAppPushOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableAppPush(true);
-    }
-
-    @Transactional
-    public void setAppPushOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableAppPush(false);
+    // TODO : 알림 부분에도 캐싱 적용을 할지 고민해보기
+    @Transactional(readOnly = true)
+    public List<Notification> getNotificationList(Long userId) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        return notificationRepository.getNotificationByUserId(user.getId());
     }
 
     @Transactional(readOnly = true)
-    public NotificationOnOffResponseDto getNotificationOnOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return new NotificationOnOffResponseDto(user.isEnableAppPush(), user.isEnableCommentLike(),
-                user.isEnableComment());
+    public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        return NotificationOnOffResponseDto.of(user.getEnableAppPush(), user.getEnableCommentPush(), user.getEnableCommentLikePush());
     }
 
     @Transactional
-    public Notification createNotification(NotificationType notificationType, String body, Long userSeq, Long memoryId) {
+    public void changeAppPushStatus(Long userId, boolean status) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        user.changeAppPushStatus(status);
+    }
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new MemoryNotFoundException();
-        });
-        return notificationRepository.save(Notification.createNotification(notificationType, body, false, memory.getId(), user.getUserSeq()));
+    @Transactional
+    public void changeCommentLikePushStatus(Long userId, boolean status) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        user.changeCommentLikePushStatus(status);
+    }
+
+    @Transactional
+    public void changeCommentPushStatus(Long userId, boolean status) {
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        user.changeCommenPushStatus(status);
+    }
+
+
+    @Transactional
+    public Notification createNotification(String title, String body, NotificationType notificationType, Long userId, Long memoryId) {
+
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
+        return notificationRepository.save(Notification.createNotification(title, body, notificationType, false, memory.getId(), user.getId()));
     }
 
     @Transactional
@@ -92,7 +74,6 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION);
         });
-        notification.checkNotification(true);
-
+        notification.userCheckedNotification();
     }
 }

@@ -31,7 +31,7 @@ public class NotificationServiceIntegrationTest extends IntegrationTest {
 
         // when
         NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationOnOff(
-                savedUser.getUserSeq());
+                savedUser.getId());
 
         // then
         assertThat(notificationOnOff.isEnableAppPush()).isTrue();
@@ -53,7 +53,7 @@ public class NotificationServiceIntegrationTest extends IntegrationTest {
         User savedUser = userRepository.save(user);
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -62,7 +62,7 @@ public class NotificationServiceIntegrationTest extends IntegrationTest {
 
         // when
         Notification notification = notificationService.createNotification(NotificationType.COMMENT, "테스트 알림",
-                savedUser.getUserSeq(), memory.getId());
+                savedUser.getId(), memory.getId());
 
         // then
         assertThat(notification.isChecked()).isFalse();
@@ -84,7 +84,7 @@ public class NotificationServiceIntegrationTest extends IntegrationTest {
         User savedUser = userRepository.save(user);
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -94,7 +94,7 @@ public class NotificationServiceIntegrationTest extends IntegrationTest {
         // when then
         assertThatThrownBy(() -> {
             notificationService.createNotification(NotificationType.COMMENT, "테스트 알림",
-                    savedUser.getUserSeq(), -1L);
+                    savedUser.getId(), -1L);
         })
                 .isInstanceOf(GlobalBadRequestException.class)
                 .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());

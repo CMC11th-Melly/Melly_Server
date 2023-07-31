@@ -2,6 +2,7 @@ package cmc.mellyserver.mellycore.comment.domain;
 
 import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Table(name = "tb_comment")
 public class Comment extends JpaBaseEntity {
 
+    private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -26,8 +28,9 @@ public class Comment extends JpaBaseEntity {
     @Lob
     private String content;
 
-    @Column(name = "writer_id")
-    private Long writerId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "memory_id")
     private Long memoryId;
@@ -49,15 +52,15 @@ public class Comment extends JpaBaseEntity {
         this.content = content;
     }
 
-    public static Comment createComment(String content, Long writerId, Long memoryId, Comment parent) {
+    public static Comment createComment(String content, User user, Long memoryId, Comment parent) {
 
-        return Comment.builder().content(content).writerId(writerId).memoryId(memoryId).parent(parent).build();
+        return Comment.builder().content(content).user(user).memoryId(memoryId).parent(parent).build();
     }
 
     @Builder
-    public Comment(String content, Long writerId, Long memoryId, Comment parent) {
+    public Comment(String content, User user, Long memoryId, Comment parent) {
         this.content = content;
-        this.writerId = writerId;
+        this.user = user;
         this.memoryId = memoryId;
         this.parent = parent;
     }
@@ -74,8 +77,16 @@ public class Comment extends JpaBaseEntity {
         }
     }
 
+    @PrePersist
+    void init() {
+        this.isDeleted = DeleteStatus.N;
+    }
+
     public void updateComment(String content) {
         this.content = content;
     }
 
+    public void removeContent() {
+        this.content = REMOVE_COMMENT;
+    }
 }

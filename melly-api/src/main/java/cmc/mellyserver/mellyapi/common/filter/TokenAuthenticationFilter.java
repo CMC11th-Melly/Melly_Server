@@ -29,7 +29,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             // 토큰에서 유저네임, 권한을 뽑아 스프링 시큐리티 유저를 만들어 Authentication 반환
+
             Authentication authentication = tokenProvider.getAuthentication(jwt);
+
             // 해당 스프링 시큐리티 유저를 시큐리티 건텍스트에 저장, 즉 디비를 거치지 않음
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

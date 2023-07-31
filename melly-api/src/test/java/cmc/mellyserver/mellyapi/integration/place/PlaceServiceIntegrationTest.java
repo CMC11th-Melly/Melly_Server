@@ -33,7 +33,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         // given
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
-        Memory memory = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠")
+        Memory memory = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠")
                 .groupInfo(new GroupInfo("테스트 그룹", GroupType.FRIEND, 1L))
                 .openType(OpenType.ALL).stars(4L).visitedDate(LocalDateTime.of(2023, 5, 29, 10, 20))
                 .build();
@@ -42,7 +42,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         memory.setKeyword(List.of("기뻐요", "좋아요"));
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq())
+                .id(user.getId())
                 .title("테스트 제목")
                 .content("테스트 컨텐츠")
                 .placeName("테스트 장소")
@@ -54,7 +54,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         memoryService.createMemory(createMemoryRequestDto);
 
         // when
-        List<MarkedPlaceResponseDto> markedPlaceResponseDtos = placeService.displayMarkedPlace(user.getUserSeq(), null);
+        List<MarkedPlaceResponseDto> markedPlaceResponseDtos = placeService.displayMarkedPlace(user.getId(), null);
 
         // then
         assertThat(markedPlaceResponseDtos).hasSize(1);
@@ -71,7 +71,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq())
+                .id(user.getId())
                 .title("테스트 제목")
                 .content("테스트 컨텐츠")
                 .placeName("테스트 장소")
@@ -81,10 +81,10 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
                 .build();
 
         memoryService.createMemory(createMemoryRequestDto);
-        PlaceResponseDto result = placeService.findPlaceByPosition(user.getUserSeq(), 1.234, 1.234);
+        PlaceResponseDto result = placeService.findPlaceByPosition(user.getId(), 1.234, 1.234);
 
         // when
-        PlaceResponseDto placeByPlaceId = placeService.findPlaceByPlaceId(user.getUserSeq(), result.getPlaceId());
+        PlaceResponseDto placeByPlaceId = placeService.findPlaceByPlaceId(user.getId(), result.getPlaceId());
 
         // then
         assertThat(placeByPlaceId.getPlaceName()).isEqualTo("테스트 장소");
@@ -100,7 +100,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
         // when then
-        assertThatThrownBy(() -> placeService.findPlaceByPlaceId(user.getUserSeq(), 2L))
+        assertThatThrownBy(() -> placeService.findPlaceByPlaceId(user.getId(), 2L))
                 .isInstanceOf(GlobalBadRequestException.class)
                 .hasMessage(ErrorCode.NO_SUCH_PLACE.getMessage());
     }
@@ -113,7 +113,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
         // when
-        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(user.getUserSeq(), 1.5, 1.5);
+        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(user.getId(), 1.5, 1.5);
 
         // then
         assertThat(placeByPosition.getIsScraped()).isFalse();
@@ -133,13 +133,13 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
                 .lng(1.5)
                 .lat(1.5)
                 .placeName("테스트 장소")
-                .userSeq(user.getUserSeq())
+                .id(user.getId())
                 .build();
 
         placeScrapService.createScrap(createPlaceScrapRequestDto);
 
         // when
-        PlaceResponseDto result = placeService.findPlaceByPosition(user.getUserSeq(), 1.5, 1.5);
+        PlaceResponseDto result = placeService.findPlaceByPosition(user.getId(), 1.5, 1.5);
 
         // then
         assertThat(result.getIsScraped()).isTrue();
@@ -152,10 +152,10 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         // given
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
-        Memory memory = Memory.builder().userId(user.getUserSeq()).title("테스트 제목").content("테스트 컨텐츠").build();
+        Memory memory = Memory.builder().userId(user.getId()).title("테스트 제목").content("테스트 컨텐츠").build();
         Memory savedMemory = memoryRepository.save(memory);
         // when
-        MemoryUpdateFormResponseDto result = memoryService.findMemoryUpdateFormData(user.getUserSeq(),
+        MemoryUpdateFormResponseDto result = memoryService.findMemoryUpdateFormData(user.getId(),
                 savedMemory.getId());
 
         // then
@@ -171,7 +171,7 @@ public class PlaceServiceIntegrationTest extends IntegrationTest {
         User user = userRepository.save(UserFactory.createEmailLoginUser());
 
         // when then
-        assertThatThrownBy(() -> memoryService.findMemoryUpdateFormData(user.getUserSeq(), 3L))
+        assertThatThrownBy(() -> memoryService.findMemoryUpdateFormData(user.getId(), 3L))
                 .isInstanceOf(GlobalBadRequestException.class)
                 .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
 

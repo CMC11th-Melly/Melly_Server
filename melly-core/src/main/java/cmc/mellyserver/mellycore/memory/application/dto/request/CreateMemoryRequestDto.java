@@ -8,13 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class CreateMemoryRequestDto {
 
-    Long userSeq;
+    Long id;
     Double lat;
     Double lng;
     String title;
@@ -25,14 +25,14 @@ public class CreateMemoryRequestDto {
     Long groupId;
     OpenType openType;
     List<String> keyword;
-    LocalDateTime visitedDate;
+    LocalDate visitedDate;
     List<MultipartFile> multipartFiles;
 
     @Builder
-    public CreateMemoryRequestDto(Long userSeq, Double lat, Double lng, String title, String placeName,
+    public CreateMemoryRequestDto(Long id, Double lat, Double lng, String title, String placeName,
                                   String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword,
-                                  LocalDateTime visitedDate, List<MultipartFile> multipartFiles) {
-        this.userSeq = userSeq;
+                                  LocalDate visitedDate, List<MultipartFile> multipartFiles) {
+        this.id = id;
         this.lat = lat;
         this.lng = lng;
         this.title = title;
@@ -57,7 +57,7 @@ public class CreateMemoryRequestDto {
     public Memory toMemory() {
         return Memory.builder()
                 .title(title)
-                .userId(userSeq)
+                .userId(id)
                 .keyword(keyword)
                 .content(content)
                 .groupId(groupId)

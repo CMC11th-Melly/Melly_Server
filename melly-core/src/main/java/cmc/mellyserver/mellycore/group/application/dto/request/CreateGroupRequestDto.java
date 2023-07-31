@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CreateGroupRequestDto {
 
-    private Long userSeq;
+    private Long creatorId;
 
     private String groupName;
 
@@ -17,9 +17,9 @@ public class CreateGroupRequestDto {
     private int groupIcon;
 
     @Builder
-    public CreateGroupRequestDto(Long userSeq, String groupName, GroupType groupType,
+    public CreateGroupRequestDto(Long id, String groupName, GroupType groupType,
                                  int groupIcon) {
-        this.userSeq = userSeq;
+        this.creatorId = id;
         this.groupName = groupName;
         this.groupType = groupType;
         this.groupIcon = groupIcon;

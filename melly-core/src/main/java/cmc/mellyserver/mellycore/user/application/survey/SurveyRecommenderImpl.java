@@ -2,7 +2,7 @@ package cmc.mellyserver.mellycore.user.application.survey;
 
 import cmc.mellyserver.mellycommon.enums.RecommendGroup;
 import cmc.mellyserver.mellycore.place.domain.Position;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

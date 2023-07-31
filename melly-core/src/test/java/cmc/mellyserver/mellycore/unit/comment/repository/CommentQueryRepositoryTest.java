@@ -1,10 +1,10 @@
 package cmc.mellyserver.mellycore.unit.comment.repository;
 
+import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentQueryRepository;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.memory.domain.vo.GroupInfo;
@@ -55,14 +55,14 @@ public class CommentQueryRepositoryTest extends RepositoryTest {
     void 메모리에_존재하는_댓글_모두_조회() {
         // given
         User 제민 = userRepository.save(제민());
-        Memory memory_제민 = Memory.builder().title("테스트 메모리").userId(제민.getUserSeq())
+        Memory memory_제민 = Memory.builder().title("테스트 메모리").userId(제민.getId())
                 .content("테스트 본문")
                 .groupInfo(new GroupInfo("친구", GroupType.FRIEND, null))
                 .openType(OpenType.ALL).build();
 
         memory_제민.setKeyword(List.of("좋아요"));
         Memory savedMemory = memoryRepository.save(memory_제민);
-        Comment comment = Comment.createComment("테스트 컨텐츠", 제민.getUserSeq(), savedMemory.getId(),
+        Comment comment = Comment.createComment("테스트 컨텐츠", 제민.getId(), savedMemory.getId(),
                 null, 3L);
         commentRepository.save(comment);
 

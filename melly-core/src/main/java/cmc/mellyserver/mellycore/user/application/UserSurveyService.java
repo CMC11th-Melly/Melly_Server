@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.user.application;
 
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommender;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +21,16 @@ public class UserSurveyService {
                             레플리카 렉을 고려하여 소스 DB로 부터 데이터를 가져온다.
      */
     @Transactional
-    public SurveyRecommendResponseDto getSurveyResult(Long userSeq) {
+    public SurveyRecommendResponseDto getSurveyResult(Long userId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }
 
     @Transactional
     public void createSurvey(SurveyRequestDto surveyRequestDto) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(surveyRequestDto.getUserSeq());
+        User user = authenticatedUserChecker.checkAuthenticatedUserExist(surveyRequestDto.getId());
         user.addSurveyData(surveyRequestDto.getRecommendGroup(), surveyRequestDto.getRecommendPlace(), surveyRequestDto.getRecommendActivity());
     }
 }

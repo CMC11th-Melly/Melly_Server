@@ -1,5 +1,6 @@
 package cmc.mellyserver.mellyapi.unit;
 
+import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.comment.presentation.CommentController;
 import cmc.mellyserver.mellyapi.common.annotation.EnableMockMvc;
 import cmc.mellyserver.mellyapi.common.utils.DataExtractor;
@@ -11,8 +12,15 @@ import cmc.mellyserver.mellyapi.place.presentation.PlaceController;
 import cmc.mellyserver.mellyapi.scrap.presentation.PlaceScrapController;
 import cmc.mellyserver.mellyapi.user.presentation.UserController;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
+import cmc.mellyserver.mellycore.group.application.GroupService;
+import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
+import cmc.mellyserver.mellycore.memory.application.MemoryWriteService;
 import cmc.mellyserver.mellycore.notification.application.NotificationService;
 import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
+import cmc.mellyserver.mellycore.place.application.PlaceService;
+import cmc.mellyserver.mellycore.scrap.application.PlaceScrapService;
+import cmc.mellyserver.mellycore.user.application.UserProfileService;
+import cmc.mellyserver.mellycore.user.application.UserSurveyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -22,6 +30,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+
 
 @AutoConfigureRestDocs
 @WebMvcTest(value = {
@@ -46,10 +55,16 @@ public class ControllerTest {
     protected CommentService commentService;
 
     @MockBean
-    protected UserService userService;
+    protected UserProfileService userProfileService;
 
     @MockBean
-    protected MemoryService memoryService;
+    protected UserSurveyService userSurveyService;
+
+    @MockBean
+    protected MemoryReadService memoryReadService;
+
+    @MockBean
+    protected MemoryWriteService memoryWriteService;
 
     @MockBean
     protected PlaceService placeService;

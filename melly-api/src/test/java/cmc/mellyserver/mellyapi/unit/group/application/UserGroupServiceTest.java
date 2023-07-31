@@ -52,7 +52,7 @@ public class UserGroupServiceTest {
         UserGroup group1 = groupService.saveGroup(createGroupRequestDto);
 
         // then
-//        assertThat(group1.getCreatorId()).isEqualTo(createGroupRequestDto.getUserSeq());
+//        assertThat(group1.getCreatorId()).isEqualTo(createGroupRequestDto.getId());
     }
 
     @DisplayName("그룹을 식별자를 통해 그룹 정보를 조회하려고 할때")

@@ -1,39 +1,39 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.request;
 
+import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.mellycommon.enums.AgeGroup;
 import cmc.mellyserver.mellycommon.enums.Gender;
-import cmc.mellyserver.mellycommon.enums.Provider;
-import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommonSignupRequest {
 
-    private String email;
-    private String uid;
-    private String nickname;
+    @Email(message = "이메일 양식으로 작성해주세요.")
+    private String email; // 이메일
 
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}",
             message = "비밀번호는 영문과 숫자 조합으로 8자리 이상 가능합니다.")
-    @Nullable
-    private String password;
+    private String password; // 비밀번호
 
-    private Provider provider;
+    @Length(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하로 작성해주세요.")
+    private String nickname; // 닉네임
 
-    private Gender gender;
 
-    @Nullable
-    private MultipartFile profileImage;
+    private Gender gender; // 성별
 
-    @Nullable
-    private AgeGroup ageGroup;
 
-    @Nullable
+    private AgeGroup ageGroup; // 연령대
+
     private String fcmToken;
 
+    public AuthSignupRequestDto toDto() {
+        return new AuthSignupRequestDto(email, password, nickname, ageGroup, gender, fcmToken);
+    }
 }

@@ -9,10 +9,10 @@ import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParti
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommenderImpl;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserDto;
@@ -240,7 +240,7 @@ public class UserServiceTest {
             SurveyRequestDto surveyRequestDto = UserFactory.mockSurveyRequestDto();
 
             given(authenticatedUserChecker.checkAuthenticatedUserExist(
-                    surveyRequestDto.getUserSeq()))
+                    surveyRequestDto.getId()))
                     .willReturn(emailLoginUser);
 
             // when
@@ -337,7 +337,7 @@ public class UserServiceTest {
                     "multipart/form-data", "testImage".getBytes());
             ProfileUpdateRequestDto profileImageDeleteDto = ProfileUpdateRequestDto.builder()
                     .profileImage(mockMultipartFile)
-                    .userSeq(1L)
+                    .id(1L)
                     .deleteImage(true)
                     .gender(Gender.MALE)
                     .ageGroup(AgeGroup.TWO)
@@ -366,7 +366,7 @@ public class UserServiceTest {
                     "multipart/form-data", "testImage".getBytes());
             ProfileUpdateRequestDto profileImageDeleteDto = ProfileUpdateRequestDto.builder()
                     .profileImage(mockMultipartFile)
-                    .userSeq(1L)
+                    .id(1L)
                     .deleteImage(false)
                     .gender(Gender.MALE)
                     .ageGroup(AgeGroup.TWO)

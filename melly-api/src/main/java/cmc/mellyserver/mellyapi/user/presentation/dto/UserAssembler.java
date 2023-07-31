@@ -10,69 +10,64 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResp
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
+import org.springframework.data.domain.Slice;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.Slice;
 
 public abstract class UserAssembler {
 
     private UserAssembler() {
     }
 
-    public static List<GroupLoginUserParticipatedResponse> groupLoginUserParticipatedResponses(
-        List<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos) {
-        return groupLoginUserParticipatedResponseDtos.stream().map(response ->
-            GroupLoginUserParticipatedResponse.builder()
-                .groupId(response.getGroupId())
-                .groupType(response.getGroupType())
-                .groupName(response.getGroupName())
-                .groupIcon(response.getGroupIcon())
-                .build()
-        ).collect(Collectors.toList());
+    public static Slice<GroupLoginUserParticipatedResponse> groupLoginUserParticipatedResponses(
+            Slice<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos) {
+        return groupLoginUserParticipatedResponseDtos.map(response ->
+                GroupLoginUserParticipatedResponse.builder()
+                        .groupId(response.getGroupId())
+                        .groupType(response.getGroupType())
+                        .groupName(response.getGroupName())
+                        .groupIcon(response.getGroupIcon())
+                        .build()
+        );
     }
 
-    public static Slice<ScrapedPlaceResponse> scrapedPlaceResponses(
-        Slice<ScrapedPlaceResponseDto> scrapedPlaceResponseDtos) {
+    public static Slice<ScrapedPlaceResponse> scrapedPlaceResponses(Slice<ScrapedPlaceResponseDto> scrapedPlaceResponseDtos) {
         return scrapedPlaceResponseDtos.map(response -> ScrapedPlaceResponse.builder()
-            .placeId(response.getPlaceId())
-            .placeName(response.getPlaceName())
-            .placeImage(response.getPlaceImage())
-            .placeCategory(response.getPlaceCategory())
-            .myMemoryCount(response.getMyMemoryCount())
-            .otherMemoryCount(response.getOtherMemoryCount())
-            .position(response.getPosition())
-            .isScraped(response.getIsScraped())
-            .recommendType(response.getRecommendType())
-            .build());
+                .placeId(response.getPlaceId())
+                .placeName(response.getPlaceName())
+                .placeImage(response.getPlaceImage())
+                .placeCategory(response.getPlaceCategory())
+                .isScraped(true)
+                .build());
     }
 
     public static List<PlaceScrapCountResponse> placeScrapCountResponses(
-        List<PlaceScrapCountResponseDto> placeScrapCountResponseDtos) {
+            List<PlaceScrapCountResponseDto> placeScrapCountResponseDtos) {
         return placeScrapCountResponseDtos.stream().map(response ->
-                PlaceScrapCountResponse.builder()
-                    .scrapType(response.getScrapType())
-                    .scrapCount(response.getScrapCount()).build())
-            .collect(Collectors.toList());
+                        PlaceScrapCountResponse.builder()
+                                .scrapType(response.getScrapType())
+                                .scrapCount(response.getScrapCount()).build())
+                .collect(Collectors.toList());
     }
 
-    public static SurveyRequestDto surveyRequestDto(Long userSeq, SurveyRequest surveyRequest) {
+    public static SurveyRequestDto surveyRequestDto(Long id, SurveyRequest surveyRequest) {
         return SurveyRequestDto.builder()
-            .userSeq(userSeq)
-            .recommendGroup(surveyRequest.getRecommendGroup())
-            .recommendPlace(surveyRequest.getRecommendPlace())
-            .recommendActivity(surveyRequest.getRecommendActivity())
-            .build();
+                .id(id)
+                .recommendGroup(surveyRequest.getRecommendGroup())
+                .recommendPlace(surveyRequest.getRecommendPlace())
+                .recommendActivity(surveyRequest.getRecommendActivity())
+                .build();
     }
 
-    public static ProfileUpdateRequestDto profileUpdateRequestDto(Long userSeq,
-        ProfileUpdateRequest profileUpdateRequest) {
+    public static ProfileUpdateRequestDto profileUpdateRequestDto(Long id, ProfileUpdateRequest profileUpdateRequest) {
         return ProfileUpdateRequestDto.builder()
-            .userSeq(userSeq)
-            .profileImage(profileUpdateRequest.getProfileImage())
-            .nickname(profileUpdateRequest.getNickname())
-            .gender(profileUpdateRequest.getGender())
-            .ageGroup(profileUpdateRequest.getAgeGroup())
-            .deleteImage(profileUpdateRequest.isDeleteImage())
-            .build();
+                .id(id)
+                .nickname(profileUpdateRequest.getNickname())
+                .gender(profileUpdateRequest.getGender())
+                .ageGroup(profileUpdateRequest.getAgeGroup())
+                .build();
     }
 }
+
+// 요즘은 바로 프로필 수정 해버리네?

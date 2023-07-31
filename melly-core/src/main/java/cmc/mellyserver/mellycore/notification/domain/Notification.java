@@ -20,15 +20,17 @@ public class Notification extends JpaBaseEntity {
     @Column(name = "notification_id")
     private Long id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "message")
     private String message;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "title")
-    NotificationType title;
+    NotificationType notificationType;
 
-    @Column(name = "checked")
-    private Boolean checked;
+    @Column(name = "user_checked")
+    private Boolean userChecked;
 
     @Column(name = "user_id")
     private Long userId;
@@ -36,20 +38,21 @@ public class Notification extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long memoryId;
 
-    public Notification(NotificationType title, String message, boolean checked, Long userId, Long memoryId) {
+    public Notification(String title, String message, NotificationType notificationType, boolean checked, Long userId, Long memoryId) {
         this.title = title;
         this.message = message;
-        this.checked = checked;
+        this.notificationType = notificationType;
+        this.userChecked = checked;
         this.userId = userId;
         this.memoryId = memoryId;
     }
 
-    public static Notification createNotification(NotificationType title, String message, boolean checked, Long memoryId, Long userId) {
+    public static Notification createNotification(String title, String message, NotificationType notificationType, boolean checked, Long memoryId, Long userId) {
 
-        return new Notification(title, message, checked, userId, memoryId);
+        return new Notification(title, message, notificationType, checked, userId, memoryId);
     }
 
-    public void checkNotification(boolean check) {
-        this.checked = check;
+    public void userCheckedNotification() {
+        this.userChecked = true;
     }
 }

@@ -41,7 +41,7 @@ public class UserGroupFactory {
 
     public static CreateGroupRequestDto mockCreateGroupRequestDto() {
         return CreateGroupRequestDto.builder()
-                .userSeq(2L)
+                .id(2L)
                 .groupIcon(1)
                 .groupName("테스트 그룹")
                 .groupType(GroupType.FRIEND)

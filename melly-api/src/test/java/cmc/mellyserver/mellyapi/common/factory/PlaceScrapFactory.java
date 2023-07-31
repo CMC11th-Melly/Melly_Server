@@ -32,7 +32,7 @@ public class PlaceScrapFactory {
                 .placeCategory("카페")
                 .placeName("스타벅스")
                 .scrapType(ScrapType.FRIEND)
-                .userSeq(1L)
+                .id(1L)
                 .build();
     }
 

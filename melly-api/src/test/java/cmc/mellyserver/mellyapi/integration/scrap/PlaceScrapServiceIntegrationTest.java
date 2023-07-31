@@ -33,13 +33,13 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
         User user = UserFactory.createEmailLoginUser();
         User savedUser = userRepository.save(user);
 
-        CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(savedUser.getUserSeq(),
+        CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(savedUser.getId(),
                 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
         placeScrapService.createScrap(createPlaceScrapRequestDto);
 
         // when
         Slice<ScrapedPlaceResponseDto> scrapedPlace = placeScrapService.findScrapedPlace(PageRequest.of(0, 10),
-                savedUser.getUserSeq(), null);
+                savedUser.getId(), null);
 
         // then
         assertThat(scrapedPlace.getContent()).hasSize(1);
@@ -59,14 +59,14 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
             User savedUser = userRepository.save(user);
 
             CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(
-                    savedUser.getUserSeq(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
+                    savedUser.getId(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
 
             // when
             placeScrapService.createScrap(createPlaceScrapRequestDto);
 
             // then
             Optional<Place> place = placeRepository.findPlaceByPosition(new Position(1.234, 1.234));
-            Optional<PlaceScrap> placeScrap = placeScrapRepository.findByUserUserSeqAndPlaceId(savedUser.getUserSeq(),
+            Optional<PlaceScrap> placeScrap = placeScrapRepository.findByUseridAndPlaceId(savedUser.getId(),
                     place.get().getId());
             assertThat(place).isPresent();
             assertThat(placeScrap).isPresent();
@@ -85,7 +85,7 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
             User savedUser = userRepository.save(user);
 
             CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(
-                    savedUser.getUserSeq(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
+                    savedUser.getId(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
             placeScrapService.createScrap(createPlaceScrapRequestDto);
 
             // then
@@ -111,14 +111,14 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
             User savedUser = userRepository.save(user);
 
             CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(
-                    savedUser.getUserSeq(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
+                    savedUser.getId(), 1.234, 1.234, ScrapType.FRIEND, "스타벅스", "카페");
             placeScrapService.createScrap(createPlaceScrapRequestDto);
 
             // when
-            placeScrapService.removeScrap(savedUser.getUserSeq(), 1.234, 1.234);
+            placeScrapService.removeScrap(savedUser.getId(), 1.234, 1.234);
 
             // then
-            Optional<PlaceScrap> result = placeScrapRepository.findByUserUserSeqAndPlaceId(savedUser.getUserSeq(),
+            Optional<PlaceScrap> result = placeScrapRepository.findByUseridAndPlaceId(savedUser.getId(),
                     savedPlace.getId());
             assertThat(result).isEmpty();
 
@@ -136,7 +136,7 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
             User savedUser = userRepository.save(user);
 
             // then
-            assertThatCode(() -> placeScrapService.removeScrap(savedUser.getUserSeq(), 1.234, 1.234))
+            assertThatCode(() -> placeScrapService.removeScrap(savedUser.getId(), 1.234, 1.234))
                     .isInstanceOf(GlobalBadRequestException.class)
                     .hasMessage("스크랩 취소할 수 없습니다.");
         }
@@ -150,7 +150,7 @@ public class PlaceScrapServiceIntegrationTest extends IntegrationTest {
             User savedUser = userRepository.save(user);
 
             // then
-            assertThatCode(() -> placeScrapService.removeScrap(savedUser.getUserSeq(), 1.234, 1.234))
+            assertThatCode(() -> placeScrapService.removeScrap(savedUser.getId(), 1.234, 1.234))
                     .isInstanceOf(GlobalBadRequestException.class)
                     .hasMessage("해당하는 장소가 없습니다.");
         }

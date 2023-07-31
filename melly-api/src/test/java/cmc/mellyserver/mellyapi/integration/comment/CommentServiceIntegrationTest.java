@@ -30,7 +30,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -39,8 +39,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -61,7 +61,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -70,8 +70,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(2L)
                 .build();
@@ -92,7 +92,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -101,8 +101,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(2L)
                 .parentId(2L)
                 .build();
@@ -123,7 +123,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -132,8 +132,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -156,7 +156,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -165,8 +165,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -188,7 +188,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -197,8 +197,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -222,7 +222,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -231,8 +231,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -241,8 +241,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto2 = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(comment.getId())
                 .build();
@@ -266,7 +266,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -275,20 +275,20 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
 
         Comment comment = commentService.saveComment(commentRequestDto);
-        commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+        commentService.saveCommentLike(user.getId(), comment.getId());
         // when
-        commentService.deleteCommentLike(user.getUserSeq(), comment.getId());
+        commentService.deleteCommentLike(user.getId(), comment.getId());
 
         // then
         Optional<CommentLike> result = commentLikeRepository.findCommentLikeByCommentIdAndUserId(
-                comment.getId(), user.getUserSeq());
+                comment.getId(), user.getId());
 
         assertThat(result).isEmpty();
     }
@@ -302,7 +302,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -311,8 +311,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -320,7 +320,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         Comment comment = commentService.saveComment(commentRequestDto);
 
         // when then
-        assertThatThrownBy(() -> commentService.deleteCommentLike(user.getUserSeq(), comment.getId()))
+        assertThatThrownBy(() -> commentService.deleteCommentLike(user.getId(), comment.getId()))
                 .isInstanceOf(GlobalBadRequestException.class)
                 .hasMessage(ErrorCode.NO_SUCH_COMMENT_LIKE.getMessage());
     }
@@ -334,7 +334,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -343,8 +343,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -352,11 +352,11 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         Comment comment = commentService.saveComment(commentRequestDto);
 
         // when
-        CommentLike commentLike = commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+        CommentLike commentLike = commentService.saveCommentLike(user.getId(), comment.getId());
 
         // then
         assertThat(commentLike.getComment().getId()).isEqualTo(comment.getId());
-        assertThat(commentLike.getUserId()).isEqualTo(user.getUserSeq());
+        assertThat(commentLike.getSocialId()).isEqualTo(user.getId());
     }
 
     @DisplayName("댓글에 좋아요를 달려고 할때 이미 좋아요를 한 적이 있다면 중복 예외가 발생한다.")
@@ -368,7 +368,7 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         User mentionedUser = userRepository.save(User.builder().nickname("멘션된 유저").ageGroup(AgeGroup.TWO).build());
 
         CreateMemoryRequestDto createMemoryRequestDto = CreateMemoryRequestDto.builder()
-                .userSeq(user.getUserSeq()).title("테스트 제목")
+                .id(user.getId()).title("테스트 제목")
                 .content("테스트 컨텐츠").placeName("테스트 장소")
                 .placeCategory("카페").lat(1.234).lng(1.234)
                 .build();
@@ -377,8 +377,8 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
 
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
                 .content("테스트 댓글")
-                .userId(user.getUserSeq())
-                .mentionUserId(mentionedUser.getUserSeq())
+                .userId(user.getId())
+                .mentionUserId(mentionedUser.getId())
                 .memoryId(memory.getId())
                 .parentId(null)
                 .build();
@@ -386,10 +386,10 @@ public class CommentServiceIntegrationTest extends IntegrationTest {
         Comment comment = commentService.saveComment(commentRequestDto);
 
         // when
-        commentService.saveCommentLike(user.getUserSeq(), comment.getId());
+        commentService.saveCommentLike(user.getId(), comment.getId());
 
         // then
-        assertThatThrownBy(() -> commentService.saveCommentLike(user.getUserSeq(), comment.getId()))
+        assertThatThrownBy(() -> commentService.saveCommentLike(user.getId(), comment.getId()))
                 .isInstanceOf(GlobalBadRequestException.class)
                 .hasMessage(ErrorCode.DUPLICATED_COMMENT_LIKE.getMessage());
     }
