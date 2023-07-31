@@ -90,6 +90,7 @@ public class MemoryWriteService {
         memory.delete();
     }
 
+    
     private void setPlaceId(CreateMemoryRequestDto createMemoryRequestDto, Memory memory, Place place) {
 
         if (!Objects.isNull(place)) {
