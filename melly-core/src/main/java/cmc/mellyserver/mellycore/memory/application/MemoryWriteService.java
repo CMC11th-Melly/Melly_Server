@@ -7,13 +7,11 @@ import cmc.mellyserver.mellycore.common.aws.StorageService;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
-import cmc.mellyserver.mellycore.group.exception.GroupNotFoundException;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.application.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.MemoryImage;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
-import cmc.mellyserver.mellycore.memory.exception.MemoryNotFoundException;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
@@ -66,11 +64,11 @@ public class MemoryWriteService {
     public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
 
         Memory memory = memoryRepository.findById(updateMemoryRequestDto.getMemoryId()).orElseThrow(() -> {
-            throw new MemoryNotFoundException();
+            throw new BusinessException(ErrorCode.NO_SUCH_MEMORY);
         });
 
         UserGroup userGroup = groupRepository.findById(updateMemoryRequestDto.getGroupId()).orElseThrow(() -> {
-            throw new GroupNotFoundException();
+            throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         });
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getId());
@@ -89,6 +87,7 @@ public class MemoryWriteService {
         });
         memory.delete();
     }
+
 
     private void setPlaceId(CreateMemoryRequestDto createMemoryRequestDto, Memory memory, Place place) {
 

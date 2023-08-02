@@ -20,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Objects;
 
-import static cmc.mellyserver.mellycore.common.aws.S3Constants.IMAGE_UPLOAD_BUCKET_NAME;
-
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
@@ -41,7 +39,7 @@ public class UserProfileService {
     public Integer checkImageStorageVolumeLoginUserUse(Long userId) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
-        return fileUploader.calculateImageVolume(IMAGE_UPLOAD_BUCKET_NAME, user.getEmail()).intValue();
+        return fileUploader.calculateImageVolume(user.getEmail()).intValue();
     }
 
     /**

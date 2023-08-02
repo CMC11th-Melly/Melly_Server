@@ -43,8 +43,9 @@ spring:
 
 app:
   auth:
-    tokenExpiry: ${JWT_EXPIRY}
-    tokenSecret: ${JWT_SECRET}
+    access-expiration-time: ${ACCESS_TOKEN_EXPIRE} # 30분 1800000
+    refresh-expiration-time: ${REFRESH_TOKEN_EXPIRE} # 2주
+    token-secret: ${JWT_SECRET}
 
 cloud:
   aws:
@@ -53,6 +54,7 @@ cloud:
     stack:
       auto: false
     s3:
+      cloud-front-url: ${CLOUD_FRONT_URL}
       bucket: ${S3_BUCKET}
     credentials:
       access-key: ${S3_ACCESS_KEY}

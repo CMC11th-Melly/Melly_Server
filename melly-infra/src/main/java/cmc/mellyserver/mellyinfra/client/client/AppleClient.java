@@ -77,7 +77,7 @@ public class AppleClient implements LoginClient {
 
             Claims body = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
 
-            return User.createOauthLoginUser(body.getSubject(), APPLE);
+            return User.createOauthLoginUser(body.getSubject(), APPLE, null, null, null, null);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
