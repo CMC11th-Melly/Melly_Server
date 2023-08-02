@@ -34,7 +34,7 @@ jobs:
           #          key: ${{ secrets.EC2_PRIVATE_KEY }}
           #          port: 22
           #          source: "./deploy.sh"
-          #          target: "/home/ubuntu/"
+        #          target: "/home/ubuntu/"
 
 
 
@@ -46,8 +46,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            chmod 777 ./deploy.sh
-            ./deploy.sh
+            chmod 777 deploy.sh
+            sh deploy.sh
             docker image prune -f
 #
 #      - name: 도커 이미지 빌드
