@@ -1,9 +1,12 @@
 package cmc.mellyserver.mellyapi.common.filter;
 
+import cmc.mellyserver.mellyapi.common.exception.LogoutOrWithdrawExpcetion;
 import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -14,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,23 +25,31 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
+    private final RedisTemplate redisTemplate;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String jwt = HeaderUtil.getAccessToken(request);
+        String accessToken = HeaderUtil.getAccessToken(request);
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            // 토큰에서 유저네임, 권한을 뽑아 스프링 시큐리티 유저를 만들어 Authentication 반환
+        if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
 
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
+            checkLogoutOrWithdrawUser(accessToken);
 
-            // 해당 스프링 시큐리티 유저를 시큐리티 건텍스트에 저장, 즉 디비를 거치지 않음
+            Authentication authentication = tokenProvider.getAuthentication(accessToken);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            logger.debug("Security Context에  인증 정보를 저장했습니다");
-
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void checkLogoutOrWithdrawUser(String jwt) {
+
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+
+        if (!Objects.isNull(valueOperations.get(jwt))) {
+            throw new LogoutOrWithdrawExpcetion("이미 로그아웃하거나 탈퇴한 유저 입니다.");
+        }
     }
 }

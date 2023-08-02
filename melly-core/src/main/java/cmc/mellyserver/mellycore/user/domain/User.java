@@ -75,7 +75,7 @@ public class User extends JpaBaseEntity {
     private UserStatus userStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "password_expired", nullable = false)
+    @Column(name = "password_expired")
     private PasswordExpired passwordExpired;
 
     @Column(name = "password_init_date")
@@ -130,6 +130,11 @@ public class User extends JpaBaseEntity {
 
     public void changeCommentLikePushStatus(boolean enableCommentLikePush) {
         this.enableCommentLikePush = enableCommentLikePush;
+    }
+
+    public void updateOauthInfo(String nickname, String socialId) {
+        this.nickname = nickname;
+        this.socialId = socialId;
     }
 
     public void changeCommenPushStatus(boolean enableCommentPush) {
@@ -203,11 +208,15 @@ public class User extends JpaBaseEntity {
     }
 
     // 처음 로그인 시에 얻어올 수 있는 정보는 OAuth에서는 없다.
-    public static User createOauthLoginUser(String socialId, Provider provider) {
+    public static User createOauthLoginUser(String socialId, Provider provider, String email, String nickname, AgeGroup ageGroup, Gender gender) {
 
         return User.builder()
                 .socialId(socialId)
                 .provider(provider)
+                .email(email)
+                .nickname(nickname)
+                .ageGroup(ageGroup)
+                .gender(gender)
                 .password(NO_PASSWORD)
                 .roleType(RoleType.USER)
                 .build();

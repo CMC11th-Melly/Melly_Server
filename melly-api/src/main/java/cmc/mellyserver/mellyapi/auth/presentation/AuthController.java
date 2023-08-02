@@ -6,10 +6,8 @@ import cmc.mellyserver.mellyapi.auth.application.dto.request.ChangePasswordReque
 import cmc.mellyserver.mellyapi.auth.application.dto.response.TokenResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.AuthLoginRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.CommonSignupRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.OAuthLoginRequest;
-import cmc.mellyserver.mellyapi.auth.presentation.dto.request.ReIssueAccessTokenRequest;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.request.*;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.response.OAuthResponseDto;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
 import cmc.mellyserver.mellyinfra.email.EmailCertificationRequest;
@@ -43,9 +41,17 @@ public class AuthController {
     @PostMapping("/social")
     public ResponseEntity<ApiResponse> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
 
-        String authToken = oAuthService.login(oAuthLoginRequest.toDto());
-        return OK(authToken);
+        OAuthResponseDto oAuthResponseDto = oAuthService.login(oAuthLoginRequest.toDto());
+        return OK(oAuthResponseDto);
     }
+
+    @PostMapping("/social-signup")
+    public ResponseEntity<ApiResponse> socialSignup(@Valid @RequestBody OAuthSignupRequest oAuthSignupRequest) {
+
+        TokenResponseDto tokenResponseDto = oAuthService.signup(oAuthSignupRequest.toDto());
+        return OK(tokenResponseDto);
+    }
+
 
     // 이메일 회원 가입
     @PostMapping("/signup")
@@ -126,10 +132,10 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/access-token/reissue")
+    @PostMapping("/token/reissue")
     public ResponseEntity<ApiResponse> generateAccessToken(@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
 
-        TokenResponseDto tokenResponseDto = authService.reIssueAccessToken(reIssueAccessTokenRequest.getRefreshToken());
+        TokenResponseDto tokenResponseDto = authService.reIssueAccessTokenAndRefreshToken(reIssueAccessTokenRequest.getRefreshToken());
         return OK(tokenResponseDto);
     }
 }

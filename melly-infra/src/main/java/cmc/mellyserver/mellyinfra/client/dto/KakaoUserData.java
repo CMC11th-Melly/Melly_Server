@@ -14,6 +14,8 @@ public class KakaoUserData {
 
     private Long id;
 
+    private Object kakao_account;
+
     private LocalDateTime connected_at;
 
 }

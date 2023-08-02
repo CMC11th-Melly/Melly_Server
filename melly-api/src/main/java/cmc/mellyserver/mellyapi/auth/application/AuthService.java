@@ -8,7 +8,6 @@ import cmc.mellyserver.mellyapi.auth.application.dto.response.TokenResponseDto;
 import cmc.mellyserver.mellyapi.auth.repository.RefreshToken;
 import cmc.mellyserver.mellyapi.auth.repository.RefreshTokenRepository;
 import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.comment.application.event.SignupEvent;
 import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
@@ -25,6 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static cmc.mellyserver.mellyapi.common.constants.RedisConstants.ACCESS_TOKEN_BLACKLIST;
+import static cmc.mellyserver.mellycommon.codes.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -65,7 +68,7 @@ public class AuthService {
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType()); // 리프레시 토큰 발행
 
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt()); // 리프레시 토큰 레디스에 저장
-        fcmService.saveToken(savedUser.getEmail(), authSignupRequestDto.getFcmToken()); // FCM 토큰 업데이트
+        fcmService.saveToken(savedUser.getId(), authSignupRequestDto.getFcmToken()); // FCM 토큰 업데이트
         publisher.publishEvent(new SignupEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
@@ -85,28 +88,40 @@ public class AuthService {
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
 
         // 사용자 FCM 토큰을 Redis에 저장한다. -> 이벤트 처리 생각중
-        fcmService.saveToken(user.getEmail(), authLoginRequestDto.getFcmToken());
+        fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
 
-    public TokenResponseDto reIssueAccessToken(String token) {
+    public TokenResponseDto reIssueAccessTokenAndRefreshToken(String token) {
 
-        RefreshToken refreshToken = refreshTokenRepository.findById(token).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.RE_LOGIN_REQUIRED);
+        Long userId = tokenProvider.extractMemberId(token);
+
+        RefreshToken refreshToken = refreshTokenRepository.findById(userId).orElseThrow(() -> {
+            throw new BusinessException(RE_LOGIN_REQUIRED);
         });
+
+        // 만약 기존의 토큰과 다르다면 비정상적인 접근이 있다 판단하고 재로그인 유도
+        if (!refreshToken.getRefreshToken().equals(token)) {
+            refreshTokenRepository.remove(userId);
+            throw new BusinessException(ABNORMAL_ACCESS);
+        }
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(refreshToken.getUserId());
 
-        String accessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
-        return TokenResponseDto.of(accessToken, null);
+        String newAccessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
+        RefreshTokenDto newRefreshToken = tokenProvider.createRefreshToken(refreshToken.getUserId(), user.getRoleType());
+        refreshTokenRepository.save(new RefreshToken(newRefreshToken.getToken(), user.getId()), newRefreshToken.getExpiredAt());
+
+        return TokenResponseDto.of(newAccessToken, newRefreshToken.getToken());
 
     }
 
     public void logout(Long userId, String accessToken) {
 
         authenticatedUserChecker.checkAuthenticatedUserExist(userId); // 현재 유저가 존재하는지 체크
-        redisTemplate.opsForValue().set(accessToken, "blackList"); // 로그아웃 처리된 토큰을 레디스에 블랙리스트 처리
+        redisTemplate.opsForValue().set(accessToken, ACCESS_TOKEN_BLACKLIST, tokenProvider.getLastExpireTime(accessToken), TimeUnit.MILLISECONDS); // 로그아웃 처리된 토큰을 레디스에 블랙리스트 처리
+        refreshTokenRepository.remove(userId);
     }
 
 
@@ -114,14 +129,16 @@ public class AuthService {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
         user.remove();
-        redisTemplate.opsForValue().set(accessToken, "blackList");
+
+        redisTemplate.opsForValue().set(accessToken, ACCESS_TOKEN_BLACKLIST, tokenProvider.getLastExpireTime(accessToken), TimeUnit.MILLISECONDS);
+        refreshTokenRepository.remove(userId);
     }
 
 
     public void checkDuplicatedNickname(String nickname) {
 
         if (userRepository.findUserByNickname(nickname).isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+            throw new BusinessException(DUPLICATE_NICKNAME);
         }
     }
 
@@ -129,7 +146,7 @@ public class AuthService {
     public void checkDuplicatedEmail(String email) {
 
         if (userRepository.findUserByEmail(email).isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+            throw new BusinessException(DUPLICATE_EMAIL);
         }
     }
 
@@ -139,7 +156,7 @@ public class AuthService {
 
 
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_USER));
+                .orElseThrow(() -> new BusinessException(NO_SUCH_USER));
 
         user.updatePassword(requestDto.getPasswordAfter());
     }
@@ -153,7 +170,7 @@ public class AuthService {
         String passwordAfter = passwordEncoder.encode(requestDto.getPasswordAfter());
 
         if (!userRepository.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
-            throw new BusinessException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
+            throw new BusinessException(BEFORE_PASSWORD_NOT_EXIST);
         }
 
         user.updatePassword(passwordAfter);
@@ -163,21 +180,21 @@ public class AuthService {
     private User checkEmail(String email) {
 
         return userRepository.findUserByEmail(email).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.INVALID_EMAIL);
+            throw new BusinessException(INVALID_EMAIL);
         });
     }
 
     private void checkPassword(String password, String originPassword) {
 
         if (!passwordEncoder.matches(password, originPassword)) {
-            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+            throw new BusinessException(INVALID_PASSWORD);
         }
     }
 
     private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
         Optional<User> userByEmail = userRepository.findUserByEmail(authSignupRequestDto.getEmail());
         if (userByEmail.isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+            throw new BusinessException(DUPLICATE_EMAIL);
         }
     }
 }

@@ -96,6 +96,19 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    public Long getLastExpireTime(String token) {
+
+        Date expirationDate = Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration();
+
+        return expirationDate.getTime() - new Date().getTime();
+
+    }
+
     public Long extractMemberId(final String accessToken) {
         try {
             String memberId = Jwts.parserBuilder()

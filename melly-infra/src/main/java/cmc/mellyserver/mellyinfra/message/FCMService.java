@@ -58,8 +58,8 @@ public class FCMService implements MessageService {
         FirebaseMessaging.getInstance().sendAsync(message);
     }
 
-    public void saveToken(String email, String fcmToken) {
-        fcmTokenDao.saveToken(PREFIX_FCMTOKEN + email, fcmToken);
+    public void saveToken(Long userId, String fcmToken) {
+        fcmTokenDao.saveToken(PREFIX_FCMTOKEN + userId, fcmToken);
     }
 
     public void deleteToken(String email) {

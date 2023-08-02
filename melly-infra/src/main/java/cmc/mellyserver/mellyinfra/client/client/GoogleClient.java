@@ -38,6 +38,6 @@ public class GoogleClient implements LoginClient {
                 .bodyToMono(GoogleUserData.class)
                 .block();
 
-        return User.createOauthLoginUser(googleUserResponse.getSub(), GOOGLE);
+        return User.createOauthLoginUser(googleUserResponse.getSub(), GOOGLE, null, null, null, null);
     }
 }

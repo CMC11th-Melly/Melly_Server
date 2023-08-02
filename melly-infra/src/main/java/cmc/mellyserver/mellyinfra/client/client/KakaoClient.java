@@ -35,7 +35,7 @@ public class KakaoClient implements LoginClient {
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new IllegalArgumentException()))
                 .bodyToMono(KakaoUserData.class)
                 .block();
-
-        return User.createOauthLoginUser(String.valueOf(kakaoUserResponse.getId()), KAKAO);
+        System.out.println(kakaoUserResponse.getId());
+        return User.createOauthLoginUser(String.valueOf(kakaoUserResponse.getId()), KAKAO, null, null, null, null);
     }
 }
