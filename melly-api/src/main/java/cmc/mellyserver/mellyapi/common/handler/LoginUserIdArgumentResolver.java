@@ -2,7 +2,7 @@ package cmc.mellyserver.mellyapi.common.handler;
 
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
-import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
+import cmc.mellyserver.mellyapi.common.token.TokenProvider;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final JwtTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
 
     @Override
@@ -31,7 +31,7 @@ public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolve
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String accessToken = HeaderUtil.getAccessToken(request);
-        Long id = tokenProvider.extractMemberId(accessToken);
+        Long id = tokenProvider.extractUserId(accessToken);
         return new LoginUser(id);
     }
 }

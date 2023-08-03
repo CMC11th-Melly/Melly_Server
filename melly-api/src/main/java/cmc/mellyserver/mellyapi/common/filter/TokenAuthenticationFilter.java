@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyapi.common.filter;
 
 import cmc.mellyserver.mellyapi.common.exception.LogoutOrWithdrawExpcetion;
-import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
+import cmc.mellyserver.mellyapi.common.token.TokenProvider;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     private final RedisTemplate redisTemplate;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

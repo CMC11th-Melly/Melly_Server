@@ -22,15 +22,23 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider implements TokenProvider {
 
-    protected static final String AUTHORITIES_KEY = "access";
+    protected static final String ROLE = "role";
+
+    protected static final String AUTHORITY_KEY = "auth";
+
+    protected static final String ACCESS_TOKEN = "access_token";
+
+    protected static final String REFRESH_TOKEN = "refresh_token";
+
 
     protected final String secret;
 
     private final long accessExpirationTime;
 
     private final long refreshExpirationTime;
+
 
     protected Key secretKey;
 
@@ -45,7 +53,9 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 토큰 생성
+
+    @Override
+
     public String createAccessToken(Long userId, RoleType roleType) {
 
         Date now = new Date();
@@ -55,28 +65,36 @@ public class JwtTokenProvider {
                 .signWith(secretKey)
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .setSubject(String.valueOf(userId))
-                .claim(AUTHORITIES_KEY, roleType.getCode())
+
+                .setSubject(ACCESS_TOKEN)
+                .claim(AUTHORITY_KEY, String.valueOf(userId))
+                .claim(ROLE, roleType.getCode())
                 .compact();
     }
+
+    @Override
 
     public RefreshTokenDto createRefreshToken(Long userId, RoleType roleType) {
 
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + refreshExpirationTime);
 
+
         String token = Jwts.builder()
                 .signWith(secretKey)
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .setSubject(String.valueOf(userId))
-                .claim(AUTHORITIES_KEY, roleType.getCode())
+                .setSubject(REFRESH_TOKEN)
+                .claim(AUTHORITY_KEY, String.valueOf(userId))
+                .claim(ROLE, roleType.getCode())
                 .compact();
+
 
         return new RefreshTokenDto(token, refreshExpirationTime);
     }
 
 
+    @Override
     public Authentication getAuthentication(String token) {
 
         Claims claims = Jwts
@@ -87,15 +105,17 @@ public class JwtTokenProvider {
                 .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(claims.get(ROLE).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        User principal = new User(claims.get(AUTHORITY_KEY).toString(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+
+    @Override
     public Long getLastExpireTime(String token) {
 
         Date expirationDate = Jwts
@@ -109,7 +129,10 @@ public class JwtTokenProvider {
 
     }
 
-    public Long extractMemberId(final String accessToken) {
+
+    @Override
+    public Long extractUserId(final String accessToken) {
+
         try {
             String memberId = Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -123,9 +146,12 @@ public class JwtTokenProvider {
         }
     }
 
+
+    @Override
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
