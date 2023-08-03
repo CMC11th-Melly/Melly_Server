@@ -105,8 +105,8 @@ public class AuthService {
         //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
 
-        fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
-        //   publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
+        // fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
+        publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
 
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
