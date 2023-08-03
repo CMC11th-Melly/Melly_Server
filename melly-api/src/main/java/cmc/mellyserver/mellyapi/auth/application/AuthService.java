@@ -15,6 +15,7 @@ import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellyinfra.message.FCMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -50,6 +51,8 @@ public class AuthService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     private final ApplicationEventPublisher publisher;
+
+    private final FCMService fcmService;
 
     @Transactional
     public TokenResponseDto emailSignup(AuthSignupRequestDto authSignupRequestDto) {
@@ -102,8 +105,8 @@ public class AuthService {
         //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
 
-
-        publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
+        fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
+        //   publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
 
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
