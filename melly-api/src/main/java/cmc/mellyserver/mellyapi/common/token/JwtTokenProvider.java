@@ -1,5 +1,6 @@
 package cmc.mellyserver.mellyapi.common.token;
 
+import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
 import cmc.mellyserver.mellycommon.enums.RoleType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -23,54 +24,64 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    protected static final String AUTHORITIES_KEY = "auth";
+    protected static final String AUTHORITIES_KEY = "access";
+
     protected final String secret;
-    protected final long tokenValidityInMilliseconds;
 
-    protected Key key;
+    private final long accessExpirationTime;
 
-    public JwtTokenProvider(@Value("${app.auth.tokenSecret}") String secret,
-                            @Value("${app.auth.tokenExpiry}") long tokenValidityInSeconds) {
+    private final long refreshExpirationTime;
+
+    protected Key secretKey;
+
+    public JwtTokenProvider(@Value("${app.auth.token-secret}") String secret,
+                            @Value("${app.auth.access-expiration-time}") long accessExpirationTime,
+                            @Value("${app.auth.refresh-expiration-time}") long refreshExpirationTime
+    ) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.accessExpirationTime = accessExpirationTime;
+        this.refreshExpirationTime = refreshExpirationTime;
         byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // 토큰 생성
-    public String createToken(Long userSeq, RoleType role) {
+    public String createAccessToken(Long userId, RoleType roleType) {
 
-        // 현재시간
-        long now = (new Date()).getTime();
-
-        // 만료되는 날짜
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date now = new Date();
+        Date expireDate = new Date(now.getTime() + accessExpirationTime);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userSeq))
-                .claim(AUTHORITIES_KEY, role.toString())
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .signWith(secretKey)
+                .setIssuedAt(now)
+                .setExpiration(expireDate)
+                .setSubject(String.valueOf(userId))
+                .claim(AUTHORITIES_KEY, roleType.getCode())
+                .compact();
+    }
+
+    public RefreshTokenDto createRefreshToken(Long userId, RoleType roleType) {
+
+        Date now = new Date();
+        Date expireDate = new Date(now.getTime() + refreshExpirationTime);
+
+        String token = Jwts.builder()
+                .signWith(secretKey)
+                .setIssuedAt(now)
+                .setExpiration(expireDate)
+                .setSubject(String.valueOf(userId))
+                .claim(AUTHORITIES_KEY, roleType.getCode())
                 .compact();
 
+        return new RefreshTokenDto(token, refreshExpirationTime);
     }
 
-    public Long getPayLoad(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return Long.valueOf(claims.getSubject());
-    }
 
     public Authentication getAuthentication(String token) {
 
         Claims claims = Jwts
                 .parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -85,14 +96,41 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    public Long getLastExpireTime(String token) {
+
+        Date expirationDate = Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration();
+
+        return expirationDate.getTime() - new Date().getTime();
+
+    }
+
+    public Long extractMemberId(final String accessToken) {
+        try {
+            String memberId = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody()
+                    .getSubject();
+            return Long.parseLong(memberId);
+        } catch (final JwtException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
+            throw new JwtException("엑세스 토큰이 만료되었습니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {

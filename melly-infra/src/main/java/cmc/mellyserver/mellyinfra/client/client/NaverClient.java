@@ -37,6 +37,6 @@ public class NaverClient implements LoginClient {
                 .bodyToMono(NaverUserData.class)
                 .block();
 
-        return User.createOauthLoginUser(naverUserResponse.getResponse().getId(), NAVER);
+        return User.createOauthLoginUser(naverUserResponse.getResponse().getId(), NAVER, null, null, null, null);
     }
 }

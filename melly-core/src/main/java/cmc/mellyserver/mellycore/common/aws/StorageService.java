@@ -13,5 +13,5 @@ public interface StorageService {
 
     void deleteFile(String fileName) throws IOException;
 
-    Long calculateImageVolume(String bucketName, String username);
+    Long calculateImageVolume(String username);
 }

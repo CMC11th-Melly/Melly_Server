@@ -6,7 +6,7 @@ import cmc.mellyserver.mellyapi.comment.presentation.dto.CommentAssembler;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentUpdateRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.LikeRequest;
-import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.common.constants.MessageConstants;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellycore.comment.application.CommentLikeService;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
@@ -34,14 +34,14 @@ public class CommentController {
     public ResponseEntity<ApiResponse> removeCommentLike(@AuthenticationPrincipal User user, @PathVariable Long commentId) {
 
         commentLikeService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
     }
 
     @PostMapping("/like")
     public ResponseEntity<ApiResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest) {
 
         commentLikeService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
     }
 
     @PostMapping
@@ -62,13 +62,13 @@ public class CommentController {
     public ResponseEntity<ApiResponse> removeComment(@PathVariable Long commentId) {
 
         commentService.deleteComment(commentId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
     }
 
     @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest) {
 
         commentService.updateComment(commentId, commentUpdateRequest.getContent());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
     }
 }
