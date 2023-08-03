@@ -62,8 +62,9 @@ public class FCMService implements MessageService {
         fcmTokenDao.saveToken(PREFIX_FCMTOKEN + userId, fcmToken);
     }
 
-    public void deleteToken(String email) {
-        fcmTokenDao.deleteToken(email);
+
+    public void deleteToken(Long userId) {
+        fcmTokenDao.deleteToken(PREFIX_FCMTOKEN + userId);
     }
 
     private boolean hasKey(String email) {

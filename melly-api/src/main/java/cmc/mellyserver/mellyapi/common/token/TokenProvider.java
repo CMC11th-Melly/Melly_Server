@@ -1,12 +1,20 @@
 package cmc.mellyserver.mellyapi.common.token;
 
+import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
+import cmc.mellyserver.mellycommon.enums.RoleType;
+import org.springframework.security.core.Authentication;
+
 public interface TokenProvider {
 
-    String createAccessToken(final String payload);
+    String createAccessToken(final Long userId, final RoleType roleType);
 
-    String createRefreshToken(final String payload);
+    RefreshTokenDto createRefreshToken(final Long userId, final RoleType roleType);
 
-    String getPayload(final String token);
+    Authentication getAuthentication(final String accessToken);
 
-    void validateToken(final String token);
+    Long getLastExpireTime(final String accessToken);
+
+    Long extractUserId(final String accessToken);
+
+    boolean validateToken(final String accessToken);
 }
