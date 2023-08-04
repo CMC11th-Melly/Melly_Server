@@ -91,8 +91,8 @@ public class AuthService {
     public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
 
-        User user = checkEmail(authLoginRequestDto.getEmail());
-        checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
+        User user = checkEmail(authLoginRequestDto.getEmail()); // ------- 1. 이메일로 유저를 검색, Disk 랜덤 I/O 1회
+        checkPassword(authLoginRequestDto.getPassword(), user.getPassword()); // ------- 2. passwordEncoder를 사용한 비밀번호 확인, CPU 리소스 사용
 
 
         user.updateLastLoginTime(LocalDateTime.now()); // 마지막 로그인 시간 업데이트
@@ -102,9 +102,10 @@ public class AuthService {
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
 
-        //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
+        // ------ 3. 레디스에 Refresh token 저장, EC2 간 네트워크 I/O 발생
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
 
+        // ------ 4. 레디스에 FCM 저장, EC2 간 네트워크 I/O 발생
         fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
         // publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
 
@@ -141,9 +142,6 @@ public class AuthService {
 
     public void logout(Long userId, String accessToken) {
 
-        authenticatedUserChecker.checkAuthenticatedUserExist(userId); // 현재 유저가 존재하는지 체크
-
-
         makeAccessTokenDisabled(accessToken); // 로그아웃 처리된 토큰을 레디스에 블랙리스트 처리
         refreshTokenRepository.remove(userId); // 리프레시 토큰 제거
         publisher.publishEvent(new RemoveFCMTokenEvent(userId));
@@ -152,7 +150,6 @@ public class AuthService {
 
     private void makeAccessTokenDisabled(String accessToken) {
         redisTemplate.opsForValue().set(accessToken, ACCESS_TOKEN_BLACKLIST, tokenProvider.getLastExpireTime(accessToken), TimeUnit.MILLISECONDS);
-
     }
 
 
