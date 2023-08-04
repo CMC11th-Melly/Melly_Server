@@ -65,7 +65,6 @@ public class JwtTokenProvider implements TokenProvider {
                 .signWith(secretKey)
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-
                 .setSubject(ACCESS_TOKEN)
                 .claim(AUTHORITY_KEY, String.valueOf(userId))
                 .claim(ROLE, roleType.getCode())
@@ -138,8 +137,8 @@ public class JwtTokenProvider implements TokenProvider {
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(accessToken)
-                    .getBody()
-                    .getSubject();
+                    .getBody().get(AUTHORITY_KEY).toString();
+
             return Long.parseLong(memberId);
         } catch (final JwtException e) {
             throw new IllegalArgumentException();
