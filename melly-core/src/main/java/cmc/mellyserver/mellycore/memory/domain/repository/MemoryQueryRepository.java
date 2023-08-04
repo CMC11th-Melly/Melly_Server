@@ -102,9 +102,12 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memoryImage.imagePath,
-                        memory.visitedDate))
+                        memory.visitedDate,
+                        userGroup.groupType
+                ))
                 .from(memory)
-                .innerJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
+                .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin().distinct()
                 .where(
                         isActive(),
                         ltMemoryId(lastId),
@@ -235,11 +238,12 @@ public class MemoryQueryRepository {
 
     private BooleanExpression eqGroup(GroupType groupType) {
 
-        if (groupType == null || groupType == GroupType.ALL) {
+        if (groupType == GroupType.ALL) {
             return null;
         }
 
-        return null;
+        return userGroup.groupType.eq(groupType);
+
     }
 
     private BooleanExpression ltMemoryId(Long memoryId) {
