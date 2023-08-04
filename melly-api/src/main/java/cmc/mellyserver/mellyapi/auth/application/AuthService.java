@@ -106,8 +106,8 @@ public class AuthService {
         refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
 
         // ------ 4. 레디스에 FCM 저장, EC2 간 네트워크 I/O 발생
-        fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
-        // publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
+        // fcmService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
+        publisher.publishEvent(new CreateFCMTokenEvent(user.getId(), authLoginRequestDto.getFcmToken()));
 
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
