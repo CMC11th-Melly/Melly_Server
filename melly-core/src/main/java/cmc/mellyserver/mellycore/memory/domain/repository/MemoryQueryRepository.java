@@ -98,6 +98,31 @@ public class MemoryQueryRepository {
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForMyPage(Long lastId, Pageable pageable, Long userId, GroupType groupType) {
 
 
+//        List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
+//                        memory.id,
+//                        memory.title,
+//                        memory.title,
+//                        memory.visitedDate,
+//                        userGroup.groupType
+//                ))
+//                .from(memory)
+//                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
+//                .where(
+//                        ltMemoryId(lastId),
+//                        createdByLoginUser(userId),
+//                        eqGroup(groupType)
+//                )
+//                .orderBy(memory.id.desc())
+//                .limit(pageable.getPageSize() + 1)
+//                .fetch();
+
+        List<Long> fetch = query.select(memory.id)
+                .from(memory)
+                .where(
+                        ltMemoryId(lastId)
+                )
+                .fetch();
+
         List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
                         memory.title,
@@ -107,16 +132,15 @@ public class MemoryQueryRepository {
                 ))
                 .from(memory)
                 .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
-//                .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin().distinct()
                 .where(
-//                        isActive(),
-                        ltMemoryId(lastId),
+                        memory.id.in(fetch),
                         createdByLoginUser(userId),
                         eqGroup(groupType)
                 )
                 .orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
+
 
         return transferToSlice(pageable, result);
     }
