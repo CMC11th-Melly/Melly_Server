@@ -17,6 +17,7 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceRespons
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class PlaceScrapService {
     /*
     캐싱 적용 가능 여부 : 가능
     */
-//    @Cacheable(value = "scrap-count:user-id", key = "#userId")
+    @Cacheable(value = "scrap-count:user-id", key = "#userId")
     @Transactional(readOnly = true)
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
 
