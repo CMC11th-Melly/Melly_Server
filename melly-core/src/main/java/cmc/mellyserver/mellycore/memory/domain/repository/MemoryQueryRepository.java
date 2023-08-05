@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cmc.mellyserver.mellycore.group.domain.QGroupAndUser.groupAndUser;
 import static cmc.mellyserver.mellycore.group.domain.QUserGroup.userGroup;
@@ -98,31 +99,6 @@ public class MemoryQueryRepository {
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForMyPage(Long lastId, Pageable pageable, Long userId, GroupType groupType) {
 
 
-//        List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
-//                        memory.id,
-//                        memory.title,
-//                        memory.title,
-//                        memory.visitedDate,
-//                        userGroup.groupType
-//                ))
-//                .from(memory)
-//                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
-//                .where(
-//                        ltMemoryId(lastId),
-//                        createdByLoginUser(userId),
-//                        eqGroup(groupType)
-//                )
-//                .orderBy(memory.id.desc())
-//                .limit(pageable.getPageSize() + 1)
-//                .fetch();
-
-        List<Long> fetch = query.select(memory.id)
-                .from(memory)
-                .where(
-                        ltMemoryId(lastId)
-                )
-                .fetch();
-
         List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
                         memory.title,
@@ -133,16 +109,15 @@ public class MemoryQueryRepository {
                 .from(memory)
                 .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
                 .where(
-                        memory.id.in(fetch),
+                        ltMemoryId(lastId),
                         createdByLoginUser(userId),
                         eqGroup(groupType)
                 )
-                .orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-
-        return transferToSlice(pageable, result);
+        List<MemoryResponseDto> reversedResult = result.stream().sorted((dto1, dto2) -> Long.compare(dto2.getMemoryId(), dto1.getMemoryId())).collect(Collectors.toList());
+        return transferToSlice(pageable, reversedResult);
     }
 
 
