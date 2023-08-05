@@ -25,8 +25,8 @@ spring:
     port: 6379
   datasource:
     hikari:
-      maximum-pool-size: 7
-      minimum-idle: 7
+      maximum-pool-size: 15
+      minimum-idle: 15
     source:
       jdbc-url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
       username: ${DB_USERNAME}
