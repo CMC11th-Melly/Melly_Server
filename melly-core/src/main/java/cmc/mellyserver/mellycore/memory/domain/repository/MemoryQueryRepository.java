@@ -116,7 +116,10 @@ public class MemoryQueryRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        List<MemoryResponseDto> reversedResult = result.stream().sorted((dto1, dto2) -> Long.compare(dto2.getMemoryId(), dto1.getMemoryId())).collect(Collectors.toList());
+        List<MemoryResponseDto> reversedResult = result.stream()
+                .sorted((dto1, dto2) -> Long.compare(dto2.getMemoryId(), dto1.getMemoryId()))
+                .collect(Collectors.toList());
+
         return transferToSlice(pageable, reversedResult);
     }
 
