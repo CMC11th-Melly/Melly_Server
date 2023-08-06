@@ -54,7 +54,7 @@ public class InactiveUserJobConfig {
     @StepScope // (1) Step의 주기에 따라 새로운 빈 생성
     public QueueItemReader<User> inactiveUserReader() {
         List<User> oldUsers =
-                userRepository.findByLastModifiedDateBeforeAndUserStatusEquals(
+                userRepository.findByLastLoginDateTimeBeforeAndUserStatusEquals(
                         LocalDateTime.now().minusYears(AccountPolicy.INACTIVE_USER_DURATION), UserStatus.ACTIVE);
         return new QueueItemReader<>(oldUsers);
     }

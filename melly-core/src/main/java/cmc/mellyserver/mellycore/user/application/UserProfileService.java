@@ -2,9 +2,9 @@ package cmc.mellyserver.mellycore.user.application;
 
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.aws.StorageService;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;

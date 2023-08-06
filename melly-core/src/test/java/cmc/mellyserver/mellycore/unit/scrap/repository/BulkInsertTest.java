@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellycore.unit.scrap.repository;
 
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
-import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapJDBCRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
-import cmc.mellyserver.mellycore.unit.common.fixtures.PlaceScrapFixtureFactory;
+import cmc.mellyserver.mellycore.unit.common.bulkinsert.BulkInsertJdbcRepository;
+import cmc.mellyserver.mellycore.unit.common.bulkinsert.RandomFixtureFactory;
 import cmc.mellyserver.mellycore.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ public class BulkInsertTest {
     public PlaceScrapRepository placeScrapRepository;
 
     @Autowired
-    public PlaceScrapJDBCRepository placeScrapJDBCRepository;
+    public BulkInsertJdbcRepository placeScrapJDBCRepository;
 
     @Test
     public void bulkInsert_user() {
 
-        var easyRandom = PlaceScrapFixtureFactory.createUser("$2a$10$rghaTRzFA74TXU.qDeTySOwqXo6ckpvtCKWbsba8W7hlc6HIYbKIu");
+        var easyRandom = RandomFixtureFactory.createUser("$2a$10$rghaTRzFA74TXU.qDeTySOwqXo6ckpvtCKWbsba8W7hlc6HIYbKIu");
         int _200만 = 2_000_000;
 
         List<User> users = IntStream.range(0, _200만 * 1)
@@ -62,7 +62,7 @@ public class BulkInsertTest {
     @Test
     public void bulkInsert_place_scrap() {
 
-        var easyRandom = PlaceScrapFixtureFactory.getPlaceScrap();
+        var easyRandom = RandomFixtureFactory.getPlaceScrap();
         int _50만 = 1_000_000;
 
         List<PlaceScrap> placeScraps = IntStream.range(0, _50만 * 1)

@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyinfra.aws;
 
-import cmc.mellyserver.mellycore.common.aws.StorageService;
+import cmc.mellyserver.mellycore.common.port.aws.StorageService;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;

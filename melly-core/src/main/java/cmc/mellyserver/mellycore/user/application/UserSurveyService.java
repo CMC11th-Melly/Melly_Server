@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.user.application;
 
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommender;

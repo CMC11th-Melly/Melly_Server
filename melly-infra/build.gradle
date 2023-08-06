@@ -8,5 +8,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:7.1.0'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.408'
 }

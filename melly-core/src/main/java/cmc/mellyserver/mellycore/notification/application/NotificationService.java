@@ -3,8 +3,8 @@ package cmc.mellyserver.mellycore.notification.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.NotificationType;
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;

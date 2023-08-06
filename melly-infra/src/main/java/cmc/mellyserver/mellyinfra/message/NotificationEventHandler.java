@@ -2,7 +2,7 @@ package cmc.mellyserver.mellyinfra.message;
 
 import cmc.mellyserver.mellycore.comment.application.event.CommentEnrollEvent;
 import cmc.mellyserver.mellycore.comment.application.event.CommentLikeEvent;
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

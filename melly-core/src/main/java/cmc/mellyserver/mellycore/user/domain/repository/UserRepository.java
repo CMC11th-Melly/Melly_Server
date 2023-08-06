@@ -19,9 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmailAndPassword(String email, String password);
 
-    List<User> findByLastModifiedDateBeforeAndUserStatusEquals(LocalDateTime localDateTime,
-                                                               UserStatus status);
+    List<User> findByLastLoginDateTimeBeforeAndUserStatusEquals(LocalDateTime localDateTime, UserStatus status);
 
-    List<User> findByPasswordInitDateBeforeAndPasswordExpiredEquals(LocalDateTime localDateTime,
-                                                                    PasswordExpired passwordExpired);
+    List<User> findByPwInitDateTimeBeforeAndPasswordExpiredEquals(LocalDateTime localDateTime, PasswordExpired passwordExpired);
 }

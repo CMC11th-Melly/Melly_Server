@@ -20,8 +20,8 @@ spring:
 
 app:
   auth:
-    tokenExpiry: ${jwt.expiry}
-    tokenSecret: ${jwt.secret}
+    tokenExpiry: 200000000
+    tokenSecret: Y21jMTF0aGFub3RoZXJjbWffgkfgjwerljfgwekljfglkwejglF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
 
 cloud:
   aws:

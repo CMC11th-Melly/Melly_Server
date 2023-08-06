@@ -30,6 +30,7 @@ public class ScrapQueryRepositoryTest extends RepositoryTest {
     @Autowired
     private PlaceScrapQueryRepository placeScrapQueryRepository;
 
+
     @DisplayName("로그인한 유저가 현재 장소를 스크랩했는지를 장소 좌표 기준으로 체크한다.")
     @Test
     void check_login_user_scraped_by_position() {

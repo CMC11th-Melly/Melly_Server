@@ -10,9 +10,9 @@ import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceQueryRepository;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
-import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapJDBCRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
+import cmc.mellyserver.mellycore.unit.common.bulkinsert.BulkInsertJdbcRepository;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -40,8 +40,8 @@ public class JpaTestConfiguration {
     }
 
     @Bean
-    public PlaceScrapJDBCRepository placeScrapJDBCRepository(JdbcTemplate jdbcTemplate) {
-        return new PlaceScrapJDBCRepository(jdbcTemplate);
+    public BulkInsertJdbcRepository placeScrapJDBCRepository(JdbcTemplate jdbcTemplate) {
+        return new BulkInsertJdbcRepository(jdbcTemplate);
     }
 
     @Bean

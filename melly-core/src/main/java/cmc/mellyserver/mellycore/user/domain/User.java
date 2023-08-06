@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -79,7 +78,7 @@ public class User extends JpaBaseEntity {
     private PasswordExpired passwordExpired;
 
     @Column(name = "password_init_date")
-    private LocalDate passwordInitDate;
+    private LocalDateTime pwInitDateTime;
 
     @Column(name = "last_login_time")
     private LocalDateTime lastLoginDateTime;
@@ -141,9 +140,8 @@ public class User extends JpaBaseEntity {
         this.enableCommentPush = enableCommentPush;
     }
 
-    public User setPwChangeStatusAndUpdateLastChangedDate(LocalDate localDate) {
+    public User setPwChangeStatus() {
         this.passwordExpired = PasswordExpired.Y;
-        this.passwordInitDate = localDate;
         return this;
     }
 
@@ -165,14 +163,14 @@ public class User extends JpaBaseEntity {
         this.enableCommentLikePush = true;
 
         if (isDefaultEmailUser()) {
-            this.passwordInitDate = LocalDate.now();
+            this.pwInitDateTime = LocalDateTime.now();
             this.passwordExpired = PasswordExpired.N;
         }
     }
 
     @Builder
     private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup, Gender gender, UserStatus userStatus,
-                 String socialId, Provider provider, String nickname, boolean enableAppPush, PasswordExpired passwordExpired, LocalDate passwordInitDate,
+                 String socialId, Provider provider, String nickname, boolean enableAppPush, PasswordExpired passwordExpired, LocalDateTime pwInitDateTime,
                  boolean enableCommentLikePush, boolean enableCommentPush) {
 
         this.id = id;
@@ -190,7 +188,7 @@ public class User extends JpaBaseEntity {
         this.enableCommentPush = enableCommentPush;
         this.enableCommentLikePush = enableCommentLikePush;
         this.passwordExpired = passwordExpired;
-        this.passwordInitDate = passwordInitDate;
+        this.pwInitDateTime = pwInitDateTime;
     }
 
     public static User createEmailLoginUser(String email, String password, String nickname, AgeGroup ageGroup, Gender gender) {

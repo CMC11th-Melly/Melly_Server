@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellycore.group.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
+import cmc.mellyserver.mellycore.common.aop.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;
@@ -100,13 +101,16 @@ public class GroupService {
         groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
     }
 
+    @OptimisticLock
     @CacheEvict(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
     @Transactional
     public void updateGroup(Long id, UpdateGroupRequestDto updateGroupRequestDto) {
 
+
         UserGroup userGroup = groupRepository.findById(updateGroupRequestDto.getGroupId()).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_GROUP);
         });
+
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
 
@@ -125,9 +129,22 @@ public class GroupService {
     public void exitGroup(Long userId, Long groupId) {
 
         Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
+
         log.info("count : {}", particiatedUserCount);
 
-        // 현재 그룹에 남아있는 사람이 혼자라면, 본인이 탈퇴시 그룹은 삭제된다.
+        // 그룹에 관리자는 무조건 한명 존재해야 한다.
+        // 기본 구성 관리자 1 + 일반 유저 1
+
+        // 그룹 탈퇴
+        // 1. 일반 유저는 바로 탈퇴 가능하다
+        // 2. 관리자는 그룹에 관리자가 2명 이상 존재할때 탈퇴할 수 있다.
+
+        // 권한 변경
+        // 1. 관리자는 일반 유저를 관리자로 권한 변경할 수 있다.
+        // 2. 관리자는 다른 관리자를 일반 유저로 강등도 가능하다.
+        // 3. 그룹에 관리자는 무조건 한명 이상 존재해야 한다.
+
+
         if (particiatedUserCount < 2) {
             removeGroup(userId, groupId);
         }

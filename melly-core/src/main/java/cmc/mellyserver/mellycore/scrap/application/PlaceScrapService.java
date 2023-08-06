@@ -3,8 +3,8 @@ package cmc.mellyserver.mellycore.scrap.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;

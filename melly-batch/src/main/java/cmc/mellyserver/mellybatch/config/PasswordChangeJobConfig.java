@@ -16,7 +16,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class PasswordChangeJobConfig {
         return new ItemProcessor<User, User>() {
             @Override
             public User process(User user) throws Exception {
-                return user.setPwChangeStatusAndUpdateLastChangedDate(LocalDate.now());
+                return user.setPwChangeStatus();
             }
         };
     }
