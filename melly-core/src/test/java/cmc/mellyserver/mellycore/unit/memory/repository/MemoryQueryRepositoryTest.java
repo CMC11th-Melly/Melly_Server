@@ -32,11 +32,11 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //        // given
 //        User 제민 = userRepository.save(제민());
 //
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        Memory savedMemory = memoryRepository.save(memory);
 //
@@ -53,13 +53,13 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 특정_장소에_로그인한_사용자가_작성한_메모리를_조회한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        Memory savedMemory = memoryRepository.save(memory);
 //        savedMemory.setKeyword(List.of("좋아요"));
@@ -77,19 +77,19 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 로그인한_사용자가_작성한_메모리를_모두_조회한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //        User 재현 = userRepository.save(재현());
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
@@ -108,19 +108,19 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 로그인하지_않은_사용자가_작성한_메모리를_모두_조회한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //        User 재현 = userRepository.save(재현());
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
@@ -140,14 +140,14 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 로그인_유저가_속한_그룹에서_작성한_메모리를_모두_조회한다(OpenType openType, int memoryCount) {
 //
 //        // given
-//        Memory memory_제민 = Memory.builder().title("테스트 메모리").userId(제민.getId())
+//        Memory memory_제민 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 메모리").userId(제민.getId())
 //                .content("테스트 본문")
 //                .groupInfo(new GroupInfo("친구", GroupType.FRIEND, groups.get(0).getId()))
 //                .openType(openType).build();
 //
 //        memory_제민.setKeyword(List.of("좋아요"));
 //
-//        Memory memory_재현 = Memory.builder().title("테스트 메모리").userId(제민.getId())
+//        Memory memory_재현 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 메모리").userId(제민.getId())
 //                .content("테스트 본문")
 //                .groupInfo(new GroupInfo("친구", GroupType.FRIEND, groups.get(0).getId()))
 //                .openType(openType).build();
@@ -169,28 +169,28 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 내그룹에_속한_사용자가_작성한_메모리를_모두_조회한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //        User 재현 = userRepository.save(재현());
 //
-//        UserGroup 동료_그룹 = UserGroup.builder().groupName("동료")
+//        UserGroup 동료_그룹 = UserGroup.cmc.mellyserver.mellycore.builder().groupName("동료")
 //                .groupType(GroupType.COMPANY).build();
 //
 //        groupAndUserRepository.saveAll(
 //                List.of(new GroupAndUser(제민, 동료_그룹), new GroupAndUser(재현, 동료_그룹)));
 //        UserGroup userGroup = groupRepository.save(동료_그룹);
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).groupInfo(
 //                        new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
 //                                userGroup.getId())).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(재현.getId()).groupInfo(
 //                        new GroupInfo(userGroup.getGroupName(), userGroup.getGroupType(),
 //                                userGroup.getId())).build();
@@ -211,19 +211,19 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 특정_장소에_내가_작성한_메모리_개수를_카운트한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //        User 재현 = userRepository.save(재현());
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(재현.getId()).build();
 //        memory2.setKeyword(List.of("좋아요"));
 //        Memory savedMemory2 = memoryRepository.save(memory2);
@@ -243,13 +243,13 @@ public class MemoryQueryRepositoryTest extends RepositoryTest {
 //    void 메모리_식별자를_기반으로_메모리_상세_정보를_조회한다() {
 //
 //        // given
-//        Place place = Place.builder().placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().placeName("테스트 장소")
 //                .position(new Position(1.234, 1.234)).build();
 //        Place savedPlace = placeRepository.save(place);
 //
 //        User 제민 = userRepository.save(제민());
 //
-//        Memory memory = Memory.builder().title("테스트 제목").placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().title("테스트 제목").placeId(savedPlace.getId())
 //                .userId(제민.getId()).build();
 //        memory.setKeyword(List.of("좋아요"));
 //        Memory savedMemory = memoryRepository.save(memory);

@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.auth.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;

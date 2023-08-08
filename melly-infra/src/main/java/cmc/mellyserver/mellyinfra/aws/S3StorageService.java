@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellyinfra.aws;
 
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+import cmc.mellyserver.mellycore.common.port.storage.StorageService;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Profile({"local", "prod"})
 @Component
 @RequiredArgsConstructor
+@Profile(value = {"local", "prod"})
 public class S3StorageService implements StorageService {
 
     @Value("${cloud.aws.s3.bucket}")
@@ -26,7 +26,8 @@ public class S3StorageService implements StorageService {
 
     @Value("${cloud.aws.s3.cloud-front-url}")
     private String CLOUD_FRONT_URL;
-    private final AmazonS3Client amazonS3Client;
+
+    private final AmazonS3 amazonS3;
 
 
     @Override
@@ -84,7 +85,7 @@ public class S3StorageService implements StorageService {
     @Override
     public void deleteFile(String fileName) throws IOException {
         try {
-            amazonS3Client.deleteObject(bucket, fileName);
+            amazonS3.deleteObject(bucket, fileName);
         } catch (SdkClientException e) {
             throw new IOException("s3 exception occur", e);
         }
@@ -93,7 +94,7 @@ public class S3StorageService implements StorageService {
     @Override
     public Long calculateImageVolume(String username) {
 
-        ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);
+        ObjectListing mellyimage = amazonS3.listObjects(bucket, username);
         List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
 
         return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
@@ -116,7 +117,7 @@ public class S3StorageService implements StorageService {
 
     private void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String filename) {
 
-        amazonS3Client.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     private String getFileUrl(String filename) {

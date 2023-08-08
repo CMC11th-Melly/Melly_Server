@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellybatch.config;
 
 import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
-import cmc.mellyserver.mellycommon.enums.UserStatus;
+import cmc.mellyserver.mellycore.common.enums.UserStatus;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

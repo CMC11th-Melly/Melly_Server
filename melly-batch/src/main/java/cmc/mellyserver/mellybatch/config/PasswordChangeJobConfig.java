@@ -50,7 +50,7 @@ public class PasswordChangeJobConfig {
     @StepScope
     public QueueItemReader<User> passwordChangeReader() {
 
-        List<User> oldUsers = userRepository.findByPasswordInitDateBeforeAndPasswordExpiredEquals(
+        List<User> oldUsers = userRepository.findByPwInitDateTimeBeforeAndPasswordExpiredEquals(
                 LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION),
                 PasswordExpired.N);
         return new QueueItemReader<>(oldUsers);
@@ -60,7 +60,7 @@ public class PasswordChangeJobConfig {
         return new ItemProcessor<User, User>() {
             @Override
             public User process(User user) throws Exception {
-                return user.setPwChangeStatus();
+                return user.changePwExpireStatus();
             }
         };
     }

@@ -1,23 +1,18 @@
 package cmc.mellyserver.mellycore.unit.config.mockapi;
 
 
-import cmc.mellyserver.mellycore.common.port.aws.AwsService;
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+import cmc.mellyserver.mellycore.common.port.storage.StorageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("local")
+@Profile("test")
 public class InfrastructureTestConfiguration {
 
     @Bean
-    public StorageService fileUploader() {
+    public StorageService mockFileUploader() {
         return new MockFileUploader();
     }
 
-    @Bean
-    public AwsService awsService() {
-        return new MockAwsService();
-    }
 }

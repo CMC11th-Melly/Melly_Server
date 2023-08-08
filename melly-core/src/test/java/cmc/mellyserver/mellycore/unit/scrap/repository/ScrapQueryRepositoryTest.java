@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.unit.scrap.repository;
 
-import cmc.mellyserver.mellycommon.enums.Provider;
 import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;

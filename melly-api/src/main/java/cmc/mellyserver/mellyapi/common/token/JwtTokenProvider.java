@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyapi.common.token;
 
 import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
-import cmc.mellyserver.mellycommon.enums.RoleType;
+import cmc.mellyserver.mellycore.common.enums.RoleType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

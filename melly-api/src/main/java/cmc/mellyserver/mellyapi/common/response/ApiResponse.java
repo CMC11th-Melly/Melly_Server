@@ -11,24 +11,19 @@ import org.springframework.http.ResponseEntity;
 @NoArgsConstructor
 public class ApiResponse<T> {
 
+    private static final String SUCCESS_MESSAGE = "성공";
+
     private int code;
     private String message;
     private T data;
 
-    public ApiResponse(int code, String message) {
+
+    public ApiResponse(final int code, final String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static <T> ResponseEntity<ApiResponse> OK(T data) {
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "OK", data));
-    }
-
-    public static <T> ResponseEntity<ApiResponse> OK() {
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "OK"));
-    }
-
-    public static <T> ResponseEntity<ApiResponse> CREATE() {
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED.value(), "OK"));
+    public static <T> ResponseEntity<ApiResponse> OK(final T data) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), SUCCESS_MESSAGE, data));
     }
 }

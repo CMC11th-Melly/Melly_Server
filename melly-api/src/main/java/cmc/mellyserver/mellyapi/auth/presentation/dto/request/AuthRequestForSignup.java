@@ -1,10 +1,8 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.request;
 
 import cmc.mellyserver.mellyapi.common.constraint.NoEmoji;
-import cmc.mellyserver.mellycommon.enums.AgeGroup;
-import cmc.mellyserver.mellycommon.enums.Gender;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import cmc.mellyserver.mellycore.common.enums.AgeGroup;
+import cmc.mellyserver.mellycore.common.enums.Gender;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +10,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,7 +42,7 @@ public class AuthRequestForSignup {
 
     @Builder
     public AuthRequestForSignup(String email, String password, String nickname, Gender gender,
-            @Nullable MultipartFile profileImage, @Nullable AgeGroup ageGroup, String fcmToken) {
+                                @Nullable MultipartFile profileImage, @Nullable AgeGroup ageGroup, String fcmToken) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;

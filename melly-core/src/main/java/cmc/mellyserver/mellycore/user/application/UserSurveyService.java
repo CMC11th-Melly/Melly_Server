@@ -1,10 +1,10 @@
 package cmc.mellyserver.mellycore.user.application;
 
-import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommender;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserSurveyService {
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
+    private final UserRepository userRepository;
     private final SurveyRecommender surveyRecommender;
 
     /*
@@ -23,14 +23,14 @@ public class UserSurveyService {
     @Transactional
     public SurveyRecommendResponseDto getSurveyResult(Long userId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }
 
     @Transactional
-    public void createSurvey(SurveyRequestDto surveyRequestDto) {
+    public void createSurvey(Long userId, SurveyRequestDto surveyRequestDto) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(surveyRequestDto.getId());
+        User user = userRepository.getById(userId);
         user.addSurveyData(surveyRequestDto.getRecommendGroup(), surveyRequestDto.getRecommendPlace(), surveyRequestDto.getRecommendActivity());
     }
 }

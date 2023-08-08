@@ -16,7 +16,7 @@ public class AuthenticatedUserChecker {
 
     public User checkAuthenticatedUserExist(Long id) {
         return userRepository.findById(id).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_USER);
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         });
     }
 }

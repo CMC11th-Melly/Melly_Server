@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyinfra.client.client;
 
 
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellyinfra.client.LoginClient;
 import cmc.mellyserver.mellyinfra.client.dto.NaverUserData;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import static cmc.mellyserver.mellycommon.enums.Provider.NAVER;
+import static cmc.mellyserver.mellycore.common.enums.Provider.NAVER;
 import static cmc.mellyserver.mellyinfra.common.constant.OAuthConstants.NAVER_RESOURCE_SERVER_URL;
 
 @Component

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 import static cmc.mellyserver.mellyapi.notification.presentation.dto.NotificationAssembler.notificationResponses;
 
@@ -39,30 +38,30 @@ public class NotificationController {
     }
 
     @PostMapping("/setting")
-    public ResponseEntity<ApiResponse> changeAppPushStatus(@AuthenticationPrincipal User user, Boolean status) {
+    public ResponseEntity<Void> changeAppPushStatus(@AuthenticationPrincipal User user, Boolean status) {
 
         notificationService.changeAppPushStatus(Long.parseLong(user.getUsername()), status);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/setting/comment")
-    public ResponseEntity<ApiResponse> changeCommentPushStatus(@AuthenticationPrincipal User user, Boolean status) {
+    public ResponseEntity<Void> changeCommentPushStatus(@AuthenticationPrincipal User user, Boolean status) {
 
         notificationService.changeCommentPushStatus(Long.parseLong(user.getUsername()), status);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/setting/comment/like")
-    public ResponseEntity<ApiResponse> changeCommentLikePushStatus(@AuthenticationPrincipal User user, Boolean status) {
+    public ResponseEntity<Void> changeCommentLikePushStatus(@AuthenticationPrincipal User user, Boolean status) {
 
         notificationService.changeCommentLikePushStatus(Long.parseLong(user.getUsername()), status);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/check")
-    public ResponseEntity<ApiResponse> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
+    public ResponseEntity<Void> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
         notificationService.checkNotification(notificationCheckRequest.getNotificationId());
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 }

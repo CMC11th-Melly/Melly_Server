@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SurveyRequestDto {
 
-    private Long id;
-
     private RecommendGroup recommendGroup;
 
     private RecommendPlace recommendPlace;
@@ -20,9 +18,7 @@ public class SurveyRequestDto {
     private RecommendActivity recommendActivity;
 
     @Builder
-    public SurveyRequestDto(Long id, RecommendGroup recommendGroup, RecommendPlace recommendPlace,
-                            RecommendActivity recommendActivity) {
-        this.id = id;
+    public SurveyRequestDto(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity) {
         this.recommendGroup = recommendGroup;
         this.recommendPlace = recommendPlace;
         this.recommendActivity = recommendActivity;

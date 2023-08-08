@@ -3,7 +3,7 @@ package cmc.mellyserver.mellycore.memory.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+import cmc.mellyserver.mellycore.common.port.storage.StorageService;
 import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
@@ -41,7 +41,7 @@ public class MemoryWriteService {
 
 
     @Transactional
-    public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
+    public Long createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getId());
 
@@ -55,7 +55,7 @@ public class MemoryWriteService {
 
         setPlaceId(createMemoryRequestDto, memory, place);
 
-        return memoryRepository.save(memory);
+        return memoryRepository.save(memory).getId();
     }
 
 

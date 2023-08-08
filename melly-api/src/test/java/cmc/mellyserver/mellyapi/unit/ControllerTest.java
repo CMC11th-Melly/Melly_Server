@@ -3,6 +3,7 @@ package cmc.mellyserver.mellyapi.unit;
 import cmc.mellyserver.mellyapi.auth.application.OAuthService;
 import cmc.mellyserver.mellyapi.comment.presentation.CommentController;
 import cmc.mellyserver.mellyapi.common.annotation.EnableMockMvc;
+import cmc.mellyserver.mellyapi.common.handler.LoginUserIdArgumentResolver;
 import cmc.mellyserver.mellyapi.common.utils.DataExtractor;
 import cmc.mellyserver.mellyapi.config.SecurityConfig;
 import cmc.mellyserver.mellyapi.group.presentation.GroupController;
@@ -11,12 +12,12 @@ import cmc.mellyserver.mellyapi.notification.presentation.NotificationController
 import cmc.mellyserver.mellyapi.place.presentation.PlaceController;
 import cmc.mellyserver.mellyapi.scrap.presentation.PlaceScrapController;
 import cmc.mellyserver.mellyapi.user.presentation.UserController;
+import cmc.mellyserver.mellycore.comment.application.CommentLikeService;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.application.MemoryWriteService;
 import cmc.mellyserver.mellycore.notification.application.NotificationService;
-import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
 import cmc.mellyserver.mellycore.place.application.PlaceService;
 import cmc.mellyserver.mellycore.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
@@ -52,6 +53,8 @@ public class ControllerTest {
     protected OAuthService oAuthService;
 
     @MockBean
+    protected LoginUserIdArgumentResolver loginUserIdArgumentResolver;
+    @MockBean
     protected CommentService commentService;
 
     @MockBean
@@ -70,7 +73,7 @@ public class ControllerTest {
     protected PlaceService placeService;
 
     @MockBean
-    protected NotificationRepository notificationRepository;
+    protected CommentLikeService commentLikeService;
 
     @MockBean
     protected GroupService groupService;

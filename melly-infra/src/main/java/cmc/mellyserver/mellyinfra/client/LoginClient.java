@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyinfra.client;
 
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.User;
 
 public interface LoginClient {

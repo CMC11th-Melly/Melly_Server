@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyinfra.client.client;
 
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellyinfra.client.LoginClient;
 import cmc.mellyserver.mellyinfra.client.dto.KakaoUserData;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import static cmc.mellyserver.mellycommon.enums.Provider.KAKAO;
+import static cmc.mellyserver.mellycore.common.enums.Provider.KAKAO;
 import static cmc.mellyserver.mellyinfra.common.constant.OAuthConstants.KAKAO_RESOURCE_SERVER_URL;
 
 @Component

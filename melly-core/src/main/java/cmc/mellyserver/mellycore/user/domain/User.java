@@ -1,6 +1,10 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-import cmc.mellyserver.mellycommon.enums.*;
+import cmc.mellyserver.mellycommon.enums.PasswordExpired;
+import cmc.mellyserver.mellycommon.enums.RecommendActivity;
+import cmc.mellyserver.mellycommon.enums.RecommendGroup;
+import cmc.mellyserver.mellycommon.enums.RecommendPlace;
+import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.user.domain.vo.Recommend;
 import lombok.AccessLevel;
@@ -21,16 +25,17 @@ import java.util.UUID;
 public class User extends JpaBaseEntity {
 
     private static String NO_PASSWORD = "NO_PASSWORD";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @Column(name = "social_id", nullable = false)
+    @Column(name = "social_id")
     private String socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "provider", nullable = false)
+    @Column(name = "provider")
     private Provider provider;
 
     @Column(name = "email")
@@ -39,7 +44,7 @@ public class User extends JpaBaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "profile_image")
@@ -49,15 +54,15 @@ public class User extends JpaBaseEntity {
     private Recommend recommend;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "age_group", nullable = false)
+    @Column(name = "age_group")
     private AgeGroup ageGroup;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_type", nullable = false)
+    @Column(name = "role_type")
     private RoleType roleType;
 
     @Column(name = "enable_app_push")
@@ -70,7 +75,7 @@ public class User extends JpaBaseEntity {
     private Boolean enableCommentPush;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_status", nullable = false)
+    @Column(name = "user_status")
     private UserStatus userStatus;
 
     @Enumerated(EnumType.STRING)
@@ -84,30 +89,19 @@ public class User extends JpaBaseEntity {
     private LocalDateTime lastLoginDateTime;
 
 
-    public void remove() {
-        this.userStatus = UserStatus.DELETE;
-    }
-
-
-    public void addSurveyData(RecommendGroup recommendGroup, RecommendPlace recommendPlace,
-                              RecommendActivity recommendActivity) {
+    public void addSurveyData(final RecommendGroup recommendGroup, final RecommendPlace recommendPlace,
+                              final RecommendActivity recommendActivity) {
         this.recommend = new Recommend(recommendGroup, recommendPlace, recommendActivity);
     }
 
-    public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup) {
+    public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
         this.nickname = nickname;
         this.gender = gender;
         this.ageGroup = ageGroup;
     }
 
-    public void updatePassword(String password) {
+    public void changePassword(String password) {
         this.password = password;
-    }
-
-
-    public void updateSocialLoginInfo(String socialId, Provider provider) {
-        this.socialId = socialId;
-        this.provider = provider;
     }
 
     public void changeProfileImage(String image) {
@@ -123,6 +117,14 @@ public class User extends JpaBaseEntity {
         this.userStatus = UserStatus.BLOCK;
     }
 
+    public void remove() {
+        this.userStatus = UserStatus.DELETE;
+    }
+
+    public void inActive() {
+        this.userStatus = UserStatus.INACTIVE;
+    }
+
     public void changeAppPushStatus(boolean enableAppPush) {
         this.enableAppPush = enableAppPush;
     }
@@ -131,22 +133,18 @@ public class User extends JpaBaseEntity {
         this.enableCommentLikePush = enableCommentLikePush;
     }
 
-    public void updateOauthInfo(String nickname, String socialId) {
-        this.nickname = nickname;
-        this.socialId = socialId;
-    }
-
     public void changeCommenPushStatus(boolean enableCommentPush) {
         this.enableCommentPush = enableCommentPush;
     }
 
-    public User setPwChangeStatus() {
-        this.passwordExpired = PasswordExpired.Y;
-        return this;
+    public void updateOauthInfo(String email, String socialId) {
+        this.email = email;
+        this.socialId = socialId;
     }
 
-    public void inActive() {
-        this.userStatus = UserStatus.INACTIVE;
+    public User changePwExpireStatus() {
+        this.passwordExpired = PasswordExpired.Y;
+        return this;
     }
 
     private boolean isDefaultEmailUser() {

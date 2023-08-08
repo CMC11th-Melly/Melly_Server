@@ -28,10 +28,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.CREATED;
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.NO_CONTENT;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @RestController
@@ -94,8 +93,8 @@ public class MemoryController {
                                      @RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
                                      @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
 
-        memoryWriteService.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
-        return CREATED;
+        Long memoryId = memoryWriteService.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
+        return ResponseEntity.created(URI.create("/api/memories/" + memoryId)).build();
     }
 
     @PutMapping("/{memoryId}")
@@ -105,7 +104,7 @@ public class MemoryController {
                                              @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
 
         memoryWriteService.updateMemory(MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
-        return NO_CONTENT;
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{memoryId}/update")
@@ -119,7 +118,7 @@ public class MemoryController {
     public ResponseEntity<Void> deleteMemory(@PathVariable Long memoryId) {
 
         memoryWriteService.removeMemory(memoryId);
-        return NO_CONTENT;
+        return ResponseEntity.noContent().build();
     }
 
 

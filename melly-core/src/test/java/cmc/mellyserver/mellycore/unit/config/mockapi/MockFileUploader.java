@@ -1,10 +1,11 @@
 package cmc.mellyserver.mellycore.unit.config.mockapi;
 
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+import cmc.mellyserver.mellycore.common.port.storage.StorageService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
 
 public class MockFileUploader implements StorageService {
 
@@ -15,7 +16,7 @@ public class MockFileUploader implements StorageService {
 
     @Override
     public String saveFile(Long userId, MultipartFile file) {
-        return "file.png";
+        return file.getName();
     }
 
     @Override

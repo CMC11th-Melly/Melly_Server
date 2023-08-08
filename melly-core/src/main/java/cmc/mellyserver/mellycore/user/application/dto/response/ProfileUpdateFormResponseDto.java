@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.user.application.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.AgeGroup;
-import cmc.mellyserver.mellycommon.enums.Gender;
+import cmc.mellyserver.mellycore.common.enums.AgeGroup;
+import cmc.mellyserver.mellycore.common.enums.Gender;
 import lombok.*;
 
 @Data

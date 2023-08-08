@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellycore.unit.common.bulkinsert;
 
-import cmc.mellyserver.mellycommon.enums.*;
+import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
 import cmc.mellyserver.mellycore.user.domain.User;
@@ -83,7 +84,7 @@ public class RandomFixtureFactory {
 //        EasyRandomParameters parameter = getEasyRandomParameters();
 //
 //        parameter
-//                .randomize(user(), () -> User.builder().id(1L).nickname("jemin").build())
+//                .randomize(user(), () -> User.cmc.mellyserver.mellycore.builder().id(1L).nickname("jemin").build())
 //                .randomize(scrapType(), new EnumRandomizer<>(ScrapType.class));
 //        return new EasyRandom(parameter);
 //    }

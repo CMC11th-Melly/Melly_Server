@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyapi.auth.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.AgeGroup;
-import cmc.mellyserver.mellycommon.enums.Gender;
+import cmc.mellyserver.mellycore.common.enums.AgeGroup;
+import cmc.mellyserver.mellycore.common.enums.Gender;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

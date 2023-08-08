@@ -27,25 +27,25 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //    void get_place_login_user_made_memory() {
 //
 //        // given
-//        User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
-//        User otherUser = User.builder().nickname("테스트 유저2").provider(Provider.DEFAULT).build();
+//        User user = User.cmc.mellyserver.mellycore.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
+//        User otherUser = User.cmc.mellyserver.mellycore.builder().nickname("테스트 유저2").provider(Provider.DEFAULT).build();
 //        User savedUser = userRepository.save(user);
 //        User savedOtherUser = userRepository.save(otherUser);
 //
-//        Place place = Place.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
 //                .build();
 //        Place savedPlace = placeRepository.save(place);
 //
-//        Place place2 = Place.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
+//        Place place2 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
 //                .build();
 //        Place savedPlace2 = placeRepository.save(place2);
 //
-//        Memory memory = Memory.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //
 //        Memory savedMemory = memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().userId(savedOtherUser.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().userId(savedOtherUser.getId())
 //                .placeId(savedPlace2.getId())
 //                .title("테스트 메모리2").build();
 //
@@ -67,22 +67,22 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //    void get_place_count_login_user_write() {
 //
 //        // given
-//        User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
+//        User user = User.cmc.mellyserver.mellycore.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
 //        User savedUser = userRepository.save(user);
 //
-//        Place place = Place.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
 //                .build();
 //        Place savedPlace = placeRepository.save(place);
 //
-//        Place place2 = Place.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
+//        Place place2 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
 //                .build();
 //        Place savedPlace2 = placeRepository.save(place2);
 //
-//        Place place3 = Place.builder().position(new Position(1.236, 1.236)).placeName("테스트 장소3")
+//        Place place3 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.236, 1.236)).placeName("테스트 장소3")
 //                .build();
 //        Place savedPlace3 = placeRepository.save(place3);
 //
-//        Place place4 = Place.builder().position(new Position(1.237, 1.237)).placeName("테스트 장소4")
+//        Place place4 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.237, 1.237)).placeName("테스트 장소4")
 //                .build();
 //        Place savedPlace4 = placeRepository.save(place4);
 //
@@ -112,33 +112,33 @@ public class PlaceQueryRepositoryTest extends RepositoryTest {
 //    void get_scraped_place_list(ScrapType scrapType, int expected) {
 //
 //        // given
-//        User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
-//        User otherUser = User.builder().nickname("테스트 유저2").provider(Provider.DEFAULT).build();
+//        User user = User.cmc.mellyserver.mellycore.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
+//        User otherUser = User.cmc.mellyserver.mellycore.builder().nickname("테스트 유저2").provider(Provider.DEFAULT).build();
 //        User savedUser = userRepository.save(user);
 //        User savedOtherUser = userRepository.save(otherUser);
 //
-//        Place place = Place.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
+//        Place place = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소")
 //                .build();
 //        Place savedPlace = placeRepository.save(place);
 //
-//        Place place2 = Place.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
+//        Place place2 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.235, 1.235)).placeName("테스트 장소2")
 //                .build();
 //        Place savedPlace2 = placeRepository.save(place2);
 //
-//        Place place3 = Place.builder().position(new Position(1.236, 1.236)).placeName("테스트 장소3")
+//        Place place3 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.236, 1.236)).placeName("테스트 장소3")
 //                .build();
 //        Place savedPlace3 = placeRepository.save(place3);
 //
-//        Place place4 = Place.builder().position(new Position(1.237, 1.237)).placeName("테스트 장소4")
+//        Place place4 = Place.cmc.mellyserver.mellycore.builder().position(new Position(1.237, 1.237)).placeName("테스트 장소4")
 //                .build();
 //        Place savedPlace4 = placeRepository.save(place4);
 //
-//        Memory memory = Memory.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
+//        Memory memory = Memory.cmc.mellyserver.mellycore.builder().userId(savedUser.getId()).placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //
 //        memoryRepository.save(memory);
 //
-//        Memory memory2 = Memory.builder().userId(savedOtherUser.getId())
+//        Memory memory2 = Memory.cmc.mellyserver.mellycore.builder().userId(savedOtherUser.getId())
 //                .placeId(savedPlace.getId())
 //                .title("테스트 메모리").build();
 //

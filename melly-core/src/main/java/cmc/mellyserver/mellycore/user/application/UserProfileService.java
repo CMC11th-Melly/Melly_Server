@@ -3,8 +3,7 @@ package cmc.mellyserver.mellycore.user.application;
 
 import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
-import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.port.storage.StorageService;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
@@ -24,8 +23,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserProfileService {
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
-
     private final UserRepository userRepository;
 
     private final StorageService fileUploader;
@@ -38,7 +35,7 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     public Integer checkImageStorageVolumeLoginUserUse(Long userId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         return fileUploader.calculateImageVolume(user.getEmail()).intValue();
     }
 
@@ -49,22 +46,22 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     public ProfileUpdateFormResponseDto getLoginUserProfileDataForUpdate(Long userId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(), user.getAgeGroup());
     }
 
     @Cacheable(value = "profile:user-id", key = "#userId")
     @Transactional(readOnly = true)
     public ProfileResponseDto getUserProfile(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_USER));
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
     }
 
-    @CacheEvict(value = "profile:user-id", key = "#profileUpdateRequestDto.id")
+    @CacheEvict(value = "profile:user-id", key = "#userId")
     @Transactional
-    public void updateUserProfile(ProfileUpdateRequestDto profileUpdateRequestDto) {
+    public void updateUserProfile(Long userId, ProfileUpdateRequestDto profileUpdateRequestDto) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(profileUpdateRequestDto.getId());
+        User user = userRepository.getById(userId);
         user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
     }
 
@@ -72,11 +69,11 @@ public class UserProfileService {
     @Transactional
     public void updateUserProfileImage(Long userId, MultipartFile profileImage) throws IOException {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         String userProfileImage = user.getProfileImage();
         removeExistprofileImage(userProfileImage);
 
-        if (profileImage.isEmpty()) {
+        if (Objects.isNull(profileImage) || profileImage.isEmpty()) {
             user.changeProfileImage(null);
         } else {
             String newImageFile = fileUploader.saveFile(user.getId(), profileImage);

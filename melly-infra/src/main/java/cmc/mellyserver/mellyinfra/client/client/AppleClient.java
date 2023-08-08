@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyinfra.client.client;
 
 
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellyinfra.client.LoginClient;
 import cmc.mellyserver.mellyinfra.client.dto.AppleUserData;
@@ -29,7 +29,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
-import static cmc.mellyserver.mellycommon.enums.Provider.APPLE;
+import static cmc.mellyserver.mellycore.common.enums.Provider.APPLE;
 import static cmc.mellyserver.mellyinfra.common.constant.OAuthConstants.APPLE_RESOURCE_SERVER_URL;
 
 @Slf4j
@@ -56,6 +56,7 @@ public class AppleClient implements LoginClient {
                 .block();
 
         try {
+
             String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
             Map<String, String> header = new ObjectMapper().readValue(

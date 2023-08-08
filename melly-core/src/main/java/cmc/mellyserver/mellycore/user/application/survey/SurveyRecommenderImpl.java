@@ -11,7 +11,9 @@ import java.util.List;
 public class SurveyRecommenderImpl implements SurveyRecommender {
 
     public SurveyRecommendResponseDto getRecommend(RecommendGroup recommendGroup) {
+
         SurveyRecommendResponseDto pollRecommendResponse;
+
         switch (recommendGroup) {
             case COUPLE:
                 List<String> coupleWords = List.of("연인과 성수동 맛집테이블", "연인과 활동이 잦은 당신에게 추천해요",

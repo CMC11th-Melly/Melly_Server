@@ -30,22 +30,22 @@ public class UserGroupQueryRepositoryTest extends RepositoryTest {
 //    void setUp() {
 //
 //        // given
-//        User user1 = UserFixtures.제민();
+//        User user1 = fixture.UserFixtures.제민();
 //        제민 = userRepository.save(user1);
 //
-//        User user2 = UserFixtures.재현();
+//        User user2 = fixture.UserFixtures.재현();
 //        재현 = userRepository.save(user2);
 //
-//        UserGroup 친구_그룹 = UserGroup.builder().groupName("친구")
+//        UserGroup 친구_그룹 = UserGroup.cmc.mellyserver.mellycore.builder().groupName("친구")
 //                .groupType(GroupType.FRIEND).build();
 //        GroupAndUser 친구_그룹_연결_1 = new GroupAndUser(제민, 친구_그룹);
 //        GroupAndUser 친구_그룹_연결_2 = new GroupAndUser(재현, 친구_그룹);
 //
-//        UserGroup 가족_그룹 = UserGroup.builder().groupName("가족")
+//        UserGroup 가족_그룹 = UserGroup.cmc.mellyserver.mellycore.builder().groupName("가족")
 //                .groupType(GroupType.FAMILY).build();
 //        GroupAndUser 가족_그룹_연결 = new GroupAndUser(제민, 가족_그룹);
 //
-//        UserGroup 동료_그룹 = UserGroup.builder().groupName("동료")
+//        UserGroup 동료_그룹 = UserGroup.cmc.mellyserver.mellycore.builder().groupName("동료")
 //                .groupType(GroupType.COMPANY).build();
 //        GroupAndUser 동료_그룹_연결 = new GroupAndUser(제민, 동료_그룹);
 //

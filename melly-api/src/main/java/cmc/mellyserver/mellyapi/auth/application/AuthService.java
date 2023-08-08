@@ -15,7 +15,6 @@ import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
-import cmc.mellyserver.mellyinfra.message.FCMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static cmc.mellyserver.mellyapi.common.constants.RedisConstants.ACCESS_TOKEN_BLACKLIST;
@@ -40,9 +38,7 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-
     private final TokenProvider tokenProvider;
-
 
     private final RedisTemplate redisTemplate;
 
@@ -51,8 +47,6 @@ public class AuthService {
     private final AuthenticatedUserChecker authenticatedUserChecker;
 
     private final ApplicationEventPublisher publisher;
-
-    private final FCMService fcmService;
 
     @Transactional
     public TokenResponseDto emailSignup(AuthSignupRequestDto authSignupRequestDto) {
@@ -121,7 +115,7 @@ public class AuthService {
 
 
         RefreshToken refreshToken = refreshTokenRepository.findById(userId).orElseThrow(() -> {
-            throw new BusinessException(RE_LOGIN_REQUIRED);
+            throw new BusinessException(RELOGIN_REQUIRED);
         });
 
         // 만약 기존의 토큰과 다르다면 비정상적인 접근이 있다 판단하고 재로그인 유도
@@ -169,7 +163,7 @@ public class AuthService {
 
     public void checkDuplicatedNickname(String nickname) {
 
-        if (userRepository.findUserByNickname(nickname).isPresent()) {
+        if (userRepository.existsByNickname(nickname)) {
             throw new BusinessException(DUPLICATE_NICKNAME);
         }
     }
@@ -183,18 +177,14 @@ public class AuthService {
     }
 
     @Transactional
-    public void updatePasswordByForget(ChangePasswordRequest requestDto) {
-        String email = requestDto.getEmail();
+    public void updateForgetPassword(ChangePasswordRequest requestDto) {
 
-
-        User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new BusinessException(NO_SUCH_USER));
-
-        user.updatePassword(requestDto.getPasswordAfter());
+        User user = userRepository.findUserByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
+        user.changePassword(requestDto.getPasswordAfter());
     }
 
     @Transactional
-    public void updatePassword(Long userId, ChangePasswordRequest requestDto) {
+    public void changePassword(Long userId, ChangePasswordRequest requestDto) {
 
         User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
 
@@ -205,7 +195,7 @@ public class AuthService {
             throw new BusinessException(BEFORE_PASSWORD_NOT_EXIST);
         }
 
-        user.updatePassword(passwordAfter);
+        user.changePassword(passwordAfter);
     }
 
 
@@ -224,8 +214,8 @@ public class AuthService {
     }
 
     private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
-        Optional<User> userByEmail = userRepository.findUserByEmail(authSignupRequestDto.getEmail());
-        if (userByEmail.isPresent()) {
+
+        if (userRepository.existsByEmail(authSignupRequestDto.getEmail())) {
             throw new BusinessException(DUPLICATE_EMAIL);
         }
     }

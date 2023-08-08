@@ -107,13 +107,13 @@ public class AuthController {
 
     @PatchMapping("/forget/password")
     public void changePasswordByForget(@Valid @RequestBody ChangePasswordRequest requestDto) {
-        authService.updatePasswordByForget(requestDto);
+        authService.updateForgetPassword(requestDto);
     }
 
 
     @PatchMapping("/password")
     public void changePassword(@CurrentUser LoginUser loginUser, @Valid @RequestBody ChangePasswordRequest requestDto) {
-        authService.updatePassword(loginUser.getId(), requestDto);
+        authService.changePassword(loginUser.getId(), requestDto);
     }
 
     // 로그 아웃

@@ -27,8 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,8 +34,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.CREATED;
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @RestController
@@ -57,28 +53,27 @@ public class UserController {
 
 
     @PostMapping("/surveys")
-    public ResponseEntity<Void> addSurvey(@AuthenticationPrincipal User user, @RequestBody SurveyRequest surveyRequest) {
+    public ResponseEntity<Void> addSurvey(@CurrentUser LoginUser loginUser, @RequestBody SurveyRequest surveyRequest) {
 
-        userSurveyService.createSurvey(
-                UserAssembler.surveyRequestDto(Long.parseLong(user.getUsername()), surveyRequest));
-        return CREATED;
+        userSurveyService.createSurvey(loginUser.getId(), surveyRequest.toDto());
+        return ResponseEntity.noContent().build();
     }
 
 
     @GetMapping("/surveys")
-    public ResponseEntity<ApiResponse> getSurvey(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getSurvey(@CurrentUser LoginUser loginUser) {
 
         SurveyRecommendResponseDto surveyRecommendResponseDto = userSurveyService.getSurveyResult(
-                Long.parseLong(user.getUsername()));
+                loginUser.getId());
         return OK(surveyRecommendResponseDto);
     }
 
     // 유저 프로필을 수정에 필요한 데이터 조회
     @GetMapping("/my-profile/edit-form")
-    public ResponseEntity<ApiResponse> updateProfileFormData(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> updateProfileFormData(@CurrentUser LoginUser loginUser) {
 
         ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userProfileService.getLoginUserProfileDataForUpdate(
-                Long.parseLong(user.getUsername()));
+                loginUser.getId());
         return OK(profileUpdateFormResponseDto);
     }
 
@@ -92,18 +87,18 @@ public class UserController {
     }
 
     // 유저 프로필 수정
-    @PutMapping("/my-profile")
-    public ResponseEntity<ApiResponse> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) throws IOException {
+    @PatchMapping("/my-profile")
+    public ResponseEntity<Void> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) {
 
-        userProfileService.updateUserProfile(UserAssembler.profileUpdateRequestDto(loginUser.getId(), profileUpdateRequest));
-        return OK;
+        userProfileService.updateUserProfile(loginUser.getId(), profileUpdateRequest.toDto());
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/my-profile/profile-image")
-    public ResponseEntity<ApiResponse> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
+    @PatchMapping("/my-profile/profile-image")
+    public ResponseEntity<Void> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
 
         userProfileService.updateUserProfileImage(loginUser.getId(), profileImage);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     // 내가 작성한 메모리 조회
