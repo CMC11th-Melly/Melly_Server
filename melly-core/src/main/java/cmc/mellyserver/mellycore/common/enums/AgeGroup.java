@@ -12,10 +12,11 @@ public enum AgeGroup {
     private int ageGroup;
 
     public static AgeGroup from(final String value) {
+        
         try {
             return AgeGroup.valueOf(value.toUpperCase());
         } catch (final IllegalArgumentException e) {
-            throw new IllegalArgumentException();
+            return null;
         }
     }
 

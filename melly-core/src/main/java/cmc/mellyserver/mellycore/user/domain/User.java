@@ -108,6 +108,9 @@ public class User extends JpaBaseEntity {
         this.profileImage = image;
     }
 
+    public void changePwInitDate(LocalDateTime now) {
+        this.pwInitDateTime = now;
+    }
 
     public void updateLastLoginTime(LocalDateTime now) {
         this.lastLoginDateTime = now;
@@ -155,13 +158,11 @@ public class User extends JpaBaseEntity {
     private void init() {
 
         this.userStatus = UserStatus.ACTIVE;
-        this.lastLoginDateTime = LocalDateTime.now();
         this.enableAppPush = true;
         this.enableCommentPush = true;
         this.enableCommentLikePush = true;
 
         if (isDefaultEmailUser()) {
-            this.pwInitDateTime = LocalDateTime.now();
             this.passwordExpired = PasswordExpired.N;
         }
     }
