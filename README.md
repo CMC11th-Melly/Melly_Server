@@ -23,21 +23,24 @@
 <br>
 
 ## 📕 Development Environment
+
 - <b>Language</b> :  Java 11
-- <b>Framework</b> :  SpringBoot, Spring Security 
+- <b>Framework</b> :  SpringBoot, Spring Security
 - <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
 - <b>DevOps</b> : EC2, RDS, S3, Elasticache
 - <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)
-- <b>Docs</b> : Swagger (SpringDocs)  
+- <b>Docs</b> : Swagger (SpringDocs)
 
 <br>
 
 ## 🗓 Development
+
 2022.09.12 ~ 2021.11.12
 
 <br>
 
 ## 📚 Folder Structure
+
 ```
 ├── MellyServerApplication.java
 ├── auth                                 # 인증 관련 도메인
@@ -65,6 +68,4 @@
 
 <br>
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/82302520/201564545-02f665c9-499a-4075-a9b3-a77e1bbe6ef3.png" width="800" height="500">
-  </p>
+![Source (4)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5553f1ef-acea-4940-9e2f-686483aa02f4)
