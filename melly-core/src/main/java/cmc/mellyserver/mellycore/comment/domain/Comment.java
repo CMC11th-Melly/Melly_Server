@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellycore.comment.domain;
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.AccessLevel;
@@ -45,8 +44,8 @@ public class Comment extends JpaBaseEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    @Enumerated(value = EnumType.STRING)
-    private DeleteStatus isDeleted;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     public Comment(String content) {
         this.content = content;
@@ -67,7 +66,7 @@ public class Comment extends JpaBaseEntity {
 
 
     public void delete() {
-        this.isDeleted = DeleteStatus.Y;
+        this.isDeleted = Boolean.TRUE;
     }
 
     private void setParent(Comment parent) {
@@ -79,7 +78,7 @@ public class Comment extends JpaBaseEntity {
 
     @PrePersist
     void init() {
-        this.isDeleted = DeleteStatus.N;
+        this.isDeleted = Boolean.FALSE;
     }
 
     public void updateComment(String content) {

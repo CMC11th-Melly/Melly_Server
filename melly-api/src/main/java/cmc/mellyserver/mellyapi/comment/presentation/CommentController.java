@@ -6,11 +6,11 @@ import cmc.mellyserver.mellyapi.comment.presentation.dto.CommentAssembler;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentUpdateRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.LikeRequest;
-import cmc.mellyserver.mellyapi.common.constants.MessageConstants;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellycore.comment.application.CommentLikeService;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
 import cmc.mellyserver.mellycore.comment.application.dto.response.CommentResponseDto;
+import cmc.mellyserver.mellycore.common.constants.MessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @RestController
@@ -48,7 +47,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse> saveComment(@CurrentUser LoginUser loginUser, @RequestBody CommentRequest commentRequest) {
 
         commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/memory/{memoryId}")

@@ -1,8 +1,10 @@
 package cmc.mellyserver.mellycore.memory.application;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
@@ -10,7 +12,6 @@ import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.mellycore.memory.exception.MemoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -71,7 +72,7 @@ public class MemoryReadService {
     public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long id, Long memoryId) {
 
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new MemoryNotFoundException();
+            throw new BusinessException(ErrorCode.NO_SUCH_MEMORY);
         });
         List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(id);
         return MemoryUpdateFormResponseDto.of(memory, userGroupLoginUserAssociated);

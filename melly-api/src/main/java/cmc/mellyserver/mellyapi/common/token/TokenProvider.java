@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyapi.common.token;
 
 import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
-import cmc.mellyserver.mellycommon.enums.RoleType;
+import cmc.mellyserver.mellycore.user.domain.enums.RoleType;
 import org.springframework.security.core.Authentication;
 
 public interface TokenProvider {

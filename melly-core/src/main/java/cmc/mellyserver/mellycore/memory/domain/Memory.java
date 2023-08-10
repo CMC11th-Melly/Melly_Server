@@ -1,8 +1,7 @@
 package cmc.mellyserver.mellycore.memory.domain;
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
-import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,7 +54,7 @@ public class Memory extends JpaBaseEntity {
     private OpenType openType; // 공개 타입
 
     @Column(name = "is_deleted")
-    private DeleteStatus is_deleted; // 삭제 여부
+    private Boolean is_deleted; // 삭제 여부
 
     private LocalDate visitedDate; // 장소 방문 날짜
 
@@ -81,11 +80,11 @@ public class Memory extends JpaBaseEntity {
 
     @PrePersist
     public void init() {
-        this.is_deleted = DeleteStatus.N;
+        this.is_deleted = Boolean.FALSE;
     }
 
     public void delete() {
-        this.is_deleted = DeleteStatus.Y;
+        this.is_deleted = Boolean.TRUE;
     }
 
     public void setUserId(Long userId) {

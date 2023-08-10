@@ -1,8 +1,9 @@
 package cmc.mellyserver.mellycore.group.application;
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
+
 import cmc.mellyserver.mellycore.common.aop.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.domain.GroupAndUser;
@@ -71,16 +72,15 @@ public class GroupService {
     }
 
     @Transactional
-    public void saveGroup(CreateGroupRequestDto createGroupRequestDto) {
+    public Long saveGroup(CreateGroupRequestDto createGroupRequestDto) {
 
         User user = userRepository.findById(createGroupRequestDto.getCreatorId()).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_USER);
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         });
 
         UserGroup savedGroup = groupRepository.save(createGroupRequestDto.toEntity());
         groupAndUserRepository.save(GroupAndUser.of(user, savedGroup));
-
-        // redis에 해당 그룹id로 key와 등록된 유저 id set으로 등록
+        return savedGroup.getId();
     }
 
 
@@ -88,7 +88,7 @@ public class GroupService {
     @Transactional
     public void participateToGroup(Long userId, Long groupId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_USER));
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         UserGroup userGroup = groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
         Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
 

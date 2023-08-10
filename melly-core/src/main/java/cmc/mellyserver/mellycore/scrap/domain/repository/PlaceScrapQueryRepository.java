@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellycore.scrap.domain.repository;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

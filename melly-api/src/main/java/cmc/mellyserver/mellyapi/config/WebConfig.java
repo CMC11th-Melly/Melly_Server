@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.config;
 
-import cmc.mellyserver.mellyapi.common.handler.LoginUserIdArgumentResolver;
+import cmc.mellyserver.mellyapi.common.resolver.LoginUserIdArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

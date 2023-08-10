@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellycore.unit.config.mockapi;
 
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
+
+import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

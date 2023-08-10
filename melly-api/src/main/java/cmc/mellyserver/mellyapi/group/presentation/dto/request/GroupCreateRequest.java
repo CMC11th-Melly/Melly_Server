@@ -1,12 +1,13 @@
 package cmc.mellyserver.mellyapi.group.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data

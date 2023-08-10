@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellycore.comment.application.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +11,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Boolean.TRUE;
 
 @Data
 @AllArgsConstructor
@@ -51,7 +52,7 @@ public class CommentDto implements Serializable {
 
     public static CommentDto convertCommentToDto(Comment comment, User user) {
 //
-        CommentDto commentDto = comment.getIsDeleted() == DeleteStatus.Y ?
+        CommentDto commentDto = comment.getIsDeleted() == TRUE ?
                 new CommentDto(comment.getId(), "삭제된 댓글입니다.", false, false, 0, null, null, null, new ArrayList<>()) :
                 new CommentDto(comment.getId(), comment.getContent(), false, false, comment.getCommentLikes().size(), comment.getUser().getNickname(), comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
 

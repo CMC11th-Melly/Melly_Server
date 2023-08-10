@@ -1,7 +1,5 @@
 package cmc.mellyserver.mellycore.common.exception;
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-
 public class BusinessException extends RuntimeException {
 
     private ErrorCode errorCode;

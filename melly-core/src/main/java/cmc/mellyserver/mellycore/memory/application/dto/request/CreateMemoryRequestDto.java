@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.memory.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.OpenType;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import lombok.Builder;

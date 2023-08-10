@@ -1,12 +1,11 @@
 package cmc.mellyserver.mellycore.memory.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.port.aws.StorageService;
-import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
+import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.application.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
@@ -16,6 +15,7 @@ import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemoryWriteService {
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
-
     private final MemoryRepository memoryRepository;
+
+    private final UserRepository userRepository;
 
     private final PlaceRepository placeRepository;
 
@@ -41,9 +41,9 @@ public class MemoryWriteService {
 
 
     @Transactional
-    public Memory createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
+    public Long createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(createMemoryRequestDto.getId());
+        User user = userRepository.getById(createMemoryRequestDto.getId());
 
         List<String> multipartFileNames = storageService.saveFileList(user.getId(), createMemoryRequestDto.getMultipartFiles());
 
@@ -55,7 +55,7 @@ public class MemoryWriteService {
 
         setPlaceId(createMemoryRequestDto, memory, place);
 
-        return memoryRepository.save(memory);
+        return memoryRepository.save(memory).getId();
     }
 
 
@@ -71,7 +71,7 @@ public class MemoryWriteService {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         });
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(updateMemoryRequestDto.getId());
+        User user = userRepository.getById(updateMemoryRequestDto.getId());
 
         //  memory.updateMemory(updateMemoryRequestDto.getTitle(), updateMemoryRequestDto.getContent(), updateMemoryRequestDto.getKeyword(),
 //                userGroup.getId(), updateMemoryRequestDto.getOpenType(), updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar(), updateMemoryRequestDto.getDeleteImageList(), storageService.saveFileList(user.getId(), updateMemoryRequestDto.getImages()));

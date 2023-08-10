@@ -1,15 +1,11 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto;
 
-import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
-import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.PlaceScrapCountResponse;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.ScrapedPlaceResponse;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
-import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
-import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
@@ -49,24 +45,6 @@ public abstract class UserAssembler {
                                 .scrapType(response.getScrapType())
                                 .scrapCount(response.getScrapCount()).build())
                 .collect(Collectors.toList());
-    }
-
-    public static SurveyRequestDto surveyRequestDto(Long id, SurveyRequest surveyRequest) {
-        return SurveyRequestDto.builder()
-                .id(id)
-                .recommendGroup(surveyRequest.getRecommendGroup())
-                .recommendPlace(surveyRequest.getRecommendPlace())
-                .recommendActivity(surveyRequest.getRecommendActivity())
-                .build();
-    }
-
-    public static ProfileUpdateRequestDto profileUpdateRequestDto(Long id, ProfileUpdateRequest profileUpdateRequest) {
-        return ProfileUpdateRequestDto.builder()
-                .id(id)
-                .nickname(profileUpdateRequest.getNickname())
-                .gender(profileUpdateRequest.getGender())
-                .ageGroup(profileUpdateRequest.getAgeGroup())
-                .build();
     }
 }
 

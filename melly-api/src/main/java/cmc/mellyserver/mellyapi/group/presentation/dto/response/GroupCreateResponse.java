@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.group.presentation.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
