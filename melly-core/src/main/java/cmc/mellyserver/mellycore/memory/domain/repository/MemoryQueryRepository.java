@@ -1,13 +1,12 @@
 package cmc.mellyserver.mellycore.memory.domain.repository;
 
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
-import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycommon.enums.OpenType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.KeywordDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -279,7 +278,7 @@ public class MemoryQueryRepository {
     }
 
     private static BooleanExpression isActive() {
-        return memory.is_deleted.eq(DeleteStatus.N);
+        return memory.is_deleted.eq(Boolean.FALSE);
     }
 
     private static BooleanExpression createdByNotCurrentLoginUser(Long id) {

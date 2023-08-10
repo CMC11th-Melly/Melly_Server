@@ -1,13 +1,13 @@
 package cmc.mellyserver.mellycore.unit.user.domain;
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycommon.enums.PasswordExpired;
-import cmc.mellyserver.mellycore.common.enums.Provider;
-import cmc.mellyserver.mellycore.common.enums.UserStatus;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.unit.RepositoryTest;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.domain.enums.PasswordExpired;
+import cmc.mellyserver.mellycore.user.domain.enums.Provider;
+import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

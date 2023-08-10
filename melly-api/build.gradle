@@ -18,10 +18,10 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'com.vdurmont:emoji-java:5.1.0'
+
+
     implementation project(':melly-core')
     implementation project(':melly-common')
-    implementation project(':melly-infra')
-    testImplementation(testFixtures(project(":melly-core")))
+
 
 }

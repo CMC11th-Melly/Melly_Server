@@ -1,10 +1,11 @@
 package cmc.mellyserver.mellycore.unit.common.bulkinsert;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
-import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.enums.*;
+import cmc.mellyserver.mellycore.user.enums.*;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.randomizers.misc.EnumRandomizer;

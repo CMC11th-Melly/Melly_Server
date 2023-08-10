@@ -8,15 +8,15 @@ import cmc.mellyserver.mellyapi.user.presentation.dto.UserAssembler;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.response.ProfileResponse;
-import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.mellycore.scrap.application.PlaceScrapService;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
 import cmc.mellyserver.mellycore.user.application.UserSurveyService;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
@@ -143,6 +143,4 @@ public class UserController {
         Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(lastId, pageable, loginUser.getId(), scrapType);
         return OK(UserAssembler.scrapedPlaceResponses(results));
     }
-
-
 }

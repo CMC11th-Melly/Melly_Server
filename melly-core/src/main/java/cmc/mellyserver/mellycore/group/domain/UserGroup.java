@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.group.domain;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.*;
 
 import javax.persistence.*;

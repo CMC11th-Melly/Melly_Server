@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.response;
 
-import cmc.mellyserver.mellycore.common.enums.Provider;
+import cmc.mellyserver.mellycore.user.domain.enums.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

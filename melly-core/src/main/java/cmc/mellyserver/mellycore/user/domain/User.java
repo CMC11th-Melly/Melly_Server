@@ -1,12 +1,7 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-import cmc.mellyserver.mellycommon.enums.PasswordExpired;
-import cmc.mellyserver.mellycommon.enums.RecommendActivity;
-import cmc.mellyserver.mellycommon.enums.RecommendGroup;
-import cmc.mellyserver.mellycommon.enums.RecommendPlace;
-import cmc.mellyserver.mellycore.common.enums.*;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import cmc.mellyserver.mellycore.user.domain.vo.Recommend;
+import cmc.mellyserver.mellycore.user.domain.enums.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

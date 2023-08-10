@@ -2,14 +2,14 @@ package cmc.mellyserver.mellycore.integration.user;
 
 
 import cmc.mellyserver.mellycore.builder.GivenBuilder;
-import cmc.mellyserver.mellycore.common.enums.AgeGroup;
-import cmc.mellyserver.mellycore.common.enums.Gender;
 import cmc.mellyserver.mellycore.integration.IntegrationTest;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.domain.enums.AgeGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

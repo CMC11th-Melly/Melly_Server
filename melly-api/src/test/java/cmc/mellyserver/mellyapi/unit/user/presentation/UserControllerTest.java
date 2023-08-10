@@ -12,9 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static cmc.mellyserver.mellyapi.common.docs.ApiDocumentUtils.getDocumentRequest;
 import static cmc.mellyserver.mellyapi.common.docs.ApiDocumentUtils.getDocumentResponse;
-import static cmc.mellyserver.mellycore.common.enums.AgeGroup.THREE;
-import static cmc.mellyserver.mellycore.common.enums.Gender.MALE;
 import static cmc.mellyserver.mellycore.common.fixture.UserFixtures.모카_응답;
+import static cmc.mellyserver.mellycore.user.domain.enums.AgeGroup.THREE;
+import static cmc.mellyserver.mellycore.user.domain.enums.Gender.MALE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;

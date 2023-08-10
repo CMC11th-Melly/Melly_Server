@@ -1,16 +1,16 @@
 package cmc.mellyserver.mellycore.unit.scrap.repository;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
-import cmc.mellyserver.mellycore.common.enums.Provider;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.unit.RepositoryTest;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.domain.enums.Provider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

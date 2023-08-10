@@ -1,8 +1,6 @@
 package cmc.mellyserver.mellycore.comment.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.comment.application.dto.request.CommentRequestDto;
 import cmc.mellyserver.mellycore.comment.application.dto.response.CommentDto;
 import cmc.mellyserver.mellycore.comment.application.dto.response.CommentResponseDto;
@@ -10,12 +8,12 @@ import cmc.mellyserver.mellycore.comment.application.event.CommentEnrollEvent;
 import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentQueryRepository;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycore.comment.exception.CommentNotFoundException;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -23,14 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentQueryRepository commentQueryRepository;
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
-
+    private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher;
 
     private final CommentRepository commentRepository;
@@ -38,15 +38,15 @@ public class CommentService {
     private final MemoryRepository memoryRepository;
 
     @Transactional(readOnly = true)
-    public CommentResponseDto getComments(Long userId, Long memoryId) {
+    public CommentResponseDto getComments(final Long userId, final Long memoryId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         List<Comment> comment = commentQueryRepository.findComment(user.getId(), memoryId);
         return convertNestedStructure(comment, user);
     }
 
     @Transactional
-    public void saveComment(CommentRequestDto commentRequestDto) {
+    public void saveComment(final CommentRequestDto commentRequestDto) {
 
         Memory memory = memoryRepository.findById(commentRequestDto.getMemoryId()).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_MEMORY);
@@ -61,9 +61,11 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment updateComment(Long commentId, String content) {
+    public Comment updateComment(final Long commentId, final String content) {
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+        });
         comment.updateComment(content);
         return comment;
     }
@@ -71,30 +73,36 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId) {
 
-        Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(CommentNotFoundException::new);
+        Comment comment = commentRepository.findCommentByIdWithParent(commentId)
+                .orElseThrow(() -> {
+                    throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+                });
         removeCommentAccordingToChildComment(comment);
     }
 
     private Comment saveCommentWithoutParent(CommentRequestDto commentRequestDto, Memory memory) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(commentRequestDto.getUserId());
+        User user = userRepository.getById(commentRequestDto.getUserId());
         return commentRepository.save(Comment.createComment(commentRequestDto.getContent(), user, memory.getId(), null));
     }
 
     private Comment saveCommentWithParent(CommentRequestDto commentRequestDto, Memory memory, Comment parentComment) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(commentRequestDto.getUserId());
+        User user = userRepository.getById(commentRequestDto.getUserId());
         Comment childComment = commentRepository.save(Comment.createComment(commentRequestDto.getContent(), user, memory.getId(), parentComment));
         parentComment.getChildren().add(childComment);
         return childComment;
     }
 
     private Comment getParentComment(CommentRequestDto commentRequestDto) {
-        return Objects.isNull(commentRequestDto.getParentId()) ? null : commentRepository.findById(commentRequestDto.getParentId()).orElseThrow(CommentNotFoundException::new);
+        return Objects.isNull(commentRequestDto.getParentId()) ? null : commentRepository.findById(commentRequestDto.getParentId())
+                .orElseThrow(() -> {
+                    throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+                });
     }
 
     private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
 
         Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
-        if (parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == DeleteStatus.Y) {
+        if (parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == TRUE) {
             return getDeletableAncestorComment(parent);
         }
         // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
@@ -109,7 +117,7 @@ public class CommentService {
         Map<Long, CommentDto> map = new HashMap<>();
 
         // 삭제 되지 않은 리스트 개수
-        int cnt = (int) comments.stream().filter(c -> c.getIsDeleted().equals(DeleteStatus.N)).count();
+        int cnt = (int) comments.stream().filter(c -> c.getIsDeleted().equals(FALSE)).count();
 
         comments.stream().forEach(comment -> {
 

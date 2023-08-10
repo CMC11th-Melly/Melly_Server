@@ -1,10 +1,8 @@
 package cmc.mellyserver.mellycore.scrap.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.util.auth.AuthenticatedUserChecker;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
@@ -14,7 +12,9 @@ import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryReposito
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,11 +32,12 @@ public class PlaceScrapService {
 
     private final PlaceRepository placeRepository;
 
+    private final UserRepository userRepository;
+
     private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
     private final PlaceScrapRepository placeScrapRepository;
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
 
     /*
     캐싱 적용 가능 여부 : 불필요
@@ -55,7 +56,7 @@ public class PlaceScrapService {
     @Transactional(readOnly = true)
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userId);
+        User user = userRepository.getById(userId);
         return placeScrapQueryRepository.getScrapedPlaceGrouping(user.getId());
     }
 
@@ -67,7 +68,7 @@ public class PlaceScrapService {
     public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
         Optional<Place> placeOpt = placeRepository.findAllByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(createPlaceScrapRequestDto.getId());
+        User user = userRepository.getById(createPlaceScrapRequestDto.getId());
         Place place = checkPlaceExist(createPlaceScrapRequestDto, placeOpt);
         placeScrapRepository.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }

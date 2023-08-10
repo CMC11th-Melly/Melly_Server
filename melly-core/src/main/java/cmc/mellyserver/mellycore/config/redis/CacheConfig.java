@@ -46,7 +46,7 @@ public class CacheConfig {
                         .fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
 
         Map<String, RedisCacheConfiguration> configurations = new HashMap<>();
-        configurations.put("default", redisCacheConfiguration.entryTtl(CacheExpireConfig.DEFAULT_CACHE_EXPIRE_TIME));
+        configurations.put("default", redisCacheConfiguration.entryTtl(CacheExpireConstants.DEFAULT_CACHE_EXPIRE_TIME));
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(configurations)

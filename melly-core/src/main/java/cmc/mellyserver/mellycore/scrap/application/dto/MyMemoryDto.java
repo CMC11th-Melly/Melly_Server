@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.scrap.application.dto;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

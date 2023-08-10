@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.user.application.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

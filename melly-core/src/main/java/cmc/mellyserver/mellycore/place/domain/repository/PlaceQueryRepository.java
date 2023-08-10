@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.place.domain.repository;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import com.querydsl.core.types.Projections;

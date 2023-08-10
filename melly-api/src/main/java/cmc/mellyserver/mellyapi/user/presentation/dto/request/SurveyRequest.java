@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.RecommendActivity;
-import cmc.mellyserver.mellycommon.enums.RecommendGroup;
-import cmc.mellyserver.mellycommon.enums.RecommendPlace;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendActivity;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendPlace;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

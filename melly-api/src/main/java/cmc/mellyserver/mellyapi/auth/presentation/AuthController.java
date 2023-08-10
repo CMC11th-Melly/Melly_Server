@@ -10,8 +10,8 @@ import cmc.mellyserver.mellyapi.auth.presentation.dto.request.*;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.response.OAuthResponseDto;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.common.util.HeaderUtil;
-import cmc.mellyserver.mellyinfra.email.EmailCertificationRequest;
-import cmc.mellyserver.mellyinfra.email.EmailCertificationService;
+import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertificationRequest;
+import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.CREATED;
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @Slf4j
@@ -73,14 +71,14 @@ public class AuthController {
     @PostMapping("/email-certification/sends")
     public ResponseEntity sendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.sendEmailForCertification(requestDto.getEmail());
-        return CREATED;
+        return ResponseEntity.noContent().build();
     }
 
     // 인증번호 재전송
     @PostMapping("/email-certification/resends")
     public ResponseEntity resendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.sendEmailForCertification(requestDto.getEmail());
-        return CREATED;
+        return ResponseEntity.noContent().build();
     }
 
     // 인증번호 확인
@@ -94,7 +92,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse> checkNicknameDuplicate(@PathVariable String nickname) {
 
         authService.checkDuplicatedNickname(nickname);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     // 이메일 중복 체크
@@ -102,7 +100,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse> checkEmailDuplicate(@PathVariable String email) {
 
         authService.checkDuplicatedEmail(email);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/forget/password")

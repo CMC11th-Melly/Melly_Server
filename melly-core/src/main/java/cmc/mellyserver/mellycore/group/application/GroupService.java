@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.group.application;
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.aop.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.domain.GroupAndUser;

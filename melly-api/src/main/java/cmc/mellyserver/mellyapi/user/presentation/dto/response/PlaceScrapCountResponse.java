@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

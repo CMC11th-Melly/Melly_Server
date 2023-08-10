@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.common.converter;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToEnumConverter implements Converter<String, ScrapType> {

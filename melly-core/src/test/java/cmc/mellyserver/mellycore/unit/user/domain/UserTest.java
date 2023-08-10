@@ -1,21 +1,18 @@
 package cmc.mellyserver.mellycore.unit.user.domain;
 
-import cmc.mellyserver.mellycommon.enums.PasswordExpired;
-import cmc.mellyserver.mellycommon.enums.RecommendActivity;
-import cmc.mellyserver.mellycommon.enums.RecommendGroup;
-import cmc.mellyserver.mellycommon.enums.RecommendPlace;
-import cmc.mellyserver.mellycore.common.enums.UserStatus;
+import cmc.mellyserver.mellycore.user.domain.Recommend;
 import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.vo.Recommend;
+import cmc.mellyserver.mellycore.user.domain.enums.*;
+import cmc.mellyserver.mellycore.user.enums.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static cmc.mellyserver.mellycore.common.enums.AgeGroup.TWO;
-import static cmc.mellyserver.mellycore.common.enums.Gender.FEMALE;
 import static cmc.mellyserver.mellycore.common.fixture.UserFixtures.모카;
+import static cmc.mellyserver.mellycore.user.domain.enums.AgeGroup.TWO;
+import static cmc.mellyserver.mellycore.user.domain.enums.Gender.FEMALE;
 
 public class UserTest {
 

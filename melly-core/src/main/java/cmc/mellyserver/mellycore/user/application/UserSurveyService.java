@@ -21,14 +21,14 @@ public class UserSurveyService {
                             레플리카 렉을 고려하여 소스 DB로 부터 데이터를 가져온다.
      */
     @Transactional
-    public SurveyRecommendResponseDto getSurveyResult(Long userId) {
+    public SurveyRecommendResponseDto getSurveyResult(final Long userId) {
 
         User user = userRepository.getById(userId);
         return surveyRecommender.getRecommend(user.getRecommend().getRecommendGroup());
     }
 
     @Transactional
-    public void createSurvey(Long userId, SurveyRequestDto surveyRequestDto) {
+    public void createSurvey(final Long userId, SurveyRequestDto surveyRequestDto) {
 
         User user = userRepository.getById(userId);
         user.addSurveyData(surveyRequestDto.getRecommendGroup(), surveyRequestDto.getRecommendPlace(), surveyRequestDto.getRecommendActivity());

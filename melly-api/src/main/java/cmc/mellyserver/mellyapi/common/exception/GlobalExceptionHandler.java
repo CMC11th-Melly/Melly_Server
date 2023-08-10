@@ -2,8 +2,8 @@ package cmc.mellyserver.mellyapi.common.exception;
 
 
 import cmc.mellyserver.mellyapi.common.response.ErrorResponse;
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

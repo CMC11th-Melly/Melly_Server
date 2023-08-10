@@ -11,9 +11,9 @@ import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryCreateRequ
 import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryDetailResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryResponse;
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.application.MemoryWriteService;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
