@@ -65,6 +65,6 @@
 <br>
 
 ## 🏛 System Structure
-![Source](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/fc35273c-06bb-4df9-925f-4d906cdedf28)
 
+![Source (4)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5553f1ef-acea-4940-9e2f-686483aa02f4)
 
