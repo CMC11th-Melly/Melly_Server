@@ -1,3 +1,7 @@
+plugins {
+    id 'java-test-fixtures'
+}
+
 bootJar {
     enabled = false
 }
@@ -6,21 +10,27 @@ jar {
     enabled = true
 }
 
+
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 dependencies {
 
 
     // DB
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.32'
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
-    implementation 'com.google.firebase:firebase-admin:7.1.0'
+//    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
     // queryDsl
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation "com.querydsl:querydsl-jpa:5.0.0"
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
+    testImplementation "com.h2database:h2"
     implementation project(':melly-common')
 }
 

@@ -3,18 +3,18 @@ package cmc.mellyserver.mellyapi.auth.application;
 import cmc.mellyserver.mellyapi.auth.application.dto.request.OAuthLoginRequestDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.RefreshTokenDto;
 import cmc.mellyserver.mellyapi.auth.application.dto.response.TokenResponseDto;
+import cmc.mellyserver.mellyapi.auth.application.loginclient.LoginClient;
+import cmc.mellyserver.mellyapi.auth.application.loginclient.LoginClientFactory;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.request.OAuthSignupRequestDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.response.OAuthResponseDto;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.response.OAuthSignupResponseDto;
+import cmc.mellyserver.mellyapi.auth.repository.JWTRepository;
 import cmc.mellyserver.mellyapi.auth.repository.RefreshToken;
-import cmc.mellyserver.mellyapi.auth.repository.RefreshTokenRepository;
 import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import cmc.mellyserver.mellycore.comment.application.event.SignupEvent;
+import cmc.mellyserver.mellycore.infrastructure.message.fcm.FCMTokenManageService;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
-import cmc.mellyserver.mellyinfra.client.LoginClient;
-import cmc.mellyserver.mellyinfra.client.LoginClientFactory;
-import cmc.mellyserver.mellyinfra.message.FCMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,9 +34,9 @@ public class OAuthService {
 
     private final JwtTokenProvider tokenProvider;
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final JWTRepository tokenRepository;
 
-    private final FCMService fcmService;
+    private final FCMTokenManageService tokenManageService;
 
     private final ApplicationEventPublisher publisher;
 
@@ -46,8 +46,6 @@ public class OAuthService {
         LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider());
         User socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
 
-        // socialId를 이용해서 기존에 회원가입한 회원인지 체크한다.
-        // 이메일의 경우, KAKAO는 비즈앱에 심사 거쳐야만 이메일을 필수로 받을 수 있다. 따라서 이메일이 무조건 있다는 보장 없음
         User user = userRepository.findUserBySocialId(socialUser.getSocialId());
 
         // 만약
@@ -61,11 +59,8 @@ public class OAuthService {
         String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
-        //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
-        refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
-
-        // 사용자 FCM 토큰을 Redis에 저장한다. -> 이벤트 처리 생각중
-        fcmService.saveToken(user.getId(), oAuthLoginRequestDto.getFcmToken());
+        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
+        tokenManageService.saveToken(user.getId(), oAuthLoginRequestDto.getFcmToken());
 
         return new OAuthResponseDto(TokenResponseDto.of(accessToken, refreshToken.getToken()), null);
     }
@@ -79,15 +74,14 @@ public class OAuthService {
         String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
-        //레디스에 저장 Refresh 토큰을 저장한다. (사용자 Id, refresh 토큰)
-        refreshTokenRepository.save(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
+        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
+        tokenManageService.deleteToken(user.getId());
 
-        // 사용자 FCM 토큰을 Redis에 저장한다. -> 이벤트 처리 생각중
-        fcmService.saveToken(user.getId(), oAuthSignupRequestDto.getFcmToken());
-
+        // 이메일을 받아왔다면 회원가입 축하 메일 전송
         if (Objects.nonNull(user.getEmail())) {
             publisher.publishEvent(new SignupEvent(user.getId()));
         }
+
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
 }

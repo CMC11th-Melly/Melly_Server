@@ -2,7 +2,7 @@ package cmc.mellyserver.mellyapi.common.filter;
 
 import cmc.mellyserver.mellyapi.common.exception.LogoutOrWithdrawExpcetion;
 import cmc.mellyserver.mellyapi.common.response.ErrorResponse;
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import org.springframework.stereotype.Component;

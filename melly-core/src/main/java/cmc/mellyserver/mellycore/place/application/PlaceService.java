@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellycore.place.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.place.domain.Place;

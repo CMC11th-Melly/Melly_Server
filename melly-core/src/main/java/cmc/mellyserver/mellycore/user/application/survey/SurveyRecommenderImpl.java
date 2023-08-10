@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.user.application.survey;
 
-import cmc.mellyserver.mellycommon.enums.RecommendGroup;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,7 +11,9 @@ import java.util.List;
 public class SurveyRecommenderImpl implements SurveyRecommender {
 
     public SurveyRecommendResponseDto getRecommend(RecommendGroup recommendGroup) {
+
         SurveyRecommendResponseDto pollRecommendResponse;
+
         switch (recommendGroup) {
             case COUPLE:
                 List<String> coupleWords = List.of("연인과 성수동 맛집테이블", "연인과 활동이 잦은 당신에게 추천해요",

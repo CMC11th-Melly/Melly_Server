@@ -13,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.CREATED;
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.NO_CONTENT;
-import static cmc.mellyserver.mellyapi.common.constants.ResponseConstants.OK;
 import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @RestController
@@ -36,35 +34,36 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<Void> addGroup(@CurrentUser LoginUser loginUser, @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
 
-        groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
-        return CREATED;
+        Long groupId = groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
+        return ResponseEntity.created(URI.create("/api/groups" + groupId)).build();
     }
 
-    @PutMapping("/{groupId}")
+    @PatchMapping("/{groupId}")
     public ResponseEntity<Void> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
 
         groupService.updateGroup(loginUser.getId(), GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
-        return NO_CONTENT;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{groupId}/participate")
     public ResponseEntity<Void> participateToGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
 
         groupService.participateToGroup(loginUser.getId(), groupId);
-        return CREATED;
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{groupId}")
-    public ResponseEntity<ApiResponse> deleteGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
+    public ResponseEntity<Void> deleteGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
 
         groupService.removeGroup(loginUser.getId(), groupId);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{groupId}/exit")
-    public ResponseEntity<ApiResponse> exitGroup(@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
+    public ResponseEntity<Void> exitGroup(@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
+
         groupService.exitGroup(loginUser.getId(), groupId);
-        return OK;
+        return ResponseEntity.noContent().build();
     }
 
 

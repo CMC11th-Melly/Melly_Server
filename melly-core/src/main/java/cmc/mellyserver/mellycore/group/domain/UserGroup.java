@@ -1,8 +1,7 @@
 package cmc.mellyserver.mellycore.group.domain;
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,7 +36,7 @@ public class UserGroup extends JpaBaseEntity {
     private GroupType groupType;
 
     @Column(name = "is_deleted", nullable = false)
-    private DeleteStatus isDeleted;
+    private Boolean isDeleted;
 
     @Builder
     public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon) {
@@ -50,7 +49,7 @@ public class UserGroup extends JpaBaseEntity {
 
     public void remove() {
 
-        this.isDeleted = DeleteStatus.Y;
+        this.isDeleted = Boolean.TRUE;
     }
 
     public void update(String groupName, GroupType groupType, Integer groupIcon) {
@@ -63,6 +62,6 @@ public class UserGroup extends JpaBaseEntity {
 
     @PrePersist
     private void init() {
-        this.isDeleted = DeleteStatus.N;
+        this.isDeleted = Boolean.FALSE;
     }
 }

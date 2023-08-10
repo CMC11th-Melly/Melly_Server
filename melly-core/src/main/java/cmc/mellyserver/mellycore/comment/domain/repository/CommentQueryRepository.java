@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static cmc.mellyserver.mellycore.comment.domain.QComment.comment;
+import static cmc.mellyserver.mellycore.user.domain.QUser.user;
 
 @Repository
 public class CommentQueryRepository {
@@ -23,7 +24,7 @@ public class CommentQueryRepository {
     public List<Comment> findComment(Long userId, Long memoryId) {
 
         return query.selectFrom(comment)
-//                .innerJoin(user).on(comment.user.id.eq(userId)).fetchJoin()
+                .innerJoin(user).on(user.id.eq(userId)).fetchJoin()
 //                .innerJoin(commentLike).on(comment.id.eq(commentLike.comment.id)).fetchJoin()
                 .where(
                         comment.memoryId.eq(memoryId)

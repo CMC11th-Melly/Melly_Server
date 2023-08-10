@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.memory.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.OpenType;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

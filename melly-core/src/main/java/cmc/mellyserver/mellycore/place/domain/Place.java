@@ -1,6 +1,5 @@
 package cmc.mellyserver.mellycore.place.domain;
 
-import cmc.mellyserver.mellycommon.enums.DeleteStatus;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,12 +32,12 @@ public class Place extends JpaBaseEntity {
     @Column(name = "place_category")
     private String placeCategory;
 
-    @Enumerated(EnumType.STRING)
+
     @Column(name = "is_deleted")
-    private DeleteStatus isDeleted;
+    private Boolean isDeleted;
 
     @Builder
-    public Place(Long id, Position position, String placeImage, String placeCategory, String placeName, DeleteStatus isDeleted) {
+    public Place(Long id, Position position, String placeImage, String placeCategory, String placeName, Boolean isDeleted) {
         this.id = id;
         this.position = position;
         this.placeName = placeName;
@@ -49,6 +48,6 @@ public class Place extends JpaBaseEntity {
 
     @PrePersist
     public void init() {
-        this.isDeleted = DeleteStatus.N;
+        this.isDeleted = Boolean.FALSE;
     }
 }

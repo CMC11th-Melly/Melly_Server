@@ -1,36 +1,32 @@
 package cmc.mellyserver.mellycore.notification.domain;
 
-import cmc.mellyserver.mellycommon.enums.NotificationType;
-import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import lombok.AccessLevel;
+import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "tb_notification")
-public class Notification extends JpaBaseEntity {
+@Document(collection = "notification")
+public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
     private Long id;
 
-    @Column(name = "title")
+    @Field(name = "title")
     private String title;
 
-    @Column(name = "message")
-    private String message;
+    @Field(name = "content")
+    private String content;
 
-    @Enumerated(EnumType.STRING)
+    @Field(name = "notification_type")
     NotificationType notificationType;
 
-    @Column(name = "user_checked")
-    private Boolean userChecked;
+    @Field(name = "is_read")
+    private Boolean isRead;
 
     @Column(name = "user_id")
     private Long userId;
@@ -38,11 +34,11 @@ public class Notification extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long memoryId;
 
-    public Notification(String title, String message, NotificationType notificationType, boolean checked, Long userId, Long memoryId) {
+    public Notification(String title, String content, NotificationType notificationType, boolean isRead, Long userId, Long memoryId) {
         this.title = title;
-        this.message = message;
+        this.content = content;
         this.notificationType = notificationType;
-        this.userChecked = checked;
+        this.isRead = isRead;
         this.userId = userId;
         this.memoryId = memoryId;
     }
@@ -53,6 +49,6 @@ public class Notification extends JpaBaseEntity {
     }
 
     public void userCheckedNotification() {
-        this.userChecked = true;
+        this.isRead = Boolean.TRUE;
     }
 }

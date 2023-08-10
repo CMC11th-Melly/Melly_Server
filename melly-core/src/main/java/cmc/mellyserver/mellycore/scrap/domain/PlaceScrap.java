@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.scrap.domain;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
 import cmc.mellyserver.mellycore.place.domain.Place;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;

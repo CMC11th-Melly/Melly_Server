@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.scrap.domain.repository.dto;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

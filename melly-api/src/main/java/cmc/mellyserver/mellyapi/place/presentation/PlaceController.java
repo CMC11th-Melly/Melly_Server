@@ -5,7 +5,7 @@ import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.mellyapi.place.presentation.dto.PlaceAssembler;
 import cmc.mellyserver.mellyapi.place.presentation.dto.request.PlaceSimpleRequest;
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.mellycore.place.application.PlaceService;
 import cmc.mellyserver.mellycore.scrap.application.dto.MarkedPlaceResponseDto;

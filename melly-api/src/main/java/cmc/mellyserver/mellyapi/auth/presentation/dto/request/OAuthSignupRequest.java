@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.AgeGroup;
-import cmc.mellyserver.mellycommon.enums.Gender;
-import cmc.mellyserver.mellycommon.enums.Provider;
+import cmc.mellyserver.mellycore.user.domain.enums.AgeGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.Gender;
+import cmc.mellyserver.mellycore.user.domain.enums.Provider;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;

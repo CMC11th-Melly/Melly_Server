@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellybatch.config;
 
 import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
-import cmc.mellyserver.mellycommon.enums.PasswordExpired;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.domain.enums.PasswordExpired;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -16,7 +16,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class PasswordChangeJobConfig {
     @StepScope
     public QueueItemReader<User> passwordChangeReader() {
 
-        List<User> oldUsers = userRepository.findByPasswordInitDateBeforeAndPasswordExpiredEquals(
+        List<User> oldUsers = userRepository.findByPwInitDateTimeBeforeAndPasswordExpiredEquals(
                 LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION),
                 PasswordExpired.N);
         return new QueueItemReader<>(oldUsers);
@@ -61,7 +60,7 @@ public class PasswordChangeJobConfig {
         return new ItemProcessor<User, User>() {
             @Override
             public User process(User user) throws Exception {
-                return user.setPwChangeStatusAndUpdateLastChangedDate(LocalDate.now());
+                return user.changePwExpireStatus();
             }
         };
     }

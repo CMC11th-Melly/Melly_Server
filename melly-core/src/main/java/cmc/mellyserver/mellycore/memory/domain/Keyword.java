@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(name = "tb_keyword")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Keyword extends JpaBaseEntity {
 

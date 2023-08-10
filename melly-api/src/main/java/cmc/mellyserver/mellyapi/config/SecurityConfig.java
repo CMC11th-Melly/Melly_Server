@@ -29,7 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RedisTemplate redisTemplate;
 
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
+
     private final TokenAccessDeniedHandler accessDeniedHandler;
+
     private final JwtExceptionFilter jwtExceptionFilter;
 
     @Override

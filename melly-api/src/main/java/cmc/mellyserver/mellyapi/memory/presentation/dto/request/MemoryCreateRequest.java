@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.memory.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.OpenType;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;

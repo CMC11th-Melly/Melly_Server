@@ -5,9 +5,8 @@ import cmc.mellyserver.mellycore.comment.domain.Comment;
 import cmc.mellyserver.mellycore.comment.domain.CommentLike;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentLikeRepository;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycore.comment.exception.CommentLikeNotFoundException;
-import cmc.mellyserver.mellycore.comment.exception.CommentNotFoundException;
-import cmc.mellyserver.mellycore.comment.exception.DuplicatedCommentLikeException;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -26,10 +25,14 @@ public class CommentLikeService {
     @Transactional
     public void saveCommentLike(Long userId, Long commentId) {
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> {
+                    throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+                });
+
         commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, userId)
                 .ifPresent(commentLike -> {
-                    throw new DuplicatedCommentLikeException();
+                    throw new BusinessException(ErrorCode.DUPLICATED_COMMENT_LIKE);
                 });
 
         commentLikeRepository.save(CommentLike.createCommentLike(userId, comment));
@@ -40,7 +43,9 @@ public class CommentLikeService {
     public void deleteCommentLike(Long id, Long commentId) {
 
         CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, id)
-                .orElseThrow(CommentLikeNotFoundException::new);
+                .orElseThrow(() -> {
+                    throw new BusinessException(ErrorCode.NO_SUCH_COMMENT_LIKE);
+                });
         commentLikeRepository.delete(commentLike);
     }
 }

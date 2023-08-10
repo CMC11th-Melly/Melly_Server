@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellybatch.config;
 
 import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
-import cmc.mellyserver.mellycommon.enums.UserStatus;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -54,7 +54,7 @@ public class InactiveUserJobConfig {
     @StepScope // (1) Step의 주기에 따라 새로운 빈 생성
     public QueueItemReader<User> inactiveUserReader() {
         List<User> oldUsers =
-                userRepository.findByLastModifiedDateBeforeAndUserStatusEquals(
+                userRepository.findByLastLoginDateTimeBeforeAndUserStatusEquals(
                         LocalDateTime.now().minusYears(AccountPolicy.INACTIVE_USER_DURATION), UserStatus.ACTIVE);
         return new QueueItemReader<>(oldUsers);
     }
