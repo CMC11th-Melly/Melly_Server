@@ -3,7 +3,7 @@ package cmc.mellyserver.mellycore.infrastructure.email.javamail;
 import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertificationDao;
 import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertificationRequest;
 import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertificationService;
-import cmc.mellyserver.mellycore.infrastructure.email.common.RandomNumberGenerator;
+import cmc.mellyserver.mellycore.infrastructure.email.certification.RandomNumberGenerator;
 import cmc.mellyserver.mellycore.infrastructure.email.constant.EmailConstants;
 import cmc.mellyserver.mellycore.infrastructure.email.ses.EmailContentTemplate;
 import lombok.RequiredArgsConstructor;

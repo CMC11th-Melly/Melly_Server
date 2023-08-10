@@ -22,6 +22,6 @@ dependencies {
 
     implementation project(':melly-core')
     implementation project(':melly-common')
-
+    testImplementation(testFixtures(project(":melly-core")))
 
 }
