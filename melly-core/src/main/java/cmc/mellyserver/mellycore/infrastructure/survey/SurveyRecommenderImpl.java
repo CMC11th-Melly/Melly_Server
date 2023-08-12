@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.user.application.survey;
+package cmc.mellyserver.mellycore.infrastructure.survey;
 
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;

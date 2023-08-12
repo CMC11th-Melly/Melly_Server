@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger*/**");
+        web.ignoring().antMatchers("/swagger*/**", "/firebase-messaging-sw.js");
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/actuator/**", "/v3/api-docs/**", "/api/memory/**", "/api/place/list", "/api/imageTest",
+                .antMatchers("/api/push", "/firebase-messaging-sw.js", "/actuator/**", "/v3/api-docs/**", "/api/memory/**", "/api/place/list", "/api/imageTest",
                         "/api/pw", "/api/optional", "/auth/social/signup", "/api/auth/social", "/api/auth/signup", "/api/auth/login", "/api/auth/token/reissue",
                         "/auth/nickname", "/auth/email", "/api/health", "/api/auth/email-certification/sends", "/api/auth/email-certification/resends", "/api/auth/email-certification/confirms", "/api/auth/social-signup", "/").permitAll()
                 .anyRequest().authenticated()
