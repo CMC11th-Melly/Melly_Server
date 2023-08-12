@@ -57,7 +57,7 @@ public class CommentService {
                 saveCommentWithoutParent(commentRequestDto, memory) :
                 saveCommentWithParent(commentRequestDto, memory, parentComment);
 
-        publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getUser().getNickname()));
+        publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getMemoryId(), comment.getUser().getNickname()));
     }
 
     @Transactional

@@ -1,27 +1,30 @@
 package cmc.mellyserver.mellycore.notification.application;
 
 
-import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
 import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
-import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
+import cmc.mellyserver.mellycore.notification.domain.repository.dto.NotificationResponse;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private final NotificationRepository notificationRepository;
+    private final MongoTemplate mongoTemplate;
 
     private final MemoryRepository memoryRepository;
 
@@ -29,8 +32,11 @@ public class NotificationService {
 
 
     @Transactional(readOnly = true)
-    public List<Notification> getNotificationList(Long userId) {
-        return null;
+    public List<NotificationResponse> getNotificationList(Long userId) {
+
+        Query query = new Query(Criteria.where("user_id").is(userId));
+        List<Notification> notificationList = mongoTemplate.findAll(Notification.class, "notification");
+        return notificationList.stream().map(NotificationResponse::from).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -59,18 +65,26 @@ public class NotificationService {
 
 
     @Transactional
-    public Notification createNotification(String title, String body, NotificationType notificationType, Long userId, Long memoryId) {
+    public Notification createNotification(String body, NotificationType notificationType, Long userId, Long memoryId) {
 
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
-        return notificationRepository.save(Notification.createNotification(title, body, notificationType, false, memory.getId(), userId));
+        User user = userRepository.getById(userId);
+        Memory memory = memoryRepository.getById(memoryId);
+
+        return mongoTemplate.insert(Notification.createNotification(
+                body,
+                userId,
+                notificationType,
+                false,
+                user.getProfileImage(),
+                user.getNickname(),
+                memory.getId(),
+                LocalDateTime.now()));
     }
 
     @Transactional
     public void checkNotification(Long notificationId) {
 
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION);
-        });
+        Notification notification = mongoTemplate.findById(notificationId, Notification.class);
         notification.userCheckedNotification();
     }
 }

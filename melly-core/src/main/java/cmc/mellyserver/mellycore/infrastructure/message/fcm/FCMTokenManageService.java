@@ -21,12 +21,12 @@ public class FCMTokenManageService {
         fcmTokenRepository.deleteToken(PREFIX_FCMTOKEN + userId);
     }
 
-    public boolean hasKey(String email) {
-        return fcmTokenRepository.hasKey(email);
+    public boolean hasKey(Long userId) {
+        return fcmTokenRepository.hasKey(PREFIX_FCMTOKEN + userId);
     }
 
-    public String getToken(String email) {
-        return fcmTokenRepository.getToken(email);
+    public String getToken(Long userId) {
+        return fcmTokenRepository.getToken(PREFIX_FCMTOKEN + userId);
     }
 
 }
