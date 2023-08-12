@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellyapi.place.presentation;
 
 
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.mellyapi.place.presentation.dto.PlaceAssembler;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @Slf4j
 @RestController
@@ -34,27 +34,27 @@ public class PlaceController {
                                                     @RequestParam(value = "groupType") GroupType groupType) {
 
         List<MarkedPlaceResponseDto> placeReponseDtos = placeService.displayMarkedPlace(Long.parseLong(user.getUsername()), groupType);
-        return OK(placeReponseDtos);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeReponseDtos);
     }
 
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<ApiResponse> getPlaceSearchByMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId) {
 
         PlaceResponseDto placeResponseDto = placeService.findPlaceByPlaceId(Long.parseLong(user.getUsername()), placeId);
-        return OK(PlaceAssembler.placeResponse(placeResponseDto));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
     }
 
     @GetMapping("/place")
     public ResponseEntity<ApiResponse> getDetailPlace(@AuthenticationPrincipal User user, PlaceSimpleRequest placeSimpleRequest) {
 
         PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(Long.parseLong(user.getUsername()), placeSimpleRequest.getLat(), placeSimpleRequest.getLng());
-        return OK(PlaceAssembler.placeResponse(placeByPosition));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeByPosition));
     }
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName) {
 
         List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeService.findPlaceInfoByMemoryName(Long.parseLong(user.getUsername()), memoryName);
-        return OK(MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos));
     }
 }

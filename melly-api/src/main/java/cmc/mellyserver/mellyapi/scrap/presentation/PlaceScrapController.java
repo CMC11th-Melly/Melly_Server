@@ -1,5 +1,7 @@
 package cmc.mellyserver.mellyapi.scrap.presentation;
 
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
+import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.ScrapAssembler;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.request.ScrapCancelRequest;
 import cmc.mellyserver.mellyapi.scrap.presentation.dto.request.ScrapRequest;
@@ -18,16 +20,16 @@ public class PlaceScrapController {
     private final PlaceScrapService scrapService;
 
     @PostMapping("/place/scrap")
-    public ResponseEntity<Void> scrapPlace(@AuthenticationPrincipal User user, @RequestBody ScrapRequest scrapRequest) {
+    public ResponseEntity<ApiResponse> scrapPlace(@AuthenticationPrincipal User user, @RequestBody ScrapRequest scrapRequest) {
 
         scrapService.createScrap(ScrapAssembler.createPlaceScrapRequestDto(Long.parseLong(user.getUsername()), scrapRequest));
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @DeleteMapping("/place/scrap")
-    public ResponseEntity<Void> removeScrap(@AuthenticationPrincipal User user, @RequestBody ScrapCancelRequest scrapCancelRequest) {
+    public ResponseEntity<ApiResponse> removeScrap(@AuthenticationPrincipal User user, @RequestBody ScrapCancelRequest scrapCancelRequest) {
 
         scrapService.removeScrap(Long.parseLong(user.getUsername()), scrapCancelRequest.getLat(), scrapCancelRequest.getLng());
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 }

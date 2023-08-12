@@ -5,6 +5,7 @@ import cmc.mellyserver.mellyapi.common.response.ErrorResponse;
 import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,9 +35,9 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             IOException {
 
         response.setContentType("application/json; charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpStatus.OK.value());
 
-        ErrorResponse error = ErrorResponse.of(ErrorCode.EXPIRED_TOKEN.getCode(), ex.getMessage());
+        ErrorResponse error = ErrorResponse.of(ErrorCode.EXPIRED_TOKEN);
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
@@ -46,9 +47,9 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             IOException {
 
         response.setContentType("application/json; charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpStatus.OK.value());
 
-        ErrorResponse error = ErrorResponse.of(ErrorCode.LOGOUT_WITHDRAW_USER.getCode(), ex.getMessage());
+        ErrorResponse error = ErrorResponse.of(ErrorCode.LOGOUT_WITHDRAW_USER);
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
