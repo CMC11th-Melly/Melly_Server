@@ -1,11 +1,11 @@
 package cmc.mellyserver.mellycore.notification.domain.repository;
 
 import cmc.mellyserver.mellycore.notification.domain.Notification;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends MongoRepository<Notification, Long> {
 
-    List<Notification> getNotificationByUserId(Long userId);
+    List<Notification> findAllByUserId(Long userId);
 }

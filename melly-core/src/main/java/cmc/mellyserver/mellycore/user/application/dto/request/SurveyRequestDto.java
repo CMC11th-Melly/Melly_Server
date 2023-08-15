@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.user.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.RecommendActivity;
-import cmc.mellyserver.mellycommon.enums.RecommendGroup;
-import cmc.mellyserver.mellycommon.enums.RecommendPlace;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendActivity;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendPlace;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SurveyRequestDto {
 
-    private Long userSeq;
-
     private RecommendGroup recommendGroup;
 
     private RecommendPlace recommendPlace;
@@ -20,9 +18,7 @@ public class SurveyRequestDto {
     private RecommendActivity recommendActivity;
 
     @Builder
-    public SurveyRequestDto(Long userSeq, RecommendGroup recommendGroup, RecommendPlace recommendPlace,
-                            RecommendActivity recommendActivity) {
-        this.userSeq = userSeq;
+    public SurveyRequestDto(RecommendGroup recommendGroup, RecommendPlace recommendPlace, RecommendActivity recommendActivity) {
         this.recommendGroup = recommendGroup;
         this.recommendPlace = recommendPlace;
         this.recommendActivity = recommendActivity;

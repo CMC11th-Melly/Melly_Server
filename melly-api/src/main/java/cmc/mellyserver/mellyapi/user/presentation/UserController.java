@@ -1,37 +1,40 @@
 package cmc.mellyserver.mellyapi.user.presentation;
 
-import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
-import cmc.mellyserver.mellyapi.memory.presentation.dto.common.MemoryAssembler;
+import cmc.mellyserver.mellyapi.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.mellyapi.user.presentation.dto.UserAssembler;
-import cmc.mellyserver.mellyapi.user.presentation.dto.request.ParticipateGroupRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
-import cmc.mellyserver.mellycommon.enums.GroupType;
-import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellyapi.user.presentation.dto.response.ProfileResponse;
 import cmc.mellyserver.mellycore.group.application.GroupService;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import cmc.mellyserver.mellycore.scrap.application.PlaceScrapService;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.mellycore.user.application.UserProfileService;
 import cmc.mellyserver.mellycore.user.application.UserSurveyService;
-import cmc.mellyserver.mellycore.user.application.dto.SurveyRecommendResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
+import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -48,90 +51,95 @@ public class UserController {
 
     private final GroupService groupService;
 
-    @GetMapping("/{userSeq}/nickname")
-    public ResponseEntity<ApiResponse> getUserNickname(@PathVariable Long userSeq) {
-
-        String nickname = userProfileService.findNicknameByUserIdentifier(userSeq);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, nickname));
-    }
 
     @PostMapping("/surveys")
-    public ResponseEntity<ApiResponse> addSurvey(@AuthenticationPrincipal User user, @RequestBody SurveyRequest surveyRequest) {
+    public ResponseEntity<ApiResponse> addSurvey(@CurrentUser LoginUser loginUser, @RequestBody SurveyRequest surveyRequest) {
 
-        userSurveyService.createSurvey(UserAssembler.surveyRequestDto(Long.parseLong(user.getUsername()), surveyRequest));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        userSurveyService.createSurvey(loginUser.getId(), surveyRequest.toDto());
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
+
 
     @GetMapping("/surveys")
-    public ResponseEntity<ApiResponse> getSurvey(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getSurvey(@CurrentUser LoginUser loginUser) {
 
-        SurveyRecommendResponseDto surveyRecommendResponseDto = userSurveyService.getSurveyResult(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, surveyRecommendResponseDto));
+        SurveyRecommendResponseDto surveyRecommendResponseDto = userSurveyService.getSurveyResult(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, surveyRecommendResponseDto);
     }
 
+    // 유저 프로필을 수정에 필요한 데이터 조회
+    @GetMapping("/my-profile/edit-form")
+    public ResponseEntity<ApiResponse> updateProfileFormData(@CurrentUser LoginUser loginUser) {
+
+        ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userProfileService.getLoginUserProfileDataForUpdate(
+                loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, profileUpdateFormResponseDto);
+    }
+
+    // 유저 프로필 조회
     @GetMapping("/my-profile")
-    public ResponseEntity<ApiResponse> updateProfileFormData(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getUserProfile(@CurrentUser LoginUser loginUser) {
 
-        ProfileUpdateFormResponseDto profileUpdateFormResponseDto = userProfileService.getLoginUserProfileDataForUpdate(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, profileUpdateFormResponseDto));
+        ProfileResponseDto profileResponseDto = userProfileService.getUserProfile(loginUser.getId());
+        Integer volume = userProfileService.checkImageStorageVolumeLoginUserUse(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto, volume));
     }
 
-    @PutMapping("/my-profile")
-    public ResponseEntity<ApiResponse> updateProfile(@AuthenticationPrincipal User user, ProfileUpdateRequest profileUpdateRequest) {
+    // 유저 프로필 수정
+    @PatchMapping("/my-profile")
+    public ResponseEntity<ApiResponse> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) {
 
-        userProfileService.updateLoginUserProfile(UserAssembler.profileUpdateRequestDto(Long.parseLong(user.getUsername()), profileUpdateRequest));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        userProfileService.updateUserProfile(loginUser.getId(), profileUpdateRequest.toDto());
+        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
+    @PatchMapping("/my-profile/profile-image")
+    public ResponseEntity<ApiResponse> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
+
+        userProfileService.updateUserProfileImage(loginUser.getId(), profileImage);
+        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+    }
+
+    // 내가 작성한 메모리 조회
     @GetMapping("/my-memorys")
-    public ResponseEntity<ApiResponse> getUserMemory(@AuthenticationPrincipal User user, @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
+    public ResponseEntity<ApiResponse> getUserMemory(@CurrentUser LoginUser loginUser,
+                                                     @RequestParam(name = "lastId", required = false) Long lastId,
+                                                     @PageableDefault(size = 10) Pageable pageable,
+                                                     @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(pageable, Long.parseLong(user.getUsername()), groupType);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-                MemoryAssembler.memoryResponses(results)));
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), groupType);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, results);
     }
 
+    // 내가 포함된 그룹 조회
     @GetMapping("/my-groups")
-    public ResponseEntity<ApiResponse> getUserGroup(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getUserGroup(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable) {
 
-        List<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results)));
+        Slice<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(loginUser.getId(), lastId, pageable);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results));
     }
 
-    @GetMapping("/my-group/{groupId}/memorys")
-    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false, name = "userId") Long userSeq) {
+    // 내가 속해 있는 그룹의 사람들이 작성한 메모리
+    @GetMapping("/my-groups/{groupId}/memorys")
+    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(pageable, groupId, userSeq);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-                MemoryAssembler.memoryResponses(results)));
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, loginUser.getId(), groupType);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.memoryResponses(results));
     }
 
+    // 내가 스크랩한 장소의 개수 조회
     @GetMapping("/place-scraps/count")
-    public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@CurrentUser LoginUser loginUser) {
 
-        List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, UserAssembler.placeScrapCountResponses(results)));
+        List<PlaceScrapCountResponseDto> results = placeScrapService.countByPlaceScrapType(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.placeScrapCountResponses(results));
     }
 
+    // 스크랩 타입별 조회
     @GetMapping("/place-scraps")
-    public ResponseEntity<ApiResponse> getPlaceUserScrap(@AuthenticationPrincipal User user, Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
+    public ResponseEntity<ApiResponse> getPlaceUserScrap(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
 
-        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(pageable, Long.parseLong(user.getUsername()), scrapType);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS,
-                UserAssembler.scrapedPlaceResponses(results)));
-    }
-
-    @GetMapping("/volume")
-    public ResponseEntity<ApiResponse> getUserImageVolume(@AuthenticationPrincipal User user) {
-
-        Integer volume = userProfileService.checkImageStorageVolumeLoginUserUse(user.getUsername());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, volume));
-    }
-
-    @PostMapping("/groups/participate")
-    public ResponseEntity<ApiResponse> participateToGroup(@AuthenticationPrincipal User user, @RequestBody ParticipateGroupRequest participateGroupRequest) {
-
-        groupService.participateToGroup(Long.parseLong(user.getUsername()), participateGroupRequest.getGroupId());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(lastId, pageable, loginUser.getId(), scrapType);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.scrapedPlaceResponses(results));
     }
 }

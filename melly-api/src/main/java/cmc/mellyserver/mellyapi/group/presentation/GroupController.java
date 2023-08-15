@@ -1,18 +1,16 @@
 package cmc.mellyserver.mellyapi.group.presentation;
 
-import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.mellyapi.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 import cmc.mellyserver.mellycore.group.application.GroupService;
-import cmc.mellyserver.mellycore.group.domain.UserGroup;
+import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupDetailResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,32 +23,46 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/{groupId}")
-    private ResponseEntity<ApiResponse> getGroupInfo(@PathVariable Long groupId) {
+    public ResponseEntity<ApiResponse> getGroupDetail(@PathVariable Long groupId) {
 
-        UserGroup group = groupService.findGroupById(groupId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, GroupAssembler.getUserGroupResponse(group)));
+        GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, GroupAssembler.getUserGroupResponse(groupDetail));
     }
 
     @PostMapping
-    private ResponseEntity<ApiResponse> addGroup(@AuthenticationPrincipal User user,
-                                                 @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
+    public ResponseEntity<ApiResponse> addGroup(@CurrentUser LoginUser loginUser, @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
 
-        UserGroup userGroup = groupService.saveGroup(GroupAssembler.createGroupRequestDto(Long.parseLong(user.getUsername()), groupCreateRequest));
-        GroupLoginUserParticipatedResponse userGroupResponse = GroupAssembler.getUserGroupResponse(userGroup);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, userGroupResponse));
+        Long groupId = groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
-    @PutMapping("/{groupId}")
-    private ResponseEntity<ApiResponse> updateGroup(@PathVariable Long groupId, @AuthenticationPrincipal User user, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
+    @PatchMapping("/{groupId}")
+    public ResponseEntity<ApiResponse> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
 
-        groupService.updateGroup(Long.parseLong(user.getUsername()), GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        groupService.updateGroup(loginUser.getId(), GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
+        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+    }
+
+    @PostMapping("/{groupId}/participate")
+    public ResponseEntity<ApiResponse> participateToGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
+
+        groupService.participateToGroup(loginUser.getId(), groupId);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @DeleteMapping("/{groupId}")
-    private ResponseEntity<ApiResponse> deleteGroup(@AuthenticationPrincipal User user, @PathVariable Long groupId) {
+    public ResponseEntity<ApiResponse> deleteGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
 
-        groupService.removeGroup(Long.parseLong(user.getUsername()), groupId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        groupService.removeGroup(loginUser.getId(), groupId);
+        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
+
+    @DeleteMapping("/{groupId}/exit")
+    public ResponseEntity<ApiResponse> exitGroup(@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
+
+        groupService.exitGroup(loginUser.getId(), groupId);
+        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+    }
+
+
 }

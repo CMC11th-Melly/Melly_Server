@@ -1,55 +1,64 @@
 package cmc.mellyserver.mellycore.notification.domain;
 
-import cmc.mellyserver.mellycommon.enums.NotificationType;
-import cmc.mellyserver.mellycore.common.util.jpa.JpaBaseEntity;
-import lombok.AccessLevel;
+import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "tb_notification")
-public class Notification extends JpaBaseEntity {
+@Document(collection = "notification")
+public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
-    private Long id;
+    private String id;
 
-    @Column(name = "message")
-    private String message;
+    @Field(name = "user_id")
+    private Long userId; // 이걸 기반으로 조회
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "title")
-    NotificationType title;
+    @Field(name = "content")
+    private String content;
 
-    @Column(name = "checked")
-    private Boolean checked;
+    @Field(name = "notification_type")
+    NotificationType notificationType;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Field(name = "is_read")
+    private Boolean isRead;
 
-    @Column(name = "memory_id")
+    @Field(name = "profile_image")
+    private String profileImage;
+
+    @Field(name = "nickname")
+    private String nickname;
+
+    @Field(name = "memory_id")
     private Long memoryId;
 
-    public Notification(NotificationType title, String message, boolean checked, Long userId, Long memoryId) {
-        this.title = title;
-        this.message = message;
-        this.checked = checked;
+    @Field(name = "notification_date_time")
+    private LocalDateTime createdDateTime;
+
+    @Builder
+    public Notification(final String content, final Long userId, final NotificationType notificationType, final Boolean isRead, final String profileImage, final String nickname, final Long memoryId, final LocalDateTime createdDateTime) {
+        this.content = content;
         this.userId = userId;
+        this.notificationType = notificationType;
+        this.isRead = isRead;
+        this.profileImage = profileImage;
+        this.nickname = nickname;
         this.memoryId = memoryId;
+        this.createdDateTime = createdDateTime;
     }
 
-    public static Notification createNotification(NotificationType title, String message, boolean checked, Long memoryId, Long userId) {
+    public static Notification createNotification(final String content, final Long userId, final NotificationType notificationType, final Boolean isRead, final String profileImage, final String nickname, final Long memoryId, final LocalDateTime createdDateTime) {
 
-        return new Notification(title, message, checked, userId, memoryId);
+        return new Notification(content, userId, notificationType, isRead, profileImage, nickname, memoryId, createdDateTime);
     }
 
-    public void checkNotification(boolean check) {
-        this.checked = check;
+    public void userCheckedNotification() {
+        this.isRead = Boolean.TRUE;
     }
 }

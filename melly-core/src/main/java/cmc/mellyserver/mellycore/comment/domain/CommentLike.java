@@ -23,10 +23,10 @@ public class CommentLike {
 
     private Long userId;
 
-    public static CommentLike createCommentLike(Long userSeq, Comment comment) {
+    public static CommentLike createCommentLike(Long id, Comment comment) {
         CommentLike commentLike = new CommentLike();
         commentLike.setComment(comment);
-        commentLike.userId = userSeq;
+        commentLike.userId = id;
         return commentLike;
     }
 

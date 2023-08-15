@@ -1,15 +1,15 @@
 package cmc.mellyserver.mellycore.scrap.application.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 public class CreatePlaceScrapRequestDto {
 
-    private Long userSeq;
+    private Long id;
 
     private Double lat;
 
@@ -22,9 +22,9 @@ public class CreatePlaceScrapRequestDto {
     private String placeCategory;
 
     @Builder
-    public CreatePlaceScrapRequestDto(Long userSeq, Double lat, Double lng, ScrapType scrapType, String placeName,
+    public CreatePlaceScrapRequestDto(Long id, Double lat, Double lng, ScrapType scrapType, String placeName,
                                       String placeCategory) {
-        this.userSeq = userSeq;
+        this.id = id;
         this.lat = lat;
         this.lng = lng;
         this.scrapType = scrapType;

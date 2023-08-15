@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.group.domain.repository.dto;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.GroupAndUser;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

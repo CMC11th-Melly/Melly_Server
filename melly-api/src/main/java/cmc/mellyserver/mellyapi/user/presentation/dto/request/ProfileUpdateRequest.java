@@ -1,25 +1,30 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.AgeGroup;
-import cmc.mellyserver.mellycommon.enums.Gender;
+import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
+import cmc.mellyserver.mellycore.user.domain.enums.AgeGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.Gender;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-@Builder
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ProfileUpdateRequest {
 
-    private MultipartFile profileImage;
-
+    @Size(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하로 입력해야 합니다.")
     private String nickname;
 
-    private Gender gender;
+    @NotEmpty(message = "성별을 입력해야 합니다.")
+    private String gender;
 
-    private AgeGroup ageGroup;
+    @NotEmpty(message = "연령대를 입력해야 합니다.")
+    private String ageGroup;
 
-    private boolean deleteImage;
-
+    public ProfileUpdateRequestDto toDto() {
+        return new ProfileUpdateRequestDto(nickname, Gender.from(gender), AgeGroup.from(ageGroup));
+    }
 }

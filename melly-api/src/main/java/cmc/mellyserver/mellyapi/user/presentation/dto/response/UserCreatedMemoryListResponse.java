@@ -1,12 +1,13 @@
 package cmc.mellyserver.mellyapi.user.presentation.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor

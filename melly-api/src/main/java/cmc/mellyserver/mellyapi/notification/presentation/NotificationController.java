@@ -1,88 +1,73 @@
 package cmc.mellyserver.mellyapi.notification.presentation;
 
-import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
-import cmc.mellyserver.mellyapi.notification.presentation.dto.NotificationAssembler;
 import cmc.mellyserver.mellyapi.notification.presentation.dto.request.NotificationCheckRequest;
 import cmc.mellyserver.mellycore.notification.application.NotificationService;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
-import cmc.mellyserver.mellycore.notification.domain.Notification;
+import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
+import cmc.mellyserver.mellycore.notification.domain.repository.dto.NotificationResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notification")
+@RequestMapping("/api/notifications")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
     @GetMapping("/setting")
-    public ResponseEntity<ApiResponse> getNotificationOnOff(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getNotificationStatus(@CurrentUser LoginUser loginUser) {
 
-        NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationOnOff(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, notificationOnOff));
+        NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse> saveNotification() {
+        notificationService.createNotification("내용", NotificationType.COMMENT_ENROLL, 1L, 1L);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getNotifications(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getNotifications(@CurrentUser LoginUser loginUser) {
 
-        List<Notification> notificationList = notificationService.getNotificationList(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, NotificationAssembler.notificationResponses(notificationList)));
+        List<NotificationResponse> notificationList = notificationService.getNotificationList(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationList);
     }
 
     @PostMapping("/setting")
-    public ResponseEntity<ApiResponse> appPushOn(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
-        notificationService.setAppPushOn(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
-    }
-
-    @DeleteMapping("/setting")
-    public ResponseEntity<ApiResponse> appPushOff(@AuthenticationPrincipal User user) {
-
-        notificationService.setAppPushOff(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        notificationService.changeAppPushStatus(loginUser.getId(), status);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment")
-    public ResponseEntity<ApiResponse> appPushCommentOn(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
-        notificationService.setPushCommentOn(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
-    }
-
-    @DeleteMapping("/setting/comment")
-    public ResponseEntity<ApiResponse> appPushCommentOff(@AuthenticationPrincipal User user) {
-
-        notificationService.setPushCommentOff(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        notificationService.changeCommentPushStatus(loginUser.getId(), status);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment/like")
-    public ResponseEntity<ApiResponse> appPushCommentLikeOn(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
-        notificationService.setPushCommentLikeOn(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
-    }
-
-    @DeleteMapping("/setting/comment/like")
-    public ResponseEntity<ApiResponse> appPushCommentLikeOff(@AuthenticationPrincipal User user) {
-
-        notificationService.setPushCommentLikeOff(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/check")
     public ResponseEntity<ApiResponse> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
         notificationService.checkNotification(notificationCheckRequest.getNotificationId());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 }

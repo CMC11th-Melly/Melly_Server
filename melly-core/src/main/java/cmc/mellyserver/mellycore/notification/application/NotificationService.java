@@ -1,98 +1,90 @@
 package cmc.mellyserver.mellycore.notification.application;
 
 
-import cmc.mellyserver.mellycommon.codes.ErrorCode;
-import cmc.mellyserver.mellycommon.enums.NotificationType;
-import cmc.mellyserver.mellycore.common.AuthenticatedUserChecker;
-import cmc.mellyserver.mellycore.common.exception.GlobalBadRequestException;
 import cmc.mellyserver.mellycore.memory.domain.Memory;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.mellycore.notification.domain.Notification;
-import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
-import cmc.mellyserver.mellycore.notification.exception.MemoryNotFoundException;
+import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
+import cmc.mellyserver.mellycore.notification.domain.repository.dto.NotificationResponse;
 import cmc.mellyserver.mellycore.user.domain.User;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private final AuthenticatedUserChecker authenticatedUserChecker;
-
-    private final NotificationRepository notificationRepository;
+    private final MongoTemplate mongoTemplate;
 
     private final MemoryRepository memoryRepository;
 
-    public List<Notification> getNotificationList(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return notificationRepository.getNotificationByUserId(user.getUserSeq());
-    }
+    private final UserRepository userRepository;
 
-    @Transactional
-    public void setPushCommentLikeOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableCommentLike(true);
-    }
 
-    @Transactional
-    public void setPushCommentLikeOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableCommentLike(false);
-    }
+    @Transactional(readOnly = true)
+    public List<NotificationResponse> getNotificationList(Long userId) {
 
-    @Transactional
-    public void setPushCommentOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableComment(true);
-    }
-
-    @Transactional
-    public void setPushCommentOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableComment(false);
-    }
-
-    @Transactional
-    public void setAppPushOn(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableAppPush(true);
-    }
-
-    @Transactional
-    public void setAppPushOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        user.setEnableAppPush(false);
+        Query query = new Query(Criteria.where("user_id").is(userId));
+        List<Notification> notificationList = mongoTemplate.findAll(Notification.class, "notification");
+        return notificationList.stream().map(NotificationResponse::from).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public NotificationOnOffResponseDto getNotificationOnOff(Long userSeq) {
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        return new NotificationOnOffResponseDto(user.isEnableAppPush(), user.isEnableCommentLike(),
-                user.isEnableComment());
+    public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
+        User user = userRepository.getById(userId);
+        return NotificationOnOffResponseDto.of(user.getEnableAppPush(), user.getEnableCommentPush(), user.getEnableCommentLikePush());
     }
 
     @Transactional
-    public Notification createNotification(NotificationType notificationType, String body, Long userSeq, Long memoryId) {
+    public void changeAppPushStatus(Long userId, boolean status) {
+        User user = userRepository.getById(userId);
+        user.changeAppPushStatus(status);
+    }
 
-        User user = authenticatedUserChecker.checkAuthenticatedUserExist(userSeq);
-        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> {
-            throw new MemoryNotFoundException();
-        });
-        return notificationRepository.save(Notification.createNotification(notificationType, body, false, memory.getId(), user.getUserSeq()));
+    @Transactional
+    public void changeCommentLikePushStatus(Long userId, boolean status) {
+        User user = userRepository.getById(userId);
+        user.changeCommentLikePushStatus(status);
+    }
+
+    @Transactional
+    public void changeCommentPushStatus(Long userId, boolean status) {
+        User user = userRepository.getById(userId);
+        user.changeCommenPushStatus(status);
+    }
+
+
+    @Transactional
+    public Notification createNotification(String body, NotificationType notificationType, Long userId, Long memoryId) {
+
+        User user = userRepository.getById(userId);
+        Memory memory = memoryRepository.getById(memoryId);
+
+        return mongoTemplate.insert(Notification.createNotification(
+                body,
+                userId,
+                notificationType,
+                false,
+                user.getProfileImage(),
+                user.getNickname(),
+                memory.getId(),
+                LocalDateTime.now()));
     }
 
     @Transactional
     public void checkNotification(Long notificationId) {
 
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> {
-            throw new GlobalBadRequestException(ErrorCode.NO_SUCH_NOTIFICATION);
-        });
-        notification.checkNotification(true);
-
+        Notification notification = mongoTemplate.findById(notificationId, Notification.class);
+        notification.userCheckedNotification();
     }
 }

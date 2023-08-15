@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellyapi.memory.presentation.dto.response;
 
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import lombok.Builder;
 import lombok.Data;
 

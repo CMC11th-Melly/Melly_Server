@@ -1,11 +1,11 @@
 package cmc.mellyserver.mellyapi.common.annotation;
 
+import org.springframework.security.test.context.support.WithMockUser;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import org.springframework.security.test.context.support.WithMockUser;
-
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockUser(username = "1", roles = "USER")
+@WithMockUser(username = "모카", roles = "USER")
 public @interface WithUser {
 }

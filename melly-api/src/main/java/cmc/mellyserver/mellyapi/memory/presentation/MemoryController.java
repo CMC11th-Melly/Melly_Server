@@ -1,30 +1,30 @@
 package cmc.mellyserver.mellyapi.memory.presentation;
 
-import cmc.mellyserver.mellyapi.common.constants.MessageConstant;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
+import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
-import cmc.mellyserver.mellyapi.memory.presentation.dto.common.MemoryAssembler;
+import cmc.mellyserver.mellyapi.memory.presentation.dto.MemoryAssembler;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.common.wrapper.GetMemoryForPlaceResponseWrapper;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.common.wrapper.GetMyGroupMemoryForPlaceResponseWrapper;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.common.wrapper.GetOtherMemoryForPlaceResponseWrapper;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryCreateRequest;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.request.MemoryUpdateRequest;
+import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryDetailResponse;
 import cmc.mellyserver.mellyapi.memory.presentation.dto.response.MemoryResponse;
-import cmc.mellyserver.mellycommon.enums.GroupType;
 import cmc.mellyserver.mellycore.group.application.GroupService;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupLoginUserParticipatedResponseDto;
 import cmc.mellyserver.mellycore.memory.application.MemoryReadService;
 import cmc.mellyserver.mellycore.memory.application.MemoryWriteService;
 import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
+import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +33,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/memorys")
+@RequestMapping("/api/memories")
 public class MemoryController {
 
     private final MemoryReadService memoryReadService;
@@ -43,73 +43,87 @@ public class MemoryController {
     private final GroupService groupService;
 
     @GetMapping("/group")
-    public ResponseEntity<ApiResponse> getGroupListForSaveMemory(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> getGroupListForSaveMemory(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable) {
 
-        List<GroupLoginUserParticipatedResponseDto> userGroup = groupService.findGroupListLoginUserParticipateForMemoryCreate(Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.groupListForSaveMemoryResponse(userGroup)));
+        Slice<GroupLoginUserParticipatedResponseDto> userGroup = groupService.findGroupListLoginUserParticipateForMemoryCreate(loginUser.getId(), lastId, pageable);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.groupListForSaveMemoryResponse(userGroup));
     }
 
-    @GetMapping("/user/place/{placeId}")
-    public ResponseEntity<ApiResponse> getUserMemory(@PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable,
-                                                     @AuthenticationPrincipal User user, @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> userMemory = memoryReadService.findLoginUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+    @GetMapping("/user/place/{placeId}")
+    public ResponseEntity<ApiResponse> getUserMemory(@CurrentUser LoginUser loginUser,
+                                                     @RequestParam(name = "lastId", required = false) Long lastId,
+                                                     @PageableDefault(size = 10) Pageable pageable,
+                                                     @PathVariable Long placeId,
+                                                     @RequestParam(required = false) GroupType groupType) {
+
+        Slice<MemoryResponseDto> userMemory = memoryReadService.findLoginUserWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(userMemory);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetMemoryForPlaceResponseWrapper(memoryResponses.getContent().stream().count(), memoryResponses)));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, new GetMemoryForPlaceResponseWrapper(memoryResponses.getContent().stream().count(), memoryResponses));
     }
 
     @GetMapping("/other/place/{placeId}")
-    public ResponseEntity<ApiResponse> getOtherMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType,
-                                                      @PageableDefault(sort = "visitedDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable) {
+    public ResponseEntity<ApiResponse> getOtherMemory(@CurrentUser LoginUser loginUser,
+                                                      @RequestParam(name = "lastId", required = false) Long lastId,
+                                                      @PageableDefault(size = 10) Pageable pageable,
+                                                      @PathVariable Long placeId,
+                                                      @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> otherMemory = memoryReadService.findOtherUserWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        Slice<MemoryResponseDto> otherMemory = memoryReadService.findOtherUserWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(otherMemory);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetOtherMemoryForPlaceResponseWrapper(memoryResponses.stream().count(), memoryResponses)));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, new GetOtherMemoryForPlaceResponseWrapper(memoryResponses.stream().count(), memoryResponses));
     }
 
     @GetMapping("/group/place/{placeId}")
-    public ResponseEntity<ApiResponse> getMyGroupMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId, Pageable pageable, @RequestParam(required = false) GroupType groupType) {
+    public ResponseEntity<ApiResponse> getMyGroupMemory(@CurrentUser LoginUser loginUser,
+                                                        @RequestParam(name = "lastId", required = false) Long lastId,
+                                                        @PathVariable Long placeId,
+                                                        @PageableDefault(size = 10) Pageable pageable,
+                                                        @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryReadService.findMyGroupMemberWriteMemoryBelongToPlace(pageable, Long.parseLong(user.getUsername()), placeId, groupType);
+        Slice<MemoryResponseDto> results = memoryReadService.findMyGroupMemberWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
         Slice<MemoryResponse> memoryResponses = MemoryAssembler.memoryResponses(results);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, new GetMyGroupMemoryForPlaceResponseWrapper(memoryResponses.stream().count(), memoryResponses)));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, new GetMyGroupMemoryForPlaceResponseWrapper(memoryResponses.stream().count(), memoryResponses));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> save(@AuthenticationPrincipal User user, @RequestPart(name = "images", required = false) List<MultipartFile> images,
+    public ResponseEntity<ApiResponse> save(@CurrentUser LoginUser loginUser,
+                                            @RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
                                             @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
 
-        memoryWriteService.createMemory(MemoryAssembler.createMemoryRequestDto(Long.parseLong(user.getUsername()), images, memoryCreateRequest));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        Long memoryId = memoryWriteService.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PutMapping("/{memoryId}")
-    public ResponseEntity<ApiResponse> updateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId, @RequestPart(name = "images", required = false) List<MultipartFile> images,
+    public ResponseEntity<ApiResponse> updateMemory(@CurrentUser LoginUser loginUser,
+                                                    @PathVariable Long memoryId,
+                                                    @RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
                                                     @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
 
-        memoryWriteService.updateMemory(MemoryAssembler.updateMemoryRequestDto(Long.parseLong(user.getUsername()), memoryId, memoryUpdateRequest, images));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        memoryWriteService.updateMemory(MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
+        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
     @GetMapping("/{memoryId}/update")
-    public ResponseEntity<ApiResponse> getFormForUpdateMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId) {
+    public ResponseEntity<ApiResponse> getFormForUpdateMemory(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId) {
 
-        MemoryUpdateFormResponseDto formForUpdateMemory = memoryReadService.findMemoryUpdateFormData(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryAssembler.memoryUpdateFormResponse(formForUpdateMemory)));
+        MemoryUpdateFormResponseDto formForUpdateMemory = memoryReadService.findMemoryUpdateFormData(loginUser.getId(), memoryId);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.memoryUpdateFormResponse(formForUpdateMemory));
     }
 
     @DeleteMapping("/{memoryId}")
     public ResponseEntity<ApiResponse> deleteMemory(@PathVariable Long memoryId) {
 
         memoryWriteService.removeMemory(memoryId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS));
+        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 
 
     @GetMapping("/{memoryId}")
-    public ResponseEntity<ApiResponse> findMemory(@AuthenticationPrincipal User user, @PathVariable Long memoryId) {
+    public ResponseEntity<ApiResponse> findMemoryDetail(@PathVariable Long memoryId) {
 
-        MemoryResponseDto memoryByMemoryId = memoryReadService.findMemoryByMemoryId(Long.parseLong(user.getUsername()), memoryId);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstant.MESSAGE_SUCCESS, MemoryResponse.of(memoryByMemoryId)));
+        MemoryDetailResponseDto memoryByMemoryId = memoryReadService.findMemoryDetail(memoryId);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryDetailResponse.of(memoryByMemoryId));
     }
 }

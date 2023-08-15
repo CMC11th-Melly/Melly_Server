@@ -8,6 +8,7 @@ import cmc.mellyserver.mellyapi.common.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -24,19 +25,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RedisTemplate redisTemplate;
+
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
+
     private final TokenAccessDeniedHandler accessDeniedHandler;
+
     private final JwtExceptionFilter jwtExceptionFilter;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger*/**");
+        web.ignoring().antMatchers("/swagger*/**", "/firebase-messaging-sw.js");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        TokenAuthenticationFilter authenticationFilter = new TokenAuthenticationFilter(jwtTokenProvider);
+        TokenAuthenticationFilter authenticationFilter = new TokenAuthenticationFilter(jwtTokenProvider, redisTemplate);
 
         http
                 .cors()
@@ -53,9 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/actuator/**", "/v3/api-docs/**", "/api/memory/**", "/api/place/list", "/api/imageTest",
-                        "/api/pw", "/api/optional", "/auth/social/signup", "/auth/social", "/auth/signup", "/auth/login",
-                        "/auth/nickname", "/auth/email", "/api/health", "/").permitAll()
+                .antMatchers("/api/push", "/firebase-messaging-sw.js", "/actuator/**", "/v3/api-docs/**", "/api/memory/**", "/api/place/list", "/api/imageTest",
+                        "/api/pw", "/api/optional", "/auth/social/signup", "/api/auth/social", "/api/auth/signup", "/api/auth/login", "/api/auth/token/reissue",
+                        "/auth/nickname", "/auth/email", "/api/health", "/api/auth/email-certification/sends", "/api/auth/email-certification/resends", "/api/auth/email-certification/confirms", "/api/auth/social-signup", "/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -63,8 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(4);
     }
 }

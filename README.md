@@ -23,21 +23,26 @@
 <br>
 
 ## 📕 Development Environment
+
 - <b>Language</b> :  Java 11
-- <b>Framework</b> :  SpringBoot, Spring Security, Spring Batch
-- <b>Database</b> : MySQL 8.0, Redis, Spring Data JPA, QueryDSL
-- <b>DevOps</b> : EC2, RDS, S3
-- <b>CI/CD</b> : Github actions(CI), Jenkins(CD), Docker
-- <b>Docs</b> : Spring RestDocs  
+
+- <b>Framework</b> :  SpringBoot, Spring Security
+- <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
+- <b>DevOps</b> : EC2, RDS, S3, Elasticache
+- <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)
+- <b>Docs</b> : Swagger (SpringDocs)
+
 
 <br>
 
 ## 🗓 Development
+
 2022.09.12 ~ 2021.11.12
 
 <br>
 
 ## 📚 Folder Structure
+
 ```
 ├── melly-api                     # 모바일 어플리케이션과 통신하는 REST API
 ├── melly-batch                   # 내부 배치 서비스        
@@ -57,6 +62,7 @@
 
 <br>
 
+
 ## 🏛 DTO Mapping Strategy
 
 <img src="https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/fcd5ce2f-276d-4b7a-8699-403a0610c6a9" width="700" height="500">
@@ -67,5 +73,6 @@
 ## 🏛 System Structure
 
 ![Source (5)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/3f3aee3c-6359-48be-8617-20e1987d0329)
+
 
 

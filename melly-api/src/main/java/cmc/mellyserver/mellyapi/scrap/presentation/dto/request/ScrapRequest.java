@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellyapi.scrap.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.ScrapType;
+import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScrapRequest {
 
-	private Double lat;
+    private Double lat;
 
-	private Double lng;
+    private Double lng;
 
-	private ScrapType scrapType;
+    private ScrapType scrapType;
 
-	private String placeName;
+    private String placeName;
 
-	private String placeCategory;
+    private String placeCategory;
 
 }

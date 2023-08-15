@@ -1,26 +1,23 @@
 package cmc.mellyserver.mellyapi.auth.presentation.dto.request;
 
 import cmc.mellyserver.mellyapi.auth.application.dto.request.AuthLoginRequestDto;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class AuthLoginRequest {
 
-    @Email
+    @Email(message = "이메일 형식을 지켜야 합니다")
     private String email;
 
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d).{8,}$")
     private String password;
 
     private String fcmToken;
 
-    public AuthLoginRequestDto toServiceDto() {
+    public AuthLoginRequestDto toDto() {
         return new AuthLoginRequestDto(email, password, fcmToken);
     }
 

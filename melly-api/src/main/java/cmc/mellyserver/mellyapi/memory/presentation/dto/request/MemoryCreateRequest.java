@@ -1,15 +1,16 @@
 package cmc.mellyserver.mellyapi.memory.presentation.dto.request;
 
-import cmc.mellyserver.mellycommon.enums.OpenType;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +29,6 @@ public class MemoryCreateRequest {
     private String title;
 
     @NotNull
-    @Length(min = 20, message = "본문은 20자 이상으로 작성해주세요.")   // ok
     @Length(max = 650, message = "본문은 650자 이하로 작성해주세요.")   // ok
     private String content;
 
@@ -38,16 +38,16 @@ public class MemoryCreateRequest {
 
     private OpenType openType;
 
-    @JsonFormat(pattern = "yyyyMMddHHmm")
-    private LocalDateTime visitedDate;
+    @JsonFormat(pattern = "yyyyMMdd")
+    private LocalDate visitedDate;
 
     private Long star;
 
     @Builder
     public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory,
-            String title,
-            String content, List<String> keyword, Long groupId, OpenType openType,
-            LocalDateTime visitedDate, Long star) {
+                               String title,
+                               String content, List<String> keyword, Long groupId, OpenType openType,
+                               LocalDate visitedDate, Long star) {
         this.lat = lat;
         this.lng = lng;
         this.placeName = placeName;
