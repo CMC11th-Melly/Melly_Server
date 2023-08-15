@@ -2,7 +2,6 @@ package cmc.mellyserver.mellycore.config;
 
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentQueryRepository;
 import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycore.common.bulkinsert.BulkInsertJdbcRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.group.domain.repository.UserGroupQueryRepository;
@@ -13,7 +12,6 @@ import cmc.mellyserver.mellycore.place.domain.repository.PlaceQueryRepository;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
-import cmc.mellyserver.mellycore.unit.common.bulkinsert.BulkInsertJdbcRepository;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -40,10 +38,6 @@ public class JpaTestConfiguration {
         return new PlaceScrapQueryRepository(entityManager);
     }
 
-    @Bean
-    public BulkInsertJdbcRepository placeScrapJDBCRepository(JdbcTemplate jdbcTemplate) {
-        return new BulkInsertJdbcRepository(jdbcTemplate);
-    }
 
     @Bean
     public PlaceQueryRepository placeQueryRepository(EntityManager entityManager) {

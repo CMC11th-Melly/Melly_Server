@@ -19,6 +19,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.util.List;
 
 import static cmc.mellyserver.mellycore.common.constants.NotificationConstants.COMMENT_LIKE_NOTI_CONTENT;
+import static cmc.mellyserver.mellycore.common.constants.NotificationConstants.GROUP_USER_CREATED_MEMORY_CONTENT;
 
 @Slf4j
 @Component
@@ -61,7 +62,7 @@ public class NotificationEventHandler {
                 .filter(user -> excludeWriter(event, user))
                 .forEach(user -> {
                     pushService.sendGroupUserCreatedMemoryMessage(event.getUserId(), event.getMemoryId(), nickname);
-                    notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE, event.getUserId(), 1L);
+                    notificationService.createNotification(GROUP_USER_CREATED_MEMORY_CONTENT, NotificationType.GROUP_USER_CREATED_MEMORY, event.getUserId(), 1L);
                 });
     }
 

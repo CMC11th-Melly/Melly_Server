@@ -6,11 +6,13 @@ import cmc.mellyserver.mellycore.infrastructure.email.certification.EmailCertifi
 import cmc.mellyserver.mellycore.infrastructure.email.certification.RandomNumberGenerator;
 import cmc.mellyserver.mellycore.infrastructure.email.constant.EmailConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
+@Profile({"local", "prod"})
 @Repository
 public class JavaMailCertificationService implements EmailCertificationService {
 

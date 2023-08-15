@@ -1,6 +1,7 @@
 package cmc.mellyserver.mellycore.group.application;
 
 
+import cmc.mellyserver.mellycore.common.aop.DistributedLock;
 import cmc.mellyserver.mellycore.common.aop.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.common.exception.ErrorCode;
@@ -73,6 +74,7 @@ public class GroupService {
         return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
     }
 
+    // 관리자 권한을 가진 사람, 멤버 초대와 그룹 수정 가능
 
     @Transactional
     public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
@@ -85,6 +87,7 @@ public class GroupService {
 
 
     @CacheEvict(value = "group:group-id", key = "#groupId")
+    @DistributedLock(key = "#groupId", waitTime = 3L, leaseTime = 2L)
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {
 
@@ -100,10 +103,11 @@ public class GroupService {
         groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
     }
 
+
     @OptimisticLock
     @CacheEvict(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
     @Transactional
-    public void updateGroup(final Long userId, final UpdateGroupRequestDto updateGroupRequestDto) {
+    public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 
         UserGroup userGroup = groupRepository.getById(updateGroupRequestDto.getGroupId());
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
@@ -124,18 +128,6 @@ public class GroupService {
         Integer particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
 
         log.info("count : {}", particiatedUserCount);
-
-        // 그룹에 관리자는 무조건 한명 존재해야 한다.
-        // 기본 구성 관리자 1 + 일반 유저 1
-
-        // 그룹 탈퇴
-        // 1. 일반 유저는 바로 탈퇴 가능하다
-        // 2. 관리자는 그룹에 관리자가 2명 이상 존재할때 탈퇴할 수 있다.
-
-        // 권한 변경
-        // 1. 관리자는 일반 유저를 관리자로 권한 변경할 수 있다.
-        // 2. 관리자는 다른 관리자를 일반 유저로 강등도 가능하다.
-        // 3. 그룹에 관리자는 무조건 한명 이상 존재해야 한다.
 
 
         if (particiatedUserCount < 2) {
