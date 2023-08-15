@@ -10,20 +10,20 @@ public class FCMTokenRepository {
 
     private final StringRedisTemplate tokenRedisTemplate;
 
-    public void saveToken(String email, String fcmToken) {
+    public void saveToken(String key, String fcmToken) {
         tokenRedisTemplate.opsForValue()
-                .set(email, fcmToken);
+                .set(key, fcmToken);
     }
 
-    public String getToken(String email) {
-        return tokenRedisTemplate.opsForValue().get(email);
+    public String getToken(String key) {
+        return tokenRedisTemplate.opsForValue().get(key);
     }
 
-    public void deleteToken(String email) {
-        tokenRedisTemplate.delete(email);
+    public void deleteToken(String key) {
+        tokenRedisTemplate.delete(key);
     }
 
-    public boolean hasKey(String email) {
-        return tokenRedisTemplate.hasKey(email);
+    public boolean hasKey(String key) {
+        return tokenRedisTemplate.hasKey(key);
     }
 }

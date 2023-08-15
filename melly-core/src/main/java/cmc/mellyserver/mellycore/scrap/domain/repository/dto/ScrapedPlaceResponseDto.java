@@ -18,8 +18,4 @@ public class ScrapedPlaceResponseDto {
 
     private String placeImage;
 
-    //	private Long myMemoryCount;
-//	private Long otherMemoryCount;
-
-    //    private Boolean isScraped;
 }

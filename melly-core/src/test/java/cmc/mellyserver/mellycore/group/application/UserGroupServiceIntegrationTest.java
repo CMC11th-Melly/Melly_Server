@@ -1,82 +1,119 @@
 package cmc.mellyserver.mellycore.group.application;
 
-
 import cmc.mellyserver.mellycore.common.IntegrationTest;
+import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.group.domain.UserGroup;
+import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
+import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
+import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
+import cmc.mellyserver.mellycore.user.domain.User;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
+
+@Slf4j
 public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
-//    @DisplayName("그룹을 추가할 수 있다.")
-//    @Test
-//    void create_group() {
-//        // given
-//        User savedUser = userRepository.save(UserFactory.createEmailLoginUser());
-//        CreateGroupRequestDto createGroupRequestDto = CreateGroupRequestDto.cmc.mellyserver.mellycore.builder()
-//                .id(savedUser.getId())
-//                .groupType(GroupType.FRIEND)
-//                .groupName("테스트 그룹")
-//                .groupIcon(1)
-//                .build();
-//
-//        // when
-//        UserGroup group = groupService.saveGroup(createGroupRequestDto);
-//
-//        // then
-//        assertThat(group.getGroupName()).isEqualTo(createGroupRequestDto.getGroupName());
-//        assertThat(group.getCreatorId()).isEqualTo(savedUser.getId());
-//        assertThat(group.getGroupIcon()).isEqualTo(createGroupRequestDto.getGroupIcon());
-//        assertThat(group.getGroupType()).isEqualTo(createGroupRequestDto.getGroupType());
-//    }
-//
-//    @DisplayName("그룹 삭제 성공")
-//    @Test
-//    void remove_group() {
-//        // given
-//        User savedUser = userRepository.save(UserFactory.createEmailLoginUser());
-//        UserGroup savedGroup = groupService.saveGroup(CreateGroupRequestDto.cmc.mellyserver.mellycore.builder()
-//                .id(savedUser.getId())
-//                .groupIcon(1)
-//                .groupName("테스트 그룹")
-//                .groupType(GroupType.FRIEND)
-//                .build());
-//
-//        // when
-//        groupService.removeGroup(savedUser.getId(), savedGroup.getId());
-//
-//        // then
-//        UserGroup removeGroup = groupService.findGroupById(savedGroup.getId());
-//        assertThat(removeGroup.getIsDeleted()).isEqualTo(DeleteStatus.Y);
-//    }
-//
-//    @DisplayName("그룹을 식별자를 통해 그룹 정보를 조회하려고 할때")
-//    @Nested
-//    class When_get_group_info_by_identifier {
-//
-//        @DisplayName("그룹의 식별자를 통해 특정 그룹의 정보를 조회할 수 있다.")
-//        @Test
-//        void get_group_info() {
-//            // given
-//            UserGroup savedGroup = groupRepository.save(UserGroupFactory.userGroup());
-//
-//            // when
-//            UserGroup group = groupService.findGroupById(savedGroup.getId());
-//
-//            // then
-//            assertThat(group.getGroupName()).isEqualTo(savedGroup.getGroupName());
-//            assertThat(group.getGroupIcon()).isEqualTo(savedGroup.getGroupIcon());
-//            assertThat(group.getGroupType()).isEqualTo(savedGroup.getGroupType());
-//        }
-//
-//        @DisplayName("특정 그룹이 DB에 존재하지 않으면 예외가 발생한다.")
-//        @Test
-//        void get_group_info_not_found() {
-//            // given
-//            groupRepository.save(UserGroupFactory.mockUserGroup());
-//
-//            // when
-//            assertThatCode(() -> groupService.findGroupById(2L))
-//                    .isInstanceOf(GlobalBadRequestException.class)
-//                    .hasMessage(ErrorCode.NO_SUCH_GROUP.getMessage());
-//        }
-//    }
+    @Autowired
+    private GroupService groupService;
 
+    @Autowired
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private GroupAndUserRepository groupAndUserRepository;
+
+
+    @DisplayName("그룹의_인원은_10명을_초과할수없다")
+    @Test
+    void 그룹의_인원은_10명을_초과할수없다() {
+
+        // given
+        UserGroup group = UserGroup.builder().groupName("테스트 그룹").groupType(GroupType.FRIEND).build();
+        UserGroup 테스트_그룹 = groupRepository.save(group);
+
+        for (int i = 0; i < 10; i++) {
+            User 모카 = 모카().회원();
+            groupService.participateToGroup(모카.getId(), 테스트_그룹.getId());
+        }
+
+        // when & then
+        User 마지막_회원 = 머식().회원();
+
+        Assertions.assertThatThrownBy(() -> {
+                    groupService.participateToGroup(마지막_회원.getId(), 테스트_그룹.getId());
+                }
+        ).isInstanceOf(BusinessException.class).hasMessage("그룹의 인원은 최대 10명 입니다.");
+    }
+
+    @DisplayName("동시에 그룹에 참여하면 제한 인원인 10명을 초과할 수 있다.")
+    @Test
+    void 동시에_그룹에_참여하면_제한인원인_10명을_초과할수_있다() throws InterruptedException {
+
+        // given
+        UserGroup group = UserGroup.builder().groupName("테스트 그룹").groupType(GroupType.FRIEND).build();
+        UserGroup 테스트_그룹 = groupRepository.save(group);
+
+        for (int i = 0; i < 9; i++) {
+            User 모카 = 모카().회원();
+            groupService.participateToGroup(모카.getId(), 테스트_그룹.getId());
+        }
+
+        // when
+        User 동시접속유저_1 = 모카().회원();
+        User 동시접속유저_2 = 모카().회원();
+
+        Thread thread1 = new Thread(
+                () -> groupService.participateToGroup(동시접속유저_1.getId(), 테스트_그룹.getId()));
+        Thread thread2 = new Thread(
+                () -> groupService.participateToGroup(동시접속유저_2.getId(), 테스트_그룹.getId()));
+
+        thread1.start();
+        thread2.start();
+
+        Thread.sleep(1000);
+
+        // then
+        Integer count = groupAndUserRepository.countUserParticipatedInGroup(테스트_그룹.getId());
+        Assertions.assertThat(count).isEqualTo(11);
+    }
+
+    @DisplayName("분산락을 적용해 동시 접속자가 생겨도 10명 인원제한을 유지한다")
+    @Test
+    void 분산락을_적용해_동시접속자가_생겨도_10명제한을_유지한다() throws InterruptedException {
+
+        // given
+        UserGroup group = UserGroup.builder().groupName("테스트 그룹").groupType(GroupType.FRIEND).build();
+        UserGroup 테스트_그룹 = groupRepository.save(group);
+
+        for (int i = 0; i < 9; i++) {
+            User 모카 = 모카().회원();
+            groupService.participateToGroup(모카.getId(), 테스트_그룹.getId());
+        }
+
+        // when
+        User 동시접속유저_1 = 모카().회원();
+        User 동시접속유저_2 = 모카().회원();
+
+        Thread thread1 = new Thread(
+                () -> groupService.participateToGroup(동시접속유저_1.getId(), 테스트_그룹.getId()));
+        Thread thread2 = new Thread(
+                () -> groupService.participateToGroup(동시접속유저_2.getId(), 테스트_그룹.getId()));
+        try {
+            thread1.start();
+            thread2.start();
+        } catch (BusinessException ex) {
+            log.info(ex.getMessage());
+        }
+
+        // then
+        Integer count = groupAndUserRepository.countUserParticipatedInGroup(테스트_그룹.getId());
+        Assertions.assertThat(count).isEqualTo(10);
+    }
 }
+
+
+

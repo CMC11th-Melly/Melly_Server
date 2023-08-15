@@ -8,5 +8,8 @@ import lombok.Data;
 public class CommentLikeEvent {
 
     private Long userId;
+
+    private Long memoryId;
+
     private String nickname;
 }

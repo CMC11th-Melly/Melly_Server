@@ -8,8 +8,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 public class MellyApiApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(MellyApiApplication.class, args);
     }
+
 
 }

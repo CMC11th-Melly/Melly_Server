@@ -1,8 +1,6 @@
 package cmc.mellyserver.mellycore.user.application;
 
 
-import cmc.mellyserver.mellycore.common.exception.BusinessException;
-import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
@@ -53,13 +51,14 @@ public class UserProfileService {
     @Cacheable(value = "profile:user-id", key = "#userId")
     @Transactional(readOnly = true)
     public ProfileResponseDto getUserProfile(final Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        User user = userRepository.getById(userId);
         return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
     }
 
     @CacheEvict(value = "profile:user-id", key = "#userId")
     @Transactional
-    public void updateUserProfile(final Long userId, ProfileUpdateRequestDto profileUpdateRequestDto) {
+    public void updateUserProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
 
         User user = userRepository.getById(userId);
         user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
@@ -71,6 +70,7 @@ public class UserProfileService {
 
         User user = userRepository.getById(userId);
         String userProfileImage = user.getProfileImage();
+
         removeExistprofileImage(userProfileImage);
 
         if (Objects.isNull(profileImage) || profileImage.isEmpty()) {
@@ -82,7 +82,8 @@ public class UserProfileService {
     }
 
     private void removeExistprofileImage(final String userProfileImage) throws IOException {
-        if (!Objects.isNull(userProfileImage)) {
+
+        if (Objects.nonNull(userProfileImage)) {
             fileUploader.deleteFile(userProfileImage);
         }
     }

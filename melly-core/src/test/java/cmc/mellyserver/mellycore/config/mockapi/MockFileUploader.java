@@ -1,12 +1,15 @@
 package cmc.mellyserver.mellycore.config.mockapi;
 
 import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
-
+@Component
+@Profile("test")
 public class MockFileUploader implements StorageService {
 
     @Override

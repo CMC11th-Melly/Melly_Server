@@ -6,6 +6,7 @@ import cmc.mellyserver.mellyapi.comment.presentation.dto.CommentAssembler;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.CommentUpdateRequest;
 import cmc.mellyserver.mellyapi.comment.presentation.dto.request.LikeRequest;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellycore.comment.application.CommentLikeService;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
@@ -18,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,28 +33,28 @@ public class CommentController {
     public ResponseEntity<ApiResponse> removeCommentLike(@AuthenticationPrincipal User user, @PathVariable Long commentId) {
 
         commentLikeService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
+        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 
     @PostMapping("/like")
     public ResponseEntity<ApiResponse> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest) {
 
         commentLikeService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), MessageConstants.MESSAGE_SUCCESS));
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse> saveComment(@CurrentUser LoginUser loginUser, @RequestBody CommentRequest commentRequest) {
 
         commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @GetMapping("/memory/{memoryId}")
     public ResponseEntity<ApiResponse> getComment(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId) {
 
         CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
-        return OK(comment);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
     }
 
     @DeleteMapping("/{commentId}")

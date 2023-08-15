@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.user.infrastructure;
 
+import cmc.mellyserver.mellycore.infrastructure.survey.SurveyRecommender;
+import cmc.mellyserver.mellycore.infrastructure.survey.SurveyRecommenderImpl;
 import cmc.mellyserver.mellycore.user.application.dto.response.SurveyRecommendResponseDto;
-import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommender;
-import cmc.mellyserver.mellycore.user.application.survey.SurveyRecommenderImpl;
 import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

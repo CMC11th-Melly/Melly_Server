@@ -3,6 +3,7 @@ package cmc.mellyserver.mellyapi.common.handler;
 import cmc.mellyserver.mellyapi.common.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 
 import static cmc.mellyserver.mellycore.common.exception.ErrorCode.UNAUTHORIZED;
@@ -24,9 +24,9 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpStatus.OK.value());
 
-        ErrorResponse error = ErrorResponse.of(UNAUTHORIZED.getCode(), authException.getMessage());
+        ErrorResponse error = ErrorResponse.of(UNAUTHORIZED);
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
