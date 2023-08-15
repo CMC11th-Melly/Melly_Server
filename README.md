@@ -69,7 +69,7 @@
 
 <br>
 
-## 🏛 System Structure
+## 🏛 System Structure (구축중입니다)
 
 ![Source (5)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/3f3aee3c-6359-48be-8617-20e1987d0329)
 
