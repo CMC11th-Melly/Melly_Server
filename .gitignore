@@ -33,6 +33,7 @@ out/
 /melly-api/src/main/resources/static/
 /melly-api/src/main/resources/templates/
 /melly-api/src/main/resources/application-local.yml
+/melly-api/src/main/resources/firebase-key.json
 /melly-batch/src/main/resources/application-local.yml
 
 
