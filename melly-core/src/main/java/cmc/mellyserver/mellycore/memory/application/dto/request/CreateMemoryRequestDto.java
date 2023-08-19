@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class CreateMemoryRequestDto {
 
-    Long id;
+    Long userId;
     Double lat;
     Double lng;
     String title;
@@ -29,10 +29,10 @@ public class CreateMemoryRequestDto {
     List<MultipartFile> multipartFiles;
 
     @Builder
-    public CreateMemoryRequestDto(Long id, Double lat, Double lng, String title, String placeName,
+    public CreateMemoryRequestDto(Long userId, Double lat, Double lng, String title, String placeName,
                                   String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword,
                                   LocalDate visitedDate, List<MultipartFile> multipartFiles) {
-        this.id = id;
+        this.userId = userId;
         this.lat = lat;
         this.lng = lng;
         this.title = title;
@@ -57,7 +57,7 @@ public class CreateMemoryRequestDto {
     public Memory toMemory() {
         return Memory.builder()
                 .title(title)
-                .userId(id)
+                .userId(userId)
                 .keyword(keyword)
                 .content(content)
                 .groupId(groupId)

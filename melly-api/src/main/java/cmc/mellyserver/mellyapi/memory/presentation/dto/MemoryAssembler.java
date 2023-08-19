@@ -74,7 +74,7 @@ public abstract class MemoryAssembler {
                                                                 List<MultipartFile> images,
                                                                 MemoryCreateRequest placeInfoRequest) {
         return CreateMemoryRequestDto.builder()
-                .id(id)
+                .userId(id)
                 .lat(placeInfoRequest.getLat())
                 .lng(placeInfoRequest.getLng())
                 .title(placeInfoRequest.getTitle())

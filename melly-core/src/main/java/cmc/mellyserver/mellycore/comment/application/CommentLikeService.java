@@ -36,7 +36,7 @@ public class CommentLikeService {
                 });
 
         commentLikeRepository.save(CommentLike.createCommentLike(userId, comment));
-        publisher.publishEvent(new CommentLikeEvent(userId, comment.getUser().getNickname()));
+        publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
     }
 
     @Transactional

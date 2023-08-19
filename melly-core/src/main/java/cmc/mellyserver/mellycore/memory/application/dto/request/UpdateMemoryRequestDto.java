@@ -18,8 +18,10 @@ public class UpdateMemoryRequestDto {
     private String title;
 
     private String content;
+
     private List<MultipartFile> images;
-    private java.util.List<String> keyword;
+
+    private List<String> keyword;
     private Long groupId;
     private OpenType openType;
     private LocalDate visitedDate;

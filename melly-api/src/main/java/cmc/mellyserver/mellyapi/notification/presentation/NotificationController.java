@@ -2,20 +2,19 @@ package cmc.mellyserver.mellyapi.notification.presentation;
 
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.CurrentUser;
 import cmc.mellyserver.mellyapi.auth.presentation.dto.common.LoginUser;
+import cmc.mellyserver.mellyapi.common.code.SuccessCode;
 import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.notification.presentation.dto.request.NotificationCheckRequest;
 import cmc.mellyserver.mellycore.notification.application.NotificationService;
 import cmc.mellyserver.mellycore.notification.application.dto.response.NotificationOnOffResponseDto;
-import cmc.mellyserver.mellycore.notification.domain.Notification;
 import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
+import cmc.mellyserver.mellycore.notification.domain.repository.dto.NotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static cmc.mellyserver.mellyapi.common.response.ApiResponse.OK;
-import static cmc.mellyserver.mellyapi.notification.presentation.dto.NotificationAssembler.notificationResponses;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,47 +27,47 @@ public class NotificationController {
     public ResponseEntity<ApiResponse> getNotificationStatus(@CurrentUser LoginUser loginUser) {
 
         NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
-        return OK(notificationOnOff);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveNotification() {
-        notificationService.createNotification("제목", "내용", NotificationType.COMMENT, 1L, 1L);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse> saveNotification() {
+        notificationService.createNotification("내용", NotificationType.COMMENT_ENROLL, 1L, 1L);
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse> getNotifications(@CurrentUser LoginUser loginUser) {
 
-        List<Notification> notificationList = notificationService.getNotificationList(loginUser.getId());
-        return OK(notificationResponses(notificationList));
+        List<NotificationResponse> notificationList = notificationService.getNotificationList(loginUser.getId());
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationList);
     }
 
     @PostMapping("/setting")
-    public ResponseEntity<Void> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeAppPushStatus(loginUser.getId(), status);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment")
-    public ResponseEntity<Void> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeCommentPushStatus(loginUser.getId(), status);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment/like")
-    public ResponseEntity<Void> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/check")
-    public ResponseEntity<Void> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
+    public ResponseEntity<ApiResponse> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
         notificationService.checkNotification(notificationCheckRequest.getNotificationId());
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 }

@@ -124,14 +124,14 @@ public class Memory extends JpaBaseEntity {
 
     private void updateMemoryImage(List<Long> deleteImageList, List<String> multipartFileNames) {
 
-        if (!Objects.isNull(deleteImageList)) {
+        if (!deleteImageList.isEmpty()) {
             for (Long deleteId : deleteImageList) {
                 this.memoryImages.removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
             }
         }
 
-        if (!Objects.isNull(multipartFileNames)) {
-            setMemoryImages(multipartFileNames.stream().map(m -> new MemoryImage(m)).collect(Collectors.toList()));
+        if (Objects.nonNull(multipartFileNames) || !multipartFileNames.isEmpty()) {
+            setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
         }
     }
 

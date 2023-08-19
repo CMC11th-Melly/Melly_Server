@@ -1,13 +1,12 @@
 package cmc.mellyserver.mellycore.infrastructure.message.fcm;
 
 import cmc.mellyserver.mellycore.notification.application.MessageService;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import static cmc.mellyserver.mellycore.common.constants.FCMConstants.PREFIX_FCMTOKEN;
 
 @Slf4j
 @Component
@@ -18,32 +17,24 @@ public class FCMSendService implements MessageService {
 
 
     @Override
-    public void sendCommentCreatedMessage(String email, String nickname) {
+    public void sendCommentCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
 
-        if (!hasKey(PREFIX_FCMTOKEN + email)) {
-            return;
-        }
+        String token = tokenManageService.getToken(userId); // FCM 푸시 알림을 보낼 유저의 토큰 조회
 
-        String token = tokenManageService.getToken(email);
-        Message message = Message.builder()
+        Message message = Message.builder() // FCM 메세지 양식 개선
                 .putData("title", "댓글 등록")
                 .putData("content", nickname + "님이 메모리에 댓글을 남겼습니다.")
                 .setToken(token)
                 .build();
 
         send(message);
-
-
     }
 
     @Override
-    public void sendCommentLikeCreatedMessage(String email, String nickname) {
+    public void sendCommentLikeCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
 
-        if (!hasKey(PREFIX_FCMTOKEN + email)) {
-            return;
-        }
+        String token = tokenManageService.getToken(userId);
 
-        String token = tokenManageService.getToken(email);
         Message message = Message.builder()
                 .putData("title", "댓글 좋아요 알림")
                 .putData("content", "메모리에 댓글에 좋아요가 달렸습니다.")
@@ -53,11 +44,13 @@ public class FCMSendService implements MessageService {
         send(message);
     }
 
-    public void send(Message message) {
-        FirebaseMessaging.getInstance().sendAsync(message);
+    @Override
+    public void sendGroupUserCreatedMemoryMessage(Long userId, Long memoryId, String nickname) {
+
     }
 
-    public boolean hasKey(String email) {
-        return tokenManageService.hasKey(email);
+    public void send(Message message) {
+        FirebaseMessaging.getInstance(FirebaseApp.getInstance()).sendAsync(message); // 비동기로 메세지 전송
     }
+
 }

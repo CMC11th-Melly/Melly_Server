@@ -9,5 +9,7 @@ public class CommentEnrollEvent {
 
     private Long userId;
 
+    private Long memoryId;
+
     private String nickname;
 }

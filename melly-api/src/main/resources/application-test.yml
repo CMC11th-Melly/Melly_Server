@@ -17,8 +17,12 @@ spring:
         default_batch_fetch_size: 1000
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
 
+  data:
+    mongodb:
+      uri: dfdf
+      database: melly
 app:
   auth:
     tokenExpiry: 200000000
@@ -26,10 +30,10 @@ app:
 
 cloud:
   aws:
-    region:
-      static: ap-northeast-2
     stack:
       auto: false
+    region:
+      static: ap-northeast-2
     s3:
       cloud-front-url: ${CLOUD_FRONT_URL}
       bucket: ${S3_BUCKET}
@@ -40,3 +44,4 @@ cloud:
 retry:
   count: 3
   sleep: 3000
+
