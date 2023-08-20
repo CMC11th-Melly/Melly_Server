@@ -98,9 +98,9 @@ public class UserRepositoryTest extends RepositoryTest {
 
         // given
         User 모카 = User.builder().nickname("모카").provider(Provider.DEFAULT).build();
-        모카.changePwInitDate(LocalDateTime.of(2023, 1, 1, 0, 0));
 
-        userRepository.save(모카);
+        User savedUser = userRepository.save(모카);
+        savedUser.changePwInitDate(LocalDateTime.of(2023, 1, 1, 0, 0));
 
         // when
         List<User> result = userRepository.findByPwInitDateTimeBeforeAndPasswordExpiredEquals(

@@ -69,11 +69,10 @@ public class UserProfileService {
     public void updateUserProfileImage(final Long userId, final MultipartFile profileImage) throws IOException {
 
         User user = userRepository.getById(userId);
-        String userProfileImage = user.getProfileImage();
 
-        removeExistprofileImage(userProfileImage);
+        removeExistprofileImage(user.getProfileImage());
 
-        if (Objects.isNull(profileImage) || profileImage.isEmpty()) {
+        if (Objects.isNull(profileImage)) {
             user.changeProfileImage(null);
         } else {
             String newImageFile = fileUploader.saveFile(user.getId(), profileImage);

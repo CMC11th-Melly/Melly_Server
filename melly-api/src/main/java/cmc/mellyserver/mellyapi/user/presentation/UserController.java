@@ -67,7 +67,7 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, surveyRecommendResponseDto);
     }
 
-    // 유저 프로필을 수정에 필요한 데이터 조회
+
     @GetMapping("/my-profile/edit-form")
     public ResponseEntity<ApiResponse> updateProfileFormData(@CurrentUser LoginUser loginUser) {
 
@@ -76,7 +76,7 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, profileUpdateFormResponseDto);
     }
 
-    // 유저 프로필 조회
+
     @GetMapping("/my-profile")
     public ResponseEntity<ApiResponse> getUserProfile(@CurrentUser LoginUser loginUser) {
 
@@ -85,9 +85,9 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto, volume));
     }
 
-    // 유저 프로필 수정
+
     @PatchMapping("/my-profile")
-    public ResponseEntity<ApiResponse> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+    public ResponseEntity<ApiResponse> updateProfile(@CurrentUser LoginUser loginUser, @RequestBody @Valid ProfileUpdateRequest profileUpdateRequest) {
 
         userProfileService.updateUserProfile(loginUser.getId(), profileUpdateRequest.toDto());
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
@@ -100,34 +100,40 @@ public class UserController {
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
-    // 내가 작성한 메모리 조회
+
     @GetMapping("/my-memorys")
     public ResponseEntity<ApiResponse> getUserMemory(@CurrentUser LoginUser loginUser,
-                                                     @RequestParam(name = "lastId", required = false) Long lastId,
+                                                     @RequestParam(required = false) Long lastId,
                                                      @PageableDefault(size = 10) Pageable pageable,
-                                                     @RequestParam(required = false) GroupType groupType) {
+                                                     @RequestParam(required = false) String groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), groupType);
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), GroupType.from(groupType));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, results);
     }
 
-    // 내가 포함된 그룹 조회
+
     @GetMapping("/my-groups")
-    public ResponseEntity<ApiResponse> getUserGroup(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<ApiResponse> getUserGroup(@CurrentUser LoginUser loginUser,
+                                                    @RequestParam(name = "lastId", required = false) Long lastId,
+                                                    @PageableDefault(size = 10) Pageable pageable) {
 
         Slice<GroupLoginUserParticipatedResponseDto> results = groupService.findGroupListLoginUserParticiated(loginUser.getId(), lastId, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.groupLoginUserParticipatedResponses(results));
     }
 
-    // 내가 속해 있는 그룹의 사람들이 작성한 메모리
-    @GetMapping("/my-groups/{groupId}/memorys")
-    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, Pageable pageable, @PathVariable Long groupId, @RequestParam(required = false) GroupType groupType) {
 
-        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, loginUser.getId(), groupType);
+    @GetMapping("/my-groups/{groupId}/memorys")
+    public ResponseEntity<ApiResponse> getMemoryBelongToMyGroup(@CurrentUser LoginUser loginUser,
+                                                                @RequestParam(name = "lastId", required = false) Long lastId,
+                                                                @PageableDefault(size = 10) Pageable pageable,
+                                                                @PathVariable Long groupId,
+                                                                @RequestParam(required = false) String groupType) {
+
+        Slice<MemoryResponseDto> results = memoryService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, loginUser.getId(), GroupType.from(groupType));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.memoryResponses(results));
     }
 
-    // 내가 스크랩한 장소의 개수 조회
+
     @GetMapping("/place-scraps/count")
     public ResponseEntity<ApiResponse> getPlaceUserScrapCount(@CurrentUser LoginUser loginUser) {
 
@@ -135,11 +141,14 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.placeScrapCountResponses(results));
     }
 
-    // 스크랩 타입별 조회
-    @GetMapping("/place-scraps")
-    public ResponseEntity<ApiResponse> getPlaceUserScrap(@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) ScrapType scrapType) {
 
-        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(lastId, pageable, loginUser.getId(), scrapType);
+    @GetMapping("/place-scraps")
+    public ResponseEntity<ApiResponse> getPlaceUserScrap(@CurrentUser LoginUser loginUser,
+                                                         @RequestParam(required = false) Long lastId,
+                                                         @PageableDefault(size = 10) Pageable pageable,
+                                                         @RequestParam(required = false) String scrapType) {
+
+        Slice<ScrapedPlaceResponseDto> results = placeScrapService.findScrapedPlace(lastId, pageable, loginUser.getId(), ScrapType.from(scrapType));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.scrapedPlaceResponses(results));
     }
 }

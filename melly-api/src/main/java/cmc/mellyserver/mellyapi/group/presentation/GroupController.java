@@ -63,6 +63,4 @@ public class GroupController {
         groupService.exitGroup(loginUser.getId(), groupId);
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
-
-
 }
