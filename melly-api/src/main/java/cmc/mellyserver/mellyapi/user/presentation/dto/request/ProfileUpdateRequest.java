@@ -24,7 +24,7 @@ public class ProfileUpdateRequest {
     @NotEmpty(message = "연령대를 입력해야 합니다.")
     private String ageGroup;
 
-    public ProfileUpdateRequestDto toDto() {
+    public ProfileUpdateRequestDto toServiceRequest() {
         return new ProfileUpdateRequestDto(nickname, Gender.from(gender), AgeGroup.from(ageGroup));
     }
 }

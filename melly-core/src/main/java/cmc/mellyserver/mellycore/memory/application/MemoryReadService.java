@@ -1,12 +1,8 @@
 package cmc.mellyserver.mellycore.memory.application;
 
-import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
-import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
-import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryUpdateFormResponseDto;
-import cmc.mellyserver.mellycore.memory.domain.Memory;
+import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryListResponse;
 import cmc.mellyserver.mellycore.memory.domain.repository.MemoryQueryRepository;
-import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
@@ -25,10 +21,6 @@ public class MemoryReadService {
 
     private final MemoryQueryRepository memoryQueryRepository;
 
-    private final MemoryRepository memoryRepository;
-
-    private final GroupAndUserRepository groupAndUserRepository;
-
 
     @Cacheable(value = "memory-detail:memory-id", key = "#memoryId")
     @Transactional(readOnly = true)
@@ -41,41 +33,50 @@ public class MemoryReadService {
         return memoryDetail;
     }
 
-    /*
-    - 메모리 조회 테스트는 서비스 계층의 통합 테스트만 진행
-    - 불필요한 테스트를 줄이는 것이 중요
-     */
 
     @Transactional(readOnly = true)
-    public Slice<MemoryResponseDto> findLoginUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
-        return memoryQueryRepository.searchMemoryUserCreatedForPlace(lastId, pageable, userId, placeId, groupType);
+    public MemoryListResponse findLoginUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
+        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForPlace(lastId, pageable, userId, placeId, groupType);
+
+        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+        boolean next = memoryResponseDtos.hasNext();
+        return MemoryListResponse.from(contents, next);
+    }
+
+    
+    @Transactional(readOnly = true)
+    public MemoryListResponse findOtherUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
+        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable, userId, placeId, groupType);
+
+        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+        boolean next = memoryResponseDtos.hasNext();
+        return MemoryListResponse.from(contents, next);
     }
 
     @Transactional(readOnly = true)
-    public Slice<MemoryResponseDto> findOtherUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
-        return memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable, userId, placeId, groupType);
+    public MemoryListResponse findMyGroupMemberWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
+        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.getMyGroupMemoryInPlace(lastId, pageable, userId, placeId, groupType);
+
+        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+        boolean next = memoryResponseDtos.hasNext();
+        return MemoryListResponse.from(contents, next);
     }
 
     @Transactional(readOnly = true)
-    public Slice<MemoryResponseDto> findMyGroupMemberWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
-        return memoryQueryRepository.getMyGroupMemoryInPlace(lastId, pageable, userId, placeId, groupType);
+    public MemoryListResponse findMemoriesLoginUserWrite(final Long lastId, final Pageable pageable, final Long userId, final GroupType groupType) {
+        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForMyPage(lastId, pageable, userId, groupType);
+
+        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+        boolean next = memoryResponseDtos.hasNext();
+        return MemoryListResponse.from(contents, next);
     }
 
     @Transactional(readOnly = true)
-    public Slice<MemoryResponseDto> findMemoriesLoginUserWrite(final Long lastId, final Pageable pageable, final Long userId, final GroupType groupType) {
-        return memoryQueryRepository.searchMemoryUserCreatedForMyPage(lastId, pageable, userId, groupType);
-    }
+    public MemoryListResponse findMemoriesUsersBelongToMyGroupWrite(final Long lastId, final Pageable pageable, final Long groupId, final Long userId, final GroupType groupType) {
+        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.getMyGroupMemory(lastId, pageable, groupId, groupType);
 
-    @Transactional(readOnly = true)
-    public Slice<MemoryResponseDto> findMemoriesUsersBelongToMyGroupWrite(final Long lastId, final Pageable pageable, final Long groupId, final Long userId, final GroupType groupType) {
-        return memoryQueryRepository.getMyGroupMemory(lastId, pageable, groupId, groupType);
-    }
-
-    @Transactional(readOnly = true)
-    public MemoryUpdateFormResponseDto findMemoryUpdateFormData(Long id, Long memoryId) {
-
-        Memory memory = memoryRepository.getById(memoryId);
-        List<UserGroup> userGroupLoginUserAssociated = groupAndUserRepository.findUserGroupLoginUserAssociated(id);
-        return MemoryUpdateFormResponseDto.of(memory, userGroupLoginUserAssociated);
+        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+        boolean next = memoryResponseDtos.hasNext();
+        return MemoryListResponse.from(contents, next);
     }
 }

@@ -2,11 +2,11 @@ package cmc.mellyserver.mellycore.memory.domain.repository;
 
 
 import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
+import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.ImageDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.KeywordDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
-import cmc.mellyserver.mellycore.memory.domain.enums.OpenType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static cmc.mellyserver.mellycore.group.domain.QGroupAndUser.groupAndUser;
@@ -53,11 +54,11 @@ public class MemoryQueryRepository {
                 .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin()
                 .innerJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
                 .where(
-                        isActive(),
+                        isActive(), // =
                         ltMemoryId(lastId),
-                        createdByLoginUser(userId),
-                        eqPlace(placeId),
-                        eqGroup(groupType)
+                        createdByLoginUser(userId), // =
+                        eqPlace(placeId), // =
+                        eqGroup(groupType) // =
                 )
                 .orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)
@@ -239,7 +240,7 @@ public class MemoryQueryRepository {
 
     private BooleanExpression eqGroup(GroupType groupType) {
 
-        if (groupType == GroupType.ALL) {
+        if (Objects.isNull(groupType)) {
             return null;
         }
 

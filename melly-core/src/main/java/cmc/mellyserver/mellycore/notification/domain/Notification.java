@@ -3,42 +3,42 @@ package cmc.mellyserver.mellycore.notification.domain;
 import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
 @Getter
-@Document(collection = "notification")
+@Entity
+@Table(name = "tb_notification")
 public class Notification {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Field(name = "user_id")
+    @Column(name = "user_id")
     private Long userId; // 이걸 기반으로 조회
 
-    @Field(name = "content")
+    @Column(name = "content")
     private String content;
 
-    @Field(name = "notification_type")
+    @Column(name = "notification_type")
     NotificationType notificationType;
 
-    @Field(name = "is_read")
+    @Column(name = "is_read")
     private Boolean isRead;
 
-    @Field(name = "profile_image")
+    @Column(name = "profile_image")
     private String profileImage;
 
-    @Field(name = "nickname")
+    @Column(name = "nickname")
     private String nickname;
 
-    @Field(name = "memory_id")
+    @Column(name = "memory_id")
     private Long memoryId;
 
-    @Field(name = "notification_date_time")
+    @Column(name = "notification_date_time")
     private LocalDateTime createdDateTime;
 
     @Builder

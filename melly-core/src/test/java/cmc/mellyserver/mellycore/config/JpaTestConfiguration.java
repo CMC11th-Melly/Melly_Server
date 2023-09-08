@@ -23,9 +23,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackageClasses = {UserRepository.class, MemoryRepository.class,
-        PlaceRepository.class, CommentRepository.class, PlaceScrapRepository.class, JdbcTemplate.class,
-        GroupRepository.class, GroupAndUserRepository.class,
+@EnableJpaRepositories(basePackageClasses = {
+        UserRepository.class,
+        MemoryRepository.class,
+        PlaceRepository.class,
+        CommentRepository.class,
+        PlaceScrapRepository.class,
+        JdbcTemplate.class,
+        GroupRepository.class,
+        GroupAndUserRepository.class,
         NotificationRepository.class})
 @TestConfiguration
 public class JpaTestConfiguration {
