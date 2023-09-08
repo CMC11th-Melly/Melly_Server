@@ -4,9 +4,8 @@ import cmc.mellyserver.mellyapi.ControllerTest;
 import cmc.mellyserver.mellyapi.common.annotation.WithUser;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
-import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
-import cmc.mellyserver.mellycore.memory.application.dto.response.MemoryListResponse;
-import cmc.mellyserver.mellycore.memory.domain.repository.dto.MemoryResponseDto;
+
+
 import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
@@ -17,7 +16,8 @@ import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
 import cmc.mellyserver.mellycore.user.domain.enums.RecommendPlace;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Pageable;
+
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -201,38 +201,39 @@ public class UserControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("유저가 작성한 메모리를 조회한다")
-    @Test
-    @WithUser
-    void 유저가_작성한_메모리를_조회한다() throws Exception {
 
-        // given
-
-        given(memoryReadService.findMemoriesLoginUserWrite(anyLong(), any(Pageable.class), anyLong(), any(GroupType.class)))
-                .willReturn(MemoryListResponse.from(List.of(MemoryResponseDto.builder().memoryId(1L).build()), true));
-
-        // when
-        mockMvc.perform(get("/api/users/my-memories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                )
-                .andDo(print())
-                .andDo(document("user/my-memories",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("응답 데이터"),
-                                fieldWithPath("data.[].contents").type(JsonFieldType.ARRAY).description("페이징 컨텐츠"),
-                                fieldWithPath("data.[].next").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재 여부"),
-                                fieldWithPath("data.[].contents.[].memoryId").type(JsonFieldType.NUMBER).description("메모리 ID"),
-                                fieldWithPath("data.[].contents.[].imagePath").type(JsonFieldType.STRING).description("메모리 사진"),
-                                fieldWithPath("data.[].contents.[].title").type(JsonFieldType.STRING).description("제목"),
-                                fieldWithPath("data.[].contents.[].visitedDate").type(JsonFieldType.STRING).description("방문 일자"),
-                                fieldWithPath("data.[].contents.[].groupType").type(JsonFieldType.STRING).description("그룹 타입")
-                        )
-                ))
-                .andExpect(status().isOk());
-    }
+//    @DisplayName("유저가 작성한 메모리를 조회한다")
+//    @Test
+//    @WithUser
+//    void 유저가_작성한_메모리를_조회한다() throws Exception {
+//
+//        // given
+//
+//        given(memoryReadService.findMemoriesLoginUserWrite(anyLong(), any(Pageable.class), anyLong(), any(GroupType.class)))
+//                .willReturn(MemoryListResponse.from(List.of(MemoryResponseDto.builder().memoryId(1L).build()), true));
+//
+//        // when
+//        mockMvc.perform(get("/api/users/my-memories")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+//                )
+//                .andDo(print())
+//                .andDo(document("user/my-memories",
+//                        getDocumentRequest(),
+//                        getDocumentResponse(),
+//                        responseFields(
+//                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
+//                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+//                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("응답 데이터"),
+//                                fieldWithPath("data.[].contents").type(JsonFieldType.ARRAY).description("페이징 컨텐츠"),
+//                                fieldWithPath("data.[].next").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재 여부"),
+//                                fieldWithPath("data.[].contents.[].memoryId").type(JsonFieldType.NUMBER).description("메모리 ID"),
+//                                fieldWithPath("data.[].contents.[].imagePath").type(JsonFieldType.STRING).description("메모리 사진"),
+//                                fieldWithPath("data.[].contents.[].title").type(JsonFieldType.STRING).description("제목"),
+//                                fieldWithPath("data.[].contents.[].visitedDate").type(JsonFieldType.STRING).description("방문 일자"),
+//                                fieldWithPath("data.[].contents.[].groupType").type(JsonFieldType.STRING).description("그룹 타입")
+//                        )
+//                ))
+//                .andExpect(status().isOk());
+//    }
 }

@@ -1,9 +1,10 @@
 package cmc.mellyserver.mellybatch.config;
 
-import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
+
+import cmc.mellyserver.mellycore.common.policy.AccountPolicy;
 import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellycore.user.domain.enums.PasswordExpired;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -60,11 +61,9 @@ public class PasswordChangeJobConfig {
         return new ItemProcessor<User, User>() {
             @Override
             public User process(User user) throws Exception {
-<<<<<<< HEAD
-                return user.setPwChangeStatus();
-=======
+
                 return user.changePwExpireStatus();
->>>>>>> 1d7408f78690378598aa34b0d188a98f022859e6
+
             }
         };
     }

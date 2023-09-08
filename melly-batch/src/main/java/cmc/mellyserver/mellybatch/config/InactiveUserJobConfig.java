@@ -1,9 +1,9 @@
 package cmc.mellyserver.mellybatch.config;
 
-import cmc.mellyserver.mellybatch.common.policy.AccountPolicy;
+import cmc.mellyserver.mellycore.common.policy.AccountPolicy;
 import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
+import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
