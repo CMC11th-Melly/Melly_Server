@@ -10,8 +10,8 @@ jobs:
       - name: 저장소 Checkout
         uses: actions/checkout@v3
 
-      #      - name: 스프링부트 애플리케이션 빌드
-      #        run: ./gradlew build -x test
+      - name: 스프링부트 애플리케이션 빌드
+        run: ./gradlew build -x test
 
       - name: 도커 이미지 빌드
         run: docker build -t sjmin/melly .
