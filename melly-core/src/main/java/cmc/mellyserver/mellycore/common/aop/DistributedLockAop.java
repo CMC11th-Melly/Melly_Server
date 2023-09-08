@@ -42,7 +42,7 @@ public class DistributedLockAop {
 
         // 락을 조회한다.
         RLock rLock = redissonClient.getLock(key);
-
+        redissonClient.getConfig().useReplicatedServers().setRetryAttempts(3).setRetryInterval(1000);
         try {
             // 락이 사용 가능한지 체크한뒤, 옵션들을 설정한다.
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)

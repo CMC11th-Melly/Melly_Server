@@ -54,11 +54,11 @@ public class MemoryQueryRepository {
                 .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin()
                 .innerJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
                 .where(
-                        isActive(),
+                        isActive(), // =
                         ltMemoryId(lastId),
-                        createdByLoginUser(userId),
-                        eqPlace(placeId),
-                        eqGroup(groupType)
+                        createdByLoginUser(userId), // =
+                        eqPlace(placeId), // =
+                        eqGroup(groupType) // =
                 )
                 .orderBy(memory.id.desc())
                 .limit(pageable.getPageSize() + 1)

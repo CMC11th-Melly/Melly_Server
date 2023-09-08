@@ -24,48 +24,48 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/setting")
-    public ResponseEntity<ApiResponse> getNotificationStatus(@CurrentUser LoginUser loginUser) {
+    public ResponseEntity<ApiResponse<NotificationOnOffResponseDto>> getNotificationStatus(@CurrentUser LoginUser loginUser) {
 
         NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> saveNotification() {
+    public ResponseEntity<ApiResponse<Void>> saveNotification() {
         notificationService.createNotification("내용", NotificationType.COMMENT_ENROLL, 1L, 1L);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getNotifications(@CurrentUser LoginUser loginUser) {
+    public ResponseEntity<ApiResponse<List<NotificationResponse>>> getNotifications(@CurrentUser LoginUser loginUser) {
 
         List<NotificationResponse> notificationList = notificationService.getNotificationList(loginUser.getId());
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationList);
     }
 
     @PostMapping("/setting")
-    public ResponseEntity<ApiResponse> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse<Void>> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeAppPushStatus(loginUser.getId(), status);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment")
-    public ResponseEntity<ApiResponse> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse<Void>> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeCommentPushStatus(loginUser.getId(), status);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/setting/comment/like")
-    public ResponseEntity<ApiResponse> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+    public ResponseEntity<ApiResponse<Void>> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
         notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @PostMapping("/check")
-    public ResponseEntity<ApiResponse> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
+    public ResponseEntity<ApiResponse<Void>> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
         notificationService.checkNotification(notificationCheckRequest.getNotificationId());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);

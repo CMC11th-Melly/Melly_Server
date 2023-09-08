@@ -23,9 +23,13 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             ServletException,
             IOException {
         try {
+
             chain.doFilter(request, response);
+
         } catch (JwtException ex) {
+
             setExpiredErrorResponse(request, response, ex);
+
         } catch (LogoutOrWithdrawExpcetion ex) {
             setLogoutOrWithdrawErrorResponse(request, response, ex);
         }
@@ -41,6 +45,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
+
     }
 
     public void setLogoutOrWithdrawErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex) throws

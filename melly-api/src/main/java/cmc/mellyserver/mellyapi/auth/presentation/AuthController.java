@@ -37,14 +37,14 @@ public class AuthController {
 
     // OAuth2를 사용한 소셜 인증
     @PostMapping("/social")
-    public ResponseEntity<ApiResponse> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
+    public ResponseEntity<ApiResponse<OAuthResponseDto>> socialLogin(@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
 
         OAuthResponseDto oAuthResponseDto = oAuthService.login(oAuthLoginRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, oAuthResponseDto);
     }
 
     @PostMapping("/social-signup")
-    public ResponseEntity<ApiResponse> socialSignup(@Valid @RequestBody OAuthSignupRequest oAuthSignupRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> socialSignup(@Valid @RequestBody OAuthSignupRequest oAuthSignupRequest) {
 
         TokenResponseDto tokenResponseDto = oAuthService.signup(oAuthSignupRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, tokenResponseDto);
@@ -53,7 +53,7 @@ public class AuthController {
 
     // 이메일 회원 가입
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signup(@Valid CommonSignupRequest commonSignupRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid CommonSignupRequest commonSignupRequest) {
 
         TokenResponseDto signupToken = authService.emailSignup(commonSignupRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, signupToken);
@@ -61,36 +61,37 @@ public class AuthController {
 
     // 이메일 로그인
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@Valid @RequestBody AuthLoginRequest authLoginRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> login(@Valid @RequestBody AuthLoginRequest authLoginRequest) {
 
+        log.info("logging");
         TokenResponseDto loginToken = authService.login(authLoginRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, loginToken);
     }
 
     // 이메일 유효성을 파악하기 위해 인증번호 전송
     @PostMapping("/email-certification/sends")
-    public ResponseEntity<ApiResponse> sendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
+    public ResponseEntity<ApiResponse<Void>> sendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.sendEmailForCertification(requestDto.getEmail());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     // 인증번호 재전송
     @PostMapping("/email-certification/resends")
-    public ResponseEntity<ApiResponse> resendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
+    public ResponseEntity<ApiResponse<Void>> resendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.sendEmailForCertification(requestDto.getEmail());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     // 인증번호 확인
     @PostMapping("/email-certification/confirms")
-    public ResponseEntity<ApiResponse> emailVerification(@RequestBody EmailCertificationRequest requestDto) {
+    public ResponseEntity<ApiResponse<Void>> emailVerification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.verifyEmail(requestDto);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     // 닉네임 중복 체크
     @GetMapping("/user-nicknames/{nickname}/exists")
-    public ResponseEntity<ApiResponse> checkNicknameDuplicate(@PathVariable String nickname) {
+    public ResponseEntity<ApiResponse<Void>> checkNicknameDuplicate(@PathVariable String nickname) {
 
         authService.checkDuplicatedNickname(nickname);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS);
@@ -98,28 +99,28 @@ public class AuthController {
 
     // 이메일 중복 체크
     @GetMapping("/user-emails/{email}/exists")
-    public ResponseEntity<ApiResponse> checkEmailDuplicate(@PathVariable String email) {
+    public ResponseEntity<ApiResponse<Void>> checkEmailDuplicate(@PathVariable String email) {
 
         authService.checkDuplicatedEmail(email);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS);
     }
 
     @PatchMapping("/forget/password")
-    public ResponseEntity<ApiResponse> changePasswordByForget(@Valid @RequestBody ChangePasswordRequest requestDto) {
+    public ResponseEntity<ApiResponse<Void>> changePasswordByForget(@Valid @RequestBody ChangePasswordRequest requestDto) {
         authService.updateForgetPassword(requestDto);
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
 
     @PatchMapping("/password")
-    public ResponseEntity<ApiResponse> changePassword(@CurrentUser LoginUser loginUser, @Valid @RequestBody ChangePasswordRequest requestDto) {
+    public ResponseEntity<ApiResponse<Void>> changePassword(@CurrentUser LoginUser loginUser, @Valid @RequestBody ChangePasswordRequest requestDto) {
         authService.changePassword(loginUser.getId(), requestDto);
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
     // 로그 아웃
     @PatchMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(@CurrentUser LoginUser loginUser, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> logout(@CurrentUser LoginUser loginUser, HttpServletRequest request) {
 
         authService.logout(loginUser.getId(), HeaderUtil.getAccessToken(request));
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
@@ -127,14 +128,14 @@ public class AuthController {
 
     // 회원 탈퇴
     @DeleteMapping("/withdraw")
-    public ResponseEntity<ApiResponse> withdraw(@CurrentUser LoginUser loginUser, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> withdraw(@CurrentUser LoginUser loginUser, HttpServletRequest request) {
 
         authService.withdraw(loginUser.getId(), HeaderUtil.getAccessToken(request));
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 
     @PostMapping("/token/reissue")
-    public ResponseEntity<ApiResponse> generateAccessToken(@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> generateAccessToken(@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
 
         TokenResponseDto tokenResponseDto = authService.reIssueAccessTokenAndRefreshToken(reIssueAccessTokenRequest.getRefreshToken());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, tokenResponseDto);

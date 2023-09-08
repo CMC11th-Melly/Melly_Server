@@ -20,11 +20,9 @@ dependencies {
 //    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 
-
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
     // queryDsl
-
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation "com.querydsl:querydsl-jpa:5.0.0"

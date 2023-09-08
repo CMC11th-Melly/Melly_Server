@@ -1,66 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property name="LOGS_ABSOLUTE_PATH" value="/home/ubuntu/logs"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{36} - %msg%n</Pattern>
-        </layout>
-    </appender>
-
-    <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-        <file>./logs/info.log</file>
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
+            <level>error</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
+        <file>./logs/error/error.log</file>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>[%X{request_id:-startup}] %d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg
+                %n
+            </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./was-logs/info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>180</maxHistory>
+            <fileNamePattern>./logs/error/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <appender name="WARN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-        <file>./logs/warn.log</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>WARN</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
+    <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/application/application.log</file>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>[%X{request_id:-startup}] %d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg
+                %n
+            </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./was-logs/warn.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>180</maxHistory>
+            <fileNamePattern>./logs/application/application.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%X{request_id:-startup}] %d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg
+                %n
+            </pattern>
+        </encoder>
+    </appender>
 
-    <logger name="LogController" additivity="false">
-        <level value="DEBUG"/>
-        <appender-ref ref="INFO_LOG"/>
-        <appender-ref ref="WARN_LOG"/>
-    </logger>
 
-    <logger name="org.hibernate.SQL" additivity="false">
-        <level value="DEBUG"/>
-        <appender-ref ref="INFO_LOG"/>
-    </logger>
+    <springProfile name="local,dev">
 
+        <root level="INFO">
+            <appender-ref ref="console"/>
+        </root>
+
+    </springProfile>
+
+    <springProfile name="prod">
+
+        <root level="INFO">
+            <appender-ref ref="info"/>
+            <appender-ref ref="error"/>
+
+        </root>
+    </springProfile>
 </configuration>
