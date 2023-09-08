@@ -4,6 +4,8 @@ import cmc.mellyserver.mellyapi.ControllerTest;
 import cmc.mellyserver.mellyapi.common.annotation.WithUser;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.mellyapi.user.presentation.dto.request.SurveyRequest;
+
+
 import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.scrap.domain.repository.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.request.SurveyRequestDto;
@@ -14,6 +16,8 @@ import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
 import cmc.mellyserver.mellycore.user.domain.enums.RecommendPlace;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -196,6 +200,7 @@ public class UserControllerTest extends ControllerTest {
                 ))
                 .andExpect(status().isOk());
     }
+
 
 //    @DisplayName("유저가 작성한 메모리를 조회한다")
 //    @Test
