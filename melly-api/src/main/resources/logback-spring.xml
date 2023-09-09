@@ -54,8 +54,8 @@
     <springProfile name="prod">
 
         <root level="INFO">
-            <appender-ref ref="info"/>
-            <appender-ref ref="error"/>
+            <appender-ref ref="console"/>
+            <!--            <appender-ref ref="error"/>-->
 
         </root>
     </springProfile>

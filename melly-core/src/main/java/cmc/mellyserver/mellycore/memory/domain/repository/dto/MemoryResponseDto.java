@@ -15,8 +15,6 @@ public class MemoryResponseDto {
 
     private Long memoryId;
 
-    private String imagePath;
-
     private String title;
 
     private LocalDate visitedDate;
@@ -25,21 +23,18 @@ public class MemoryResponseDto {
 
 
     @Builder
-    public MemoryResponseDto(Long memoryId, String title, String imagePath, GroupType groupType, LocalDate visitedDate) {
+    public MemoryResponseDto(Long memoryId, String title, GroupType groupType, LocalDate visitedDate) {
         this.memoryId = memoryId;
         this.title = title;
-        this.imagePath = imagePath;
         this.groupType = groupType;
         this.visitedDate = visitedDate;
     }
 
-    public MemoryResponseDto(Long memoryId, String title, String imagePath, LocalDate visitedDate, GroupType groupType) {
+    public MemoryResponseDto(Long memoryId, String title, LocalDate visitedDate, GroupType groupType) {
 
         this.memoryId = memoryId;
         this.title = title;
-        this.imagePath = imagePath;
         this.visitedDate = visitedDate;
         this.groupType = groupType;
-
     }
 }
