@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: 저장소 Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{secrets.ACTION_TOKEN}}
+          submodules: true
 
       - name: 스프링부트 애플리케이션 빌드
         run: ./gradlew build -x test
