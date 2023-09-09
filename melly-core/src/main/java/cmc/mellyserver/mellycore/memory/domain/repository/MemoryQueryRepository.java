@@ -48,11 +48,13 @@ public class MemoryQueryRepository {
         List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
                         memory.title,
-                        memoryImage.imagePath,
-                        memory.visitedDate))
+                        memory.visitedDate,
+                        userGroup.groupType
+                ))
                 .from(memory)
-                .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id)).fetchJoin()
+                .innerJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id))
                 .innerJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
+                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
                 .where(
                         isActive(), // =
                         ltMemoryId(lastId),
@@ -73,14 +75,17 @@ public class MemoryQueryRepository {
         List<MemoryResponseDto> results = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
                         memory.title,
-                        memoryImage.imagePath,
-                        memory.visitedDate))
+                        memory.visitedDate,
+                        userGroup.groupType
+                ))
                 .from(memory)
                 .innerJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
                 .where(
                         isActive(),
                         ltMemoryId(lastId),
                         memory.groupId.eq(groupId),
+                        eqGroup(groupType),
                         checkOpenTypeAllOrGroup()
                 )
                 .orderBy(memory.id.desc())
@@ -101,7 +106,6 @@ public class MemoryQueryRepository {
 
         List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
-                        memory.title,
                         memory.title,
                         memory.visitedDate,
                         userGroup.groupType
@@ -153,10 +157,11 @@ public class MemoryQueryRepository {
         List<MemoryResponseDto> result = query.select(Projections.constructor(MemoryResponseDto.class,
                         memory.id,
                         memory.title,
-                        memoryImage.imagePath,
-                        memory.visitedDate))
+                        memory.visitedDate,
+                        userGroup.groupType
+                ))
                 .from(memory)
-                .leftJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
                 .where(
                         isActive(),
                         ltMemoryId(lastId),
@@ -178,9 +183,12 @@ public class MemoryQueryRepository {
                         memory.id,
                         memory.title,
                         memoryImage.imagePath,
-                        memory.visitedDate))
+                        memory.visitedDate,
+                        userGroup.groupType
+                ))
                 .from(memory)
                 .leftJoin(place).on(place.id.eq(memory.placeId))
+                .innerJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
                 .where(
                         isActive(),
                         ltMemoryId(lastId),
