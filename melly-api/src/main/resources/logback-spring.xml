@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
-    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>error</level>
             <onMatch>ACCEPT</onMatch>
@@ -20,7 +20,8 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./logs/application/application.log</file>
         <encoder>
             <pattern>[%X{request_id:-startup}] %d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg
@@ -34,7 +35,8 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%X{request_id:-startup}] %d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg
                 %n
@@ -46,7 +48,7 @@
     <springProfile name="local,dev">
 
         <root level="INFO">
-            <appender-ref ref="console"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
 
     </springProfile>
@@ -54,9 +56,8 @@
     <springProfile name="prod">
 
         <root level="INFO">
-            <appender-ref ref="console"/>
-            <!--            <appender-ref ref="error"/>-->
-
+            <appender-ref ref="CONSOLE"/>
         </root>
+
     </springProfile>
 </configuration>

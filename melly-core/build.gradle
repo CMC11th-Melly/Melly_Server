@@ -10,28 +10,30 @@ jar {
     enabled = true
 }
 
-
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 dependencies {
 
 
     // DB
-//    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
-    // queryDsl
 
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // QueryDSL
     implementation "com.querydsl:querydsl-jpa:5.0.0"
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
-    testImplementation "com.h2database:h2"
+
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     implementation project(':melly-common')
 }
 
+
+// ===== QueryDSL Config =======
 
 def querydslDir = "$buildDir/generated/querydsl"
 

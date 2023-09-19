@@ -3,11 +3,8 @@ plugins {
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id 'jacoco-report-aggregation'
-//    id 'org.sonarqube' version '3.5.0.2730'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // 원하는 모듈에서만 선택해서 사용 가능하다.
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false
 }
-
 
 repositories {
     mavenCentral()
@@ -41,9 +38,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
-    apply plugin: 'jacoco-report-aggregation'
     apply plugin: 'org.asciidoctor.jvm.convert'
-
 
     repositories {
         mavenCentral()
@@ -57,44 +52,46 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
-        // Lombok
+
+        // Spring
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
-        compileOnly 'org.projectlombok:lombok:1.18.20'
-        annotationProcessor 'org.projectlombok:lombok:1.18.20'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+        // Tolerance
+        implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
+        implementation 'org.springframework.retry:spring-retry'
 
         // firebase
         implementation 'com.google.firebase:firebase-admin:9.1.1'
-
-        implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
-        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
-
 
         // Monitoring
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
         implementation 'io.micrometer:micrometer-registry-prometheus'
 
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-        testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-        asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-
+        // Redis
         implementation 'org.redisson:redisson-spring-boot-starter:3.23.1'
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation 'org.springframework.retry:spring-retry'
-
 
         // JWT
         implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
         implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
         runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
         runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-        // redis
+
+        // Lombok
+        compileOnly 'org.projectlombok:lombok:1.18.20'
+        annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+        // Test
         testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
+        asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+        testImplementation "com.h2database:h2"
     }
 
 
@@ -201,7 +198,4 @@ subprojects {
             }
         }
     }
-
 }
-
-
