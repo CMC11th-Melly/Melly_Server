@@ -54,7 +54,6 @@ subprojects {
     dependencies {
 
         // Spring
-        implementation 'org.springframework.boot:spring-boot-starter-webflux'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -97,6 +96,7 @@ subprojects {
 
     // Rest-Docs 설정 시작
     ext {
+
         snippetsDir = file('build/generated-snippets') // 스니펫들이 생성되는 위치 지정
     }
 

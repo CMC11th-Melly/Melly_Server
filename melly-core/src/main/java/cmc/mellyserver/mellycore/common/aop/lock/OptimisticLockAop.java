@@ -18,32 +18,25 @@ import javax.persistence.OptimisticLockException;
 @Component
 public class OptimisticLockAop {
 
-
     public Integer retryMaxCount = 3;
 
-    public Integer retryInterval = 3000;
-
-
-    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.OptimisticLock)")
+    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.annotation.OptimisticLock)")
     public Object doOneMoreRetryTransactionIfOptimisticLockExceptionThrow(
 
+
             ProceedingJoinPoint joinPoint) throws Throwable {
+
         Exception exceptionHolder = null;
 
         for (int retryCount = 0; retryCount <= retryMaxCount; retryCount++) {
 
             try {
-                log.info("[RETRY_COUNT]: {}", retryCount);
-                log.info("Optimistic Locking aop 실행 후 다음 로직 넘어감");
                 return joinPoint.proceed();
 
             } catch (OptimisticLockException | ObjectOptimisticLockingFailureException | CannotAcquireLockException e) {
 
-
-                log.error("{} 발생", e.getClass());
                 exceptionHolder = e;
 
-                Thread.sleep(retryInterval);
             }
         }
 

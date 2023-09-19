@@ -39,7 +39,7 @@ public class NotificationEventHandler {
     public void sendCommentPush(CommentEnrollEvent event) {
 
         pushService.sendCommentCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
-        notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL, event.getUserId(), 1L);
+        notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL, event.getUserId(), event.getMemoryId());
     }
 
     @Async
@@ -47,7 +47,7 @@ public class NotificationEventHandler {
     public void sendCommentLikePush(CommentLikeEvent event) {
 
         pushService.sendCommentLikeCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
-        notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE, event.getUserId(), 1L);
+        notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE, event.getUserId(), event.getMemoryId());
     }
 
     @Async
@@ -55,14 +55,14 @@ public class NotificationEventHandler {
     public void sendGroupUserMemoryCreatedPush(GroupUserMemoryCreatedEvent event) {
 
 
-        List<User> usersParticipatedInGroup = groupAndUserRepository.getUsersParticipatedInGroup(event.getGroupId()); // 그룹 참여자들을 찾는다.
+        List<User> usersParticipatedInGroup = groupAndUserRepository.getUsersParticipatedInGroup(event.getGroupId());
         String nickname = userRepository.getById(event.getUserId()).getNickname();
 
         usersParticipatedInGroup.stream()
                 .filter(user -> excludeWriter(event, user))
                 .forEach(user -> {
                     pushService.sendGroupUserCreatedMemoryMessage(event.getUserId(), event.getMemoryId(), nickname);
-                    notificationService.createNotification(GROUP_USER_CREATED_MEMORY_CONTENT, NotificationType.GROUP_USER_CREATED_MEMORY, event.getUserId(), 1L);
+                    notificationService.createNotification(GROUP_USER_CREATED_MEMORY_CONTENT, NotificationType.GROUP_USER_CREATED_MEMORY, event.getUserId(), event.getMemoryId());
                 });
     }
 

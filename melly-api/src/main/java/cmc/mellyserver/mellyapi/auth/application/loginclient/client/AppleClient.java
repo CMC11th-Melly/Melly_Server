@@ -2,6 +2,7 @@ package cmc.mellyserver.mellyapi.auth.application.loginclient.client;
 
 
 import cmc.mellyserver.mellyapi.auth.application.loginclient.LoginClient;
+import cmc.mellyserver.mellyapi.auth.application.loginclient.client.feign.AppleOpenFeign;
 import cmc.mellyserver.mellyapi.auth.application.loginclient.dto.AppleUserData;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.enums.Provider;
@@ -14,10 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -29,7 +27,6 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
-import static cmc.mellyserver.mellyapi.auth.application.loginclient.constants.OAuthConstants.APPLE_RESOURCE_SERVER_URL;
 import static cmc.mellyserver.mellycore.user.domain.enums.Provider.APPLE;
 
 @Slf4j
@@ -37,7 +34,7 @@ import static cmc.mellyserver.mellycore.user.domain.enums.Provider.APPLE;
 @RequiredArgsConstructor
 public class AppleClient implements LoginClient {
 
-    private final WebClient webClient;
+    private final AppleOpenFeign appleOpenFeign;
 
     @Override
     public boolean supports(Provider provider) {
@@ -47,13 +44,7 @@ public class AppleClient implements LoginClient {
     @Override
     public User getUserData(String accessToken) {
 
-        AppleUserData response = webClient.get()
-                .uri(APPLE_RESOURCE_SERVER_URL)
-                .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new IllegalArgumentException()))
-                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new IllegalAccessException()))
-                .bodyToMono(AppleUserData.class)
-                .block();
+        AppleUserData response = appleOpenFeign.call();
 
         try {
 

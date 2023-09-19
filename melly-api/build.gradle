@@ -5,17 +5,32 @@ bootJar {
 
 dependencies {
 
-
+    // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // OpenFeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Test
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation project(':melly-core')
     implementation project(':melly-common')
     testImplementation(testFixtures(project(":melly-core")))
-
 }
+
+ext {
+    set('springCloudVersion', "2021.0.4")
+}
+
+
+dependencyManagement {
+
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+

@@ -1,5 +1,6 @@
 package cmc.mellyserver.mellycore.common.aop.lock;
 
+import cmc.mellyserver.mellycore.common.aop.lock.annotation.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,10 +25,10 @@ public class DistributedLockAop {
     private static final String REDISSON_LOCK_PREFIX = "LOCK:";
 
     private final RedissonClient redissonClient;
-    private final AopForTransaction aopForTransaction;
+
 
     // 해당 어노테이션이 붙은 메서드를 찾아온다.
-    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.DistributedLock)")
+    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.annotation.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         // @DistributedLock 어노테이션이 붙은 메서드의 시그니처를 가져온다.
@@ -43,6 +44,7 @@ public class DistributedLockAop {
         // 락을 조회한다.
         RLock rLock = redissonClient.getLock(key);
         redissonClient.getConfig().useReplicatedServers().setRetryAttempts(3).setRetryInterval(1000);
+
         try {
             // 락이 사용 가능한지 체크한뒤, 옵션들을 설정한다.
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
@@ -53,18 +55,21 @@ public class DistributedLockAop {
             }
 
             // 본 로직 실행
-            return aopForTransaction.proceed(joinPoint);
+            return joinPoint.proceed();
 
         } catch (InterruptedException e) {
             throw new InterruptedException();
 
         } finally {
             try {
+
                 // 본 로직 실행이 성공적으로 끝나고 나면 락을 해제한다. 이때 대기하고 있던 쓰레드들에게 락 해제 메세지가 전달 된다.
                 rLock.unlock();
+
             } catch (IllegalMonitorStateException e) {
+
                 // 실패하면 예외 발생
-                log.info("Redisson Lock Already UnLock {} {}", method.getName(), key);
+                log.error("Redisson Lock이 이미 해제됐습니다. {} {}", method.getName(), key);
             }
         }
     }

@@ -29,6 +29,9 @@ dependencies {
     // AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // flyway
+    implementation 'org.flywaydb:flyway-core:6.4.2'
+
     implementation project(':melly-common')
 }
 

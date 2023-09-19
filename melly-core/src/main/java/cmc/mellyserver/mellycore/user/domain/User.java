@@ -140,12 +140,6 @@ public class User extends JpaBaseEntity {
         this.enableCommentPush = enableCommentPush;
     }
 
-
-    public User setPwChangeStatus() {
-        this.passwordExpired = PasswordExpired.Y;
-        return this;
-    }
-
     public User changePwExpireStatus() {
         this.passwordExpired = PasswordExpired.Y;
         return this;

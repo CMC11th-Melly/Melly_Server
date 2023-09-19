@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop.lock;
+package cmc.mellyserver.mellycore.common.aop.lock.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,7 +17,7 @@ public @interface DistributedLock {
     TimeUnit timeUnit() default TimeUnit.SECONDS;
 
     // 락 대기 시간
-    long waitTime() default 10L;
+    long waitTime() default 3L;
 
     // 락 사용 시간
     // 락을 3초 사용한 이후에는 반납해야 한다.

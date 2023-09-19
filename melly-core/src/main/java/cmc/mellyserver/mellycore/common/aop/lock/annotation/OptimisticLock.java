@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop.lock;
+package cmc.mellyserver.mellycore.common.aop.lock.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

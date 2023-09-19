@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.group.application;
 
 
-import cmc.mellyserver.mellycore.common.aop.lock.DistributedLock;
-import cmc.mellyserver.mellycore.common.aop.lock.OptimisticLock;
+import cmc.mellyserver.mellycore.common.aop.lock.annotation.DistributedLock;
+import cmc.mellyserver.mellycore.common.aop.lock.annotation.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
