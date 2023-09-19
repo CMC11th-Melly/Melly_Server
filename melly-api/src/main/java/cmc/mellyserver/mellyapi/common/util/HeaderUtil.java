@@ -13,7 +13,7 @@ public class HeaderUtil {
 
     public static String getAccessToken(HttpServletRequest request) {
 
-        String headerValue = request.getHeader(HEADER_AUTHORIZATION); // Bearer token
+        String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
         if (!Objects.isNull(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
 

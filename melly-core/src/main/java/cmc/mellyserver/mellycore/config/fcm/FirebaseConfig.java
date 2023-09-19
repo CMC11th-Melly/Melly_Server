@@ -14,7 +14,7 @@ import java.io.IOException;
 
 
 @Configuration
-@Profile({"local", "prod"})
+@Profile({"local"})
 public class FirebaseConfig {
 
     @PostConstruct

@@ -7,6 +7,7 @@ import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
 import cmc.mellyserver.mellycore.scrap.application.dto.request.CreatePlaceScrapRequestDto;
+import cmc.mellyserver.mellycore.scrap.application.dto.response.ScrapedPlaceListResponse;
 import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
 import cmc.mellyserver.mellycore.scrap.domain.enums.ScrapType;
 import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapQueryRepository;
@@ -44,9 +45,13 @@ public class PlaceScrapService {
     no offset 기반으로 충분히 최적화를 했기에 캐시 관리로 인한 비용이 더 크다고 판단됨.
      */
     @Transactional(readOnly = true)
-    public Slice<ScrapedPlaceResponseDto> findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
+    public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
 
-        return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
+        Slice<ScrapedPlaceResponseDto> userScrapedPlace = placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
+
+        List<ScrapedPlaceResponseDto> contents = userScrapedPlace.getContent();
+        boolean next = userScrapedPlace.hasNext();
+        return ScrapedPlaceListResponse.from(contents, next);
     }
 
     /*

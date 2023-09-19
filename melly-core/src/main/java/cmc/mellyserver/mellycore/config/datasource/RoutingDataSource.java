@@ -13,7 +13,6 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
 
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
-        log.info("Transaction Read Only : {}", isReadOnly);
 
         if (isReadOnly) {
             return SOURCE;

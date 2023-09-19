@@ -64,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/nickname", "/auth/email", "/api/health", "/api/auth/email-certification/sends", "/api/auth/email-certification/resends", "/api/auth/email-certification/confirms", "/api/auth/social-signup", "/").permitAll()
                 .anyRequest().authenticated()
                 .and()
+
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, TokenAuthenticationFilter.class);
 

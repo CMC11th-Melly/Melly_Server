@@ -1,12 +1,13 @@
 package cmc.mellyserver.mellycore.group.application;
 
 
-import cmc.mellyserver.mellycore.common.aop.DistributedLock;
-import cmc.mellyserver.mellycore.common.aop.OptimisticLock;
+import cmc.mellyserver.mellycore.common.aop.lock.DistributedLock;
+import cmc.mellyserver.mellycore.common.aop.lock.OptimisticLock;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.common.exception.ErrorCode;
 import cmc.mellyserver.mellycore.group.application.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.mellycore.group.application.dto.request.UpdateGroupRequestDto;
+import cmc.mellyserver.mellycore.group.application.dto.response.GroupListLoginUserParticipatedResponse;
 import cmc.mellyserver.mellycore.group.domain.GroupAndUser;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
@@ -20,8 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,22 +62,15 @@ public class GroupService {
     이유 : 정확한 데이터를 반영해야함으로 직접 DB에서 조회해야 한다.
      */
     @Transactional(readOnly = true)
-    public Slice<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticiated(final Long userId, final Long groupId, final Pageable pageable) {
+    public GroupListLoginUserParticipatedResponse findGroupListLoginUserParticiated(final Long userId, final Long groupId, final Pageable pageable) {
 
-        return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
+        Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
+
+        List<GroupLoginUserParticipatedResponseDto> contents = groupListLoginUserParticipate.getContent();
+        boolean next = groupListLoginUserParticipate.hasNext();
+        return GroupListLoginUserParticipatedResponse.from(contents, next);
     }
 
-
-    /*
-    캐시 적용 여부 : 불가능
-    이유 : 메모리 추가 시에는 유저가 속해있는 그룹 정보가 항상 최신으로 제공되야 한다
-    */
-    @Transactional(readOnly = true)
-    public Slice<GroupLoginUserParticipatedResponseDto> findGroupListLoginUserParticipateForMemoryCreate(final Long userId, final Long groupId, final Pageable pageable) {
-        return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
-    }
-
-    // 관리자 권한을 가진 사람, 멤버 초대와 그룹 수정 가능
 
     @Transactional
     public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
@@ -86,8 +82,9 @@ public class GroupService {
     }
 
 
+    @Retryable(maxAttempts = 3, include = OptimisticLockingFailureException.class)
     @CacheEvict(value = "group:group-id", key = "#groupId")
-    @DistributedLock(key = "#groupId", waitTime = 3L, leaseTime = 2L)
+    @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 2L)
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {
 

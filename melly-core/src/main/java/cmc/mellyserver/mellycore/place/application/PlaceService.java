@@ -62,7 +62,7 @@ public class PlaceService {
                 memoryCounts.get("belongToUSer"),
                 memoryCounts.get("NotBelongToUSer"),
                 checkCurrentLoginUserScraped, place.getPlaceCategory(), place.getPlaceName(),
-                GroupType.ALL,
+                null,
                 place.getPlaceImage());
     }
 
@@ -86,7 +86,7 @@ public class PlaceService {
                 id, new Position(lat, lng));
 
         return new PlaceResponseDto(place.getId(), place.getPosition(), memoryCounts.get("belongToUser"), memoryCounts.get("notBelongToUser"),
-                isCurrentLoginUserScraped, place.getPlaceCategory(), place.getPlaceName(), GroupType.ALL, place.getPlaceImage());
+                isCurrentLoginUserScraped, place.getPlaceCategory(), place.getPlaceName(), null, place.getPlaceImage());
     }
 
     /*

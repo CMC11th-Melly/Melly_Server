@@ -9,9 +9,12 @@ jobs:
     steps:
       - name: 저장소 Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{secrets.ACTION_TOKEN}}
+          submodules: true
 
-      #      - name: 스프링부트 애플리케이션 빌드
-      #        run: ./gradlew build -x test
+      - name: 스프링부트 애플리케이션 빌드
+        run: ./gradlew build -x test
 
       - name: 도커 이미지 빌드
         run: docker build -t sjmin/melly .
@@ -25,16 +28,6 @@ jobs:
       - name: Docker Hub 퍼블리시
         run: docker push sjmin/melly
 
-
-      - name: Send deploy.sh
-        uses: appleboy/scp-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.EC2_HOST }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          port: 22
-          source: "deploy.sh"
-          target: "/home/ubuntu/"
 
       - name: Deploy to Dev
         uses: appleboy/ssh-action@master

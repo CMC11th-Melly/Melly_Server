@@ -17,7 +17,7 @@ public class PlaceResponseDto {
     private Boolean isScraped;
     private String PlaceCategory = "";
     private String placeName = "";
-    private GroupType recommendType = GroupType.ALL;
+    private GroupType recommendType = null;
     private String placeImage;
 
     @Builder

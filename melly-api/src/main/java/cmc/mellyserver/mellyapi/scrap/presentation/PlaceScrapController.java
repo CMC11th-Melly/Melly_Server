@@ -20,14 +20,14 @@ public class PlaceScrapController {
     private final PlaceScrapService scrapService;
 
     @PostMapping("/place/scrap")
-    public ResponseEntity<ApiResponse> scrapPlace(@AuthenticationPrincipal User user, @RequestBody ScrapRequest scrapRequest) {
+    public ResponseEntity<ApiResponse<Void>> scrapPlace(@AuthenticationPrincipal User user, @RequestBody ScrapRequest scrapRequest) {
 
         scrapService.createScrap(ScrapAssembler.createPlaceScrapRequestDto(Long.parseLong(user.getUsername()), scrapRequest));
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     @DeleteMapping("/place/scrap")
-    public ResponseEntity<ApiResponse> removeScrap(@AuthenticationPrincipal User user, @RequestBody ScrapCancelRequest scrapCancelRequest) {
+    public ResponseEntity<ApiResponse<Void>> removeScrap(@AuthenticationPrincipal User user, @RequestBody ScrapCancelRequest scrapCancelRequest) {
 
         scrapService.removeScrap(Long.parseLong(user.getUsername()), scrapCancelRequest.getLat(), scrapCancelRequest.getLng());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);

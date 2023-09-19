@@ -14,9 +14,13 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 각각의 요소들이 왜 들어있는지 확실히 체크하기
+ */
 @EnableCaching
 @Configuration
 public class CacheConfig {
@@ -36,7 +40,6 @@ public class CacheConfig {
 
     }
 
-
     @Bean
     public RedisCacheManager redisCacheManager() {
 
@@ -45,11 +48,13 @@ public class CacheConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
 
+
         Map<String, RedisCacheConfiguration> configurations = new HashMap<>();
-        configurations.put("default", redisCacheConfiguration.entryTtl(CacheExpireConstants.DEFAULT_CACHE_EXPIRE_TIME));
+        configurations.put("default", redisCacheConfiguration.entryTtl(Duration.ofSeconds(10L)));
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(configurations)
                 .build();
+
     }
 }

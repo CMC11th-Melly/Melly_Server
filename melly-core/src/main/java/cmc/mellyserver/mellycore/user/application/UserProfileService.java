@@ -8,7 +8,7 @@ import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequ
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +48,7 @@ public class UserProfileService {
         return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(), user.getAgeGroup());
     }
 
+
     @Cacheable(value = "profile:user-id", key = "#userId")
     @Transactional(readOnly = true)
     public ProfileResponseDto getUserProfile(final Long userId) {
@@ -56,7 +57,7 @@ public class UserProfileService {
         return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
     }
 
-    @CacheEvict(value = "profile:user-id", key = "#userId")
+    @CachePut(value = "profile:user-id", key = "#userId")
     @Transactional
     public void updateUserProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
 
@@ -64,16 +65,16 @@ public class UserProfileService {
         user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
     }
 
-    @CacheEvict(value = "profile:user-id", key = "#userId")
+
+    @CachePut(value = "profile:user-id", key = "#userId")
     @Transactional
     public void updateUserProfileImage(final Long userId, final MultipartFile profileImage) throws IOException {
 
         User user = userRepository.getById(userId);
-        String userProfileImage = user.getProfileImage();
 
-        removeExistprofileImage(userProfileImage);
+        removeExistprofileImage(user.getProfileImage());
 
-        if (Objects.isNull(profileImage) || profileImage.isEmpty()) {
+        if (Objects.isNull(profileImage)) {
             user.changeProfileImage(null);
         } else {
             String newImageFile = fileUploader.saveFile(user.getId(), profileImage);
