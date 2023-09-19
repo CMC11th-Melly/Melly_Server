@@ -147,3 +147,5 @@ Caused by: java.lang.IllegalArgumentException: dataSource or dataSourceClassName
 	... 103 common frames omitted
 [startup] 20230908 11:03:46.211 [main] ERROR [DnsServerAddressStreamProviders:79] - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
                 
+[startup] 20230908 14:07:32.844 [main] ERROR [DnsServerAddressStreamProviders:79] - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+                

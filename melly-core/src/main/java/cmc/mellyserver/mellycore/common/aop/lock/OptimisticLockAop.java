@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop;
+package cmc.mellyserver.mellycore.common.aop.lock;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,7 +24,7 @@ public class OptimisticLockAop {
     public Integer retryInterval = 3000;
 
 
-    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.OptimisticLock)")
+    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.OptimisticLock)")
     public Object doOneMoreRetryTransactionIfOptimisticLockExceptionThrow(
 
             ProceedingJoinPoint joinPoint) throws Throwable {

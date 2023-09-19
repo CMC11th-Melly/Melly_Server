@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.memory.application;
 
 
-import cmc.mellyserver.mellycore.common.aop.CheckPlaceExists;
+import cmc.mellyserver.mellycore.common.aop.place.CheckPlaceExists;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
 import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;

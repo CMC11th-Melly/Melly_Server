@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop;
+package cmc.mellyserver.mellycore.common.aop.place;
 
 import cmc.mellyserver.mellycore.memory.application.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.mellycore.place.domain.Place;
@@ -21,7 +21,7 @@ public class CheckPlaceExistsAop {
 
     private final PlaceRepository placeRepository;
 
-    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.CheckPlaceExists) && args(createMemoryRequestDto)")
+    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.place.CheckPlaceExists) && args(createMemoryRequestDto)")
     public Object createPlaceWhenMemoryCreatedToNotExistPlace(final ProceedingJoinPoint joinPoint, final CreateMemoryRequestDto createMemoryRequestDto) throws Throwable {
 
         Optional<Place> place = placeRepository.findPlaceByPosition(new Position(createMemoryRequestDto.getLat(), createMemoryRequestDto.getLng()));

@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop;
+package cmc.mellyserver.mellycore.common.aop.lock;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

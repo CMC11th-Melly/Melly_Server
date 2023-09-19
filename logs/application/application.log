@@ -388,3 +388,196 @@ This generated password is for development use only. Your security configuration
                 
 [41b90001ff864776a97788dbad20b572] 20230908 11:04:09.436 [http-nio-8080-exec-1] INFO  [RoutingDataSource:16] - Transaction Read Only : false
                 
+[startup] 20230908 11:55:48.145 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m32s583ms).
+                
+[startup] 20230908 11:57:51.723 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m3s581ms).
+                
+[startup] 20230908 12:37:58.581 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m6s490ms).
+                
+[startup] 20230908 12:43:52.901 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m54s321ms).
+                
+[startup] 20230908 12:50:26.351 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m3s444ms).
+                
+[startup] 20230908 12:57:10.571 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m44s220ms).
+                
+[startup] 20230908 13:04:59.353 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m18s772ms).
+                
+[startup] 20230908 13:12:38.155 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m38s802ms).
+                
+[startup] 20230908 13:20:35.832 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m27s666ms).
+                
+[startup] 20230908 13:26:28.495 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m22s657ms).
+                
+[startup] 20230908 13:38:16.241 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=11m47s747ms).
+                
+[startup] 20230908 13:39:12.969 [HikariPool-1 housekeeper] WARN  [HikariPool:788] - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=56s728ms).
+                
+[startup] 20230908 14:07:27.540 [SpringApplicationShutdownHook] INFO  [GracefulShutdown:53] - Commencing graceful shutdown. Waiting for active requests to complete
+                
+[startup] 20230908 14:07:27.548 [tomcat-shutdown] INFO  [GracefulShutdown:78] - Graceful shutdown complete
+                
+[startup] 20230908 14:07:27.715 [SpringApplicationShutdownHook] INFO  [LocalContainerEntityManagerFactoryBean:651] - Closing JPA EntityManagerFactory for persistence unit 'default'
+                
+[startup] 20230908 14:07:27.719 [SpringApplicationShutdownHook] INFO  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+                
+[startup] 20230908 14:07:27.729 [SpringApplicationShutdownHook] INFO  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+                
+[startup] 20230908 14:07:29.749 [main] INFO  [MellyApiApplication:55] - Starting MellyApiApplication using Java 11.0.17 on seojemin-ui-MacBookPro.local with PID 14594 (/Users/seojemin/IdeaProjects/Melly_Server/melly-api/out/production/classes started by seojemin in /Users/seojemin/IdeaProjects/Melly_Server)
+                
+[startup] 20230908 14:07:29.749 [background-preinit] INFO  [Version:21] - HV000001: Hibernate Validator 6.2.5.Final
+                
+[startup] 20230908 14:07:29.752 [main] INFO  [MellyApiApplication:637] - The following 1 profile is active: "prod"
+                
+[startup] 20230908 14:07:30.457 [main] INFO  [RepositoryConfigurationDelegate:262] - Multiple Spring Data modules found, entering strict repository configuration mode
+                
+[startup] 20230908 14:07:30.457 [main] INFO  [RepositoryConfigurationDelegate:132] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+                
+[startup] 20230908 14:07:30.549 [main] INFO  [RepositoryConfigurationDelegate:201] - Finished Spring Data repository scanning in 88 ms. Found 9 JPA repository interfaces.
+                
+[startup] 20230908 14:07:30.555 [main] INFO  [RepositoryConfigurationDelegate:262] - Multiple Spring Data modules found, entering strict repository configuration mode
+                
+[startup] 20230908 14:07:30.556 [main] INFO  [RepositoryConfigurationDelegate:132] - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+                
+[startup] 20230908 14:07:30.572 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.comment.domain.repository.CommentLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.573 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.573 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.574 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.group.domain.repository.GroupRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.574 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.574 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.575 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.575 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.575 [main] INFO  [RepositoryConfigurationExtensionSupport:349] - Spring Data Redis - Could not safely identify store assignment for repository candidate interface cmc.mellyserver.mellycore.user.domain.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+                
+[startup] 20230908 14:07:30.575 [main] INFO  [RepositoryConfigurationDelegate:201] - Finished Spring Data repository scanning in 14 ms. Found 0 Redis repository interfaces.
+                
+[startup] 20230908 14:07:30.779 [main] INFO  [GenericScope:283] - BeanFactory id=31723d35-ba5d-3195-88db-609638f080bd
+                
+[startup] 20230908 14:07:30.859 [main] INFO  [PostProcessorRegistrationDelegate$BeanPostProcessorChecker:376] - Bean '(inner bean)#424f02b8' of type [com.amazonaws.auth.BasicAWSCredentials] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+                
+[startup] 20230908 14:07:30.860 [main] INFO  [PostProcessorRegistrationDelegate$BeanPostProcessorChecker:376] - Bean '(inner bean)#74c121d4' of type [com.amazonaws.auth.AWSStaticCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+                
+[startup] 20230908 14:07:30.864 [main] INFO  [PostProcessorRegistrationDelegate$BeanPostProcessorChecker:376] - Bean '(inner bean)#935d3f9' of type [com.amazonaws.auth.profile.ProfileCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+                
+[startup] 20230908 14:07:31.214 [main] INFO  [TomcatWebServer:108] - Tomcat initialized with port(s): 8080 (http)
+                
+[startup] 20230908 14:07:31.219 [main] INFO  [Http11NioProtocol:173] - Initializing ProtocolHandler ["http-nio-8080"]
+                
+[startup] 20230908 14:07:31.219 [main] INFO  [StandardService:173] - Starting service [Tomcat]
+                
+[startup] 20230908 14:07:31.219 [main] INFO  [StandardEngine:173] - Starting Servlet engine: [Apache Tomcat/9.0.75]
+                
+[startup] 20230908 14:07:31.302 [main] INFO  [[/]:173] - Initializing Spring embedded WebApplicationContext
+                
+[startup] 20230908 14:07:31.303 [main] INFO  [ServletWebServerApplicationContext:292] - Root WebApplicationContext: initialization completed in 1525 ms
+                
+[startup] 20230908 14:07:31.423 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.424 [main] INFO  [HikariDataSource:110] - HikariPool-1 - Starting...
+                
+[startup] 20230908 14:07:31.737 [main] INFO  [HikariDataSource:123] - HikariPool-1 - Start completed.
+                
+[startup] 20230908 14:07:31.781 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.782 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.782 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.782 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.790 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.791 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.791 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.791 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.933 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.933 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:31.955 [main] INFO  [LogHelper:31] - HHH000204: Processing PersistenceUnitInfo [name: default]
+                
+[startup] 20230908 14:07:31.980 [main] INFO  [Version:44] - HHH000412: Hibernate ORM core version 5.6.15.Final
+                
+[startup] 20230908 14:07:32.058 [main] INFO  [Version:56] - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+                
+[startup] 20230908 14:07:32.105 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:32.112 [main] INFO  [Dialect:175] - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+                
+[startup] 20230908 14:07:32.423 [main] INFO  [PojoInstantiator:47] - HHH000182: No default (no-argument) constructor for class: cmc.mellyserver.mellycore.notification.domain.Notification (class must be instantiated by Interceptor)
+                
+[startup] 20230908 14:07:32.488 [main] INFO  [JtaPlatformInitiator:52] - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+                
+[startup] 20230908 14:07:32.494 [main] INFO  [LocalContainerEntityManagerFactoryBean:437] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+                
+[startup] 20230908 14:07:32.844 [main] ERROR [DnsServerAddressStreamProviders:79] - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+                
+[startup] 20230908 14:07:32.965 [main] WARN  [JpaBaseConfiguration$JpaWebConfiguration:223] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+                
+[startup] 20230908 14:07:33.900 [main] INFO  [Version:41] - Redisson 3.23.1
+                
+[startup] 20230908 14:07:33.996 [redisson-netty-4-4] INFO  [MasterPubSubConnectionPool:140] - 1 connections initialized for 3.35.52.90/3.35.52.90:6379
+                
+[startup] 20230908 14:07:34.411 [redisson-netty-4-19] INFO  [MasterConnectionPool:140] - 24 connections initialized for 3.35.52.90/3.35.52.90:6379
+                
+[startup] 20230908 14:07:34.542 [main] WARN  [UserDetailsServiceAutoConfiguration:89] - 
+
+Using generated security password: ccad9598-7283-46de-975f-9126c99fa3e4
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+                
+[startup] 20230908 14:07:34.577 [main] WARN  [WebSecurity:305] - You are asking Spring Security to ignore Ant [pattern='/swagger*/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+                
+[startup] 20230908 14:07:34.577 [main] INFO  [DefaultSecurityFilterChain:52] - Will not secure Ant [pattern='/swagger*/**']
+                
+[startup] 20230908 14:07:34.577 [main] WARN  [WebSecurity:305] - You are asking Spring Security to ignore Ant [pattern='/firebase-messaging-sw.js']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+                
+[startup] 20230908 14:07:34.577 [main] INFO  [DefaultSecurityFilterChain:52] - Will not secure Ant [pattern='/firebase-messaging-sw.js']
+                
+[startup] 20230908 14:07:34.609 [main] INFO  [WelcomePageHandlerMapping:58] - Adding welcome page template: index
+                
+[startup] 20230908 14:07:34.762 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:34.762 [main] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:35.080 [main] INFO  [EndpointLinksResolver:58] - Exposing 24 endpoint(s) beneath base path '/actuator'
+                
+[startup] 20230908 14:07:35.135 [main] INFO  [DefaultSecurityFilterChain:55] - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@30ca87d9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@10d5e2dc, org.springframework.security.web.context.SecurityContextPersistenceFilter@780a021b, org.springframework.security.web.header.HeaderWriterFilter@18f9c19c, org.springframework.web.filter.CorsFilter@266e0341, org.springframework.security.web.authentication.logout.LogoutFilter@6c303cdc, cmc.mellyserver.mellyapi.common.filter.JwtExceptionFilter@430212cb, cmc.mellyserver.mellyapi.common.filter.TokenAuthenticationFilter@5398fac2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@49bf6f8c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4159113f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@37884b27, org.springframework.security.web.session.SessionManagementFilter@33ea43a, org.springframework.security.web.access.ExceptionTranslationFilter@6208a618, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1c595228]
+                
+[startup] 20230908 14:07:35.870 [main] INFO  [Http11NioProtocol:173] - Starting ProtocolHandler ["http-nio-8080"]
+                
+[startup] 20230908 14:07:35.882 [main] INFO  [TomcatWebServer:220] - Tomcat started on port(s): 8080 (http) with context path ''
+                
+[startup] 20230908 14:07:35.898 [main] INFO  [MellyApiApplication:61] - Started MellyApiApplication in 6.62 seconds (JVM running for 7.044)
+                
+[startup] 20230908 14:07:36.423 [RMI TCP Connection(5)-127.0.0.1] INFO  [[/]:173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+                
+[startup] 20230908 14:07:36.424 [RMI TCP Connection(5)-127.0.0.1] INFO  [DispatcherServlet:525] - Initializing Servlet 'dispatcherServlet'
+                
+[startup] 20230908 14:07:36.425 [RMI TCP Connection(5)-127.0.0.1] INFO  [DispatcherServlet:547] - Completed initialization in 1 ms
+                
+[startup] 20230908 14:07:36.448 [RMI TCP Connection(4)-127.0.0.1] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:36.448 [RMI TCP Connection(4)-127.0.0.1] INFO  [RoutingDataSource:16] - Transaction Read Only : false
+                
+[startup] 20230908 14:07:39.505 [SpringApplicationShutdownHook] INFO  [GracefulShutdown:53] - Commencing graceful shutdown. Waiting for active requests to complete
+                
+[startup] 20230908 14:07:39.508 [tomcat-shutdown] INFO  [GracefulShutdown:78] - Graceful shutdown complete
+                
+[startup] 20230908 14:07:39.669 [SpringApplicationShutdownHook] INFO  [LocalContainerEntityManagerFactoryBean:651] - Closing JPA EntityManagerFactory for persistence unit 'default'
+                
+[startup] 20230908 14:07:39.671 [SpringApplicationShutdownHook] INFO  [HikariDataSource:350] - HikariPool-1 - Shutdown initiated...
+                
+[startup] 20230908 14:07:39.755 [SpringApplicationShutdownHook] INFO  [HikariDataSource:352] - HikariPool-1 - Shutdown completed.
+                

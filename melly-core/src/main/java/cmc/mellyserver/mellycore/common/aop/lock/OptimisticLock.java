@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop;
+package cmc.mellyserver.mellycore.common.aop.lock;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CheckPlaceExists {
+public @interface OptimisticLock {
 }

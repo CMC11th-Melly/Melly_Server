@@ -48,6 +48,7 @@ public class UserProfileService {
         return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(), user.getAgeGroup());
     }
 
+
     @Cacheable(value = "profile:user-id", key = "#userId")
     @Transactional(readOnly = true)
     public ProfileResponseDto getUserProfile(final Long userId) {

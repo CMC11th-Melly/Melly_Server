@@ -13,6 +13,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LoginClientFactory {
 
+    // LoginClient 타입의 모든게 다 들어온다.
     private final List<LoginClient> loginClientList;
 
     private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
@@ -23,8 +24,14 @@ public class LoginClientFactory {
             return loginClient;
         }
 
-        loginClient = loginClientList.stream()
-                .filter(v -> v.supports(provider))
+        // 이 부분이 중요하다.
+//        loginClient = loginClientList.stream()
+//                .filter(v -> v.supports(provider))
+//                .findFirst()
+//                .orElseThrow();
+
+        loginClient = loginClientList.stream().filter(client ->
+                        client.supports(provider))
                 .findFirst()
                 .orElseThrow();
 

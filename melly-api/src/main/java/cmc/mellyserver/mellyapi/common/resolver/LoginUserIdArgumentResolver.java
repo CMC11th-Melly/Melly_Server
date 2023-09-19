@@ -14,12 +14,14 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * SecurityContextHolder에서 유저 식별자 파싱하는 클래스
+ */
 @Component
 @RequiredArgsConstructor
 public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final TokenProvider tokenProvider;
-
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
@@ -29,6 +31,7 @@ public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
+
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String accessToken = HeaderUtil.getAccessToken(request);
         Long id = tokenProvider.extractUserId(accessToken);

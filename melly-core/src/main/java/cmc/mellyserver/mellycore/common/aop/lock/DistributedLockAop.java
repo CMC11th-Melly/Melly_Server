@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common.aop;
+package cmc.mellyserver.mellycore.common.aop.lock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class DistributedLockAop {
     private final AopForTransaction aopForTransaction;
 
     // 해당 어노테이션이 붙은 메서드를 찾아온다.
-    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.DistributedLock)")
+    @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         // @DistributedLock 어노테이션이 붙은 메서드의 시그니처를 가져온다.

@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.config.datasource;
 
-public class DatabaseType {
+public abstract class DatabaseType {
 
     public static final String SOURCE = "source";
 
