@@ -9,7 +9,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
-    
+
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
@@ -29,7 +29,7 @@ dependencies {
 }
 
 ext {
-    set('springCloudVersion', "2021.0.4")
+    set('springCloudVersion', "2021.0.5")
 }
 
 

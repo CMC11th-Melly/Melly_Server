@@ -3,9 +3,10 @@ plugins {
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // root에서는 적용 안할 예정
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // apply false는 root에서 동작하지 않게 만든다
 }
 
+// 각종 의존성을 어떤 원격 저장소에서 받을지를 결정
 repositories {
     mavenCentral()
 }
