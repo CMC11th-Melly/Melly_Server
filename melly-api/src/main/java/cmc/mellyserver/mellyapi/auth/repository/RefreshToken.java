@@ -2,9 +2,9 @@ package cmc.mellyserver.mellyapi.auth.repository;
 
 public class RefreshToken {
 
-    private Long userId; // 분명이 구성이 맞다.
+    private Long userId;
 
-    private String refreshToken; // 이 구성이 맞는 것 같아
+    private String refreshToken;
 
 
     public RefreshToken(final String refreshToken, final Long userId) {
