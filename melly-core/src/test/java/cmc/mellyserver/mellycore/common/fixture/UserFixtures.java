@@ -1,7 +1,6 @@
 package cmc.mellyserver.mellycore.common.fixture;
 
 
-import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.enums.RoleType;
@@ -9,17 +8,18 @@ import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
 
 public class UserFixtures {
 
-
     /* 모카 */
     public static final String 모카_이메일 = "mocha@naver.com";
-    public static final String 모카_닉네임 = "모카";
-    public static final String 모카_프로필 = "/mocha.png";
-    public static final ProfileResponseDto 모카_응답 = new ProfileResponseDto(1L, 모카_닉네임, 모카_이메일, 모카_프로필);
 
+    public static final String 모카_닉네임 = "모카";
+
+    public static final String 모카_프로필 = "/mocha.png";
 
     /* 머식 */
     public static final String 머식_이메일 = "mosik@naver.com";
+
     public static final String 머식_닉네임 = "머식";
+
     public static final String 머식_프로필 = "/mosik.png";
 
 
