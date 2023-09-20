@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellybatch.config;
 
-import cmc.mellyserver.mellycore.common.policy.AccountPolicy;
+import cmc.mellyserver.mellycore.common.policy.UserPolicy;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
@@ -55,7 +55,7 @@ public class InactiveUserJobConfig {
     public QueueItemReader<User> inactiveUserReader() {
         List<User> oldUsers =
                 userRepository.findByLastLoginDateTimeBeforeAndUserStatusEquals(
-                        LocalDateTime.now().minusYears(AccountPolicy.INACTIVE_USER_DURATION), UserStatus.ACTIVE);
+                        LocalDateTime.now().minusYears(UserPolicy.INACTIVE_USER_DURATION), UserStatus.ACTIVE);
         return new QueueItemReader<>(oldUsers);
     }
 

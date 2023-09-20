@@ -1,5 +1,6 @@
 plugins {
     id 'java-test-fixtures'
+    id "com.ewerk.gradle.plugins.querydsl" // 하위 빌드 스크립트에서는 버전 없이 사용 가능하다
 }
 
 bootJar {
@@ -10,14 +11,10 @@ jar {
     enabled = true
 }
 
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
-
 dependencies {
-
 
     // DB
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
     // QueryDSL
     implementation "com.querydsl:querydsl-jpa:5.0.0"
@@ -36,7 +33,7 @@ dependencies {
 }
 
 
-// ===== QueryDSL Config =======
+// ========= QueryDSL Config ===========
 
 def querydslDir = "$buildDir/generated/querydsl"
 

@@ -17,8 +17,8 @@ import java.util.List;
 
 import static cmc.mellyserver.mellycore.common.fixture.UserFixtures.모카;
 import static cmc.mellyserver.mellycore.common.fixture.UserFixtures.모카_이메일;
-import static cmc.mellyserver.mellycore.common.policy.AccountPolicy.INACTIVE_USER_DURATION;
-import static cmc.mellyserver.mellycore.common.policy.AccountPolicy.PASSWORD_CHANGE_DURATION;
+import static cmc.mellyserver.mellycore.common.policy.UserPolicy.INACTIVE_USER_DURATION;
+import static cmc.mellyserver.mellycore.common.policy.UserPolicy.PASSWORD_CHANGE_DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

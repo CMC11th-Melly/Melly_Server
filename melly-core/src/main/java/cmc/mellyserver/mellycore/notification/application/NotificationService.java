@@ -34,8 +34,7 @@ public class NotificationService {
     @Transactional(readOnly = true)
     public List<NotificationResponse> getNotificationList(Long userId) {
 
-
-        List<Notification> notificationList = notificationRepository.findAll();
+        List<Notification> notificationList = notificationRepository.findAllByUserId(userId);
         return notificationList.stream().map(NotificationResponse::from).collect(Collectors.toList());
     }
 

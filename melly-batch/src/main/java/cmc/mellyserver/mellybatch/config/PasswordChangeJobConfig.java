@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellybatch.config;
 
 
-import cmc.mellyserver.mellycore.common.policy.AccountPolicy;
+import cmc.mellyserver.mellycore.common.policy.UserPolicy;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.enums.PasswordExpired;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
@@ -52,7 +52,7 @@ public class PasswordChangeJobConfig {
     public QueueItemReader<User> passwordChangeReader() {
 
         List<User> oldUsers = userRepository.findByPwInitDateTimeBeforeAndPasswordExpiredEquals(
-                LocalDateTime.now().minusMonths(AccountPolicy.PASSWORD_CHANGE_DURATION),
+                LocalDateTime.now().minusMonths(UserPolicy.PASSWORD_CHANGE_DURATION),
                 PasswordExpired.N);
         return new QueueItemReader<>(oldUsers);
     }

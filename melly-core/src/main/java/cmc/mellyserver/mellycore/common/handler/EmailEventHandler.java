@@ -25,7 +25,7 @@ public class EmailEventHandler {
 
     private final EmailSendService emailSendService;
 
-    @Async
+    @Async(value = "threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void signupEvent(SignupEvent event) {
 

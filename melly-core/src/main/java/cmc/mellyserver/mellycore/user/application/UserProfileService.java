@@ -3,7 +3,6 @@ package cmc.mellyserver.mellycore.user.application;
 
 import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
-import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateFormResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.mellycore.user.domain.User;
 import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
@@ -13,7 +12,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -35,17 +33,6 @@ public class UserProfileService {
 
         User user = userRepository.getById(userId);
         return fileUploader.calculateImageVolume(user.getEmail()).intValue();
-    }
-
-    /**
-     * 캐싱 적용 여부 : 불가능
-     * 이유 : 프로필 정보를 수정하기 위해 조회하는 데이터는 항상 최신성이 보장되야 한다. 따라서 캐시 적용 불가능하다.
-     */
-    @Transactional(readOnly = true)
-    public ProfileUpdateFormResponseDto getLoginUserProfileDataForUpdate(final Long userId) {
-
-        User user = userRepository.getById(userId);
-        return new ProfileUpdateFormResponseDto(user.getProfileImage(), user.getNickname(), user.getGender(), user.getAgeGroup());
     }
 
 

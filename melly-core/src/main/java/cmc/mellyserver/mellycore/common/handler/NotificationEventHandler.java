@@ -34,7 +34,7 @@ public class NotificationEventHandler {
 
     private final UserRepository userRepository;
 
-    @Async
+    @Async(value = "threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendCommentPush(CommentEnrollEvent event) {
 
@@ -42,7 +42,7 @@ public class NotificationEventHandler {
         notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL, event.getUserId(), event.getMemoryId());
     }
 
-    @Async
+    @Async(value = "threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendCommentLikePush(CommentLikeEvent event) {
 
@@ -50,7 +50,7 @@ public class NotificationEventHandler {
         notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE, event.getUserId(), event.getMemoryId());
     }
 
-    @Async
+    @Async(value = "threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendGroupUserMemoryCreatedPush(GroupUserMemoryCreatedEvent event) {
 

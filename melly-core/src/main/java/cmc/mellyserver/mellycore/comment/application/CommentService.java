@@ -31,6 +31,7 @@ public class CommentService {
     private final CommentQueryRepository commentQueryRepository;
 
     private final UserRepository userRepository;
+
     private final ApplicationEventPublisher publisher;
 
     private final CommentRepository commentRepository;
