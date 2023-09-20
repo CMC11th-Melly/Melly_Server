@@ -7,7 +7,6 @@ import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellyapi.group.presentation.dto.GroupAssembler;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupCreateRequest;
 import cmc.mellyserver.mellyapi.group.presentation.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.mellyapi.user.presentation.dto.response.GroupLoginUserParticipatedResponse;
 import cmc.mellyserver.mellycore.group.application.GroupService;
 import cmc.mellyserver.mellycore.group.domain.repository.dto.GroupDetailResponseDto;
 import lombok.RequiredArgsConstructor;

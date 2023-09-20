@@ -20,3 +20,5 @@ public abstract class UserAssembler {
                 .collect(Collectors.toList());
     }
 }
+
+// 요즘은 바로 프로필 수정 해버리네?

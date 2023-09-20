@@ -24,4 +24,9 @@ public class ApiResponse<T> {
         return ResponseEntity.status(successCode.getStatus())
                 .body(new ApiResponse<>(successCode.getStatus(), successCode.getMessage(), null));
     }
+
+    public static <T> ResponseEntity<ApiResponse> success(final SuccessCode successCode) {
+        return ResponseEntity.status(successCode.getStatus())
+                .body(new ApiResponse<>(successCode.getStatus(), successCode.getMessage(), null));
+    }
 }

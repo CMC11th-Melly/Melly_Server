@@ -28,6 +28,7 @@ task copyPrivate(type: Copy) {
     }
 }
 
+
 subprojects {
 
     group 'cmc.mellyserver'
