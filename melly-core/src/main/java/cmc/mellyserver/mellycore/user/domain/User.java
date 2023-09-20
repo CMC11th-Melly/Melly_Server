@@ -140,15 +140,6 @@ public class User extends JpaBaseEntity {
         this.enableCommentPush = enableCommentPush;
     }
 
-    public User changePwExpireStatus() {
-        this.passwordExpired = PasswordExpired.Y;
-        return this;
-    }
-
-    public User changePwExpireStatus() {
-        this.passwordExpired = PasswordExpired.Y;
-        return this;
-    }
 
     private boolean isDefaultEmailUser() {
         return !Objects.isNull(this.provider) && this.provider.equals(Provider.DEFAULT);
