@@ -5,7 +5,7 @@
 
   <br>
 <h3>CMC MakeUS 11TH 떡잎마을방범대 Project <br>
-  멜리 MELLY - 장소 기반 추억 기록장 <a href=https://apps.apple.com/kr/app/%EB%A9%9C%EB%A6%AC-melly-%EC%9E%A5%EC%86%8C-%EA%B8%B0%EB%B0%98-%EC%B6%94%EC%96%B5-%EA%B8%B0%EB%A1%9D%EC%9E%A5/id6444202109>다운로드</a></h3>
+  멜리 MELLY - 장소 기반 추억 기록장 <a href=https://apps.apple.com/kr/app/%EB%A9%9C%EB%A6%AC-melly-%EC%9E%A5%EC%86%8C-%EA%B8%B0%EB%B0%98-%EC%B6%94%EC%96%B5-%EA%B8%B0%EB%A1%9D%EC%9E%A5/id6444202109>다운로드 (현재 서버 리팩토링 중입니다)</a></h3>
 </div>
 <br>
 <br>
@@ -23,48 +23,56 @@
 <br>
 
 ## 📕 Development Environment
+
 - <b>Language</b> :  Java 11
-- <b>Framework</b> :  SpringBoot, Spring Security 
+
+- <b>Framework</b> :  SpringBoot, Spring Security
 - <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
 - <b>DevOps</b> : EC2, RDS, S3, Elasticache
 - <b>CI/CD</b> : Github actions, Code Deploy (Beanstalk으로 이전 예정)
-- <b>Docs</b> : Swagger (SpringDocs)  
+- <b>Docs</b> : Swagger (SpringDocs)
+
 
 <br>
 
 ## 🗓 Development
+
 2022.09.12 ~ 2021.11.12
 
 <br>
 
 ## 📚 Folder Structure
-```
-├── MellyServerApplication.java
-├── auth                                 # 인증 관련 도메인
-├── block                                # 메모리 및 댓글 차단 도메인
-├── comment                              # 메모리 댓글 도메인
-├── common                               # 공통 응답 형식 및 유틸리티 모음
-├── config                               # 인증, 문서화 등 설정 모음
-├── group                                # 유저 그룹 도메인
-├── healthcheck                          # 헬스 체크
-├── memory                               # 메모리 도메인
-├── memoryScrap                          # 메모리 스크랩 도메인
-├── notification                         # 푸시 알림 도메인
-├── place                                # 장소 도메인
-├── placeScrap                           # 장소 스크랩 도메인
-├── recommend                            # 추천 장소 도메인
-├── report                               # 메모리 및 댓글 신고 도메인
-├── trend                                # 핫한 장소 도메인
-└── user                                 # 유저 도메인
 
 ```
+├── melly-api                     # 모바일 어플리케이션과 통신하는 REST API
+├── melly-batch                   # 내부 배치 서비스        
+├── melly-core                    # 서비스 로직, 도메인          
+├── melly-common                  # Enum, Utils           
+└── melly-infra                   # AWS, FCM 등의 외부 모듈    
+```
+
+<br>
+
+## 🏛 Domain Architecture
+
+<img src="https://user-images.githubusercontent.com/82302520/234835879-48072114-75ba-476c-9914-a731967ca4bf.png" width="800" height="700">
+
+- DDD 기반의 아키텍쳐로 애그리거트를 분리하는 리팩토링을 진행했습니다.
+- 애그리거트 간의 필수적인 연관관계 참조가 필요없는 경우 ID 참조로 전환했습니다.
+
+<br>
+
+
+## 🏛 DTO Mapping Strategy
+
+<img src="https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/fcd5ce2f-276d-4b7a-8699-403a0610c6a9" width="700" height="500">
+
 
 <br>
 
 ## 🏛 System Structure
 
-<br>
+![Source (5)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/3f3aee3c-6359-48be-8617-20e1987d0329)
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/82302520/201564545-02f665c9-499a-4075-a9b3-a77e1bbe6ef3.png" width="800" height="500">
-  </p>
+
+

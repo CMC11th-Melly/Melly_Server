@@ -1,1 +1,8 @@
 rootProject.name = 'mellyServer'
+include 'melly-api'
+include 'melly-core'
+include 'melly-batch'
+include 'melly-common'
+
+
+

@@ -18,8 +18,6 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-/src/main/resources/application-local.yml
-/src/main/resources/firebase/melly-fdd90-firebase-adminsdk-a139l-bd9a957ecb.json
 .idea
 *.iws
 *.iml
@@ -27,6 +25,17 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+### Path ###
+/melly-api/src/main/resources/application-prod.yml
+/melly-api/src/main/resources/firebase/
+/melly-api/src/main/resources/static/
+/melly-api/src/main/resources/templates/
+/melly-api/src/main/resources/application-local.yml
+/melly-api/src/main/resources/firebase-key.json
+/melly-batch/src/main/resources/application-local.yml
+
+
 
 ### NetBeans ###
 /nbproject/private/

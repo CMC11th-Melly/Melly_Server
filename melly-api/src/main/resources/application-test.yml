@@ -1,0 +1,47 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    source:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:~/write;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialects: org.hibernate.dialect.MySQL57Dialect
+        format_sql: true
+        default_batch_fetch_size: 1000
+    generate-ddl: false
+    hibernate:
+      ddl-auto: create-drop
+
+  data:
+    mongodb:
+      uri: dfdf
+      database: melly
+app:
+  auth:
+    tokenExpiry: 200000000
+    tokenSecret: Y21jMTF0aGFub3RoZXJjbWffgkfgjwerljfgwekljfglkwejglF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    s3:
+      cloud-front-url: ${CLOUD_FRONT_URL}
+      bucket: ${S3_BUCKET}
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+
+retry:
+  count: 3
+  sleep: 3000
+
