@@ -11,7 +11,6 @@ import cmc.mellyserver.mellyapi.common.response.ApiResponse;
 import cmc.mellyserver.mellycore.comment.application.CommentLikeService;
 import cmc.mellyserver.mellycore.comment.application.CommentService;
 import cmc.mellyserver.mellycore.comment.application.dto.response.CommentResponseDto;
-import cmc.mellyserver.mellycore.common.constants.MessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
