@@ -84,7 +84,8 @@ public class GroupService {
 
     @Retryable(maxAttempts = 3, include = OptimisticLockingFailureException.class)
     @CacheEvict(value = "group:group-id", key = "#groupId")
-    @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 2L)
+    @DistributedLock(key = "#groupId")
+    @OptimisticLock
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {
 
@@ -139,6 +140,4 @@ public class GroupService {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
     }
-
-
 }
