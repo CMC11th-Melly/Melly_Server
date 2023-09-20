@@ -1,6 +1,9 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-import cmc.mellyserver.mellycore.user.domain.enums.*;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendActivity;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendGroup;
+import cmc.mellyserver.mellycore.user.domain.enums.RecommendPlace;
+import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,19 +106,6 @@ public class UserTest {
         Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.DELETE);
     }
 
-    @DisplayName("유저 상태를 패스워드 만료 상태로 변경한다.")
-    @Test
-    void 유저_상태를_패스워드_만료_상태로_변경한다() {
-
-        // given
-        User user = 모카();
-
-        // when
-        user.changePwExpireStatus();
-
-        // then
-        Assertions.assertThat(user.getPasswordExpired()).isEqualTo(PasswordExpired.Y);
-    }
 
     @DisplayName("유저의 마지막 로그인 날짜를 변경한다.")
     @Test

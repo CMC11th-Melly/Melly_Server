@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.memory.repository;
 
-import cmc.mellyserver.mellycore.common.RepositoryTest;
+import cmc.mellyserver.mellycore.config.RepositoryTest;
 
 public class MemoryQueryRepositoryTest extends RepositoryTest {
 //
