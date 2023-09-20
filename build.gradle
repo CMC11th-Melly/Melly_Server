@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // root에서는 적용 안할 예정
 }
 
@@ -20,6 +20,7 @@ configurations {
     }
 }
 
+// Sub-Module 적용
 task copyPrivate(type: Copy) {
     copy {
         from './lib'
@@ -56,7 +57,6 @@ subprojects {
 
         // Spring
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
@@ -74,12 +74,6 @@ subprojects {
         // Redis
         implementation 'org.redisson:redisson-spring-boot-starter:3.23.1'
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-        // JWT
-        implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-        implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
-        runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-        runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
         // Lombok
         compileOnly 'org.projectlombok:lombok:1.18.20'
