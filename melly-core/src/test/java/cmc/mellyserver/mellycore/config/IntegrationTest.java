@@ -1,4 +1,4 @@
-package cmc.mellyserver.mellycore.common;
+package cmc.mellyserver.mellycore.config;
 
 
 import cmc.mellyserver.mellycore.builder.BuilderSupporter;

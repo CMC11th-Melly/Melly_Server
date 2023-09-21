@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.group.application;
 
-import cmc.mellyserver.mellycore.common.IntegrationTest;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
+import cmc.mellyserver.mellycore.config.IntegrationTest;
 import cmc.mellyserver.mellycore.group.domain.UserGroup;
 import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
 import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;

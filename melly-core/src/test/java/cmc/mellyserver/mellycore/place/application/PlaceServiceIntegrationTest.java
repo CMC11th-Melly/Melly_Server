@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.place.application;
 
 
-import cmc.mellyserver.mellycore.common.IntegrationTest;
+import cmc.mellyserver.mellycore.config.IntegrationTest;
 
 public class PlaceServiceIntegrationTest extends IntegrationTest {
 

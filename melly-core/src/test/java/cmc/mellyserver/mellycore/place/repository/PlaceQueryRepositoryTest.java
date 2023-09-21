@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.place.repository;
 
-import cmc.mellyserver.mellycore.common.RepositoryTest;
+import cmc.mellyserver.mellycore.config.RepositoryTest;
 
 public class PlaceQueryRepositoryTest extends RepositoryTest {
 
