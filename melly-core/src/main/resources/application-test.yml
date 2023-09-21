@@ -15,7 +15,6 @@ spring:
         dialects: org.hibernate.dialect.MySQL57Dialect
         format_sql: true
         default_batch_fetch_size: 1000
-    generate-ddl: false
     hibernate:
       ddl-auto: create-drop
 app:
