@@ -31,7 +31,7 @@ jobs:
         shell: bash
 
       - name: Test with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1

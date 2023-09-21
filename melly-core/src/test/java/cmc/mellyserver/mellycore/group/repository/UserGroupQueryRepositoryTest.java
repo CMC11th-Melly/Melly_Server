@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.group.repository;
 
-import cmc.mellyserver.mellycore.common.RepositoryTest;
+import cmc.mellyserver.mellycore.config.RepositoryTest;
 
 public class UserGroupQueryRepositoryTest extends RepositoryTest {
 

@@ -1,21 +1,27 @@
 package cmc.mellyserver.mellycore.common.fixture;
 
+import cmc.mellyserver.mellycore.place.domain.Place;
+import cmc.mellyserver.mellycore.place.domain.Position;
+
 public class PlaceFixtures {
-//
-//    /* 스타벅스 */
-//    public static final String 스타벅스 = "스타벅스";
-//
-//    public static final Position 스타벅스_좌표 = new Position(1.234, 1.234);
-//    public static final String 스타벅스_이미지 = "/starbucks.png";
-//    public static final String 스타벅스_카테고리 = "카페/베이커리";
-//
-//    public static Place 스타벅스() {
-//        return Place.builder()
-//                .position(스타벅스_좌표)
-//                .placeName(스타벅스)
-//                .placeImage(스타벅스_이미지)
-//                .placeCategory(스타벅스_카테고리)
-//                .isDeleted(Boolean.FALSE)
-//                .build();
-//    }
+
+    private static final String 장소_이름 = "스타벅스";
+
+    private static final String 장소_카테고리 = "디저트/카페";
+
+    private static final Position 장소_좌표 = new Position(1.2345, 1.2345);
+
+    private static final String 장소_이미지_URL = "place_image_url";
+
+
+    public static Place 스타벅스() {
+
+        return Place.builder()
+                .placeName(장소_이름)
+                .placeCategory(장소_카테고리)
+                .position(장소_좌표)
+                .isDeleted(Boolean.FALSE)
+                .placeImage(장소_이미지_URL)
+                .build();
+    }
 }

@@ -1,8 +1,8 @@
 package cmc.mellyserver.mellycore.user.domain;
 
-import cmc.mellyserver.mellycore.common.RepositoryTest;
 import cmc.mellyserver.mellycore.common.exception.BusinessException;
 import cmc.mellyserver.mellycore.common.exception.ErrorCode;
+import cmc.mellyserver.mellycore.config.RepositoryTest;
 import cmc.mellyserver.mellycore.user.domain.enums.PasswordExpired;
 import cmc.mellyserver.mellycore.user.domain.enums.Provider;
 import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;

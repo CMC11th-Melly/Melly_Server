@@ -1,7 +1,7 @@
 package cmc.mellyserver.mellycore.scrap.application;
 
 
-import cmc.mellyserver.mellycore.common.IntegrationTest;
+import cmc.mellyserver.mellycore.config.IntegrationTest;
 
 public class PlaceScrapServiceTest extends IntegrationTest {
 

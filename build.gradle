@@ -3,11 +3,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // root에서는 적용 안할 예정
-}
-
-repositories {
-    mavenCentral()
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // apply false는 root에서 동작하지 않게 만든다
 }
 
 bootJar {
@@ -40,14 +36,13 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
-    apply plugin: 'org.asciidoctor.jvm.convert'
+
 
     repositories {
         mavenCentral()
     }
 
     configurations {
-        asciidoctorExtensions
         compileOnly {
             extendsFrom annotationProcessor
         }
@@ -80,41 +75,15 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
         // Test
-        testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-        asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
         testImplementation "com.h2database:h2"
     }
 
-
-    // Rest-Docs 설정 시작
-    ext {
-
-        snippetsDir = file('build/generated-snippets') // 스니펫들이 생성되는 위치 지정
-    }
-
-    test {
-        outputs.dir snippetsDir // 위에서 지정한 snippetsDir에 결과를 출력하도록 한다.
-        useJUnitPlatform()
-        finalizedBy 'jacocoTestReport' // 마지막에는 jacocoReport를 작성한다.
-    }
-
-    asciidoctor { // asciidoctor 작업 구성
-        dependsOn test // test 작업 이후에 작동하도록 하는 설정
-        print('hello')
-        configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
-        inputs.dir snippetsDir // snippectsDir에서 스니펫들을 불러온다.
-
-        // source가 없으면 .adoc파일을 전부 html로 만들어버림
-        // source 지정시 특정 adoc만 HTML로 만든다.
-        sources {
-            include("**/index.adoc", "**/common/*.adoc")
-        }
-    }
-
+    // ======= jacoco config =========
     jacoco {
         toolVersion = '0.8.7'
     }

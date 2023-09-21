@@ -9,8 +9,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -18,7 +16,6 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @RequiredArgsConstructor
-@Order(Ordered.LOWEST_PRECEDENCE - 1)
 @Slf4j
 public class DistributedLockAop {
 
@@ -27,7 +24,10 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
 
 
-    // 해당 어노테이션이 붙은 메서드를 찾아온다.
+    /*
+    반환값이 Object인 이유 : @DistributedLock 어노테이션이 어떤 메서드에 사용될지 미리 예상할 수 없다.
+                         void가 될수도 있고, String이 반환될 수도 있는 것이기에 Object형을 통해 응답을 받도록 구성함
+     */
     @Around("@annotation(cmc.mellyserver.mellycore.common.aop.lock.annotation.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
@@ -39,22 +39,27 @@ public class DistributedLockAop {
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
 
         // DistributedLock 어노테이션에 넘긴 key 파라미터 값을 파싱해서 LOCK:12 형태로 만든다.
+        /*
+        signature.getParameternames() => 메서드 시그니쳐에 들어가는 파라미터 이름
+        joinPoint.getArgs() => 실제 groupService#participatedToGroup()에 파라미터로 넘어온 값
+        parser의 의미 => 프록시로 넘어온 파라미터 중에서 @DistributedLock의 key 이름에 해당하는 변수의 값을 파싱함
+         */
         String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
 
-        // 락을 조회한다.
         RLock rLock = redissonClient.getLock(key);
-        redissonClient.getConfig().useReplicatedServers().setRetryAttempts(3).setRetryInterval(1000);
 
         try {
-            // 락이 사용 가능한지 체크한뒤, 옵션들을 설정한다.
-            boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
 
-            // 만약 누가 락을 점유하고 있으면 false 반환
-            if (!available) {
-                return false;
+            /*
+            1. 락 사용이 가능하다면 available을 true로 반환
+            2. 락 사용이 불가능하다면 기존 사용자가 unlock 할때까지 대기
+             */
+            boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
+
+            if (!available) { // 끝까지 락 획득 못했으면 예외 발생
+                throw new IllegalArgumentException("락 획득 실패로 로직 실행에 실패했습니다");
             }
 
-            // 본 로직 실행
             return joinPoint.proceed();
 
         } catch (InterruptedException e) {
@@ -62,13 +67,8 @@ public class DistributedLockAop {
 
         } finally {
             try {
-
-                // 본 로직 실행이 성공적으로 끝나고 나면 락을 해제한다. 이때 대기하고 있던 쓰레드들에게 락 해제 메세지가 전달 된다.
                 rLock.unlock();
-
             } catch (IllegalMonitorStateException e) {
-
-                // 실패하면 예외 발생
                 log.error("Redisson Lock이 이미 해제됐습니다. {} {}", method.getName(), key);
             }
         }
