@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.scrap.repository;
 
-import cmc.mellyserver.mellycore.common.RepositoryTest;
+import cmc.mellyserver.mellycore.config.RepositoryTest;
 import cmc.mellyserver.mellycore.place.domain.Place;
 import cmc.mellyserver.mellycore.place.domain.Position;
 import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;

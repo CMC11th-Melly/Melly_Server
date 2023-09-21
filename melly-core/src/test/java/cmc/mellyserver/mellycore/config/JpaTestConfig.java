@@ -20,9 +20,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-@EnableJpaAuditing
+
 @EnableJpaRepositories(basePackageClasses = {
         UserRepository.class,
         MemoryRepository.class,
@@ -32,18 +31,16 @@ import javax.persistence.PersistenceContext;
         JdbcTemplate.class,
         GroupRepository.class,
         GroupAndUserRepository.class,
-        NotificationRepository.class})
+        NotificationRepository.class}
+)
+@EnableJpaAuditing
 @TestConfiguration
-public class JpaTestConfiguration {
-
-    @PersistenceContext
-    private EntityManager entityManager;
+public class JpaTestConfig {
 
     @Bean
     public PlaceScrapQueryRepository placeScrapQueryRepository(EntityManager entityManager) {
         return new PlaceScrapQueryRepository(entityManager);
     }
-
 
     @Bean
     public PlaceQueryRepository placeQueryRepository(EntityManager entityManager) {

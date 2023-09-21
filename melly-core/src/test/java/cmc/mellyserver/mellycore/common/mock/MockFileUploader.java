@@ -1,20 +1,21 @@
-package cmc.mellyserver.mellycore.config.mockapi;
+package cmc.mellyserver.mellycore.common.mock;
 
 import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @Profile("test")
 public class MockFileUploader implements StorageService {
 
     @Override
     public List<String> saveFileList(Long userId, List<MultipartFile> multipartFiles) {
-        return List.of("file1.png");
+        return List.of("test_file.jpg");
     }
 
     @Override
@@ -23,12 +24,11 @@ public class MockFileUploader implements StorageService {
     }
 
     @Override
-    public void deleteFile(String fileName) throws IOException {
-
+    public void deleteFile(String fileName) {
     }
 
     @Override
     public Long calculateImageVolume(String username) {
-        return null;
+        return 1L;
     }
 }

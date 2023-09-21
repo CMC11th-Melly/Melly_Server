@@ -1,8 +1,10 @@
 package cmc.mellyserver.mellycore.notification.domain;
 
 import cmc.mellyserver.mellycore.notification.domain.enums.NotificationType;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_notification")
 public class Notification {
 
@@ -18,7 +21,7 @@ public class Notification {
     private Long id;
 
     @Column(name = "user_id")
-    private Long userId; // 이걸 기반으로 조회
+    private Long userId;
 
     @Column(name = "content")
     private String content;

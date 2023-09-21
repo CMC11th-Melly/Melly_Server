@@ -1,6 +1,6 @@
 package cmc.mellyserver.mellycore.notification.application;
 
-import cmc.mellyserver.mellycore.common.IntegrationTest;
+import cmc.mellyserver.mellycore.config.IntegrationTest;
 
 public class NotificationServiceIntegrationTest extends IntegrationTest {
 

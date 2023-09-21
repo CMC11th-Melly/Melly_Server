@@ -1,7 +1,7 @@
 name: Melly Backend CD
 on:
   push:
-    branches: [ develop ]
+    branches: [ main, develop ]
 
 jobs:
   deploy:
@@ -27,7 +27,6 @@ jobs:
 
       - name: Docker Hub 퍼블리시
         run: docker push sjmin/melly
-
 
       - name: Deploy to Dev
         uses: appleboy/ssh-action@master

@@ -2,7 +2,7 @@ package cmc.mellyserver.mellycore.user.application;
 
 
 import cmc.mellyserver.mellycore.builder.GivenBuilder;
-import cmc.mellyserver.mellycore.common.IntegrationTest;
+import cmc.mellyserver.mellycore.config.IntegrationTest;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellycore.user.application.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.mellycore.user.domain.User;
