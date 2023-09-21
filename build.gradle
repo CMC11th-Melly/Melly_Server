@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // apply false는 root에서 동작하지 않게 만든다
-
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
 }
 
 bootJar {
@@ -49,7 +49,22 @@ subprojects {
         }
     }
 
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+
     dependencies {
+
+        // kotlin
+        implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
         // Spring
         implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -130,8 +130,6 @@ public class GroupService {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
     }
-<<<<<<< HEAD
-=======
 
 
     private void validateNewUserParticipateEnable(Long groupId) {
@@ -141,5 +139,5 @@ public class GroupService {
             throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
         }
     }
->>>>>>> 334643abeb3238dc734a3095852b7f2ad028cc95
+
 }
