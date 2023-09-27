@@ -27,13 +27,14 @@ out/
 !**/src/test/**/out/
 
 ### Path ###
-/melly-api/src/main/resources/application-prod.yml
-/melly-api/src/main/resources/firebase/
-/melly-api/src/main/resources/static/
-/melly-api/src/main/resources/templates/
-/melly-api/src/main/resources/application-local.yml
-/melly-api/src/main/resources/firebase-key.json
-/melly-batch/src/main/resources/application-local.yml
+/core/core-api/src/main/resources/application-prod.yml
+/core/core-api/src/main/resources/firebase/
+/core/core-api/src/main/resources/static/
+/core/core-api/src/main/resources/templates/
+/core/core-api/src/main/resources/application-local.yml
+/core/core-api/src/main/resources/firebase-key.json
+/batch/src/main/resources/application-local.yml
+
 
 
 
