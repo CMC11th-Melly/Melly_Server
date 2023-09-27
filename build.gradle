@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // apply false는 root에서 동작하지 않게 만든다
     id 'org.jetbrains.kotlin.jvm' version '1.6.21' apply false
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21' apply false
@@ -10,6 +10,10 @@ plugins {
 
 bootJar {
     enabled = false
+}
+
+repositories {
+    mavenCentral()
 }
 
 configurations {
@@ -42,10 +46,6 @@ subprojects {
     apply plugin: 'org.jetbrains.kotlin.plugin.jpa'
 
 
-    repositories {
-        mavenCentral()
-    }
-
     configurations {
         compileOnly {
             extendsFrom annotationProcessor
@@ -66,7 +66,7 @@ subprojects {
 
     dependencies {
 
-        // kotlin
+        //kotlin
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
         // Spring
@@ -90,7 +90,7 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
         // Lombok
-        compileOnly 'org.projectlombok:lombok:1.18.20'
+        implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
         // Test

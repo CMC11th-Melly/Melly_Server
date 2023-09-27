@@ -1,5 +1,6 @@
 package cmc.mellyserver.mellycore.memory.application.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

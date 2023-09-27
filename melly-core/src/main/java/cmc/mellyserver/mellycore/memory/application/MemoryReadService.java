@@ -43,7 +43,7 @@ public class MemoryReadService {
         return MemoryListResponse.from(contents, next);
     }
 
-    
+
     @Transactional(readOnly = true)
     public MemoryListResponse findOtherUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable, final Long userId, final Long placeId, final GroupType groupType) {
         Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable, userId, placeId, groupType);
