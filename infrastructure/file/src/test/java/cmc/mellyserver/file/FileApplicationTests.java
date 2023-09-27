@@ -1,10 +1,10 @@
-package com.example.dbredis;
+package cmc.mellyserver.file;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DbRedisApplicationTests {
+class FileApplicationTests {
 
     @Test
     void contextLoads() {

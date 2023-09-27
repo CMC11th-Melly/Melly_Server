@@ -2,10 +2,12 @@ package cmc.mellyserver.mellyapi.domain.user;
 
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
+import cmc.mellyserver.file.FileDto;
+import cmc.mellyserver.file.StorageService;
 import cmc.mellyserver.mellyapi.domain.user.dto.response.ProfileResponseDto;
 import cmc.mellyserver.mellyapi.domain.user.dto.response.ProfileUpdateRequestDto;
-import com.example.file.FileDto;
-import com.example.file.StorageService;
+import cmc.mellyserver.mellyapi.support.exception.BusinessException;
+import cmc.mellyserver.mellyapi.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,7 +32,7 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     public Integer checkImageStorageVolumeLoginUserUse(final Long userId) {
 
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return fileUploader.calculateImageVolume(user.getEmail()).intValue();
     }
 
@@ -39,7 +41,7 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     public ProfileResponseDto getUserProfile(final Long userId) {
 
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
     }
 
@@ -48,7 +50,7 @@ public class UserProfileService {
     @Transactional
     public void updateUserProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
 
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
     }
 
@@ -57,9 +59,9 @@ public class UserProfileService {
     @Transactional
     public void updateUserProfileImage(final Long userId, final MultipartFile profileImage) throws IOException {
 
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        removeExistprofileImage(user.getProfileImage());
+        removeExistProfileImage(user.getProfileImage());
 
         if (Objects.isNull(profileImage) || profileImage.isEmpty()) {
             user.changeProfileImage(null);
@@ -77,7 +79,7 @@ public class UserProfileService {
         return new FileDto(originalFilename, size, contentType, inputStream);
     }
 
-    private void removeExistprofileImage(final String userProfileImage) throws IOException {
+    private void removeExistProfileImage(final String userProfileImage) throws IOException {
 
         if (Objects.nonNull(userProfileImage)) {
             fileUploader.deleteFile(userProfileImage);

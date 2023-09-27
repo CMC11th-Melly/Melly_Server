@@ -1,4 +1,4 @@
-package com.example.dbredis.redis;
+package cmc.mellyserver.dbredis.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.example.file;
+package cmc.mellyserver.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

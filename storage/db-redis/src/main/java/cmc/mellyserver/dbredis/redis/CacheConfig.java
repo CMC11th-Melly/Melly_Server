@@ -1,4 +1,4 @@
-package com.example.dbredis.redis;
+package cmc.mellyserver.dbredis.redis;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

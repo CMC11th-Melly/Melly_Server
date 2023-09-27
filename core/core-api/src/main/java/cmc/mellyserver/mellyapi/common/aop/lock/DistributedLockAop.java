@@ -4,7 +4,6 @@ import cmc.mellyserver.mellyapi.common.aop.lock.annotation.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
@@ -29,7 +28,7 @@ public class DistributedLockAop {
     반환값이 Object인 이유 : @DistributedLock 어노테이션이 어떤 메서드에 사용될지 미리 예상할 수 없다.
                          void가 될수도 있고, String이 반환될 수도 있는 것이기에 Object형을 통해 응답을 받도록 구성함
      */
-    @Around("@annotation(d1)")
+//    @Around("@annotation(d1)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         // @DistributedLock 어노테이션이 붙은 메서드의 시그니처를 가져온다.
