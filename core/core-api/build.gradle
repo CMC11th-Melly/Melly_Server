@@ -1,0 +1,36 @@
+bootJar.enabled = true
+jar.enabled = false
+
+
+dependencies {
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    // Tolerance
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
+    implementation 'org.springframework.retry:spring-retry'
+
+    // QueryDsl
+
+
+    implementation project(":storage:db-core")
+    implementation project(":storage:db-redis")
+    implementation project(":infrastructure:notification")
+    implementation project(":infrastructure:file")
+    implementation project(":support:monitoring")
+    implementation project(":support:logging")
+    implementation project(":clients:client-auth")
+}
+
+// ========= QueryDSL Config ===========
+
