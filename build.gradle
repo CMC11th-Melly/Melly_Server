@@ -1,80 +1,43 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '2.7.12'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id "org.asciidoctor.jvm.convert" version "3.3.2" apply false
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false // apply false는 root에서 동작하지 않게 만든다
-
+    id 'java-library'
+    id 'org.springframework.boot' apply(false)
+    id 'io.spring.dependency-management'
+    id 'io.spring.javaformat' apply(false)
+    id 'org.asciidoctor.jvm.convert' apply(false)
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" apply false
 }
 
-bootJar {
-    enabled = false
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-// Sub-Module 적용
-task copyPrivate(type: Copy) {
-    copy {
-        from './lib'
-        include "*.yml", "*.json"
-        into 'melly-api/src/main/resources'
-    }
-}
-
-
-subprojects {
-
-    group 'cmc.mellyserver'
-    version '1.0'
-    sourceCompatibility = 11
-
-    apply plugin: 'java'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'jacoco'
-
+allprojects {
+    group = "${projectGroup}"
+    version = "${applicationVersion}"
+    sourceCompatibility = project.javaVersion
 
     repositories {
         mavenCentral()
     }
+}
 
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.asciidoctor.jvm.convert'
+    apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
         }
     }
 
     dependencies {
 
-        // Spring
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-        // Tolerance
-        implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
-        implementation 'org.springframework.retry:spring-retry'
-
-        // firebase
-        implementation 'com.google.firebase:firebase-admin:9.1.1'
-
-        // Monitoring
-        implementation 'org.springframework.boot:spring-boot-starter-actuator'
-        implementation 'io.micrometer:micrometer-registry-prometheus'
-
-        // Redis
-        implementation 'org.redisson:redisson-spring-boot-starter:3.23.1'
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
         // Lombok
-        compileOnly 'org.projectlombok:lombok:1.18.20'
+        implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
+        implementation "com.querydsl:querydsl-jpa:5.0.0"
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
         // Test
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
@@ -84,84 +47,69 @@ subprojects {
         testImplementation "com.h2database:h2"
     }
 
-    // ======= jacoco config =========
-    jacoco {
-        toolVersion = '0.8.7'
+    bootJar.enabled = false
+    jar.enabled = true
+
+    test {
+        useJUnitPlatform {
+            excludeTags('develop', 'restdocs')
+        }
     }
 
-    jacocoTestReport {
-
-        reports {
-            // 원하는 리포트를 켜고 끌 수 있습니다.
-            html.enabled true
-            xml.enabled false
-            csv.enabled false
+    tasks.register('unitTest', Test) {
+        group = 'verification'
+        useJUnitPlatform {
+            excludeTags('develop', 'context', 'restdocs')
         }
-
-
-        def Qdomains = []
-        for (qPattern in "**/QA".."**/QZ") {
-            Qdomains.add(qPattern + "*")
-        }
-
-        afterEvaluate {
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it,
-                        exclude: [
-                                '**/MellyServerApplication*',
-                                '**/*Request*',
-                                '**/*Response*',
-                                '**/*Dto*',
-                                '**/*Client*',
-                                '**/common*',
-                                '**/*Exception*',
-                                '**/*Config*',
-                                '**/*Health*',
-                                '**/*OAuth*',
-                                '**/*Client*',
-                                '**/*Apple*',
-                                '**/*Key*'
-                        ] + Qdomains)
-            }
-            ))
-        }
-
-        finalizedBy 'jacocoTestCoverageVerification'
     }
 
-    jacocoTestCoverageVerification {
-        def Qdomains = []
-        // 패키지 + 클래스명
-        for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
-            Qdomains.add(qPattern + '*')
+    tasks.register('contextTest', Test) {
+        group = 'verification'
+        useJUnitPlatform {
+            includeTags('context')
         }
-        // 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
-        violationRules {
-            rule {
-                element = 'BUNDLE'
+    }
 
-                limit {
-                    counter = 'LINE'
-                    value = 'COVEREDRATIO'
-                    minimum = 0.00
-                }
-
-                excludes = [
-                        '**.*Application*',
-                        '**.*Request*',
-                        '**.*Response*',
-                        '**.*Dto*',
-                        '**.*Client*',
-                        '**.*Interceptor*',
-                        '**.*Exception*',
-                        '**.*Config*',
-                        '**/*Health*',
-                        '**/*OAuth*',
-                        '**/*Client*',
-                        '**/*Apple*',
-                        '**/*Key*'
-                ] + Qdomains
-            }
+    tasks.register('restDocsTest', Test) {
+        group = 'verification'
+        useJUnitPlatform {
+            includeTags('restdocs')
         }
+    }
+
+
+    tasks.named('asciidoctor') {
+        dependsOn restDocsTest
+    }
+
+    def querydslDir = "$buildDir/generated/querydsl"
+
+
+    sourceSets {
+        main.java.srcDir querydslDir
+    }
+
+    querydsl {
+        jpa = true
+        querydslSourcesDir = querydslDir
+    }
+
+    compileQuerydsl {
+        options.annotationProcessorPath = configurations.querydsl
+    }
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+        querydsl.extendsFrom compileClasspath
+    }
+}
+
+// Sub-Module 적용
+task copyPrivate(type: Copy) {
+    copy {
+        from './lib'
+        include "*.yml", "*.json"
+        into 'core/core-api/src/main/resources'
     }
 }

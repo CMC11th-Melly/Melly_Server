@@ -1,8 +1,32 @@
-rootProject.name = 'mellyServer'
-include 'melly-api'
-include 'melly-core'
-include 'melly-batch'
-include 'melly-common'
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+        id 'org.asciidoctor.jvm.convert' version "${asciidoctorConvertVersion}"
+        id 'io.spring.javaformat' version "${springJavaFormatVersion}"
+    }
+}
+
+
+rootProject.name = "mellyServer"
+
+include 'storage:db-core'
+include 'storage:db-redis'
+include 'core:core-api'
+include 'batch'
+include 'support:logging'
+include 'support:monitoring'
+include 'infrastructure:file'
+include 'infrastructure:notification'
+include 'test:api-docs'
+include 'clients:client-auth'
+
+
+
+
+
+
+
 
 
 
