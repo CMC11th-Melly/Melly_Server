@@ -1,10 +1,10 @@
 package cmc.mellyserver.common.fixture;
 
 
-import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.enums.Provider;
-import cmc.mellyserver.mellycore.user.domain.enums.RoleType;
-import cmc.mellyserver.mellycore.user.domain.enums.UserStatus;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.dbcore.user.enums.Provider;
+import cmc.mellyserver.dbcore.user.enums.RoleType;
+import cmc.mellyserver.dbcore.user.enums.UserStatus;
 
 public class UserFixtures {
 

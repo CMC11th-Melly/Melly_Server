@@ -1,14 +1,15 @@
 package cmc.mellyserver.builder;
 
-import cmc.mellyserver.mellycore.comment.domain.repository.CommentLikeRepository;
-import cmc.mellyserver.mellycore.comment.domain.repository.CommentRepository;
-import cmc.mellyserver.mellycore.group.domain.repository.GroupAndUserRepository;
-import cmc.mellyserver.mellycore.group.domain.repository.GroupRepository;
-import cmc.mellyserver.mellycore.memory.domain.repository.MemoryRepository;
-import cmc.mellyserver.mellycore.notification.domain.repository.NotificationRepository;
-import cmc.mellyserver.mellycore.place.domain.repository.PlaceRepository;
-import cmc.mellyserver.mellycore.scrap.domain.repository.PlaceScrapRepository;
-import cmc.mellyserver.mellycore.user.domain.repository.UserRepository;
+
+import cmc.mellyserver.dbcore.comment.commenlike.CommentLikeRepository;
+import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
+import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
+import cmc.mellyserver.dbcore.group.GroupRepository;
+import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.notification.NotificationRepository;
+import cmc.mellyserver.dbcore.place.PlaceRepository;
+import cmc.mellyserver.dbcore.scrap.PlaceScrapRepository;
+import cmc.mellyserver.dbcore.user.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

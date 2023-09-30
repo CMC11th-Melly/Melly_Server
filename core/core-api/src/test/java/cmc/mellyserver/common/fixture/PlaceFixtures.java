@@ -1,7 +1,8 @@
 package cmc.mellyserver.common.fixture;
 
-import cmc.mellyserver.mellycore.place.domain.Place;
-import cmc.mellyserver.mellycore.place.domain.Position;
+
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.dbcore.place.Position;
 
 public class PlaceFixtures {
 

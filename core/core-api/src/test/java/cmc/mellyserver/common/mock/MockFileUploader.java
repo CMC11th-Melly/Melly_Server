@@ -1,10 +1,10 @@
 package cmc.mellyserver.common.mock;
 
-import cmc.mellyserver.mellycore.infrastructure.storage.StorageService;
+import cmc.mellyserver.file.FileDto;
+import cmc.mellyserver.file.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,14 +13,15 @@ import java.util.List;
 @Profile("test")
 public class MockFileUploader implements StorageService {
 
+
     @Override
-    public List<String> saveFileList(Long userId, List<MultipartFile> multipartFiles) {
-        return List.of("test_file.jpg");
+    public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
+        return null;
     }
 
     @Override
-    public String saveFile(Long userId, MultipartFile file) {
-        return file.getName();
+    public String saveFile(Long userId, FileDto file) {
+        return "mock.jpg";
     }
 
     @Override

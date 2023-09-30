@@ -1,10 +1,10 @@
 package cmc.mellyserver.config;
 
 
-import cmc.mellyserver.mellycore.builder.BuilderSupporter;
-import cmc.mellyserver.mellycore.builder.GivenBuilder;
-import cmc.mellyserver.mellycore.common.db.DatabaseCleanup;
-import cmc.mellyserver.mellycore.common.fixture.UserFixtures;
+import cmc.mellyserver.builder.BuilderSupporter;
+import cmc.mellyserver.builder.GivenBuilder;
+import cmc.mellyserver.common.db.DatabaseCleanup;
+import cmc.mellyserver.common.fixture.UserFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

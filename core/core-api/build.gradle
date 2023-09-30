@@ -20,8 +20,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
     implementation 'org.springframework.retry:spring-retry'
 
-    // QueryDsl
-
+    // Test
+    testImplementation 'org.springframework.security:spring-security-test'
 
     implementation project(":storage:db-core")
     implementation project(":storage:db-redis")

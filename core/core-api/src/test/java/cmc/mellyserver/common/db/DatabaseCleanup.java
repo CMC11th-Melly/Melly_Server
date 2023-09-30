@@ -1,9 +1,9 @@
 package cmc.mellyserver.common.db;
 
-import com.google.common.base.CaseFormat;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.com.google.common.base.CaseFormat;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.Entity;

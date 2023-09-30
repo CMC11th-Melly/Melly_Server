@@ -2,15 +2,17 @@ package cmc.mellyserver.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.InputStream;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class FileDto {
 
-    private final String originalFilename;
-    private final long size;
-    private final String contentType;
-    private final InputStream inputStream;
+    private String originalFilename;
+    private long size;
+    private String contentType;
+    private InputStream inputStream;
 }

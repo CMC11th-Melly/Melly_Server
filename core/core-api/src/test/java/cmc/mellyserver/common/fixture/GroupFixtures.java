@@ -1,7 +1,8 @@
 package cmc.mellyserver.common.fixture;
 
-import cmc.mellyserver.mellycore.group.domain.UserGroup;
-import cmc.mellyserver.mellycore.group.domain.enums.GroupType;
+
+import cmc.mellyserver.dbcore.group.UserGroup;
+import cmc.mellyserver.dbcore.group.enums.GroupType;
 
 public class GroupFixtures {
 

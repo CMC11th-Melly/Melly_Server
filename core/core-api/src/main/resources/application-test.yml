@@ -25,9 +25,18 @@ spring:
       database: melly
 app:
   auth:
-    tokenExpiry: 200000000
-    tokenSecret: Y21jMTF0aGFub3RoZXJjbWffgkfgjwerljfgwekljfglkwejglF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
+    access-expiration-time: 20000000 # 30분
+    refresh-expiration-time: 1209600000 # 2주
+    token-secret: Y21jMTF0aGFub3RoZXJjbWNzdXJmbWF0ZWNtYzExdGhhbm90aGVyY21jc3VyZm1hdGUfwegwegewfwwgwegwggsfgergtrr
 
+oauth:
+  resource:
+    uri:
+      kakao: https://kapi.kakao.com/v2/user/me
+      naver: https://openapi.naver.com/v1/nid/me
+      google: https://oauth2.googleapis.com/tokeninfo
+      apple: https://appleid.apple.com/auth/keys
+      
 cloud:
   aws:
     stack:
@@ -35,11 +44,11 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      cloud-front-url: ${CLOUD_FRONT_URL}
-      bucket: ${S3_BUCKET}
+      cloud-front-url:
+      bucket:
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key:
+      secret-key:
 
 retry:
   count: 3

@@ -1,13 +1,14 @@
 package cmc.mellyserver.builder;
 
-import cmc.mellyserver.mellycore.group.domain.UserGroup;
-import cmc.mellyserver.mellycore.memory.domain.Memory;
-import cmc.mellyserver.mellycore.notification.domain.Notification;
-import cmc.mellyserver.mellycore.place.domain.Place;
-import cmc.mellyserver.mellycore.scrap.domain.PlaceScrap;
-import cmc.mellyserver.mellycore.user.domain.User;
-import cmc.mellyserver.mellycore.user.domain.enums.AgeGroup;
-import cmc.mellyserver.mellycore.user.domain.enums.Gender;
+
+import cmc.mellyserver.dbcore.group.UserGroup;
+import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.notification.Notification;
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.dbcore.scrap.PlaceScrap;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.dbcore.user.enums.AgeGroup;
+import cmc.mellyserver.dbcore.user.enums.Gender;
 
 public final class GivenBuilder {
 

@@ -28,7 +28,6 @@ public class S3StorageService implements StorageService {
     private final AmazonS3 amazonS3Client;
 
 
-    @Override
     public List<String> saveFileList(Long userId, List<FileDto> files) {
 
         List<String> fileNameList = new ArrayList<>();
@@ -41,7 +40,7 @@ public class S3StorageService implements StorageService {
         return fileNameList;
     }
 
-    @Override
+
     public String saveFile(Long userId, FileDto file) {
 
         String fileName = createFileName(userId, file.getOriginalFilename());
@@ -56,16 +55,14 @@ public class S3StorageService implements StorageService {
         return getFileUrl(fileName);
     }
 
-    @Override
     public void deleteFile(String fileName) throws IOException {
         try {
             amazonS3Client.deleteObject(bucket, fileName);
         } catch (SdkClientException e) {
-            throw new IOException("s3 exception occur", e);
+            throw new IOException();
         }
     }
 
-    @Override
     public Long calculateImageVolume(String username) {
 
         ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);

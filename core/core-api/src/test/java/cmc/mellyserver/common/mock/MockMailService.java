@@ -1,6 +1,6 @@
 package cmc.mellyserver.common.mock;
 
-import cmc.mellyserver.mellycore.infrastructure.email.EmailSendService;
+import cmc.mellyserver.notification.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
