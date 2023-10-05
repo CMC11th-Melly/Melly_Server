@@ -1,7 +1,7 @@
-package cmc.mellyserver.common.handler;
+package cmc.mellyserver.common.filter;
 
-import cmc.mellyserver.support.response.ErrorResponse;
 import cmc.mellyserver.support.exception.ErrorCode;
+import cmc.mellyserver.support.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

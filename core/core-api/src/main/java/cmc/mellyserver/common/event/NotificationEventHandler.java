@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.handler;
+package cmc.mellyserver.common.event;
 
 
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;

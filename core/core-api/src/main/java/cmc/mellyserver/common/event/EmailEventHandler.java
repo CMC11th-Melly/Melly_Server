@@ -1,10 +1,12 @@
-package cmc.mellyserver.common.handler;
+package cmc.mellyserver.common.event;
 
 
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.comment.event.SignupEvent;
 import cmc.mellyserver.notification.email.EmailSendService;
+import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -25,14 +27,15 @@ public class EmailEventHandler {
 
     private final EmailSendService emailSendService;
 
-    @Async(value = "threadPoolTaskExecutor")
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void signupEvent(SignupEvent event) {
 
-        User user = userRepository.getById(event.getUserId());
+        User user = userRepository.findById(event.getUserId()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("nickname", user.getNickname());
+
         emailSendService.sendMail(SIGNUP_CELEBRATION_MAIL, map, user.getEmail());
     }
 }

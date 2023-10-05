@@ -1,5 +1,6 @@
 package cmc.mellyserver.domain.auth;
 
+import cmc.mellyserver.common.token.TokenProvider;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.auth.dto.request.AuthLoginRequestDto;
@@ -10,9 +11,8 @@ import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
 import cmc.mellyserver.domain.comment.event.SignupEvent;
-import cmc.mellyserver.common.token.TokenProvider;
-import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.notification.fcm.FCMTokenManageService;
+import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,19 +62,23 @@ public class AuthService {
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
 
-    /*
-    선착순 이벤트 진행 시, 로그인이 몰리는 상황을 가정했을때, TPS를 올릴 수 있는 포인트들을 고민
-    1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
-    2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
-    3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가된다. I/O 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
-    4. @TransactionEventListener를 적용해서 데이터 일관성 보장
+    /**
+     * 로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
+     * <p>
+     * 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
+     * <p>
+     * 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
+     * <p>
+     * 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
+     * <p>
+     * 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
      */
     @Transactional
     public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
-        User user = checkEmail(authLoginRequestDto.getEmail()); // ------- 1. 이메일로 유저를 검색, Disk 랜덤 I/O 1회
-        checkPassword(authLoginRequestDto.getPassword(), user.getPassword()); // ------- 2. passwordEncoder를 사용한 비밀번호 확인, CPU 리소스 사용
-        user.updateLastLoginTime(LocalDateTime.now()); // 마지막 로그인 시간 업데이트
+        User user = checkEmail(authLoginRequestDto.getEmail());
+        checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
+        user.updateLastLoginTime(LocalDateTime.now());
 
         String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());

@@ -21,14 +21,13 @@ public class JavaMailSendService implements EmailSendService {
     @Override
     public void sendMail(String subject, Map<String, Object> variables, String... to) {
 
-
-        String content = variables.get("content").toString(); // 메일 내용 만들어내기
-
         SimpleMailMessage message = new SimpleMailMessage();
+
         message.setTo(to);
         message.setFrom("jemin3161@naver.com");
         message.setSubject(subject);
-        message.setText(content);
+        message.setText(variables.get("content").toString());
+
         mailSender.send(message);
     }
 }
