@@ -1,11 +1,11 @@
 package cmc.mellyserver.domain.user;
 
+import cmc.mellyserver.FileDto;
+import cmc.mellyserver.StorageService;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
 import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
-import cmc.mellyserver.file.FileDto;
-import cmc.mellyserver.file.StorageService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

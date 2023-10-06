@@ -1,9 +1,9 @@
 package cmc.mellyserver.config.web;
 
 import cmc.mellyserver.common.filter.JwtExceptionFilter;
+import cmc.mellyserver.common.filter.RestAuthenticationEntryPoint;
+import cmc.mellyserver.common.filter.TokenAccessDeniedHandler;
 import cmc.mellyserver.common.filter.TokenAuthenticationFilter;
-import cmc.mellyserver.common.handler.RestAuthenticationEntryPoint;
-import cmc.mellyserver.common.handler.TokenAccessDeniedHandler;
 import cmc.mellyserver.common.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
