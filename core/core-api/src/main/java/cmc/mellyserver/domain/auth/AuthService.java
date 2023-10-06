@@ -10,7 +10,7 @@ import cmc.mellyserver.domain.auth.dto.response.RefreshTokenDto;
 import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
-import cmc.mellyserver.domain.comment.event.SignupEvent;
+import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
 import cmc.mellyserver.notification.fcm.FCMTokenManageService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
@@ -57,7 +57,7 @@ public class AuthService {
         tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt()); // 리프레시 토큰 레디스에 저장
         tokenManageService.saveToken(savedUser.getId(), authSignupRequestDto.getFcmToken());
 
-        publisher.publishEvent(new SignupEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
+        publisher.publishEvent(new SignupCompletedEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }

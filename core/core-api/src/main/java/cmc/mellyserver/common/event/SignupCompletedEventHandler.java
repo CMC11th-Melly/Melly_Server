@@ -3,7 +3,7 @@ package cmc.mellyserver.common.event;
 
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
-import cmc.mellyserver.domain.comment.event.SignupEvent;
+import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
 import cmc.mellyserver.notification.email.EmailSendService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EmailEventHandler {
+public class SignupCompletedEventHandler {
 
     public static final String SIGNUP_CELEBRATION_MAIL = "회원가입 축하드립니다!";
 
@@ -29,7 +29,7 @@ public class EmailEventHandler {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void signupEvent(SignupEvent event) {
+    public void signupEvent(SignupCompletedEvent event) {
 
         User user = userRepository.findById(event.getUserId()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 

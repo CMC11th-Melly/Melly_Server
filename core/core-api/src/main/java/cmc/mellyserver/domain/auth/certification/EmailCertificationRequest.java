@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.email.certification;
+package cmc.mellyserver.domain.auth.certification;
 
 import lombok.AccessLevel;
 import lombok.Getter;

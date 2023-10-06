@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.email.certification;
+package cmc.mellyserver.domain.auth.certification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -9,9 +9,9 @@ import java.time.Duration;
 import static cmc.mellyserver.notification.email.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
 import static cmc.mellyserver.notification.email.constant.EmailConstants.PREFIX_CERTIFICATION;
 
-@RequiredArgsConstructor
 @Repository
-class EmailCertificationNumberDao implements EmailCertificationDao {
+@RequiredArgsConstructor
+class EmailCertificationNumberDao implements CertificationNumberDao {
 
     private final StringRedisTemplate redisTemplate;
 
@@ -21,7 +21,7 @@ class EmailCertificationNumberDao implements EmailCertificationDao {
      * 인증번호 유효기간은 3분으로 설정했습니다.
      */
     @Override
-    public void saveEmailCertificationNumber(String email, String certificationNumber) {
+    public void saveCertificationNumber(String email, String certificationNumber) {
 
         redisTemplate.opsForValue()
                 .set(PREFIX_CERTIFICATION + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
@@ -29,12 +29,12 @@ class EmailCertificationNumberDao implements EmailCertificationDao {
     }
 
     @Override
-    public String getEmailCertificationNumber(String email) {
+    public String getCertificationNumber(String email) {
         return redisTemplate.opsForValue().get(PREFIX_CERTIFICATION + email);
     }
 
     @Override
-    public void removeEmailCertificationNumber(String email) {
+    public void removeCertificationNumber(String email) {
         redisTemplate.delete(PREFIX_CERTIFICATION + email);
     }
 

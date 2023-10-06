@@ -1,6 +1,10 @@
 package cmc.mellyserver.domain.auth;
 
 import cmc.mellyserver.clientauth.LoginClient;
+import cmc.mellyserver.common.token.JwtTokenProvider;
+import cmc.mellyserver.controller.auth.dto.request.OAuthSignupRequestDto;
+import cmc.mellyserver.controller.auth.dto.response.OAuthResponseDto;
+import cmc.mellyserver.controller.auth.dto.response.OAuthSignupResponseDto;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.auth.dto.request.OAuthLoginRequestDto;
@@ -8,11 +12,7 @@ import cmc.mellyserver.domain.auth.dto.response.RefreshTokenDto;
 import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
-import cmc.mellyserver.domain.comment.event.SignupEvent;
-import cmc.mellyserver.common.token.JwtTokenProvider;
-import cmc.mellyserver.controller.auth.dto.request.OAuthSignupRequestDto;
-import cmc.mellyserver.controller.auth.dto.response.OAuthResponseDto;
-import cmc.mellyserver.controller.auth.dto.response.OAuthSignupResponseDto;
+import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
 import cmc.mellyserver.notification.fcm.FCMTokenManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +78,7 @@ public class OAuthService {
 
         // 이메일을 받아왔다면 회원가입 축하 메일 전송
         if (Objects.nonNull(user.getEmail())) {
-            publisher.publishEvent(new SignupEvent(user.getId()));
+            publisher.publishEvent(new SignupCompletedEvent(user.getId()));
         }
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
