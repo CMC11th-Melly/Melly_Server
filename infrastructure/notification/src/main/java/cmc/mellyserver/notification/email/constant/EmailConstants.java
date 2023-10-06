@@ -10,7 +10,7 @@ public abstract class EmailConstants {
 
     public static final String PREFIX_CERTIFICATION = "email certification:";
 
-    public static final int LIMIT_TIME_CERTIFICATION_NUMBER = 10 * 60;
+    public static final int LIMIT_TIME_CERTIFICATION_NUMBER = 60 * 3;
 
     public static final String DOMAIN_NAME = "http://localhost:8080";
 }

@@ -11,26 +11,30 @@ import static cmc.mellyserver.notification.email.constant.EmailConstants.PREFIX_
 
 @RequiredArgsConstructor
 @Repository
-public class EmailCertificationNumberDao implements EmailCertificationDao {
+class EmailCertificationNumberDao implements EmailCertificationDao {
 
     private final StringRedisTemplate redisTemplate;
 
+    /**
+     * 이메일 인증 번호를 Redis에 저장합니다.
+     * <p>
+     * 인증번호 유효기간은 3분으로 설정했습니다.
+     */
     @Override
-    public void createEmail(String email, String certificationNumber) {
+    public void saveEmailCertificationNumber(String email, String certificationNumber) {
 
         redisTemplate.opsForValue()
-                .set(PREFIX_CERTIFICATION + email, certificationNumber,
-                        Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
+                .set(PREFIX_CERTIFICATION + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
 
     }
 
     @Override
-    public String getEmailCertification(String email) {
+    public String getEmailCertificationNumber(String email) {
         return redisTemplate.opsForValue().get(PREFIX_CERTIFICATION + email);
     }
 
     @Override
-    public void removeEmailCertification(String email) {
+    public void removeEmailCertificationNumber(String email) {
         redisTemplate.delete(PREFIX_CERTIFICATION + email);
     }
 

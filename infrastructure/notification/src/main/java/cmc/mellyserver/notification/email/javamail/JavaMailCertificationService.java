@@ -19,10 +19,12 @@ public class JavaMailCertificationService implements EmailCertificationService {
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailCertificationNumberDao;
 
-    // 이메일 전송 및 인증번호 저장
+    /**
+     * 인증 이메일 전송 기능
+     */
     public void sendEmailForCertification(String email) {
 
-        String content = RandomNumberGenerator.makeRandomNumber();
+        String content = RandomNumberGenerator.makeRandomNumber(); // 인증에 사용될 랜덤 넘버를 생성합니다
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
@@ -31,7 +33,7 @@ public class JavaMailCertificationService implements EmailCertificationService {
         message.setText(content);
         mailSender.send(message);
 
-        emailCertificationNumberDao.createEmail(email, content);
+        emailCertificationNumberDao.saveEmailCertificationNumber(email, content);
     }
 
 
@@ -42,12 +44,12 @@ public class JavaMailCertificationService implements EmailCertificationService {
         }
 
         // 인증하고 나면 레디스에서 삭제하기
-        emailCertificationNumberDao.removeEmailCertification(requestDto.getEmail());
+        emailCertificationNumberDao.removeEmailCertificationNumber(requestDto.getEmail());
     }
 
 
     // 인증번호 일치 여부 확인 내부 로직
     private boolean isVerify(EmailCertificationRequest requestDto) {
-        return !(emailCertificationNumberDao.hasKey(requestDto.getEmail()) && emailCertificationNumberDao.getEmailCertification(requestDto.getEmail()).equals(requestDto.getCertificationNumber()));
+        return !(emailCertificationNumberDao.hasKey(requestDto.getEmail()) && emailCertificationNumberDao.getEmailCertificationNumber(requestDto.getEmail()).equals(requestDto.getCertificationNumber()));
     }
 }
