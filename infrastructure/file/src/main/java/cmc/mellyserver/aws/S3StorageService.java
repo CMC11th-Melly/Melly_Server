@@ -1,5 +1,7 @@
-package cmc.mellyserver.file;
+package cmc.mellyserver.aws;
 
+import cmc.mellyserver.FileDto;
+import cmc.mellyserver.StorageService;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
@@ -17,7 +19,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Profile(value = {"local", "prod"})
-public class S3StorageService implements StorageService {
+class S3StorageService implements StorageService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;

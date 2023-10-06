@@ -1,6 +1,8 @@
 package cmc.mellyserver.domain.memory;
 
 
+import cmc.mellyserver.StorageService;
+import cmc.mellyserver.common.aop.place.CheckPlaceExists;
 import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.memory.Memory;
@@ -14,8 +16,6 @@ import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.event.GroupUserMemoryCreatedEvent;
-import cmc.mellyserver.file.StorageService;
-import cmc.mellyserver.common.aop.place.CheckPlaceExists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;

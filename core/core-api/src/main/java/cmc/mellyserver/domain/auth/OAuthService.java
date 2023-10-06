@@ -13,7 +13,6 @@ import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
 import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
-import cmc.mellyserver.notification.fcm.FCMTokenManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

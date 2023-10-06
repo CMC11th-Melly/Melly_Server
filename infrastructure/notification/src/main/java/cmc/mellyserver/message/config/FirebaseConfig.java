@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.config;
+package cmc.mellyserver.message.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

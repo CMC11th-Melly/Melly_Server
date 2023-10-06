@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 
-import static cmc.mellyserver.notification.email.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
-import static cmc.mellyserver.notification.email.constant.EmailConstants.PREFIX_CERTIFICATION;
+import static cmc.mellyserver.email.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
+import static cmc.mellyserver.email.constant.EmailConstants.PREFIX_CERTIFICATION;
 
 @Repository
 @RequiredArgsConstructor

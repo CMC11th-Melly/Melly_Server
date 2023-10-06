@@ -1,7 +1,7 @@
 package cmc.mellyserver.common.event;
 
-import cmc.mellyserver.notification.email.EmailSendService;
-import cmc.mellyserver.notification.email.constant.EmailConstants;
+import cmc.mellyserver.email.EmailSendService;
+import cmc.mellyserver.email.constant.EmailConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

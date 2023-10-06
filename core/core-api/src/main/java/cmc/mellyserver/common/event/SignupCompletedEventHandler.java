@@ -4,7 +4,7 @@ package cmc.mellyserver.common.event;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
-import cmc.mellyserver.notification.email.EmailSendService;
+import cmc.mellyserver.email.EmailSendService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

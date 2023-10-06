@@ -1,7 +1,7 @@
 package cmc.mellyserver.common.mock;
 
-import cmc.mellyserver.file.FileDto;
-import cmc.mellyserver.file.StorageService;
+import cmc.mellyserver.FileDto;
+import cmc.mellyserver.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

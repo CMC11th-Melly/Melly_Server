@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.fcm;
+package cmc.mellyserver.message.fcm;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.Getter;
 @Data
 @AllArgsConstructor
 @Builder
-public class FCMMessage {
+class FCMMessage {
     private boolean validateOnly;
     private Message message;
 

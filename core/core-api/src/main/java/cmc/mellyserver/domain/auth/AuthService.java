@@ -11,7 +11,6 @@ import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
 import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
-import cmc.mellyserver.notification.fcm.FCMTokenManageService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

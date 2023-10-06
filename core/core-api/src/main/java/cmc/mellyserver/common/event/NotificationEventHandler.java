@@ -9,7 +9,7 @@ import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;
 import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
 import cmc.mellyserver.domain.memory.event.GroupUserMemoryCreatedEvent;
 import cmc.mellyserver.domain.notification.NotificationService;
-import cmc.mellyserver.notification.fcm.MessageService;
+import cmc.mellyserver.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -19,8 +19,8 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 
-import static cmc.mellyserver.notification.constants.NotificationConstants.COMMENT_LIKE_NOTI_CONTENT;
-import static cmc.mellyserver.notification.constants.NotificationConstants.GROUP_USER_CREATED_MEMORY_CONTENT;
+import static cmc.mellyserver.message.constants.NotificationConstants.COMMENT_LIKE_NOTI_CONTENT;
+import static cmc.mellyserver.message.constants.NotificationConstants.GROUP_USER_CREATED_MEMORY_CONTENT;
 
 
 @Slf4j

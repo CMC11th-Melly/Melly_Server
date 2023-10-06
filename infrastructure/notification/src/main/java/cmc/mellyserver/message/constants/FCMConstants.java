@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.constants;
+package cmc.mellyserver.message.constants;
 
 public abstract class FCMConstants {
 

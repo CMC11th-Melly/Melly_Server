@@ -1,18 +1,16 @@
-package cmc.mellyserver.notification.fcm;
+package cmc.mellyserver.dbredis.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-@RequiredArgsConstructor
 @Repository
-public class FCMTokenRepository {
-
+@RequiredArgsConstructor
+public class FcmTokenRepository {
     private final StringRedisTemplate tokenRedisTemplate;
 
     public void saveToken(String key, String fcmToken) {
-        tokenRedisTemplate.opsForValue()
-                .set(key, fcmToken);
+        tokenRedisTemplate.opsForValue().set(key, fcmToken);
     }
 
     public String getToken(String key) {

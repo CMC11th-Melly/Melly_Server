@@ -1,4 +1,4 @@
-package cmc.mellyserver.file;
+package cmc.mellyserver;
 
 
 import java.io.IOException;

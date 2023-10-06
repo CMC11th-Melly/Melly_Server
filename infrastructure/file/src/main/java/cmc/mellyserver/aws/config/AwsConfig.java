@@ -1,4 +1,4 @@
-package cmc.mellyserver.aws;
+package cmc.mellyserver.aws.config;
 
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

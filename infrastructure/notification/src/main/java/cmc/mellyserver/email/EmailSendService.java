@@ -1,4 +1,4 @@
-package cmc.mellyserver.notification.email;
+package cmc.mellyserver.email;
 
 public interface EmailSendService {
 
