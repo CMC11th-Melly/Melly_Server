@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.util.HashMap;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -32,10 +30,6 @@ public class SignupCompletedEventHandler {
     public void signupEvent(SignupCompletedEvent event) {
 
         User user = userRepository.findById(event.getUserId()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("nickname", user.getNickname());
-
-        emailSendService.sendMail(SIGNUP_CELEBRATION_MAIL, map, user.getEmail());
+        emailSendService.sendMail(SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
     }
 }
