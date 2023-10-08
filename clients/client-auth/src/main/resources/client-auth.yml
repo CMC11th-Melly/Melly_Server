@@ -10,9 +10,13 @@ spring.cloud.openfeign:
   client:
     config:
       default:
-        connectTimeout: 2100
-        readTimeout: 5000
+        connectTimeout: 1000
+        readTimeout: 3000
         loggerLevel: full
+
+  httpclient:
+    max-connections: 2000 # 전체 커넥션 수를 나타낸다
+    max-connections-per-route: 500 # Route당 할당되는 최대 커넥션 수를 나타낸다
 
   circuitbreaker:
     enabled: true
@@ -20,10 +24,6 @@ spring.cloud.openfeign:
   compression:
     response:
       enabled: false
-
-  httpclient:
-    max-connections: 2000
-    max-connections-per-route: 500
 
 resilience4j:
   circuitbreaker:
@@ -33,11 +33,12 @@ resilience4j:
         slowCallRateThreshold: 80
         slowCallDurationThreshold: 5s
         registerHealthIndicator: true
+        recordFailurePredicate: cmc.mellyserver.clientauth.DefaultExceptionRecordFailurePredicate
     instances:
       default:
         baseConfig: default
   timelimiter:
     configs:
       default:
-        timeoutDuration: 6s
+        timeoutDuration: 5s # 해당 시간은 OpenFeign Client의 Connection Timeout과 Read Timeout 보다 크게 설정해야 한다. 작업 처리 시간이 만료되면 retry를 진행하지 않는다
         cancelRunningFuture: true
