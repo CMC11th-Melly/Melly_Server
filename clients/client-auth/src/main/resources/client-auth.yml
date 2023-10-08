@@ -1,0 +1,43 @@
+client:
+  oauth:
+    uri:
+      kakao: https://kapi.kakao.com/v2/user/me
+      naver: https://openapi.naver.com/v1/nid/me
+      google: https://oauth2.googleapis.com/tokeninfo
+      apple: https://appleid.apple.com/auth/keys
+
+spring.cloud.openfeign:
+  client:
+    config:
+      default:
+        connectTimeout: 2100
+        readTimeout: 5000
+        loggerLevel: full
+
+  circuitbreaker:
+    enabled: true
+
+  compression:
+    response:
+      enabled: false
+
+  httpclient:
+    max-connections: 2000
+    max-connections-per-route: 500
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        waitDurationInOpenState: 30s
+        slowCallRateThreshold: 80
+        slowCallDurationThreshold: 5s
+        registerHealthIndicator: true
+    instances:
+      default:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 6s
+        cancelRunningFuture: true

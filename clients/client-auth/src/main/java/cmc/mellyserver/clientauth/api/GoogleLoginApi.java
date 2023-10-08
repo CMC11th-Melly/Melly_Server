@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "googleOpenFeign", url = "${oauth.resource.uri.google}")
+@FeignClient(name = "googleLogin", url = "${client.oauth.uri.google}")
 interface GoogleLoginApi {
 
     @GetMapping(

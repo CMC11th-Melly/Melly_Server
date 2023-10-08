@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-@FeignClient(name = "appleOpenFeign", url = "${oauth.resource.uri.apple}")
+@FeignClient(name = "appleLogin", url = "${client.oauth.uri.apple}")
 interface AppleLoginApi {
 
     @GetMapping(
