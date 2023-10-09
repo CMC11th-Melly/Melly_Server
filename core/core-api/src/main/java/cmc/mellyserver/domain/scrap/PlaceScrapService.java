@@ -68,12 +68,12 @@ public class PlaceScrapService {
 
     @CachePut(value = "scrap-count:user-id", key = "#userId")
     @Transactional
-    public void removeScrap(Long userId, Double lat, Double lng) {
+    public void removeScrap(Long userId, Position position) {
 
-        Place place = placeReader.findByPosition(new Position(lat, lng));
+        Place place = placeReader.findByPosition(position);
         checkScrapExisted(userId, place.getId());
 
-        placeScrapWriter.deleteByUserIdAndPlacePosition(userId, new Position(lat, lng));
+        placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
     }
 
 

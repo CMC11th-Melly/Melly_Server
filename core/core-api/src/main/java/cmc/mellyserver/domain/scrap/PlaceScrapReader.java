@@ -1,5 +1,6 @@
 package cmc.mellyserver.domain.scrap;
 
+import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
 import cmc.mellyserver.dbcore.scrap.PlaceScrapRepository;
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
@@ -33,4 +34,13 @@ public class PlaceScrapReader {
     public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
         return placeScrapQueryRepository.getScrapedPlaceGrouping(userId);
     }
+
+    public boolean checkUserScraped(Long userId, Long placeId) {
+        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
+    }
+
+    public boolean checkUserScraped(Long userId, Position position) {
+        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
+    }
+
 }

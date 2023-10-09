@@ -1,8 +1,7 @@
 package cmc.mellyserver.domain.memory;
 
 
-import cmc.mellyserver.StorageService;
-import cmc.mellyserver.common.aop.place.CheckPlaceExists;
+import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
 import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.memory.Memory;
@@ -36,8 +35,6 @@ public class MemoryWriteService {
 
     private final PlaceRepository placeRepository;
 
-    private final StorageService storageService;
-
     private final GroupRepository groupRepository;
 
 
@@ -46,7 +43,7 @@ public class MemoryWriteService {
     그룹 공개 -> 내가 이 메모리를 함께 공유하기로한 그룹의 사람들에게 푸시 알림을 전송하기, 단 그룹으로부터 알림을 받겠다에 동의한 사람만 가능
     장소 추가 로직은 차후 AOP 적용하기
      */
-    @CheckPlaceExists
+    @ValidatePlaceExisted
     @Transactional
     public Long createMemory(final CreateMemoryRequestDto createMemoryRequestDto) {
 

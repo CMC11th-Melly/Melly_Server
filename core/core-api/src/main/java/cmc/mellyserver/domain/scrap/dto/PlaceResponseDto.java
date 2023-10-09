@@ -1,11 +1,13 @@
 package cmc.mellyserver.domain.scrap.dto;
 
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.HashMap;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +20,6 @@ public class PlaceResponseDto {
     private Boolean isScraped;
     private String PlaceCategory = "";
     private String placeName = "";
-    private GroupType recommendType = null;
     private String placeImage;
 
     @Builder
@@ -31,10 +32,12 @@ public class PlaceResponseDto {
         this.placeImage = "https://mellyimage.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221118_193556196.png";
     }
 
-    public static PlaceResponseDto PlaceNotCreated(Position position, Long myMemoryCount, Long otherMemoryCount,
-                                                   Boolean isScraped) {
-        return new PlaceResponseDto(position, myMemoryCount, otherMemoryCount, isScraped);
-
+    public static PlaceResponseDto of(Place place, boolean isUserScraped, HashMap<String, Long> memoryCount) {
+        return new PlaceResponseDto(place.getId(), place.getPosition(),
+                memoryCount.get("myMemory"),
+                memoryCount.get("otherMemory"),
+                isUserScraped, place.getPlaceCategory(), place.getPlaceName(),
+                place.getPlaceImage());
     }
 
 }
