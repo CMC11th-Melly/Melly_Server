@@ -1,5 +1,6 @@
 package cmc.mellyserver.clientauth.dto;
 
+import cmc.mellyserver.clientauth.api.LoginClientResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,9 @@ public class NaverUserData {
         private String email;
 
         private String nickname;
+    }
+
+    public LoginClientResult toResult() {
+        return new LoginClientResult(response.id, "naver");
     }
 }

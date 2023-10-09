@@ -22,7 +22,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.asciidoctor.jvm.convert'
-    apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+
 
     dependencyManagement {
         imports {
@@ -37,8 +37,12 @@ subprojects {
         implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-        implementation "com.querydsl:querydsl-jpa:5.0.0"
-        annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
+        // QueryDsl
+        implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
         // Test
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
@@ -83,32 +87,7 @@ subprojects {
         dependsOn restDocsTest
     }
 
-    def querydslDir = "$buildDir/generated/querydsl"
 
-
-    sourceSets {
-        main.java.srcDir querydslDir
-    }
-
-    querydsl {
-        jpa = true
-        querydslSourcesDir = querydslDir
-    }
-
-    compileQuerydsl {
-        options.annotationProcessorPath = configurations.querydsl
-    }
-
-    compileQuerydsl.doFirst {
-        if (file(querydslDir).exists())
-            delete(file(querydslDir))
-    }
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
-        querydsl.extendsFrom compileClasspath
-    }
 }
 
 // Sub-Module 적용

@@ -1,6 +1,7 @@
 package cmc.mellyserver.controller.place;
 
 
+import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
 import cmc.mellyserver.controller.place.dto.PlaceAssembler;
@@ -11,7 +12,6 @@ import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponse
 import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

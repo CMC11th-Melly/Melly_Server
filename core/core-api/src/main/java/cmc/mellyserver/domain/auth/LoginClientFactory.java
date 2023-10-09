@@ -33,7 +33,7 @@ public class LoginClientFactory {
 //                .orElseThrow();
 
         loginClient = loginClientList.stream().filter(client ->
-                        client.supports(provider))
+                        client.supports(provider.name()))
                 .findFirst()
                 .orElseThrow();
 

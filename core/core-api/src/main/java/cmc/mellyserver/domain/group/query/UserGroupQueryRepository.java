@@ -4,12 +4,12 @@ import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponse
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static cmc.mellyserver.dbcore.group.QGroupAndUser.groupAndUser;
@@ -18,16 +18,10 @@ import static cmc.mellyserver.dbcore.user.QUser.user;
 
 
 @Repository
+@RequiredArgsConstructor
 public class UserGroupQueryRepository {
 
-    private final EntityManager em;
-
     private final JPAQueryFactory query;
-
-    public UserGroupQueryRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
 
 
     public Slice<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userId, Long lastId, Pageable pageable) {

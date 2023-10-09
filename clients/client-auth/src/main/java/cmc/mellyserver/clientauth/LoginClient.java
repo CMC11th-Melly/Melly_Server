@@ -1,14 +1,13 @@
 package cmc.mellyserver.clientauth;
 
 
-import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.dbcore.user.enums.Provider;
+import cmc.mellyserver.clientauth.api.LoginClientResult;
 
 public interface LoginClient {
 
     static final String AUTH_PREFIX = "Bearer ";
 
-    boolean supports(Provider provider);
+    boolean supports(String provider);
 
-    User getUserData(String accessToken);
+    LoginClientResult getUserData(String accessToken);
 }

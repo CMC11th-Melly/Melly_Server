@@ -1,8 +1,8 @@
 package cmc.mellyserver.dbcore.place;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
-import javax.persistence.Embeddable;
 
 @Getter
 @AllArgsConstructor

@@ -1,5 +1,6 @@
 package cmc.mellyserver.clientauth.dto;
 
+import cmc.mellyserver.clientauth.api.LoginClientResult;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,7 @@ public class KakaoUserData {
 
     private LocalDateTime connected_at;
 
+    public LoginClientResult toResult() {
+        return new LoginClientResult(String.valueOf(id), "kakao");
+    }
 }

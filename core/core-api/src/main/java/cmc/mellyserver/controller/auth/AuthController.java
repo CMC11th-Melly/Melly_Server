@@ -13,13 +13,12 @@ import cmc.mellyserver.domain.auth.certification.EmailCertificationRequest;
 import cmc.mellyserver.domain.auth.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 
 @Slf4j

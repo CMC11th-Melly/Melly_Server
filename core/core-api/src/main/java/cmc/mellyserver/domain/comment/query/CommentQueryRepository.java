@@ -2,9 +2,9 @@ package cmc.mellyserver.domain.comment.query;
 
 import cmc.mellyserver.dbcore.comment.comment.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static cmc.mellyserver.dbcore.comment.comment.QComment.comment;
@@ -12,15 +12,11 @@ import static cmc.mellyserver.dbcore.user.QUser.user;
 
 
 @Repository
+@RequiredArgsConstructor
 public class CommentQueryRepository {
 
-    private final EntityManager em;
     private final JPAQueryFactory query;
 
-    public CommentQueryRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
 
     public List<Comment> findComment(Long userId, Long memoryId) {
 

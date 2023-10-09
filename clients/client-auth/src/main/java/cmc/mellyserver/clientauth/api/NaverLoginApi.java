@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "naverOpenFeign", url = "${oauth.resource.uri.naver}")
+@FeignClient(name = "naverLogin", url = "${client.oauth.uri.naver}")
 interface NaverLoginApi {
 
     @GetMapping(
