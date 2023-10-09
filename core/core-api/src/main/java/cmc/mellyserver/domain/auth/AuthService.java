@@ -2,7 +2,6 @@ package cmc.mellyserver.domain.auth;
 
 import cmc.mellyserver.common.token.TokenProvider;
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.dbredis.repository.FcmTokenRepository;
 import cmc.mellyserver.domain.auth.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.domain.auth.dto.request.AuthSignupRequestDto;
@@ -12,6 +11,8 @@ import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
 import cmc.mellyserver.domain.auth.repository.JWTRepository;
 import cmc.mellyserver.domain.auth.repository.RefreshToken;
 import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
+import cmc.mellyserver.domain.user.UserReader;
+import cmc.mellyserver.domain.user.UserWriter;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
+    private final UserReader userReader;
+
+    private final UserWriter userWriter;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -41,23 +44,22 @@ public class AuthService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public TokenResponseDto emailSignup(AuthSignupRequestDto authSignupRequestDto) {
+    public TokenResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
 
         checkDuplicatedEmail(authSignupRequestDto);
-        String encodedPassword = passwordEncoder.encode(authSignupRequestDto.getPassword()); // 비밀번호 암호화 -> 암호화 강도 낮춰서 CPU 성능 확보
-
-        User savedUser = userRepository.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(), encodedPassword, authSignupRequestDto.getNickname(),
+        User savedUser = userWriter.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(), passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
                 authSignupRequestDto.getAgeGroup(),
                 authSignupRequestDto.getGender()));
-        savedUser.updateLastLoginTime(LocalDateTime.now()); // 회원가입 후, 바로 로그인이기 때문에 마지막 로그인 시간 업데이트
 
-        String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType()); // 액세스 토큰 발행
-        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType()); // 리프레시 토큰 발행
+        savedUser.updateLastLoginTime(LocalDateTime.now());
 
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt()); // 리프레시 토큰 레디스에 저장
+        String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType());
+        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType());
+
+        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt());
         fcmTokenRepository.saveToken(savedUser.getId().toString(), authSignupRequestDto.getFcmToken());
 
-        publisher.publishEvent(new SignupCompletedEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
+        publisher.publishEvent(new SignupCompletedEvent(savedUser.getId()));
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
@@ -105,7 +107,7 @@ public class AuthService {
         // 3. Redis에 있는 토큰과 내가 refresh를 위해 가져온 토큰이 다르면 변조됐다고 판단 후 재로그인
         checkAbnormalUserAccess(token, userId, refreshToken);
 
-        User user = userRepository.getById(refreshToken.getUserId());
+        User user = userReader.findById(refreshToken.getUserId());
 
         String newAccessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
         RefreshTokenDto newRefreshToken = tokenProvider.createRefreshToken(refreshToken.getUserId(), user.getRoleType());
@@ -126,7 +128,7 @@ public class AuthService {
 
     public void withdraw(final Long userId, final String accessToken) {
 
-        User user = userRepository.getById(userId);
+        User user = userReader.findById(userId);
         user.remove();
 
         tokenRepository.makeAccessTokenDisabled(accessToken);
@@ -138,7 +140,7 @@ public class AuthService {
 
     public void checkDuplicatedNickname(final String nickname) {
 
-        if (userRepository.existsByNickname(nickname)) {
+        if (userReader.existsByNickname(nickname)) {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
         }
     }
@@ -146,7 +148,7 @@ public class AuthService {
 
     public void checkDuplicatedEmail(final String email) {
 
-        if (userRepository.findUserByEmail(email).isPresent()) {
+        if (userReader.findByEmail(email).isPresent()) {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
@@ -154,19 +156,19 @@ public class AuthService {
     @Transactional
     public void updateForgetPassword(ChangePasswordRequest requestDto) {
 
-        User user = userRepository.findUserByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        User user = userReader.findByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.changePassword(requestDto.getPasswordAfter());
     }
 
     @Transactional
     public void changePassword(final Long userId, ChangePasswordRequest requestDto) {
 
-        User user = userRepository.getById(userId);
+        User user = userReader.findById(userId);
 
         String passwordBefore = passwordEncoder.encode(requestDto.getPasswordBefore());
         String passwordAfter = passwordEncoder.encode(requestDto.getPasswordAfter());
 
-        if (!userRepository.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
+        if (!userReader.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
             throw new BusinessException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
         }
 
@@ -176,11 +178,10 @@ public class AuthService {
 
     private User checkEmail(final String email) {
 
-        return userRepository.findUserByEmail(email).orElseThrow(() -> {
+        return userReader.findByEmail(email).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.INVALID_EMAIL);
         });
     }
-
 
     private void checkPassword(final String password, final String originPassword) {
 
@@ -189,17 +190,17 @@ public class AuthService {
         }
     }
 
-
     private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
 
-        if (userRepository.existsByEmail(authSignupRequestDto.getEmail())) {
+        if (userReader.existsByEmail(authSignupRequestDto.getEmail())) {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
 
+    private void checkAbnormalUserAccess(final String token, final Long userId, final RefreshToken refreshToken) {
 
-    private void checkAbnormalUserAccess(final String token, final Long userId, RefreshToken refreshToken) {
         if (!refreshToken.getRefreshToken().equals(token)) {
+
             tokenRepository.removeRefreshToken(userId);
             throw new BusinessException(ErrorCode.ABNORMAL_ACCESS);
         }

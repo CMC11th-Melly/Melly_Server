@@ -54,7 +54,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid CommonSignupRequest commonSignupRequest) {
 
-        TokenResponseDto signupToken = authService.emailSignup(commonSignupRequest.toDto());
+        TokenResponseDto signupToken = authService.signup(commonSignupRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, signupToken);
     }
 

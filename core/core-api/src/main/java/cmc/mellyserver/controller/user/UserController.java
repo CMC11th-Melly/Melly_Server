@@ -47,8 +47,8 @@ public class UserController {
     @GetMapping("/my-profile")
     public ResponseEntity<ApiResponse<ProfileResponse>> getUserProfile(@CurrentUser LoginUser loginUser) {
 
-        ProfileResponseDto profileResponseDto = userProfileService.getUserProfile(loginUser.getId());
-        Integer volume = userProfileService.checkImageStorageVolumeLoginUserUse(loginUser.getId());
+        ProfileResponseDto profileResponseDto = userProfileService.getProfile(loginUser.getId());
+        Integer volume = userProfileService.checkImageStorageVolume(loginUser.getId());
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto, volume));
     }
 
@@ -56,14 +56,14 @@ public class UserController {
     @PatchMapping("/my-profile")
     public ResponseEntity<ApiResponse<Void>> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) {
 
-        userProfileService.updateUserProfile(loginUser.getId(), profileUpdateRequest.toServiceRequest());
+        userProfileService.updateProfile(loginUser.getId(), profileUpdateRequest.toServiceRequest());
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
     @PatchMapping("/my-profile/profile-image")
     public ResponseEntity<ApiResponse<Void>> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
 
-        userProfileService.updateUserProfileImage(loginUser.getId(), profileImage);
+        userProfileService.updateProfileImage(loginUser.getId(), profileImage);
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 

@@ -198,7 +198,7 @@ public class User extends JpaBaseEntity {
     }
 
     // 처음 로그인 시에 얻어올 수 있는 정보는 OAuth에서는 없다.
-    public static User createOauthLoginUser(String socialId, Provider provider, String email, String nickname, AgeGroup ageGroup, Gender gender) {
+    public static User oauthUser(String socialId, Provider provider, String email, String nickname, AgeGroup ageGroup, Gender gender) {
 
         return User.builder()
                 .socialId(socialId)
