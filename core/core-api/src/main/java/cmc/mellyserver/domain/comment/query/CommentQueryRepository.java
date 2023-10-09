@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.comment.query;
+package cmc.mellyserver.domain.comment.query;
 
 import cmc.mellyserver.dbcore.comment.comment.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;

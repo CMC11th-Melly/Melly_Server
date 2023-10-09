@@ -1,6 +1,6 @@
-package cmc.mellyserver.dbcore.group.query;
+package cmc.mellyserver.domain.group.query;
 
-import cmc.mellyserver.dbcore.group.query.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

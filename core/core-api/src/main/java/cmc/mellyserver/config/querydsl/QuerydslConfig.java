@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.config.querydsl;
+package cmc.mellyserver.config.querydsl;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;

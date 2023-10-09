@@ -1,7 +1,6 @@
 bootJar.enabled = true
 jar.enabled = false
 
-
 dependencies {
 
     // Spring
@@ -32,5 +31,4 @@ dependencies {
     implementation project(":clients:client-auth")
 }
 
-// ========= QueryDSL Config ===========
 

@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.scrap.query.dto;
+package cmc.mellyserver.domain.scrap.query.dto;
 
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.Data;

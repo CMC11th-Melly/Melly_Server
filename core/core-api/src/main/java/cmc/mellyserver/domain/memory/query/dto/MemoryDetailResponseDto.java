@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.memory.query.dto;
+package cmc.mellyserver.domain.memory.query.dto;
 
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 import lombok.Data;

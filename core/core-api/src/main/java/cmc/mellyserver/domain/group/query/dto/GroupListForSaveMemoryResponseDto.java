@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.group.query.dto;
+package cmc.mellyserver.domain.group.query.dto;
 
 
 import cmc.mellyserver.dbcore.group.enums.GroupType;

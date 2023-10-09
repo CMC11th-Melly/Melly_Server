@@ -2,10 +2,10 @@ package cmc.mellyserver.controller.group.dto;
 
 import cmc.mellyserver.controller.group.dto.request.GroupCreateRequest;
 import cmc.mellyserver.controller.group.dto.request.GroupUpdateRequest;
+import cmc.mellyserver.controller.user.dto.response.GroupLoginUserParticipatedResponse;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
-import cmc.mellyserver.controller.user.dto.response.GroupLoginUserParticipatedResponse;
 
 
 public abstract class GroupAssembler {

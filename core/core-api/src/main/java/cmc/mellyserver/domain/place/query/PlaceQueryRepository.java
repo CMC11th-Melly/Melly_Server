@@ -1,9 +1,9 @@
-package cmc.mellyserver.dbcore.place.query;
+package cmc.mellyserver.domain.place.query;
 
 
 import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.dbcore.memory.query.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -1,12 +1,12 @@
-package cmc.mellyserver.dbcore.memory.query;
+package cmc.mellyserver.domain.memory.query;
 
 
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 import cmc.mellyserver.dbcore.memory.enums.OpenType;
-import cmc.mellyserver.dbcore.memory.query.dto.ImageDto;
-import cmc.mellyserver.dbcore.memory.query.dto.KeywordDto;
-import cmc.mellyserver.dbcore.memory.query.dto.MemoryDetailResponseDto;
-import cmc.mellyserver.dbcore.memory.query.dto.MemoryResponseDto;
+import cmc.mellyserver.domain.memory.query.dto.ImageDto;
+import cmc.mellyserver.domain.memory.query.dto.KeywordDto;
+import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
+import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;

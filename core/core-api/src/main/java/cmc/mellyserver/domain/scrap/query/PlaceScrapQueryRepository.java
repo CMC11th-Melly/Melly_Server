@@ -1,10 +1,10 @@
-package cmc.mellyserver.dbcore.scrap.query;
+package cmc.mellyserver.domain.scrap.query;
 
 
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
-import cmc.mellyserver.dbcore.scrap.query.dto.PlaceScrapCountResponseDto;
-import cmc.mellyserver.dbcore.scrap.query.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
+import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
