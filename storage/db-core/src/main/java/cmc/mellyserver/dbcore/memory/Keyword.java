@@ -1,11 +1,11 @@
 package cmc.mellyserver.dbcore.memory;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
 @Entity
 @Getter

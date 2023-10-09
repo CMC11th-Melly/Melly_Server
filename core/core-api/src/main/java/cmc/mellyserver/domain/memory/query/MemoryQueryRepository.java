@@ -1,22 +1,22 @@
-package cmc.mellyserver.domain.memory.query;
+package cmc.mellyserver.dbcore.memory.query;
 
 
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 import cmc.mellyserver.dbcore.memory.enums.OpenType;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
-import cmc.mellyserver.domain.memory.query.dto.KeywordDto;
-import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
-import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
+import cmc.mellyserver.dbcore.memory.query.dto.ImageDto;
+import cmc.mellyserver.dbcore.memory.query.dto.KeywordDto;
+import cmc.mellyserver.dbcore.memory.query.dto.MemoryDetailResponseDto;
+import cmc.mellyserver.dbcore.memory.query.dto.MemoryResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -31,15 +31,10 @@ import static cmc.mellyserver.dbcore.place.QPlace.place;
 
 
 @Repository
+@RequiredArgsConstructor
 public class MemoryQueryRepository {
 
-    private final EntityManager em;
     private JPAQueryFactory query;
-
-    public MemoryQueryRepository(EntityManager em) {
-        this.em = em;
-        query = new JPAQueryFactory(em);
-    }
 
 
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForPlace(Long lastId, Pageable pageable, Long userId, Long placeId, GroupType groupType) {

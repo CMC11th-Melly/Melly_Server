@@ -1,6 +1,7 @@
 package cmc.mellyserver.domain.auth;
 
 import cmc.mellyserver.clientauth.LoginClient;
+import cmc.mellyserver.clientauth.api.LoginClientResult;
 import cmc.mellyserver.common.token.JwtTokenProvider;
 import cmc.mellyserver.controller.auth.dto.request.OAuthSignupRequestDto;
 import cmc.mellyserver.controller.auth.dto.response.OAuthResponseDto;
@@ -43,9 +44,9 @@ public class OAuthService {
     public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
 
         LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider());
-        User socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
+        LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
 
-        User user = userRepository.findUserBySocialId(socialUser.getSocialId());
+        User user = userRepository.findUserBySocialId(socialUser.uid());
 
         // 만약
         if (Objects.isNull(user)) {

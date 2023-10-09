@@ -3,18 +3,12 @@ package cmc.mellyserver.domain.auth.dto.request;
 
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-
-/**
- * AuthSignupDto.java
- *
- * @author jemlog
- */
 
 @Data
 public class AuthSignupRequestDto {

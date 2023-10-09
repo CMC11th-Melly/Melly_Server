@@ -1,4 +1,4 @@
-package cmc.mellyserver.domain.memory.query.dto;
+package cmc.mellyserver.dbcore.memory.query.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

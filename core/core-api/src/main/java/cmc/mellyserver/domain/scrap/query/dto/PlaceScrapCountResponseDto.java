@@ -1,4 +1,4 @@
-package cmc.mellyserver.domain.scrap.query.dto;
+package cmc.mellyserver.dbcore.scrap.query.dto;
 
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
 import lombok.AllArgsConstructor;

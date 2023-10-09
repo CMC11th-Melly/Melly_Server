@@ -1,19 +1,19 @@
-package cmc.mellyserver.domain.scrap.query;
+package cmc.mellyserver.dbcore.scrap.query;
 
 
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
-import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
-import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
+import cmc.mellyserver.dbcore.scrap.query.dto.PlaceScrapCountResponseDto;
+import cmc.mellyserver.dbcore.scrap.query.dto.ScrapedPlaceResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static cmc.mellyserver.dbcore.place.QPlace.place;
@@ -22,15 +22,11 @@ import static cmc.mellyserver.dbcore.user.QUser.user;
 
 
 @Repository
+@RequiredArgsConstructor
 public class PlaceScrapQueryRepository {
 
-    private final EntityManager em;
     private final JPAQueryFactory query;
 
-    public PlaceScrapQueryRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
 
     public Boolean checkCurrentLoginUserScrapedPlaceByPosition(Long id, Position position) {
 

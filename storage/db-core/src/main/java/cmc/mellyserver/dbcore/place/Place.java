@@ -1,12 +1,12 @@
 package cmc.mellyserver.dbcore.place;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
