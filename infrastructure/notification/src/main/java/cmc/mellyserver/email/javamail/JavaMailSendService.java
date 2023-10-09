@@ -18,7 +18,7 @@ class JavaMailSendService implements EmailSendService {
     private final JavaMailSender mailSender;
 
     @Value("${email.sender}")
-    private final String sender;
+    private String sender;
 
     @Override
     public void sendMail(String subject, String content, String... receivers) {

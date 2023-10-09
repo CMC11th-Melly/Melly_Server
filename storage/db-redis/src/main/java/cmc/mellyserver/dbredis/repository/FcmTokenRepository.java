@@ -20,8 +20,4 @@ public class FcmTokenRepository {
     public void deleteToken(String key) {
         tokenRedisTemplate.delete(key);
     }
-
-    public boolean hasKey(String key) {
-        return tokenRedisTemplate.hasKey(key);
-    }
 }

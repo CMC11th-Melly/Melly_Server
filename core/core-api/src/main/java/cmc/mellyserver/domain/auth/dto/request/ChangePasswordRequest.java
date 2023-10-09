@@ -1,11 +1,10 @@
 package cmc.mellyserver.domain.auth.dto.request;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Pattern;
 
 
 @Getter

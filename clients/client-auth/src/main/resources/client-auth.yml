@@ -1,0 +1,44 @@
+client:
+  oauth:
+    uri:
+      kakao: https://kapi.kakao.com/v2/user/me
+      naver: https://openapi.naver.com/v1/nid/me
+      google: https://oauth2.googleapis.com/tokeninfo
+      apple: https://appleid.apple.com/auth/keys
+
+spring.cloud.openfeign:
+  client:
+    config:
+      default:
+        connectTimeout: 1000
+        readTimeout: 3000
+        loggerLevel: full
+
+  httpclient:
+    max-connections: 2000 # 전체 커넥션 수를 나타낸다
+    max-connections-per-route: 500 # Route당 할당되는 최대 커넥션 수를 나타낸다
+
+  circuitbreaker:
+    enabled: true
+
+  compression:
+    response:
+      enabled: false
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        waitDurationInOpenState: 30s
+        slowCallRateThreshold: 80
+        slowCallDurationThreshold: 5s
+        registerHealthIndicator: true
+        recordFailurePredicate: cmc.mellyserver.clientauth.DefaultExceptionRecordFailurePredicate
+    instances:
+      default:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 5s # 해당 시간은 OpenFeign Client의 Connection Timeout과 Read Timeout 보다 크게 설정해야 한다. 작업 처리 시간이 만료되면 retry를 진행하지 않는다
+        cancelRunningFuture: true

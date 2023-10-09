@@ -7,9 +7,9 @@ import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponse
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static cmc.mellyserver.dbcore.memory.QMemory.memory;
@@ -17,15 +17,10 @@ import static cmc.mellyserver.dbcore.place.QPlace.place;
 
 
 @Repository
+@RequiredArgsConstructor
 public class PlaceQueryRepository {
 
-    private final EntityManager em;
     private final JPAQueryFactory query;
-
-    public PlaceQueryRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
 
 
     public List<Place> getPlaceUserMemoryExist(Long id, GroupType groupType) {

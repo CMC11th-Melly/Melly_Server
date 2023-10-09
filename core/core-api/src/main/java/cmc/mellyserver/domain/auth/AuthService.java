@@ -3,6 +3,7 @@ package cmc.mellyserver.domain.auth;
 import cmc.mellyserver.common.token.TokenProvider;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
+import cmc.mellyserver.dbredis.repository.FcmTokenRepository;
 import cmc.mellyserver.domain.auth.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.domain.auth.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.domain.auth.dto.request.ChangePasswordRequest;
@@ -35,7 +36,7 @@ public class AuthService {
 
     private final JWTRepository tokenRepository;
 
-    private final FCMTokenManageService tokenManageService;
+    private final FcmTokenRepository fcmTokenRepository;
 
     private final ApplicationEventPublisher publisher;
 
@@ -54,7 +55,7 @@ public class AuthService {
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType()); // 리프레시 토큰 발행
 
         tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt()); // 리프레시 토큰 레디스에 저장
-        tokenManageService.saveToken(savedUser.getId(), authSignupRequestDto.getFcmToken());
+        fcmTokenRepository.saveToken(savedUser.getId().toString(), authSignupRequestDto.getFcmToken());
 
         publisher.publishEvent(new SignupCompletedEvent(savedUser.getId())); // 회원가입 축하 이벤트 발송
 
@@ -84,7 +85,7 @@ public class AuthService {
 
         // ------ 3. 레디스에 Refresh token 저장, EC2 간 네트워크 I/O 발생
         tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
-        tokenManageService.saveToken(user.getId(), authLoginRequestDto.getFcmToken());
+        fcmTokenRepository.saveToken(user.getId().toString(), authLoginRequestDto.getFcmToken());
 
         return TokenResponseDto.of(accessToken, refreshToken.getToken());
     }
@@ -93,12 +94,15 @@ public class AuthService {
     // Refresh Token Rotation (RTR) 전략 적용
     public TokenResponseDto reIssueAccessTokenAndRefreshToken(final String token) {
 
+        // 1. Claim을 파싱하는 과정에서 유효기간이 지나면 예외 발생
         Long userId = tokenProvider.extractUserId(token);
+
+        // 2. 만약 해당 ID에 해당하는 리프레시 토큰이 redis에 없으면 재로그인
         RefreshToken refreshToken = tokenRepository.findRefreshToken(userId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.RELOGIN_REQUIRED);
         });
 
-        // 만약 기존의 토큰과 다르다면 비정상적인 접근이 있다 판단하고 재로그인 유도
+        // 3. Redis에 있는 토큰과 내가 refresh를 위해 가져온 토큰이 다르면 변조됐다고 판단 후 재로그인
         checkAbnormalUserAccess(token, userId, refreshToken);
 
         User user = userRepository.getById(refreshToken.getUserId());
@@ -116,7 +120,7 @@ public class AuthService {
         tokenRepository.makeAccessTokenDisabled(accessToken);
         tokenRepository.removeRefreshToken(userId);
 
-        tokenManageService.deleteToken(userId);
+        fcmTokenRepository.deleteToken(userId.toString());
     }
 
 
@@ -128,7 +132,7 @@ public class AuthService {
         tokenRepository.makeAccessTokenDisabled(accessToken);
         tokenRepository.removeRefreshToken(userId);
 
-        tokenManageService.deleteToken(userId);
+        fcmTokenRepository.deleteToken(userId.toString());
     }
 
 

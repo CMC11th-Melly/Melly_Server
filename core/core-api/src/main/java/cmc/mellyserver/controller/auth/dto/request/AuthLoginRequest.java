@@ -1,10 +1,9 @@
 package cmc.mellyserver.controller.auth.dto.request;
 
 import cmc.mellyserver.domain.auth.dto.request.AuthLoginRequestDto;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Email;
 
 @Data
 @NoArgsConstructor

@@ -1,12 +1,14 @@
 package cmc.mellyserver.domain.auth;
 
 import cmc.mellyserver.clientauth.LoginClient;
+import cmc.mellyserver.clientauth.api.LoginClientResult;
 import cmc.mellyserver.common.token.JwtTokenProvider;
 import cmc.mellyserver.controller.auth.dto.request.OAuthSignupRequestDto;
 import cmc.mellyserver.controller.auth.dto.response.OAuthResponseDto;
 import cmc.mellyserver.controller.auth.dto.response.OAuthSignupResponseDto;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
+import cmc.mellyserver.dbredis.repository.FcmTokenRepository;
 import cmc.mellyserver.domain.auth.dto.request.OAuthLoginRequestDto;
 import cmc.mellyserver.domain.auth.dto.response.RefreshTokenDto;
 import cmc.mellyserver.domain.auth.dto.response.TokenResponseDto;
@@ -34,7 +36,7 @@ public class OAuthService {
 
     private final JWTRepository tokenRepository;
 
-    private final FCMTokenManageService tokenManageService;
+    private final FcmTokenRepository fcmTokenRepository;
 
     private final ApplicationEventPublisher publisher;
 
@@ -42,9 +44,9 @@ public class OAuthService {
     public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
 
         LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider());
-        User socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
+        LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
 
-        User user = userRepository.findUserBySocialId(socialUser.getSocialId());
+        User user = userRepository.findUserBySocialId(socialUser.uid());
 
         // 만약
         if (Objects.isNull(user)) {
@@ -58,7 +60,7 @@ public class OAuthService {
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
         tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
-        tokenManageService.saveToken(user.getId(), oAuthLoginRequestDto.getFcmToken());
+        fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto.getFcmToken());
 
         return new OAuthResponseDto(TokenResponseDto.of(accessToken, refreshToken.getToken()), null);
     }
@@ -73,7 +75,7 @@ public class OAuthService {
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
         tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
-        tokenManageService.deleteToken(user.getId());
+        fcmTokenRepository.deleteToken(user.getId().toString());
 
         // 이메일을 받아왔다면 회원가입 축하 메일 전송
         if (Objects.nonNull(user.getEmail())) {

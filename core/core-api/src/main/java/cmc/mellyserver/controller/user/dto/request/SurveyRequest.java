@@ -5,11 +5,10 @@ import cmc.mellyserver.dbcore.user.enums.RecommendActivity;
 import cmc.mellyserver.dbcore.user.enums.RecommendGroup;
 import cmc.mellyserver.dbcore.user.enums.RecommendPlace;
 import cmc.mellyserver.domain.user.dto.request.SurveyRequestDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor

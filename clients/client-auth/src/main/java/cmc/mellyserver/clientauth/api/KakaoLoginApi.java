@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "kakaoOpenFeign", url = "${oauth.resource.uri.kakao}")
+@FeignClient(name = "kakaoLogin", url = "${client.oauth.uri.kakao}")
 interface KakaoLoginApi {
 
     @GetMapping(

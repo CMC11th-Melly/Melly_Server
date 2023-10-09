@@ -3,12 +3,12 @@ package cmc.mellyserver.dbcore.comment.comment;
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.User;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

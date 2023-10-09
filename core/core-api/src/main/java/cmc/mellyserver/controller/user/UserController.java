@@ -1,6 +1,8 @@
 package cmc.mellyserver.controller.user;
 
 import cmc.mellyserver.common.code.SuccessCode;
+import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
+import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.controller.user.dto.UserAssembler;
 import cmc.mellyserver.controller.user.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.controller.user.dto.response.PlaceScrapCountResponse;
@@ -16,9 +18,8 @@ import cmc.mellyserver.domain.scrap.dto.response.ScrapedPlaceListResponse;
 import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.domain.user.UserProfileService;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.support.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 

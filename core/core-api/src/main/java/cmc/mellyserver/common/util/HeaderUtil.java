@@ -1,8 +1,8 @@
 package cmc.mellyserver.common.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Slf4j

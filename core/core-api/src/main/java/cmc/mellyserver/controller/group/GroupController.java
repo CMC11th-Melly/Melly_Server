@@ -1,20 +1,19 @@
 package cmc.mellyserver.controller.group;
 
-import cmc.mellyserver.controller.group.dto.GroupAssembler;
-import cmc.mellyserver.controller.group.dto.request.GroupCreateRequest;
-import cmc.mellyserver.controller.group.dto.request.GroupUpdateRequest;
-import cmc.mellyserver.domain.group.GroupService;
-import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
 import cmc.mellyserver.controller.auth.dto.common.LoginUser;
+import cmc.mellyserver.controller.group.dto.GroupAssembler;
+import cmc.mellyserver.controller.group.dto.request.GroupCreateRequest;
+import cmc.mellyserver.controller.group.dto.request.GroupUpdateRequest;
 import cmc.mellyserver.controller.user.dto.response.GroupLoginUserParticipatedResponse;
+import cmc.mellyserver.domain.group.GroupService;
+import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
