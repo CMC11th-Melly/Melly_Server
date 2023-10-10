@@ -30,7 +30,6 @@ public abstract class PlaceAssembler {
                 .isScraped(placeResponseDto.getIsScraped())
                 .placeCategory(placeResponseDto.getPlaceCategory())
                 .placeName(placeResponseDto.getPlaceName())
-                .recommendType(placeResponseDto.getRecommendType())
                 .placeImage(placeResponseDto.getPlaceImage())
                 .build();
     }

@@ -34,7 +34,7 @@ import static cmc.mellyserver.dbcore.place.QPlace.place;
 @RequiredArgsConstructor
 public class MemoryQueryRepository {
 
-    private JPAQueryFactory query;
+    private final JPAQueryFactory query;
 
 
     public Slice<MemoryResponseDto> searchMemoryUserCreatedForPlace(Long lastId, Pageable pageable, Long userId, Long placeId, GroupType groupType) {

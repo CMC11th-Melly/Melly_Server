@@ -30,10 +30,10 @@ public class ValidatePlaceExistedAop {
             if (arg instanceof Position) {
                 Optional<Place> place = placeRepository.findByPosition((Position) arg);
 
-                if (place.isEmpty()) {
-                    Place savePlace = createMemoryRequestDto.toPlace();
-                    placeRepository.save(savePlace);
-                }
+//                if (place.isEmpty()) {
+//                    Place savePlace = createMemoryRequestDto.toPlace();
+//                    placeRepository.save(savePlace);
+//                }
 
                 return joinPoint.proceed();
             }

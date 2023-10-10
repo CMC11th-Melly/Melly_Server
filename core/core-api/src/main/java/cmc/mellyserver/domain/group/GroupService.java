@@ -4,17 +4,14 @@ package cmc.mellyserver.domain.group;
 import cmc.mellyserver.common.aop.lock.annotation.DistributedLock;
 import cmc.mellyserver.common.aop.lock.annotation.OptimisticLock;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
-import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
-import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
-import cmc.mellyserver.domain.group.query.UserGroupQueryRepository;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -36,77 +33,75 @@ public class GroupService {
 
     private static final int GROUP_MEMBER_MAX_COUNT = 9;
 
-    private final GroupRepository groupRepository;
+    private final GroupReader groupReader;
 
-    private final GroupAndUserRepository groupAndUserRepository;
+    private final GroupWriter groupWriter;
 
-    private final UserRepository userRepository;
+    private final UserReader userReader;
 
-    private final UserGroupQueryRepository userGroupQueryRepository;
+    private final GroupAndUserReader groupAndUserReader;
+
+    private final GroupAndUserWriter groupAndUserWriter;
 
 
     @Cacheable(value = "group:group-id", key = "#groupId")
     @Transactional(readOnly = true)
     public GroupDetailResponseDto getGroupDetail(final Long groupId) {
 
-        UserGroup userGroup = groupRepository.getById(groupId);
-        List<User> usersParticipatedInGroup = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
-        return GroupDetailResponseDto.of(userGroup, usersParticipatedInGroup);
+        UserGroup userGroup = groupReader.findById(groupId);
+        List<User> groupMembers = groupAndUserReader.getGroupMembers(groupId);
+        return GroupDetailResponseDto.of(userGroup, groupMembers);
     }
 
 
     @Transactional(readOnly = true)
     public GroupListLoginUserParticipatedResponse findGroupListLoginUserParticiated(final Long userId, final Long groupId, final Pageable pageable) {
 
-        Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
-
-        List<GroupLoginUserParticipatedResponseDto> contents = groupListLoginUserParticipate.getContent();
-        boolean next = groupListLoginUserParticipate.hasNext();
-        return GroupListLoginUserParticipatedResponse.from(contents, next);
+        Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = groupReader.groupListLoginUserParticipate(userId, groupId, pageable);
+        return transferToList(groupListLoginUserParticipate);
     }
 
 
     @Transactional
     public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
 
-        User user = userRepository.getById(createGroupRequestDto.getCreatorId());
-        UserGroup savedGroup = groupRepository.save(createGroupRequestDto.toEntity());
-        groupAndUserRepository.save(GroupAndUser.of(user, savedGroup));
-        return savedGroup.getId();
+        User user = userReader.findById(createGroupRequestDto.getCreatorId());
+        UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
+        return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
     }
 
 
-    // TODO : 모든 어노테이션이 AOP를 기반으로 동작한다. 각각의 AOP 동작 순서 파악하기
     @CachePut(value = "group:group-id", key = "#groupId")
     @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 2L)
     @OptimisticLock
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {
 
-        User user = userRepository.getById(userId);
-        UserGroup userGroup = groupRepository.getById(groupId);
+        User user = userReader.findById(userId);
+        UserGroup userGroup = groupReader.findById(groupId);
 
         validateNewUserParticipateEnable(groupId);
-        checkUserAlreadyParticipatedInGroup(user, userGroup);
+        checkUserAlreadyParticipatedInGroup(user.getId(), userGroup.getId());
 
-        groupAndUserRepository.save(GroupAndUser.of(user, userGroup));
+        groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
     }
+
 
     @CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
     @OptimisticLock
     @Transactional
     public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 
-        UserGroup userGroup = groupRepository.getById(updateGroupRequestDto.getGroupId());
+        UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
     }
 
 
     @CacheEvict(value = "group:group-id", key = "#groupId")
     @Transactional
-    public void removeGroup(final Long userId, final Long groupId) {
+    public void removeGroup(final Long groupId) {
 
-        UserGroup userGroup = groupRepository.getById(groupId);
+        UserGroup userGroup = groupReader.findById(groupId);
         userGroup.remove();
     }
 
@@ -115,29 +110,35 @@ public class GroupService {
     @Transactional
     public void exitGroup(final Long userId, final Long groupId) {
 
-        int particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
-
-        if (particiatedUserCount < 2) {
-            removeGroup(userId, groupId);
+        if (groupAndUserReader.countGroupMembers(groupId) < 2) {
+            removeGroup(groupId);
         }
 
-        groupAndUserRepository.deleteGroupAndUserByUserIdAndGroupId(userId, groupId);
+        groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
     }
 
 
-    private void checkUserAlreadyParticipatedInGroup(User user, UserGroup userGroup) {
-        if (groupAndUserRepository.findGroupAndUserByUserAndGroup(user, userGroup).isPresent()) {
+    private void checkUserAlreadyParticipatedInGroup(final Long userId, final Long groupId) {
+
+        if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
     }
 
 
     private void validateNewUserParticipateEnable(Long groupId) {
-        int particiatedUserCount = groupAndUserRepository.countUserParticipatedInGroup(groupId);
 
-        if (particiatedUserCount > GROUP_MEMBER_MAX_COUNT) {
+        if (groupAndUserReader.countGroupMembers(groupId) > GROUP_MEMBER_MAX_COUNT) {
             throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
         }
+    }
+
+
+    private GroupListLoginUserParticipatedResponse transferToList(Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate) {
+
+        List<GroupLoginUserParticipatedResponseDto> contents = groupListLoginUserParticipate.getContent();
+        boolean next = groupListLoginUserParticipate.hasNext();
+        return GroupListLoginUserParticipatedResponse.from(contents, next);
     }
 
 }

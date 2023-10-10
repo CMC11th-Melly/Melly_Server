@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public interface GroupAndUserRepository extends JpaRepository<GroupAndUser, Long> {
 
-    Optional<GroupAndUser> findGroupAndUserByUserAndGroup(User user, UserGroup group);
+    Optional<GroupAndUser> findByUserIdAndGroupId(Long userId, Long groupId);
 
     @Query("select count(*) from GroupAndUser ga where ga.group.id = :groupId")
     Integer countUserParticipatedInGroup(@Param("groupId") Long groupId);
@@ -24,7 +24,7 @@ public interface GroupAndUserRepository extends JpaRepository<GroupAndUser, Long
     @Query("select u from GroupAndUser ga inner join User u on u.id = ga.user.id where ga.group.id = :groupId")
     List<User> getUsersParticipatedInGroup(@Param("groupId") Long groupId);
 
-    void deleteGroupAndUserByUserIdAndGroupId(Long userId, Long groupId);
+    void deleteByUserIdAndGroupId(Long userId, Long groupId);
 
     @Query("select distinct ug from GroupAndUser ga join UserGroup ug on ug.id = ga.group.id join User u on u.id = ga.user.id where u.id = :userId")
     List<UserGroup> findUserGroupLoginUserAssociated(@Param("userId") Long userId);

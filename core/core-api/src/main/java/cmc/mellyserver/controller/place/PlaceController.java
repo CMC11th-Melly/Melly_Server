@@ -8,6 +8,7 @@ import cmc.mellyserver.controller.place.dto.PlaceAssembler;
 import cmc.mellyserver.controller.place.dto.request.PlaceSimpleRequest;
 import cmc.mellyserver.controller.place.dto.response.PlaceResponse;
 import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponseDto;
 import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
@@ -42,21 +43,21 @@ public class PlaceController {
     @GetMapping("/place/{placeId}/search")
     public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@AuthenticationPrincipal User user, @PathVariable Long placeId) {
 
-        PlaceResponseDto placeResponseDto = placeService.findPlaceByPlaceId(Long.parseLong(user.getUsername()), placeId);
+        PlaceResponseDto placeResponseDto = placeService.findByPlaceId(Long.parseLong(user.getUsername()), placeId);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
     }
 
     @GetMapping("/place")
     public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user, PlaceSimpleRequest placeSimpleRequest) {
 
-        PlaceResponseDto placeByPosition = placeService.findPlaceByPosition(Long.parseLong(user.getUsername()), placeSimpleRequest.getLat(), placeSimpleRequest.getLng());
+        PlaceResponseDto placeByPosition = placeService.findByPosition(Long.parseLong(user.getUsername()), new Position(placeSimpleRequest.getLat(), placeSimpleRequest.getLng()));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeByPosition));
     }
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<FindPlaceInfoByMemoryNameResponse>>> searchPlaceByMemoryTitle(@AuthenticationPrincipal User user, @RequestParam String memoryName) {
 
-        List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeService.findPlaceInfoByMemoryName(Long.parseLong(user.getUsername()), memoryName);
+        List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeService.findByMemoryTitle(Long.parseLong(user.getUsername()), memoryName);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos));
     }
 }

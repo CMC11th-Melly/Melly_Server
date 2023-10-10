@@ -38,12 +38,11 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
         // QueryDsl
-        implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
-        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-        implementation 'javax.xml.bind:jaxb-api:2.3.0'
-        // Test
+
+
+//        implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
+//        implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'

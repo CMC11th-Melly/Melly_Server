@@ -5,6 +5,7 @@ import cmc.mellyserver.StorageService;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
 import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,10 +33,15 @@ public class UserProfileService {
         return fileUploader.calculateImageVolume(user.getEmail()).intValue();
     }
 
-
+    @CircuitBreaker(name = "user-profile", fallbackMethod = "userProfileFallback")
     @Cacheable(value = "profile:user-id", key = "#userId")
     public ProfileResponseDto getProfile(final Long userId) {
 
+        User user = userReader.findById(userId);
+        return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
+    }
+
+    public ProfileResponseDto userProfileFallback(final Long userId) {
         User user = userReader.findById(userId);
         return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
     }

@@ -14,13 +14,12 @@ import cmc.mellyserver.domain.group.query.UserGroupQueryRepository;
 import cmc.mellyserver.domain.memory.query.MemoryQueryRepository;
 import cmc.mellyserver.domain.place.query.PlaceQueryRepository;
 import cmc.mellyserver.domain.scrap.query.PlaceScrapQueryRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.persistence.EntityManager;
 
 
 @EnableJpaRepositories(basePackageClasses = {
@@ -39,27 +38,27 @@ import javax.persistence.EntityManager;
 public class JpaTestConfig {
 
     @Bean
-    public PlaceScrapQueryRepository placeScrapQueryRepository(EntityManager entityManager) {
-        return new PlaceScrapQueryRepository(entityManager);
+    public PlaceScrapQueryRepository placeScrapQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new PlaceScrapQueryRepository(jpaQueryFactory);
     }
 
     @Bean
-    public PlaceQueryRepository placeQueryRepository(EntityManager entityManager) {
-        return new PlaceQueryRepository(entityManager);
+    public PlaceQueryRepository placeQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new PlaceQueryRepository(jpaQueryFactory);
     }
 
     @Bean
-    public MemoryQueryRepository memoryQueryRepository(EntityManager entityManager) {
-        return new MemoryQueryRepository(entityManager);
+    public MemoryQueryRepository memoryQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new MemoryQueryRepository(jpaQueryFactory);
     }
 
     @Bean
-    public CommentQueryRepository commentQueryRepository(EntityManager entityManager) {
-        return new CommentQueryRepository(entityManager);
+    public CommentQueryRepository commentQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new CommentQueryRepository(jpaQueryFactory);
     }
 
     @Bean
-    public UserGroupQueryRepository userGroupQueryRepository(EntityManager entityManager) {
-        return new UserGroupQueryRepository(entityManager);
+    public UserGroupQueryRepository userGroupQueryRepository(JPAQueryFactory jpaQueryFactory) {
+        return new UserGroupQueryRepository(jpaQueryFactory);
     }
 }

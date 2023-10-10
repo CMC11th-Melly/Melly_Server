@@ -41,7 +41,7 @@ public class UserProfileServiceTest extends IntegrationTest {
         GivenBuilder 모카 = 모카();
 
         // when & then
-        ProfileResponseDto userProfile = userProfileService.getUserProfile(모카.회원().getId());
+        ProfileResponseDto userProfile = userProfileService.getProfile(모카.회원().getId());
 
         assertThat(userProfile.getUserId()).isEqualTo(모카.회원().getId());
         assertThat(userProfile.getNickname()).isEqualTo("모카");
@@ -58,7 +58,7 @@ public class UserProfileServiceTest extends IntegrationTest {
 
 
         // when
-        userProfileService.updateUserProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()));
+        userProfileService.updateProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()));
 
         // then
         User user = userRepository.findById(savedUser.getId()).get();
@@ -74,7 +74,7 @@ public class UserProfileServiceTest extends IntegrationTest {
         GivenBuilder 모카 = 모카();
 
         // when
-        userProfileService.updateUserProfileImage(모카.회원().getId(), null);
+        userProfileService.updateProfile(모카.회원().getId(), null);
 
         // then
         User updatedUser = userRepository.getById(모카.회원().getId());
@@ -90,7 +90,7 @@ public class UserProfileServiceTest extends IntegrationTest {
         GivenBuilder 모카 = 모카();
 
         // when
-        userProfileService.updateUserProfile(모카.회원().getId(), 모카_프로필_수정_요청);
+        userProfileService.updateProfile(모카.회원().getId(), 모카_프로필_수정_요청);
 
         // then
         User updatedUser = userRepository.getById(모카.회원().getId());

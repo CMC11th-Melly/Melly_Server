@@ -53,7 +53,7 @@ public class GroupController {
     @DeleteMapping("/{groupId}")
     public ResponseEntity<ApiResponse<Void>> deleteGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
 
-        groupService.removeGroup(loginUser.getId(), groupId);
+        groupService.removeGroup(groupId);
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 

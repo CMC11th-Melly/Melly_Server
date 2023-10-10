@@ -1,10 +1,11 @@
 package cmc.mellyserver.controller.scrap;
 
+import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.scrap.dto.ScrapAssembler;
 import cmc.mellyserver.controller.scrap.dto.request.ScrapCancelRequest;
 import cmc.mellyserver.controller.scrap.dto.request.ScrapRequest;
+import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class PlaceScrapController {
     @DeleteMapping("/place/scrap")
     public ResponseEntity<ApiResponse<Void>> removeScrap(@AuthenticationPrincipal User user, @RequestBody ScrapCancelRequest scrapCancelRequest) {
 
-        scrapService.removeScrap(Long.parseLong(user.getUsername()), scrapCancelRequest.getLat(), scrapCancelRequest.getLng());
+        scrapService.removeScrap(Long.parseLong(user.getUsername()), new Position(scrapCancelRequest.getLat(), scrapCancelRequest.getLng()));
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 }
