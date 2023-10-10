@@ -2,7 +2,7 @@ dependencies {
 
     // OpenFeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation 'io.github.openfeign:feign-hc5'
+    implementation 'io.github.openfeign:feign-hc5' // HttpClient5를 통신 클라이언트로 사용합니다.
     implementation 'io.github.openfeign:feign-micrometer'
 
     // Fault Tolerance

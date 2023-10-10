@@ -1,4 +1,4 @@
-package cmc.mellyserver.clientauth.dto;
+package cmc.mellyserver.clientauth.model;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AppleUserData {
+public class AppleResource {
 
     private List<Key> keys;
 

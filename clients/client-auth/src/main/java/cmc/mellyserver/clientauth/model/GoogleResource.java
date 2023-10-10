@@ -1,4 +1,4 @@
-package cmc.mellyserver.clientauth.dto;
+package cmc.mellyserver.clientauth.model;
 
 import cmc.mellyserver.clientauth.api.LoginClientResult;
 import lombok.AccessLevel;
@@ -6,20 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class KakaoUserData {
+public class GoogleResource {
 
-    private Long id;
+    private String sub;
 
-    private Object kakao_account;
+    private String email;
 
-    private LocalDateTime connected_at;
+    private Boolean email_verified;
 
     public LoginClientResult toResult() {
-        return new LoginClientResult(String.valueOf(id), "kakao");
+        return new LoginClientResult(sub, "google");
     }
 }

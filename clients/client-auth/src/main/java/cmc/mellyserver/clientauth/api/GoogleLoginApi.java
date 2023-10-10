@@ -1,6 +1,6 @@
 package cmc.mellyserver.clientauth.api;
 
-import cmc.mellyserver.clientauth.dto.GoogleUserData;
+import cmc.mellyserver.clientauth.model.GoogleResource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ interface GoogleLoginApi {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    GoogleUserData call(
+    GoogleResource call(
             @RequestParam(value = "id_token") String accessToken
     );
 }

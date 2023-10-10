@@ -10,40 +10,38 @@ spring.cloud.openfeign:
   client:
     config:
       default:
-        connectTimeout: 1000
-        readTimeout: 2000
+        connectTimeout: 1000 # 3-way handshake 과정에서 발생하는 타임아웃을 제한합니다.
+        readTimeout: 2000 # 커넥션 연결 후, 실제 데이터 송/수신할때 발생하는 타임아웃을 제한합니다.
         loggerLevel: full
 
   httpclient:
-    max-connections: 2000 # 전체 커넥션 수를 나타낸다
-    max-connections-per-route: 500 # Route당 할당되는 최대 커넥션 수를 나타낸다
+    max-connections: 2000 # 전체 커넥션 수를 나타냅니다.
+    max-connections-per-route: 500 # route당 할당되는 최대 커넥션 수를 나타냅니다.
 
   circuitbreaker:
-    enabled: true
+    enabled: true # OpenFeign에 CircuitBreaker를 적용합니다.
 
 resilience4j.circuitbreaker:
   configs:
     default:
       slidingWindowType: COUNT_BASED
-      minimumNumberOfCalls: 7
-      slidingWindowSize: 10
-      waitDurationInOpenState: 10s
+      minimumNumberOfCalls: 7 # Circuit Open 여부를 판단하기 위해 실행해야 하는 최소 요청 횟수입니다.
+      slidingWindowSize: 10 # 슬라이딩 윈도우의 크기입니다.
+      waitDurationInOpenState: 10s # Circuit이 Open 상태에 머무는 시간입니다.
 
-      failureRateThreshold: 80
+      failureRateThreshold: 80 # 슬라이딩 윈도우 내에서 몇 %이상되면 Circuit을 Open할지 결정하는 비율입니다.
 
-      slowCallDurationThreshold: 3000
-      slowCallRateThreshold: 80
+      slowCallDurationThreshold: 3000 # 몇초동안 요청이 지속되면 슬로우 콜로 판별하는지 기준입니다.
+      slowCallRateThreshold: 80 # 슬라이딩 윈도우 내 요청 중 몇 %이상 슬로우 콜이 발생하면 Circuit을 Open할지 결정하는 비율입니다.
 
-      permittedNumberOfCallsInHalfOpenState: 5
-      automaticTransitionFromOpenToHalfOpenEnabled: true
+      permittedNumberOfCallsInHalfOpenState: 5 # Half Open 상태에서 상태 변화를 위해 테스트 해보는 요청 횟수입니다.
+      automaticTransitionFromOpenToHalfOpenEnabled: true # Half Open으로 자동으로 변경시킬지를 판별합니다.
 
-      eventConsumerBufferSize: 10
-
-      recordFailurePredicate: cmc.mellyserver.clientauth.DefaultExceptionRecordFailurePredicate
+      eventConsumerBufferSize: 10 # Actuator에서 CircuitBreaker 상태를 보여줄때 이벤트를 몇개까지 버퍼에 쌓을지 결정합니다.
 
   instances:
-    default:
-      baseConfig: default
+    default: # Circuit Breaker 인스턴스명입니다.
+      baseConfig: default # 어떤 설정을 사용할지 결정합니다. 상단의 default config를 그대로 적용합니다.
 
 resilience4j.timelimiter:
   configs:

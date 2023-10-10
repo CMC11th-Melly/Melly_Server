@@ -4,6 +4,8 @@ import cmc.mellyserver.clientauth.LoginClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static cmc.mellyserver.clientauth.api.Provider.GOOGLE;
+
 
 @Component
 @RequiredArgsConstructor
@@ -13,7 +15,7 @@ public class GoogleClient implements LoginClient {
 
     @Override
     public boolean supports(String provider) {
-        return provider == "google";
+        return provider.equals(GOOGLE);
     }
 
     @Override

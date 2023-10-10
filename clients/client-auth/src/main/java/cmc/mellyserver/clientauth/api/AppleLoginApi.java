@@ -1,7 +1,7 @@
 package cmc.mellyserver.clientauth.api;
 
 
-import cmc.mellyserver.clientauth.dto.AppleUserData;
+import cmc.mellyserver.clientauth.model.AppleResource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +14,6 @@ interface AppleLoginApi {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    AppleUserData call();
+    AppleResource call();
 }
 

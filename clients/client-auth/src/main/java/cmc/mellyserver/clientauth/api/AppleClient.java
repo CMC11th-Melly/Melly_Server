@@ -1,14 +1,11 @@
 package cmc.mellyserver.clientauth.api;
 
-
 import cmc.mellyserver.clientauth.LoginClient;
-import cmc.mellyserver.clientauth.dto.AppleUserData;
+import cmc.mellyserver.clientauth.model.AppleResource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +19,8 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
+import static cmc.mellyserver.clientauth.api.Provider.APPLE;
+
 
 @Component
 @RequiredArgsConstructor
@@ -31,26 +30,18 @@ public class AppleClient implements LoginClient {
 
     @Override
     public boolean supports(String provider) {
-        return provider == "apple";
+        return provider.equals(APPLE);
     }
 
     @Override
     public LoginClientResult getUserData(String accessToken) {
 
-        AppleUserData response = appleLoginApi.call();
+        AppleResource response = appleLoginApi.call();
 
         try {
             Claims body = extractClaims(accessToken, response);
-            return new LoginClientResult(body.getSubject(), "apple");
+            return new LoginClientResult(body.getSubject(), APPLE);
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (MalformedJwtException e) {
-            e.printStackTrace();
-        } catch (ExpiredJwtException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,14 +49,14 @@ public class AppleClient implements LoginClient {
         return null;
     }
 
-    private Claims extractClaims(String accessToken, AppleUserData response) throws JsonProcessingException, UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private Claims extractClaims(String accessToken, AppleResource response) throws JsonProcessingException, UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
         String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
         Map<String, String> header = new ObjectMapper().readValue(
                 new String(Base64.getDecoder().decode(headerOfIdentityToken),
                         "UTF-8"), Map.class);
 
-        AppleUserData.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
+        AppleResource.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
                 .orElseThrow(() -> new IllegalAccessException());
 
         byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
@@ -78,7 +69,6 @@ public class AppleClient implements LoginClient {
         KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
         PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-        Claims body = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
-        return body;
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
     }
 }

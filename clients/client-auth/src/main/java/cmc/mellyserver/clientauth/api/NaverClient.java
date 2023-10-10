@@ -5,6 +5,8 @@ import cmc.mellyserver.clientauth.LoginClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static cmc.mellyserver.clientauth.api.Provider.NAVER;
+
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +16,7 @@ public class NaverClient implements LoginClient {
 
     @Override
     public boolean supports(String provider) {
-        return provider == "naver";
+        return provider.equals(NAVER);
     }
 
     @Override

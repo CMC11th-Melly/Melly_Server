@@ -1,7 +1,7 @@
 package cmc.mellyserver.clientauth.api;
 
 
-import cmc.mellyserver.clientauth.dto.KakaoUserData;
+import cmc.mellyserver.clientauth.model.KakaoResource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ interface KakaoLoginApi {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    KakaoUserData call(
+    KakaoResource call(
             @RequestHeader(value = "Authorization") String accessToken
     );
 }

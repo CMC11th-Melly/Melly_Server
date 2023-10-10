@@ -1,4 +1,4 @@
-package cmc.mellyserver.clientauth.dto;
+package cmc.mellyserver.clientauth.model;
 
 import cmc.mellyserver.clientauth.api.LoginClientResult;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NaverUserData {
+public class NaverResource {
 
     private String resultcode;
 
