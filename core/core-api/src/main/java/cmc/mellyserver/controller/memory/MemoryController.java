@@ -1,8 +1,8 @@
 package cmc.mellyserver.controller.memory;
 
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.common.code.SuccessCode;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.request.MemoryCreateRequest;
 import cmc.mellyserver.controller.memory.dto.request.MemoryUpdateRequest;

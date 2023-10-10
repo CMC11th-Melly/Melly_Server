@@ -1,5 +1,8 @@
 package cmc.mellyserver.controller.comment;
 
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.comment.dto.CommentAssembler;
 import cmc.mellyserver.controller.comment.dto.request.CommentRequest;
 import cmc.mellyserver.controller.comment.dto.request.CommentUpdateRequest;
@@ -7,9 +10,6 @@ import cmc.mellyserver.controller.comment.dto.request.LikeRequest;
 import cmc.mellyserver.domain.comment.CommentLikeService;
 import cmc.mellyserver.domain.comment.CommentService;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
-import cmc.mellyserver.common.code.SuccessCode;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

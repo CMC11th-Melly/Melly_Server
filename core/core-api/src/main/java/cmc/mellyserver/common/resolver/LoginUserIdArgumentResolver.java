@@ -1,9 +1,9 @@
 package cmc.mellyserver.common.resolver;
 
-import cmc.mellyserver.common.token.TokenProvider;
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.auth.token.TokenProvider;
 import cmc.mellyserver.common.util.HeaderUtil;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

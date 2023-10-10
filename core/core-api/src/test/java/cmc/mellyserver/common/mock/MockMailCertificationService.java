@@ -1,7 +1,7 @@
 package cmc.mellyserver.common.mock;
 
-import cmc.mellyserver.domain.auth.certification.CertificationService;
-import cmc.mellyserver.domain.auth.certification.EmailCertificationRequest;
+import cmc.mellyserver.auth.certification.CertificationService;
+import cmc.mellyserver.auth.certification.EmailCertificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

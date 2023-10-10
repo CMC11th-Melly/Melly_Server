@@ -1,8 +1,8 @@
 package cmc.mellyserver.controller.user;
 
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.common.code.SuccessCode;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.controller.user.dto.UserAssembler;
 import cmc.mellyserver.controller.user.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.controller.user.dto.response.PlaceScrapCountResponse;

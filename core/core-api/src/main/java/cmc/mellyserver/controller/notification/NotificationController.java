@@ -1,13 +1,13 @@
 package cmc.mellyserver.controller.notification;
 
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.notification.dto.request.NotificationCheckRequest;
 import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import cmc.mellyserver.domain.notification.NotificationService;
 import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffResponseDto;
-import cmc.mellyserver.common.code.SuccessCode;
-import cmc.mellyserver.controller.auth.dto.common.CurrentUser;
-import cmc.mellyserver.controller.auth.dto.common.LoginUser;
 import cmc.mellyserver.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
