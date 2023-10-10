@@ -5,7 +5,7 @@ dependencies {
     implementation 'io.github.openfeign:feign-hc5'
     implementation 'io.github.openfeign:feign-micrometer'
 
-    // Resilience4j
+    // Fault Tolerance
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 
     // JWT
