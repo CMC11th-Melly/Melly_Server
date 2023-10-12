@@ -1,6 +1,12 @@
 dependencies {
 
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    /**
+     db-core 모듈에는 MySQL 드라이버와 H2 드라이버 의존성이 RuntimeOnly로 추가됩니다.
+     DB 드라이버의 경우 컴파일 타임에는 내 코드 상에서 직접적으로 Import 해서 사용하지 않기 때문에 Implementation으로 의존성을 받을 필요는 없습니다.
+     하지만 빌드 결과물에는 포함이 되야 런타임에서 사용이 가능하기 때문에 runtimeOnly로 드라이버 2개를 포함했습니다.
+     */
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'com.h2database:h2'
 }
