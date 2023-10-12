@@ -15,20 +15,24 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
 
-    /**
-     QueryDSL은 뷰에 특화된 쿼리를 만들어 낼 수 있습니다.
-     따라서 외부 클라이언트(모바일, 웹)과 통신하는 External-API 모듈이나 어드민을 위한 Admin-API 모듈에서 주로 사용된다고 생각합니다.
-     Boot 모듈 중에는 복잡한 쿼리가 필요없고 QueryDSL을 사용하지 않는 모듈도 차후 추가될 수 있다고 생각합니다.
-     Storage 모듈은 모든 Boot 모듈에서 사용되는 공통 모듈입니다.
-     따라서 Boot 모듈에서 선택적으로 QueryDSL을 적용할 수 있도록 storage:db-core 모듈이 아닌 Boot 모듈인 core-api에 QueryDSL 설정을 추가했습니다.
+    /*
+    QueryDSL은 뷰에 특화된 쿼리를 만들어 낼 수 있습니다.
+    따라서 외부 클라이언트(모바일, 웹)과 통신하는 External-API 모듈이나 어드민을 위한 Admin-API 모듈에서 주로 사용된다고 생각합니다.
+    Boot 모듈 중에는 복잡한 쿼리가 필요없고 QueryDSL을 사용하지 않는 모듈도 차후 추가될 수 있다고 생각합니다.
+    Storage 모듈은 모든 Boot 모듈에서 사용되는 공통 모듈입니다.
+    따라서 Boot 모듈에서 선택적으로 QueryDSL을 적용할 수 있도록 storage:db-core 모듈이 아닌 Boot 모듈인 core-api에 QueryDSL 설정을 추가했습니다.
      */
     implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-    // Fault Tolerance
-    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
+    /*
+    현재 Melly 프로젝트의 clients:client-auth 모듈에서 OpenFeign을 위한 Circuit Breaker를 위해 Resilience4j 라이브러리를 implementation으로 사용하고 있습니다.
+    core-api 모듈에서 client-auth 모듈을 의존하고 있기에 core-api의 compile classpath에 resilence4j가 들어오지는 않지만 runtime에는 사용이 가능합니다.
+    따라서 core-api 모듈에서는 중복으로 implementation을 하지 않고 compileOnly로 compile classpath에만 의존성을 추가했습니다.
+     */
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
 
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
