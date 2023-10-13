@@ -11,8 +11,7 @@ public class AsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
 
     @Override
     public void handleUncaughtException(Throwable e, Method method, Object... params) {
-
-
+        log.error(e.getMessage());
     }
 
 }

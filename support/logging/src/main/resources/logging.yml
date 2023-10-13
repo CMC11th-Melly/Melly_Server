@@ -1,5 +1,5 @@
 logging:
-  config: classpath:logback/logback-${spring.profiles.active}.xml
+  config: classpath:logback/logback-${spring.profiles.active}.xml # Profile별로 다른 logback.xml 파일을 사용합니다.
   level:
     com:
       amazonaws:

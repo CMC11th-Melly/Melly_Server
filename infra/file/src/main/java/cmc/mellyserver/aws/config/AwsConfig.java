@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile(value = {"local", "prod"})
-public class AwsConfig {
+class AwsConfig {
 
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;

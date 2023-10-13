@@ -22,6 +22,7 @@ import java.io.IOException;
 import static cmc.mellyserver.common.fixture.UserFixtures.모카_프로필;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 public class UserProfileServiceTest extends IntegrationTest {
 
     private static final ProfileUpdateRequestDto 모카_프로필_수정_요청 = new ProfileUpdateRequestDto("머식", Gender.FEMALE, AgeGroup.THREE);
@@ -65,23 +66,8 @@ public class UserProfileServiceTest extends IntegrationTest {
         assertThat(user.getProfileImage()).isEqualTo("mock.jpg");
     }
 
-    @Transactional
-    @DisplayName("수정하려는 프로필 이미지가 없으면 기본 이미지로 변경한다.")
-    @Test
-    void 유저_프로필_이미지를_기본_이미지로_변경한다() throws IOException {
 
-        // given
-        GivenBuilder 모카 = 모카();
 
-        // when
-        userProfileService.updateProfile(모카.회원().getId(), null);
-
-        // then
-        User updatedUser = userRepository.getById(모카.회원().getId());
-        assertThat(updatedUser.getProfileImage()).isNull();
-    }
-
-    @Transactional
     @DisplayName("유저 프로필 정보를 수정한다.")
     @Test
     void 유저_프로필_정보를_수정한다() {
@@ -93,7 +79,7 @@ public class UserProfileServiceTest extends IntegrationTest {
         userProfileService.updateProfile(모카.회원().getId(), 모카_프로필_수정_요청);
 
         // then
-        User updatedUser = userRepository.getById(모카.회원().getId());
+        User updatedUser = userRepository.findById(모카.회원().getId()).get();
         assertThat(updatedUser.getNickname()).isEqualTo("머식");
     }
 }

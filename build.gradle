@@ -3,10 +3,9 @@ plugins {
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
     id 'io.spring.javaformat' apply(false)
-    id 'org.asciidoctor.jvm.convert' apply(false)
 }
 
-apply from: 'lint.gradle'
+//apply from: 'lint.gradle'
 
 allprojects {
     group = "${projectGroup}"
@@ -22,7 +21,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'org.asciidoctor.jvm.convert'
+
 
 
     dependencyManagement {
@@ -50,43 +49,6 @@ subprojects {
     bootJar.enabled = false
     jar.enabled = true
 
-    test {
-        useJUnitPlatform {
-            excludeTags('develop', 'restdocs')
-        }
-    }
-
-    tasks.register('unitTest', Test) {
-        group = 'verification'
-        useJUnitPlatform {
-            excludeTags('develop', 'context', 'restdocs')
-        }
-    }
-
-    tasks.register('contextTest', Test) {
-        group = 'verification'
-        useJUnitPlatform {
-            includeTags('context')
-        }
-    }
-
-    tasks.register('restDocsTest', Test) {
-        group = 'verification'
-        useJUnitPlatform {
-            includeTags('restdocs')
-        }
-    }
-
-    tasks.register('developTest', Test) {
-        group = 'verification'
-        useJUnitPlatform {
-            includeTags('develop')
-        }
-    }
-
-    tasks.named('asciidoctor') {
-        dependsOn restDocsTest
-    }
 }
 
 // Sub-Module 적용
@@ -97,3 +59,4 @@ task copyPrivate(type: Copy) {
         into 'core/core-api/src/main/resources'
     }
 }
+

@@ -21,14 +21,9 @@ public class DistributedLockAop {
 
     private static final String REDISSON_LOCK_PREFIX = "LOCK:";
 
-    // TODO : 락을 구현하는 방법은 여러가지가 사용 가능하다. 이 부분 추상화 필요!
     private final RedissonClient redissonClient;
 
 
-    /*
-    반환값이 Object인 이유 : @DistributedLock 어노테이션이 어떤 메서드에 사용될지 미리 예상할 수 없다.
-                         void가 될수도 있고, String이 반환될 수도 있는 것이기에 Object형을 통해 응답을 받도록 구성함
-     */
     @Around("@annotation(cmc.mellyserver.common.aop.lock.annotation.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 

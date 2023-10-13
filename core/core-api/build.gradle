@@ -1,5 +1,16 @@
+plugins {
+    id 'org.asciidoctor.jvm.convert' version '3.3.2' // Rest Docs는 API 문서화 & 테스트로만 필요합니다. 따라서 core-api 모듈에서만 플러그인을 사용하도록 만들었습니다.
+}
+
 bootJar.enabled = true
 jar.enabled = false
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExt
+}
 
 dependencies {
 
@@ -10,7 +21,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    // 해당 라이브러리 또한 client-auth에서 implementation으로 사용 중이기에 compileOnly로 변경했습니다.
+    compileOnly 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
@@ -34,8 +46,13 @@ dependencies {
      */
     compileOnly 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
 
+    
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // Rest Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
 
 
     // Multi Module
@@ -46,6 +63,40 @@ dependencies {
     implementation project(":support:logging")
     implementation project(":clients:client-auth")
     testImplementation project(":test:api-docs")
+
 }
 
+
+ext {
+    snippetsDir = file('build/generated-snippets') // 해당 경로에 adoc 조각들을 모읍니다.
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    outputs.dir snippetsDir // test의 결과물을 snippetsDir로 모읍니다.
+}
+
+asciidoctor { // asciidoctor 작업 구성입니다.
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+// refresh를 위해 static/docs 폴더를 비웁니다.
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+        from("${asciidoctor.outputDir}") // build/docs/asciidoc 경로에 만들어지는 결과물을 static/docs로 복사합니다.
+        into 'src/main/resources/static/docs'
+
+}
+
+build {
+    dependsOn copyDocument
+}
 

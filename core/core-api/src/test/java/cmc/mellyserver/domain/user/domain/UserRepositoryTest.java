@@ -13,21 +13,22 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static cmc.mellyserver.common.fixture.UserFixtures.모카;
-import static cmc.mellyserver.common.fixture.UserFixtures.모카_이메일;
 import static cmc.mellyserver.common.constants.UserPolicy.INACTIVE_USER_DURATION;
 import static cmc.mellyserver.common.constants.UserPolicy.PASSWORD_CHANGE_DURATION;
+import static cmc.mellyserver.common.fixture.UserFixtures.모카;
+import static cmc.mellyserver.common.fixture.UserFixtures.모카_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
+@Transactional
 public class UserRepositoryTest extends RepositoryTest {
 
-    private static final LocalDateTime 현재_시간 = LocalDateTime.of(2023, 8, 8, 0, 0);
+    private static final LocalDateTime 현재_시간 = LocalDateTime.of(2023, 10, 8, 0, 0);
 
     @Autowired
     private UserRepository userRepository;
@@ -81,7 +82,7 @@ public class UserRepositoryTest extends RepositoryTest {
 
         // givne
         User 모카 = User.builder().nickname("모카").build();
-        모카.updateLastLoginTime(LocalDateTime.of(2023, 7, 1, 0, 0));
+        모카.updateLastLoginTime(LocalDateTime.of(2023, 8, 1, 0, 0));
 
         userRepository.save(모카);
 
@@ -102,7 +103,7 @@ public class UserRepositoryTest extends RepositoryTest {
         User 모카 = User.builder().nickname("모카").provider(Provider.DEFAULT).build();
 
         User savedUser = userRepository.save(모카);
-        savedUser.changePwInitDate(LocalDateTime.of(2023, 1, 1, 0, 0));
+        savedUser.changePwInitDate(LocalDateTime.of(2022, 1, 1, 0, 0));
 
         // when
         List<User> result = userRepository.findByPwInitDateTimeBeforeAndPasswordExpiredEquals(

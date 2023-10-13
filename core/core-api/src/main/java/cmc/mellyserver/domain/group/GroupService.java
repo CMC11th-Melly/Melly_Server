@@ -71,8 +71,8 @@ public class GroupService {
     }
 
 
-    @CachePut(value = "group:group-id", key = "#groupId")
-    @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 2L)
+
+    @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 3L)
     @OptimisticLock
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {

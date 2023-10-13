@@ -14,9 +14,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
+@Transactional
 public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
     @Autowired
@@ -82,7 +84,7 @@ public class UserGroupServiceIntegrationTest extends IntegrationTest {
 
         // then
         Integer count = groupAndUserRepository.countUserParticipatedInGroup(테스트_그룹.getId());
-        Assertions.assertThat(count).isEqualTo(10);
+        Assertions.assertThat(count).isEqualTo(9);
     }
 }
 

@@ -39,11 +39,11 @@ public class UserController {
 
     private final UserProfileService userProfileService;
 
-    private final MemoryReadService memoryService;
+    private final MemoryReadService memoryReadService;
 
     private final GroupService groupService;
 
-
+    // 내 프로필 조회
     @GetMapping("/my-profile")
     public ResponseEntity<ApiResponse<ProfileResponse>> getUserProfile(@CurrentUser LoginUser loginUser) {
 
@@ -52,7 +52,7 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto, volume));
     }
 
-
+    // 내 프로필 수정
     @PatchMapping("/my-profile")
     public ResponseEntity<ApiResponse<Void>> updateProfile(@CurrentUser LoginUser loginUser, @Valid @RequestBody ProfileUpdateRequest profileUpdateRequest) {
 
@@ -60,6 +60,7 @@ public class UserController {
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
+    // 내 프로필 이미지 수정
     @PatchMapping("/my-profile/profile-image")
     public ResponseEntity<ApiResponse<Void>> updateProfileImage(@CurrentUser LoginUser loginUser, MultipartFile profileImage) throws IOException {
 
@@ -67,18 +68,18 @@ public class UserController {
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 
-
+    // 내가 작성한 메모리 조회
     @GetMapping("/my-memories")
     public ResponseEntity<ApiResponse<MemoryListResponse>> getUserMemory(@CurrentUser LoginUser loginUser,
                                                                          @RequestParam(required = false) Long lastId,
                                                                          @PageableDefault(size = 10) Pageable pageable,
                                                                          @RequestParam(required = false) String groupType) {
 
-        MemoryListResponse memoryListResponse = memoryService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), GroupType.from(groupType));
+        MemoryListResponse memoryListResponse = memoryReadService.findMemoriesLoginUserWrite(lastId, pageable, loginUser.getId(), GroupType.from(groupType));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
     }
 
-
+    // 내가 포함된 그룹 조회
     @GetMapping("/my-groups")
     public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getUserGroup(@CurrentUser LoginUser loginUser,
                                                                                             @RequestParam(name = "lastId", required = false) Long lastId,
@@ -88,19 +89,19 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
     }
 
-
-    @GetMapping("/my-groups/{groupId}/memorys")
+    // 내 그룹이 작성한 메모리 조회
+    @GetMapping("/my-groups/{groupId}/memories")
     public ResponseEntity<ApiResponse<MemoryListResponse>> getMemoryBelongToMyGroup(@CurrentUser LoginUser loginUser,
                                                                                     @RequestParam(name = "lastId", required = false) Long lastId,
                                                                                     @PageableDefault(size = 10) Pageable pageable,
                                                                                     @PathVariable Long groupId,
                                                                                     @RequestParam(required = false) String groupType) {
 
-        MemoryListResponse memoryListResponse = memoryService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, loginUser.getId(), GroupType.from(groupType));
+        MemoryListResponse memoryListResponse = memoryReadService.findMemoriesUsersBelongToMyGroupWrite(lastId, pageable, groupId, loginUser.getId(), GroupType.from(groupType));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
     }
 
-
+    // 내가 스크랩한 장소 스크랩 타입별 개수 조회
     @GetMapping("/place-scraps/count")
     public ResponseEntity<ApiResponse<List<PlaceScrapCountResponse>>> getPlaceUserScrapCount(@CurrentUser LoginUser loginUser) {
 
@@ -108,7 +109,7 @@ public class UserController {
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, UserAssembler.placeScrapCountResponses(results));
     }
 
-
+    // 내가 스크랩한 장소 조회
     @GetMapping("/place-scraps")
     public ResponseEntity<ApiResponse<ScrapedPlaceListResponse>> getPlaceUserScrap(@CurrentUser LoginUser loginUser,
                                                                                    @RequestParam(required = false) Long lastId,
