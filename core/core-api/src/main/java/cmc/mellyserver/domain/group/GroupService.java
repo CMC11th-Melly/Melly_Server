@@ -2,7 +2,6 @@ package cmc.mellyserver.domain.group;
 
 
 import cmc.mellyserver.common.aop.lock.annotation.DistributedLock;
-import cmc.mellyserver.common.aop.lock.annotation.OptimisticLock;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.user.User;
@@ -14,6 +13,7 @@ import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponse
 import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,6 +28,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupService {
 
@@ -45,7 +46,6 @@ public class GroupService {
 
 
     @Cacheable(value = "group:group-id", key = "#groupId")
-    @Transactional(readOnly = true)
     public GroupDetailResponseDto getGroupDetail(final Long groupId) {
 
         UserGroup userGroup = groupReader.findById(groupId);
@@ -53,8 +53,7 @@ public class GroupService {
         return GroupDetailResponseDto.of(userGroup, groupMembers);
     }
 
-
-    @Transactional(readOnly = true)
+    
     public GroupListLoginUserParticipatedResponse findGroupListLoginUserParticiated(final Long userId, final Long groupId, final Pageable pageable) {
 
         Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = groupReader.groupListLoginUserParticipate(userId, groupId, pageable);
@@ -71,9 +70,8 @@ public class GroupService {
     }
 
 
-
+    @Retry(name = "optimisticLock", fallbackMethod = "optimisticFallback")
     @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 3L)
-    @OptimisticLock
     @Transactional
     public void participateToGroup(final Long userId, final Long groupId) {
 
@@ -86,9 +84,13 @@ public class GroupService {
         groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
     }
 
+    public void optimisticFallback(Long userId, Long groupId)
+    {
+        throw new IllegalArgumentException("낙관적 락 실패");
+    }
+
 
     @CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
-    @OptimisticLock
     @Transactional
     public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 

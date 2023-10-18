@@ -6,7 +6,7 @@ import cmc.mellyserver.dbcore.user.enums.Provider;
 import cmc.mellyserver.dbcore.user.enums.RoleType;
 import cmc.mellyserver.dbcore.user.enums.UserStatus;
 
-public class UserFixtures {
+public abstract class UserFixtures {
 
     /* 모카 */
     public static final String 모카_이메일 = "mocha@naver.com";

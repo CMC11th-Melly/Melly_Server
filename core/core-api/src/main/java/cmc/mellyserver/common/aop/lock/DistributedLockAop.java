@@ -47,12 +47,13 @@ public class DistributedLockAop {
         try {
 
             /*
-            1. 락 사용이 가능하다면 available을 true로 반환
-            2. 락 사용이 불가능하다면 기존 사용자가 unlock 할때까지 대기
+            tryLock 메서드에 진입한 쓰레드는 락을 획득할 수 있을때까지 대기하게 됩니다.
+            Pub/Sub 기반으로 동작하며, 락을 가지고 있는 쓰레드가 락을 해제하면 해당 소식을 publish하게 되고, subscribe 하고 있던 쓰레드 중 하나가 락을 획득합니다.
+            이 방식의 장점은 스핀락 방식을 사용하지 않기 때문에 Redis로 가는 부하가 적다는 장점이 있습니다.
              */
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
 
-            if (!available) { // 끝까지 락 획득 못했으면 예외 발생
+            if (!available) {
                 throw new IllegalArgumentException("락 획득 실패로 로직 실행에 실패했습니다");
             }
 
@@ -60,7 +61,6 @@ public class DistributedLockAop {
 
         } catch (InterruptedException e) {
             throw new InterruptedException();
-
         } finally {
             try {
                 rLock.unlock();

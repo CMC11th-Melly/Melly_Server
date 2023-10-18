@@ -20,6 +20,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+
     // JWT
     // 해당 라이브러리 또한 client-auth에서 implementation으로 사용 중이기에 compileOnly로 변경했습니다.
     compileOnly 'io.jsonwebtoken:jjwt-api:0.11.2'
@@ -39,6 +40,7 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+
     /*
     현재 Melly 프로젝트의 clients:client-auth 모듈에서 OpenFeign을 위한 Circuit Breaker를 위해 Resilience4j 라이브러리를 implementation으로 사용하고 있습니다.
     core-api 모듈에서 client-auth 모듈을 의존하고 있기에 core-api의 compile classpath에 resilence4j가 들어오지는 않지만 runtime에는 사용이 가능합니다.
@@ -46,13 +48,13 @@ dependencies {
      */
     compileOnly 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
 
-    
+
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
 
+
     // Rest Docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-
 
 
     // Multi Module
@@ -66,6 +68,9 @@ dependencies {
 
 }
 
+
+
+// ===== Rest Docs Config =====
 
 ext {
     snippetsDir = file('build/generated-snippets') // 해당 경로에 adoc 조각들을 모읍니다.

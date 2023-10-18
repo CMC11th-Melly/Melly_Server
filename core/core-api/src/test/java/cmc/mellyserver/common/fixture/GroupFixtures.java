@@ -4,7 +4,7 @@ package cmc.mellyserver.common.fixture;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 
-public class GroupFixtures {
+public abstract class GroupFixtures {
 
     private static final String 그룹_이름 = "학교 동기들";
 

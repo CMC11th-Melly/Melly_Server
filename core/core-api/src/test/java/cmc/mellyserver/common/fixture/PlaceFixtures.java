@@ -4,7 +4,7 @@ package cmc.mellyserver.common.fixture;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 
-public class PlaceFixtures {
+public abstract class PlaceFixtures {
 
     private static final String 장소_이름 = "스타벅스";
 

@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemoryWriteService {
 
-
     private final PlaceReader placeReader;
 
     private final MemoryReader memoryReader;
