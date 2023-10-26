@@ -9,12 +9,14 @@ import java.util.List;
 @Data
 public class SurveyRecommendResponse {
 
-    private Position position;
-    private List<String> words;
+	private Position position;
 
-    @Builder
-    public SurveyRecommendResponse(Position position, List<String> words) {
-        this.position = position;
-        this.words = words;
-    }
+	private List<String> words;
+
+	@Builder
+	public SurveyRecommendResponse(Position position, List<String> words) {
+		this.position = position;
+		this.words = words;
+	}
+
 }

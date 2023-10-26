@@ -29,180 +29,182 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
-    private final UserWriter userWriter;
+	private final UserWriter userWriter;
 
-    private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-    private final TokenProvider tokenProvider;
+	private final TokenProvider tokenProvider;
 
-    private final AuthTokenRepository tokenRepository;
+	private final AuthTokenRepository tokenRepository;
 
-    private final FcmTokenRepository fcmTokenRepository;
+	private final FcmTokenRepository fcmTokenRepository;
 
-    private final ApplicationEventPublisher publisher;
+	private final ApplicationEventPublisher publisher;
 
-    @Transactional
-    public TokenResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
+	@Transactional
+	public TokenResponseDto signup(AuthSignupRequestDto authSignupRequestDto) {
 
-        checkDuplicatedEmail(authSignupRequestDto);
-        User savedUser = userWriter.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(), passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
-                authSignupRequestDto.getAgeGroup(),
-                authSignupRequestDto.getGender()));
+		checkDuplicatedEmail(authSignupRequestDto);
+		User savedUser = userWriter.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(),
+				passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
+				authSignupRequestDto.getAgeGroup(), authSignupRequestDto.getGender()));
 
-        savedUser.updateLastLoginTime(LocalDateTime.now());
+		savedUser.updateLastLoginTime(LocalDateTime.now());
 
-        String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType());
-        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType());
+		String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType());
+		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType());
 
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()), refreshToken.getExpiredAt());
-        fcmTokenRepository.saveToken(savedUser.getId().toString(), authSignupRequestDto.getFcmToken());
+		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()),
+				refreshToken.getExpiredAt());
+		fcmTokenRepository.saveToken(savedUser.getId().toString(), authSignupRequestDto.getFcmToken());
 
-        publisher.publishEvent(new SignupCompletedEvent(savedUser.getId()));
+		publisher.publishEvent(new SignupCompletedEvent(savedUser.getId()));
 
-        return TokenResponseDto.of(accessToken, refreshToken.getToken());
-    }
+		return TokenResponseDto.of(accessToken, refreshToken.getToken());
+	}
 
-    /**
-     * 로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
-     * <p>
-     * 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
-     * <p>
-     * 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
-     * <p>
-     * 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
-     * <p>
-     * 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
-     */
-    @Transactional
-    public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
+	/**
+	 * 로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
+	 * <p>
+	 * 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
+	 * <p>
+	 * 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화
+	 * 강도 조절
+	 * <p>
+	 * 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O
+	 * 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
+	 * <p>
+	 * 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
+	 */
+	@Transactional
+	public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
-        User user = checkEmail(authLoginRequestDto.getEmail());
-        checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
-        user.updateLastLoginTime(LocalDateTime.now());
+		User user = checkEmail(authLoginRequestDto.getEmail());
+		checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
+		user.updateLastLoginTime(LocalDateTime.now());
 
-        String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
-        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
+		String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
+		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
 
-        // ------ 3. 레디스에 Refresh token 저장, EC2 간 네트워크 I/O 발생
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
-        fcmTokenRepository.saveToken(user.getId().toString(), authLoginRequestDto.getFcmToken());
+		// ------ 3. 레디스에 Refresh token 저장, EC2 간 네트워크 I/O 발생
+		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()),
+				refreshToken.getExpiredAt());
+		fcmTokenRepository.saveToken(user.getId().toString(), authLoginRequestDto.getFcmToken());
 
-        return TokenResponseDto.of(accessToken, refreshToken.getToken());
-    }
+		return TokenResponseDto.of(accessToken, refreshToken.getToken());
+	}
 
+	// Refresh Token Rotation (RTR) 전략 적용
+	public TokenResponseDto reIssueAccessTokenAndRefreshToken(final String token) {
 
-    // Refresh Token Rotation (RTR) 전략 적용
-    public TokenResponseDto reIssueAccessTokenAndRefreshToken(final String token) {
+		// 1. Claim을 파싱하는 과정에서 유효기간이 지나면 예외 발생
+		Long userId = tokenProvider.extractUserId(token);
 
-        // 1. Claim을 파싱하는 과정에서 유효기간이 지나면 예외 발생
-        Long userId = tokenProvider.extractUserId(token);
+		// 2. 만약 해당 ID에 해당하는 리프레시 토큰이 redis에 없으면 재로그인
+		RefreshToken refreshToken = tokenRepository.findRefreshToken(userId).orElseThrow(() -> {
+			throw new BusinessException(ErrorCode.RELOGIN_REQUIRED);
+		});
 
-        // 2. 만약 해당 ID에 해당하는 리프레시 토큰이 redis에 없으면 재로그인
-        RefreshToken refreshToken = tokenRepository.findRefreshToken(userId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.RELOGIN_REQUIRED);
-        });
+		// 3. Redis에 있는 토큰과 내가 refresh를 위해 가져온 토큰이 다르면 변조됐다고 판단 후 재로그인
+		checkAbnormalUserAccess(token, userId, refreshToken);
 
-        // 3. Redis에 있는 토큰과 내가 refresh를 위해 가져온 토큰이 다르면 변조됐다고 판단 후 재로그인
-        checkAbnormalUserAccess(token, userId, refreshToken);
+		User user = userReader.findById(refreshToken.getUserId());
 
-        User user = userReader.findById(refreshToken.getUserId());
+		String newAccessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
+		RefreshTokenDto newRefreshToken = tokenProvider.createRefreshToken(refreshToken.getUserId(),
+				user.getRoleType());
+		tokenRepository.saveRefreshToken(new RefreshToken(newRefreshToken.getToken(), user.getId()),
+				newRefreshToken.getExpiredAt());
 
-        String newAccessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
-        RefreshTokenDto newRefreshToken = tokenProvider.createRefreshToken(refreshToken.getUserId(), user.getRoleType());
-        tokenRepository.saveRefreshToken(new RefreshToken(newRefreshToken.getToken(), user.getId()), newRefreshToken.getExpiredAt());
+		return TokenResponseDto.of(newAccessToken, newRefreshToken.getToken());
+	}
 
-        return TokenResponseDto.of(newAccessToken, newRefreshToken.getToken());
-    }
+	public void logout(final Long userId, final String accessToken) {
 
+		tokenRepository.makeAccessTokenDisabled(accessToken);
+		tokenRepository.removeRefreshToken(userId);
 
-    public void logout(final Long userId, final String accessToken) {
+		fcmTokenRepository.deleteToken(userId.toString());
+	}
 
-        tokenRepository.makeAccessTokenDisabled(accessToken);
-        tokenRepository.removeRefreshToken(userId);
+	public void withdraw(final Long userId, final String accessToken) {
 
-        fcmTokenRepository.deleteToken(userId.toString());
-    }
+		User user = userReader.findById(userId);
+		user.remove();
 
+		tokenRepository.makeAccessTokenDisabled(accessToken);
+		tokenRepository.removeRefreshToken(userId);
 
-    public void withdraw(final Long userId, final String accessToken) {
+		fcmTokenRepository.deleteToken(userId.toString());
+	}
 
-        User user = userReader.findById(userId);
-        user.remove();
+	public void checkDuplicatedNickname(final String nickname) {
 
-        tokenRepository.makeAccessTokenDisabled(accessToken);
-        tokenRepository.removeRefreshToken(userId);
+		if (userReader.existsByNickname(nickname)) {
+			throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+		}
+	}
 
-        fcmTokenRepository.deleteToken(userId.toString());
-    }
+	public void checkDuplicatedEmail(final String email) {
 
+		if (userReader.findByEmail(email).isPresent()) {
+			throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+		}
+	}
 
-    public void checkDuplicatedNickname(final String nickname) {
+	@Transactional
+	public void updateForgetPassword(ChangePasswordRequest requestDto) {
 
-        if (userReader.existsByNickname(nickname)) {
-            throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
-        }
-    }
+		User user = userReader.findByEmail(requestDto.getEmail())
+			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+		user.changePassword(requestDto.getPasswordAfter());
+	}
 
+	@Transactional
+	public void changePassword(final Long userId, ChangePasswordRequest requestDto) {
 
-    public void checkDuplicatedEmail(final String email) {
+		User user = userReader.findById(userId);
 
-        if (userReader.findByEmail(email).isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
-        }
-    }
+		String passwordBefore = passwordEncoder.encode(requestDto.getPasswordBefore());
+		String passwordAfter = passwordEncoder.encode(requestDto.getPasswordAfter());
 
-    @Transactional
-    public void updateForgetPassword(ChangePasswordRequest requestDto) {
+		if (!userReader.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
+			throw new BusinessException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
+		}
 
-        User user = userReader.findByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        user.changePassword(requestDto.getPasswordAfter());
-    }
+		user.changePassword(passwordAfter);
+	}
 
-    @Transactional
-    public void changePassword(final Long userId, ChangePasswordRequest requestDto) {
+	private User checkEmail(final String email) {
 
-        User user = userReader.findById(userId);
+		return userReader.findByEmail(email).orElseThrow(() -> {
+			throw new BusinessException(ErrorCode.INVALID_EMAIL);
+		});
+	}
 
-        String passwordBefore = passwordEncoder.encode(requestDto.getPasswordBefore());
-        String passwordAfter = passwordEncoder.encode(requestDto.getPasswordAfter());
+	private void checkPassword(final String password, final String originPassword) {
 
-        if (!userReader.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
-            throw new BusinessException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
-        }
+		if (!passwordEncoder.matches(password, originPassword)) {
+			throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+		}
+	}
 
-        user.changePassword(passwordAfter);
-    }
+	private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
 
+		if (userReader.existsByEmail(authSignupRequestDto.getEmail())) {
+			throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+		}
+	}
 
-    private User checkEmail(final String email) {
+	private void checkAbnormalUserAccess(final String token, final Long userId, final RefreshToken refreshToken) {
 
-        return userReader.findByEmail(email).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.INVALID_EMAIL);
-        });
-    }
+		if (!refreshToken.getRefreshToken().equals(token)) {
 
-    private void checkPassword(final String password, final String originPassword) {
+			tokenRepository.removeRefreshToken(userId);
+			throw new BusinessException(ErrorCode.ABNORMAL_ACCESS);
+		}
+	}
 
-        if (!passwordEncoder.matches(password, originPassword)) {
-            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
-        }
-    }
-
-    private void checkDuplicatedEmail(AuthSignupRequestDto authSignupRequestDto) {
-
-        if (userReader.existsByEmail(authSignupRequestDto.getEmail())) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
-        }
-    }
-
-    private void checkAbnormalUserAccess(final String token, final Long userId, final RefreshToken refreshToken) {
-
-        if (!refreshToken.getRefreshToken().equals(token)) {
-
-            tokenRepository.removeRefreshToken(userId);
-            throw new BusinessException(ErrorCode.ABNORMAL_ACCESS);
-        }
-    }
 }

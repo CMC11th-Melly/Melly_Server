@@ -9,8 +9,12 @@ import java.io.InputStream;
 @AllArgsConstructor
 public class FileDto {
 
-    private String originalFilename;
-    private long size;
-    private String contentType;
-    private InputStream inputStream;
+	private String originalFilename;
+
+	private long size;
+
+	private String contentType;
+
+	private InputStream inputStream;
+
 }

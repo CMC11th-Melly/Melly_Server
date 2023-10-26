@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 public class CommentEnrollEvent {
 
-    private Long userId;
+	private Long userId;
 
-    private Long memoryId;
+	private Long memoryId;
 
-    private String nickname;
+	private String nickname;
+
 }

@@ -10,10 +10,16 @@ import java.util.List;
 @AllArgsConstructor
 public class OtherMemoryDto {
 
-    private Long memoryId;
-    private GroupType groupType;
-    private List<MemoryImageDto> memoryImages;
-    private String title;
-    private List<String> keyword;
-    private String createdDate;
+	private Long memoryId;
+
+	private GroupType groupType;
+
+	private List<MemoryImageDto> memoryImages;
+
+	private String title;
+
+	private List<String> keyword;
+
+	private String createdDate;
+
 }

@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemoryWriter {
 
-    private final MemoryRepository memoryRepository;
+	private final MemoryRepository memoryRepository;
 
-    public Memory save(Memory memory) {
-        return memoryRepository.save(memory);
-    }
+	public Memory save(Memory memory) {
+		return memoryRepository.save(memory);
+	}
+
 }

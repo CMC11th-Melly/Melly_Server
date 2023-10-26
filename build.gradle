@@ -2,10 +2,11 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
+    id 'org.sonarqube' version '4.0.0.2929'
     id 'io.spring.javaformat' apply(false)
 }
 
-//apply from: 'lint.gradle'
+apply from: 'lint.gradle'
 
 allprojects {
     group = "${projectGroup}"
@@ -21,7 +22,8 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-
+    apply plugin: 'io.spring.javaformat'
+    apply plugin: 'org.sonarqube'
 
 
     dependencyManagement {

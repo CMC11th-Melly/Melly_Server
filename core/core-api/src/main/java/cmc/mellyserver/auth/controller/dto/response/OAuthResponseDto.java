@@ -8,7 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class OAuthResponseDto<T> {
 
-    public TokenResponseDto tokenInfo;
+	public TokenResponseDto tokenInfo;
 
-    public T data;
+	public T data;
+
 }

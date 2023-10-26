@@ -13,25 +13,29 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class OptimisticLockAop {
-    private static int RETRY_MAX_COUNT = 3;
 
-    @Around("@annotation(cmc.mellyserver.common.aop.lock.annotation.DistributedLock)")
-    public Object doOneMoreRetryTransactionIfOptimisticLockExceptionThrow(ProceedingJoinPoint joinPoint) throws Throwable {
+	private static int RETRY_MAX_COUNT = 3;
 
-        Exception exceptionHolder = null;
+	@Around("@annotation(cmc.mellyserver.common.aop.lock.annotation.DistributedLock)")
+	public Object doOneMoreRetryTransactionIfOptimisticLockExceptionThrow(ProceedingJoinPoint joinPoint)
+			throws Throwable {
 
-        for (int retryCount = 0; retryCount <= RETRY_MAX_COUNT; retryCount++) {
+		Exception exceptionHolder = null;
 
-            try {
-                return joinPoint.proceed();
+		for (int retryCount = 0; retryCount <= RETRY_MAX_COUNT; retryCount++) {
 
-            } catch (OptimisticLockException | ObjectOptimisticLockingFailureException | CannotAcquireLockException e) {
+			try {
+				return joinPoint.proceed();
 
-                exceptionHolder = e;
-            }
-        }
+			}
+			catch (OptimisticLockException | ObjectOptimisticLockingFailureException | CannotAcquireLockException e) {
 
-        // 3번 반복 후에도 실패하면 예외 반환
-        throw exceptionHolder;
-    }
+				exceptionHolder = e;
+			}
+		}
+
+		// 3번 반복 후에도 실패하면 예외 반환
+		throw exceptionHolder;
+	}
+
 }

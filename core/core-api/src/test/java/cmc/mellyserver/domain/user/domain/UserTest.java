@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.user.domain;
 
-
 import cmc.mellyserver.dbcore.user.Recommend;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.enums.RecommendActivity;
@@ -17,111 +16,108 @@ import static cmc.mellyserver.common.fixture.UserFixtures.모카;
 import static cmc.mellyserver.dbcore.user.enums.AgeGroup.TWO;
 import static cmc.mellyserver.dbcore.user.enums.Gender.FEMALE;
 
-
 public class UserTest {
 
-    @DisplayName("유저의 프로필 이미지를 수정한다.")
-    @Test
-    void 유저의_프로필_이미지를_변경한다() {
+	@DisplayName("유저의 프로필 이미지를 수정한다.")
+	@Test
+	void 유저의_프로필_이미지를_변경한다() {
 
-        // given
-        User user = 모카();
+		// given
+		User user = 모카();
 
-        // when
-        user.changeProfileImage("updated_image.png");
+		// when
+		user.changeProfileImage("updated_image.png");
 
-        // then
-        Assertions.assertThat(user.getProfileImage()).isEqualTo("updated_image.png");
-    }
+		// then
+		Assertions.assertThat(user.getProfileImage()).isEqualTo("updated_image.png");
+	}
 
-    @DisplayName("유저의 프로필 정보를 수정한다.")
-    @Test
-    void 유저의_프로필을_변경한다() {
+	@DisplayName("유저의 프로필 정보를 수정한다.")
+	@Test
+	void 유저의_프로필을_변경한다() {
 
-        // given
-        User user = 모카();
+		// given
+		User user = 모카();
 
-        // when
-        user.updateProfile("지원", FEMALE, TWO);
+		// when
+		user.updateProfile("지원", FEMALE, TWO);
 
-        // then
-        Assertions.assertThat(user.getNickname()).isEqualTo("지원");
-        Assertions.assertThat(user.getGender()).isEqualTo(FEMALE);
-        Assertions.assertThat(user.getAgeGroup()).isEqualTo(TWO);
-    }
+		// then
+		Assertions.assertThat(user.getNickname()).isEqualTo("지원");
+		Assertions.assertThat(user.getGender()).isEqualTo(FEMALE);
+		Assertions.assertThat(user.getAgeGroup()).isEqualTo(TWO);
+	}
 
+	@DisplayName("유저가 최초 회원가입할때 진행한 설문 조사 결과를 저장한다.")
+	@Test
+	void 회원가입시_진행한_설문조사결과를_저장한다() {
 
-    @DisplayName("유저가 최초 회원가입할때 진행한 설문 조사 결과를 저장한다.")
-    @Test
-    void 회원가입시_진행한_설문조사결과를_저장한다() {
+		// given
+		User user = 모카();
 
-        // given
-        User user = 모카();
+		// when
+		user.addSurveyData(RecommendGroup.FRIEND, RecommendPlace.PLACE1, RecommendActivity.CAFE);
 
-        // when
-        user.addSurveyData(RecommendGroup.FRIEND, RecommendPlace.PLACE1, RecommendActivity.CAFE);
+		// then
+		Assertions.assertThat(user.getRecommend())
+			.usingRecursiveComparison()
+			.isEqualTo(new Recommend(RecommendGroup.FRIEND, RecommendPlace.PLACE1, RecommendActivity.CAFE));
+	}
 
-        // then
-        Assertions.assertThat(user.getRecommend()).usingRecursiveComparison()
-                .isEqualTo(new Recommend(RecommendGroup.FRIEND,
-                        RecommendPlace.PLACE1,
-                        RecommendActivity.CAFE));
-    }
+	@DisplayName("유저의 상태를 휴면상태로 변경한다.")
+	@Test
+	void 유저의_상태를_휴면상태로_변경한다() {
 
-    @DisplayName("유저의 상태를 휴면상태로 변경한다.")
-    @Test
-    void 유저의_상태를_휴면상태로_변경한다() {
+		// given
+		User user = 모카();
 
-        // given
-        User user = 모카();
+		// when
+		user.inActive();
 
-        // when
-        user.inActive();
+		// then
+		Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.INACTIVE);
+	}
 
-        // then
-        Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.INACTIVE);
-    }
+	@DisplayName("유저의 상태를 중지상태로 변경한다.")
+	@Test
+	void 유저의_상태를_중지상태로_변경한다() {
 
-    @DisplayName("유저의 상태를 중지상태로 변경한다.")
-    @Test
-    void 유저의_상태를_중지상태로_변경한다() {
+		// given
+		User user = 모카();
 
-        // given
-        User user = 모카();
+		// when
+		user.block();
 
-        // when
-        user.block();
+		// then
+		Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.BLOCK);
+	}
 
-        // then
-        Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.BLOCK);
-    }
+	@DisplayName("유저를 탈퇴 상태로 변경한다.")
+	@Test
+	void 유저의_상태를_탈퇴상태로_변경한다() {
 
-    @DisplayName("유저를 탈퇴 상태로 변경한다.")
-    @Test
-    void 유저의_상태를_탈퇴상태로_변경한다() {
+		// given
+		User user = 모카();
 
-        // given
-        User user = 모카();
+		// when
+		user.remove();
 
-        // when
-        user.remove();
+		// then
+		Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.DELETE);
+	}
 
-        // then
-        Assertions.assertThat(user.getUserStatus()).isEqualTo(UserStatus.DELETE);
-    }
+	@DisplayName("유저의 마지막 로그인 날짜를 변경한다.")
+	@Test
+	void 유저의_마지막_로그인_날짜를_변경한다() {
 
+		// given
+		User user = 모카();
 
-    @DisplayName("유저의 마지막 로그인 날짜를 변경한다.")
-    @Test
-    void 유저의_마지막_로그인_날짜를_변경한다() {
+		// when
+		user.updateLastLoginTime(LocalDateTime.of(2023, 8, 6, 11, 0));
 
-        // given
-        User user = 모카();
+		// then
+		Assertions.assertThat(user.getLastLoginDateTime()).isEqualTo(LocalDateTime.of(2023, 8, 6, 11, 0));
+	}
 
-        // when
-        user.updateLastLoginTime(LocalDateTime.of(2023, 8, 6, 11, 0));
-
-        // then
-        Assertions.assertThat(user.getLastLoginDateTime()).isEqualTo(LocalDateTime.of(2023, 8, 6, 11, 0));
-    }
 }

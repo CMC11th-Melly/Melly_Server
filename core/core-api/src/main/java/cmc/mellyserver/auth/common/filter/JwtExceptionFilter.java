@@ -18,45 +18,47 @@ import java.io.IOException;
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
-            ServletException,
-            IOException {
-        try {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		try {
 
-            chain.doFilter(request, response);
+			chain.doFilter(request, response);
 
-        } catch (JwtException ex) {
+		}
+		catch (JwtException ex) {
 
-            setExpiredErrorResponse(request, response, ex);
+			setExpiredErrorResponse(request, response, ex);
 
-        } catch (LogoutOrWithdrawExpcetion ex) {
-            setLogoutOrWithdrawErrorResponse(request, response, ex);
-        }
-    }
+		}
+		catch (LogoutOrWithdrawExpcetion ex) {
+			setLogoutOrWithdrawErrorResponse(request, response, ex);
+		}
+	}
 
-    public void setExpiredErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex) throws
-            IOException {
+	public void setExpiredErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex)
+			throws IOException {
 
-        response.setContentType("application/json; charset=UTF-8");
-        response.setStatus(HttpStatus.OK.value());
+		response.setContentType("application/json; charset=UTF-8");
+		response.setStatus(HttpStatus.OK.value());
 
-        ErrorResponse error = ErrorResponse.of(ErrorCode.EXPIRED_TOKEN);
+		ErrorResponse error = ErrorResponse.of(ErrorCode.EXPIRED_TOKEN);
 
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), error);
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(response.getOutputStream(), error);
 
-    }
+	}
 
-    public void setLogoutOrWithdrawErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex) throws
-            IOException {
+	public void setLogoutOrWithdrawErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex)
+			throws IOException {
 
-        response.setContentType("application/json; charset=UTF-8");
-        response.setStatus(HttpStatus.OK.value());
+		response.setContentType("application/json; charset=UTF-8");
+		response.setStatus(HttpStatus.OK.value());
 
-        ErrorResponse error = ErrorResponse.of(ErrorCode.LOGOUT_WITHDRAW_USER);
+		ErrorResponse error = ErrorResponse.of(ErrorCode.LOGOUT_WITHDRAW_USER);
 
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), error);
-    }
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(response.getOutputStream(), error);
+	}
+
 }

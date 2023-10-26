@@ -14,15 +14,16 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class MemoryReader {
 
-    private final MemoryRepository memoryRepository;
+	private final MemoryRepository memoryRepository;
 
-    private final MemoryQueryRepository memoryQueryRepository;
+	private final MemoryQueryRepository memoryQueryRepository;
 
-    public Memory findById(Long memoryId) {
-        return memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
-    }
+	public Memory findById(Long memoryId) {
+		return memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
+	}
 
-    public HashMap<String, Long> countMemoryInPlace(Long userId, Long placeId) {
-        return memoryQueryRepository.countMemoriesBelongToPlace(userId, placeId);
-    }
+	public HashMap<String, Long> countMemoryInPlace(Long userId, Long placeId) {
+		return memoryQueryRepository.countMemoriesBelongToPlace(userId, placeId);
+	}
+
 }

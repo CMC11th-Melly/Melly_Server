@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthmeWrappingDto {
 
-    private AccessTokenUserData user;
+	private AccessTokenUserData user;
+
 }

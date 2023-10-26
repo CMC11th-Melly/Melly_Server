@@ -21,43 +21,41 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PlaceService {
 
-    private final PlaceReader placeReader;
+	private final PlaceReader placeReader;
 
-    private final PlaceScrapReader placeScrapReader;
+	private final PlaceScrapReader placeScrapReader;
 
-    private final MemoryReader memoryReader;
+	private final MemoryReader memoryReader;
 
+	public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
 
-    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
+		List<Place> placeUserMemoryExist = placeReader.placeUserMemoryExist(id, groupType);
+		return placeUserMemoryExist.stream()
+			.map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), 0L))
+			.collect(Collectors.toList());
+	}
 
-        List<Place> placeUserMemoryExist = placeReader.placeUserMemoryExist(id, groupType);
-        return placeUserMemoryExist.stream().map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), 0L))
-                .collect(Collectors.toList());
-    }
+	public PlaceResponseDto findByPlaceId(Long userId, Long placeId) {
 
+		Place place = placeReader.findById(placeId);
+		HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
+		boolean isUserScraped = placeScrapReader.checkUserScraped(placeId, userId);
 
-    public PlaceResponseDto findByPlaceId(Long userId, Long placeId) {
+		return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
+	}
 
-        Place place = placeReader.findById(placeId);
-        HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
-        boolean isUserScraped = placeScrapReader.checkUserScraped(placeId, userId);
+	public PlaceResponseDto findByPosition(Long userId, Position position) {
 
-        return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
-    }
+		Place place = placeReader.findByPosition(position);
+		HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
+		boolean isUserScraped = placeScrapReader.checkUserScraped(userId, position);
 
+		return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
+	}
 
-    public PlaceResponseDto findByPosition(Long userId, Position position) {
+	public List<FindPlaceInfoByMemoryNameResponseDto> findByMemoryTitle(Long id, String memoryTitle) {
 
-        Place place = placeReader.findByPosition(position);
-        HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
-        boolean isUserScraped = placeScrapReader.checkUserScraped(userId, position);
+		return placeReader.findByMemoryTitle(id, memoryTitle);
+	}
 
-        return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
-    }
-
-
-    public List<FindPlaceInfoByMemoryNameResponseDto> findByMemoryTitle(Long id, String memoryTitle) {
-
-        return placeReader.findByMemoryTitle(id, memoryTitle);
-    }
 }

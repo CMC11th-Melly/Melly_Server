@@ -17,27 +17,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaceReader {
 
-    private final PlaceRepository placeRepository;
+	private final PlaceRepository placeRepository;
 
-    private final PlaceQueryRepository placeQueryRepository;
+	private final PlaceQueryRepository placeQueryRepository;
 
-    public Place findById(Long placeId) {
-        return placeRepository.findById(placeId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
-        });
-    }
+	public Place findById(Long placeId) {
+		return placeRepository.findById(placeId).orElseThrow(() -> {
+			throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
+		});
+	}
 
-    public Place findByPosition(Position position) {
-        return placeRepository.findByPosition(position).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
-    }
+	public Place findByPosition(Position position) {
+		return placeRepository.findByPosition(position)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
+	}
 
-    public List<Place> placeUserMemoryExist(Long userId, GroupType groupType) {
-        return placeQueryRepository.getPlaceUserMemoryExist(userId, groupType);
-    }
+	public List<Place> placeUserMemoryExist(Long userId, GroupType groupType) {
+		return placeQueryRepository.getPlaceUserMemoryExist(userId, groupType);
+	}
 
-    public List<FindPlaceInfoByMemoryNameResponseDto> findByMemoryTitle(Long id, String memoryName) {
-        return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
-    }
-
+	public List<FindPlaceInfoByMemoryNameResponseDto> findByMemoryTitle(Long id, String memoryName) {
+		return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
+	}
 
 }

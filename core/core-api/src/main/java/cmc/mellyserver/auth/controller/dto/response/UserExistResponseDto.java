@@ -8,7 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserExistResponseDto {
 
-    private Provider provider;
+	private Provider provider;
 
-    private String email;
+	private String email;
+
 }

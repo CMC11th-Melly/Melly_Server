@@ -13,10 +13,16 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyMemoryDto {
 
-    private Long memoryId;
-    private GroupType groupType;
-    private List<MemoryImageDto> memoryImages;
-    private String title;
-    private List<String> keyword;
-    private String createdDate;
+	private Long memoryId;
+
+	private GroupType groupType;
+
+	private List<MemoryImageDto> memoryImages;
+
+	private String title;
+
+	private List<String> keyword;
+
+	private String createdDate;
+
 }

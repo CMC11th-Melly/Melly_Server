@@ -1,6 +1,5 @@
 package cmc.mellyserver.controller;
 
-
 import cmc.mellyserver.auth.config.SecurityConfig;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import cmc.mellyserver.controller.comment.CommentController;
@@ -31,51 +30,46 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureRestDocs // RestDocs 설정을 활성화 합니다.
 @WebMvcTest(controllers = { // 사용하려는 Controller를 모두 등록해줍니다.
-        UserController.class,
-        PlaceScrapController.class,
-        PlaceController.class,
-        MemoryController.class,
-        GroupController.class,
-        NotificationController.class,
-        CommentController.class
-},excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class) })
+		UserController.class, PlaceScrapController.class, PlaceController.class, MemoryController.class,
+		GroupController.class, NotificationController.class, CommentController.class },
+		excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class) })
 @ActiveProfiles("test") // test profile로 실행되도록 만듭니다.
 public abstract class ControllerTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+	@Autowired
+	protected ObjectMapper objectMapper;
 
-    @MockBean
-    protected UserProfileService userProfileService;
+	@MockBean
+	protected UserProfileService userProfileService;
 
-    @MockBean
-    protected PlaceScrapService placeScrapService;
+	@MockBean
+	protected PlaceScrapService placeScrapService;
 
-    @MockBean
-    protected MemoryReadService memoryReadService;
+	@MockBean
+	protected MemoryReadService memoryReadService;
 
-    @MockBean
-    protected MemoryWriteService memoryWriteService;
+	@MockBean
+	protected MemoryWriteService memoryWriteService;
 
-    @MockBean
-    protected CommentService commentService;
+	@MockBean
+	protected CommentService commentService;
 
-    @MockBean
-    protected CommentLikeService commentLikeService;
+	@MockBean
+	protected CommentLikeService commentLikeService;
 
-    @MockBean
-    protected PlaceService placeService;
+	@MockBean
+	protected PlaceService placeService;
 
-    @MockBean
-    protected GroupService groupService;
+	@MockBean
+	protected GroupService groupService;
 
-    @MockBean
-    protected NotificationService notificationService;
+	@MockBean
+	protected NotificationService notificationService;
 
-    @MockBean
-    protected JwtTokenProvider jwtTokenProvider;
+	@MockBean
+	protected JwtTokenProvider jwtTokenProvider;
+
 }

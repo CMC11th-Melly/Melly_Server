@@ -16,48 +16,47 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemoryCreateRequest {
 
-    private Double lat;
+	private Double lat;
 
-    private Double lng;
+	private Double lng;
 
-    private String placeName;
+	private String placeName;
 
-    private String placeCategory;
+	private String placeCategory;
 
-    @NotNull
-    @Length(max = 23, message = "제목은 23자 이하로 입력해주세요.")
-    private String title;
+	@NotNull
+	@Length(max = 23, message = "제목은 23자 이하로 입력해주세요.")
+	private String title;
 
-    @NotNull
-    @Length(max = 650, message = "본문은 650자 이하로 작성해주세요.")   // ok
-    private String content;
+	@NotNull
+	@Length(max = 650, message = "본문은 650자 이하로 작성해주세요.") // ok
+	private String content;
 
-    private List<String> keyword;
+	private List<String> keyword;
 
-    private Long groupId;
+	private Long groupId;
 
-    private OpenType openType;
+	private OpenType openType;
 
-    @JsonFormat(pattern = "yyyyMMdd")
-    private LocalDate visitedDate;
+	@JsonFormat(pattern = "yyyyMMdd")
+	private LocalDate visitedDate;
 
-    private Long star;
+	private Long star;
 
-    @Builder
-    public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory,
-                               String title,
-                               String content, List<String> keyword, Long groupId, OpenType openType,
-                               LocalDate visitedDate, Long star) {
-        this.lat = lat;
-        this.lng = lng;
-        this.placeName = placeName;
-        this.placeCategory = placeCategory;
-        this.title = title;
-        this.content = content;
-        this.keyword = keyword;
-        this.groupId = groupId;
-        this.openType = openType;
-        this.visitedDate = visitedDate;
-        this.star = star;
-    }
+	@Builder
+	public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory, String title,
+			String content, List<String> keyword, Long groupId, OpenType openType, LocalDate visitedDate, Long star) {
+		this.lat = lat;
+		this.lng = lng;
+		this.placeName = placeName;
+		this.placeCategory = placeCategory;
+		this.title = title;
+		this.content = content;
+		this.keyword = keyword;
+		this.groupId = groupId;
+		this.openType = openType;
+		this.visitedDate = visitedDate;
+		this.star = star;
+	}
+
 }

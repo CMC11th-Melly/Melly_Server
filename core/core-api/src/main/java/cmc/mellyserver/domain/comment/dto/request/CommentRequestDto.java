@@ -6,21 +6,21 @@ import lombok.Data;
 @Data
 public class CommentRequestDto {
 
-    private Long userId;
+	private Long userId;
 
-    private String content;
+	private String content;
 
-    private Long memoryId;
+	private Long memoryId;
 
-    private Long parentId;
+	private Long parentId;
 
+	@Builder
+	public CommentRequestDto(Long userId, String content, Long memoryId, Long parentId) {
 
-    @Builder
-    public CommentRequestDto(Long userId, String content, Long memoryId, Long parentId) {
+		this.userId = userId;
+		this.content = content;
+		this.memoryId = memoryId;
+		this.parentId = parentId;
+	}
 
-        this.userId = userId;
-        this.content = content;
-        this.memoryId = memoryId;
-        this.parentId = parentId;
-    }
 }
