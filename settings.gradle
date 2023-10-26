@@ -13,7 +13,6 @@ rootProject.name = "mellyServer"
 include 'storage:db-core'
 include 'storage:db-redis'
 include 'core:core-api'
-include 'core:core-batch'
 include 'support:logging'
 include 'infra:file'
 include 'infra:notification'
