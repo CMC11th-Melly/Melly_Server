@@ -18,5 +18,8 @@ public class RedisTestContainers {
                 .withExposedPorts(6379).withReuse(true);
 
         REDIS_CONTAINER.start();
+
+        System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
+        System.setProperty("spring.data.redis.port", REDIS_CONTAINER.getMappedPort(6379).toString());
     }
 }
