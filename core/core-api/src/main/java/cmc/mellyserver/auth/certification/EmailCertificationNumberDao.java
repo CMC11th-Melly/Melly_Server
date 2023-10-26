@@ -1,13 +1,12 @@
 package cmc.mellyserver.auth.certification;
 
+import static cmc.mellyserver.mail.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
+import static cmc.mellyserver.mail.constant.EmailConstants.PREFIX_CERTIFICATION;
+
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.time.Duration;
-
-import static cmc.mellyserver.email.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
-import static cmc.mellyserver.email.constant.EmailConstants.PREFIX_CERTIFICATION;
 
 @Repository
 @RequiredArgsConstructor

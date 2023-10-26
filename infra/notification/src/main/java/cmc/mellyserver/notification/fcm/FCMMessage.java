@@ -1,4 +1,4 @@
-package cmc.mellyserver.message.fcm;
+package cmc.mellyserver.notification.fcm;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

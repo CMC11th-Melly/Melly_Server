@@ -1,4 +1,4 @@
-package cmc.mellyserver.email;
+package cmc.mellyserver.mail;
 
 public interface EmailSendService {
 

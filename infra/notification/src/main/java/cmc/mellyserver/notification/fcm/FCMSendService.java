@@ -1,8 +1,8 @@
-package cmc.mellyserver.message.fcm;
+package cmc.mellyserver.notification.fcm;
 
 import cmc.mellyserver.dbredis.repository.FcmTokenRepository;
-import cmc.mellyserver.message.MessageService;
-import cmc.mellyserver.message.constants.NotificationConstants;
+import cmc.mellyserver.notification.NotificationService;
+import cmc.mellyserver.notification.constants.NotificationConstants;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class FCMSendService implements MessageService {
+class FCMSendService implements NotificationService {
 
     private final FcmTokenRepository tokenRepository;
 

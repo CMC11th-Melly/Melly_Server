@@ -1,6 +1,6 @@
-package cmc.mellyserver.email.javamail;
+package cmc.mellyserver.mail.javamail;
 
-import cmc.mellyserver.email.EmailSendService;
+import cmc.mellyserver.mail.EmailSendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

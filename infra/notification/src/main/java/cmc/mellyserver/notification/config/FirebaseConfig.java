@@ -1,16 +1,15 @@
-package cmc.mellyserver.message.config;
+package cmc.mellyserver.notification.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import java.io.FileInputStream;
+import java.io.IOException;
+import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
-import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 
 @Configuration
