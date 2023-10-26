@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.user.application;
 
-
 import cmc.mellyserver.builder.GivenBuilder;
 import cmc.mellyserver.common.fixture.UserFixtures;
 import cmc.mellyserver.config.IntegrationTest;
@@ -25,63 +24,58 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class UserProfileServiceTest extends IntegrationTest {
 
-    private static final ProfileUpdateRequestDto 모카_프로필_수정_요청 = new ProfileUpdateRequestDto("머식", Gender.FEMALE, AgeGroup.THREE);
+	private static final ProfileUpdateRequestDto 모카_프로필_수정_요청 = new ProfileUpdateRequestDto("머식", Gender.FEMALE,
+			AgeGroup.THREE);
 
-    @Autowired
-    private UserProfileService userProfileService;
+	@Autowired
+	private UserProfileService userProfileService;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
+	@DisplayName("유저 프로필을 조회한다.")
+	@Test
+	void 유저_프로필을_조회한다() {
 
-    @DisplayName("유저 프로필을 조회한다.")
-    @Test
-    void 유저_프로필을_조회한다() {
+		// given
+		GivenBuilder 모카 = 모카();
 
-        // given
-        GivenBuilder 모카 = 모카();
+		// when & then
+		ProfileResponseDto userProfile = userProfileService.getProfile(모카.회원().getId());
 
-        // when & then
-        ProfileResponseDto userProfile = userProfileService.getProfile(모카.회원().getId());
+		assertThat(userProfile.getUserId()).isEqualTo(모카.회원().getId());
+		assertThat(userProfile.getNickname()).isEqualTo("모카");
+	}
 
-        assertThat(userProfile.getUserId()).isEqualTo(모카.회원().getId());
-        assertThat(userProfile.getNickname()).isEqualTo("모카");
-    }
+	@DisplayName("수정하려는 프로필 이미지가 있으면 변경한다.")
+	@Test
+	void 유저_프로필_이미지를_수정한다() throws IOException {
 
+		// given
+		User 모카 = UserFixtures.모카();
+		User savedUser = userRepository.save(모카);
 
-    @DisplayName("수정하려는 프로필 이미지가 있으면 변경한다.")
-    @Test
-    void 유저_프로필_이미지를_수정한다() throws IOException {
+		// when
+		userProfileService.updateProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()));
 
-        // given
-        User 모카 = UserFixtures.모카();
-        User savedUser = userRepository.save(모카);
+		// then
+		User user = userRepository.findById(savedUser.getId()).get();
+		assertThat(user.getProfileImage()).isEqualTo("mock.jpg");
+	}
 
+	@DisplayName("유저 프로필 정보를 수정한다.")
+	@Test
+	void 유저_프로필_정보를_수정한다() {
 
-        // when
-        userProfileService.updateProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()));
+		// given
+		GivenBuilder 모카 = 모카();
 
-        // then
-        User user = userRepository.findById(savedUser.getId()).get();
-        assertThat(user.getProfileImage()).isEqualTo("mock.jpg");
-    }
+		// when
+		userProfileService.updateProfile(모카.회원().getId(), 모카_프로필_수정_요청);
 
+		// then
+		User updatedUser = userRepository.findById(모카.회원().getId()).get();
+		assertThat(updatedUser.getNickname()).isEqualTo("머식");
+	}
 
-
-    @DisplayName("유저 프로필 정보를 수정한다.")
-    @Test
-    void 유저_프로필_정보를_수정한다() {
-
-        // given
-        GivenBuilder 모카 = 모카();
-
-        // when
-        userProfileService.updateProfile(모카.회원().getId(), 모카_프로필_수정_요청);
-
-        // then
-        User updatedUser = userRepository.findById(모카.회원().getId()).get();
-        assertThat(updatedUser.getNickname()).isEqualTo("머식");
-    }
 }
-
-

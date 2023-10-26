@@ -1,7 +1,7 @@
 package cmc.mellyserver.common.event;
 
-import cmc.mellyserver.email.EmailSendService;
-import cmc.mellyserver.email.constant.EmailConstants;
+import cmc.mellyserver.mail.EmailConstants;
+import cmc.mellyserver.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -14,12 +14,13 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 class SignupCertificationEventHandler {
 
-    private final EmailSendService emailSendService;
+	private final EmailService emailService;
 
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(SignupCertificationEvent event) {
+	@Async
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void handle(SignupCertificationEvent event) {
 
-        emailSendService.sendMail(EmailConstants.TITLE_CERTIFICATION, event.getContent(), event.getEmail());
-    }
+		emailService.send(EmailConstants.TITLE_CERTIFICATION, event.getContent(), event.getEmail());
+	}
+
 }

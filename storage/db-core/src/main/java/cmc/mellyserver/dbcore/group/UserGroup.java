@@ -1,6 +1,5 @@
 package cmc.mellyserver.dbcore.group;
 
-
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 import jakarta.persistence.*;
@@ -13,55 +12,53 @@ import lombok.*;
 @AllArgsConstructor
 public class UserGroup extends JpaBaseEntity {
 
-    @Id
-    @Column(name = "group_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@Column(name = "group_id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "group_name", nullable = false)
-    private String groupName;
+	@Column(name = "group_name", nullable = false)
+	private String groupName;
 
-    @Column(name = "group_icon", nullable = false)
-    private Integer groupIcon;
+	@Column(name = "group_icon", nullable = false)
+	private Integer groupIcon;
 
-    @Column(name = "invite_link")
-    private String inviteLink;
+	@Column(name = "invite_link")
+	private String inviteLink;
 
-    @Version
-    private Long version;
+	@Version
+	private Long version;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "group_type", nullable = false)
+	private GroupType groupType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "group_type", nullable = false)
-    private GroupType groupType;
+	@Column(name = "is_deleted", nullable = false)
+	private Boolean isDeleted;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+	@Builder
+	public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon) {
+		this.groupName = groupName;
+		this.inviteLink = inviteLink;
+		this.groupType = groupType;
+		this.groupIcon = groupIcon;
+	}
 
-    @Builder
-    public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon) {
-        this.groupName = groupName;
-        this.inviteLink = inviteLink;
-        this.groupType = groupType;
-        this.groupIcon = groupIcon;
-    }
+	public void remove() {
 
+		this.isDeleted = Boolean.TRUE;
+	}
 
-    public void remove() {
+	public void update(String groupName, GroupType groupType, Integer groupIcon) {
 
-        this.isDeleted = Boolean.TRUE;
-    }
+		this.groupName = groupName;
+		this.groupType = groupType;
+		this.groupIcon = groupIcon;
+	}
 
-    public void update(String groupName, GroupType groupType, Integer groupIcon) {
+	@PrePersist
+	private void init() {
+		this.isDeleted = Boolean.FALSE;
+	}
 
-        this.groupName = groupName;
-        this.groupType = groupType;
-        this.groupIcon = groupIcon;
-    }
-
-
-    @PrePersist
-    private void init() {
-        this.isDeleted = Boolean.FALSE;
-    }
 }

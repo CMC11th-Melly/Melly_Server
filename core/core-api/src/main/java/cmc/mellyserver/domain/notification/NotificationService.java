@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.notification;
 
-
 import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.notification.Notification;
@@ -22,66 +21,65 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class NotificationService {
 
-    private final NotificationReader notificationReader;
+	private final NotificationReader notificationReader;
 
-    private final NotificationWriter notificationWriter;
+	private final NotificationWriter notificationWriter;
 
-    private final MemoryReader memoryReader;
+	private final MemoryReader memoryReader;
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
+	public List<NotificationResponse> getNotificationList(Long userId) {
 
-    public List<NotificationResponse> getNotificationList(Long userId) {
+		List<Notification> notificationList = notificationReader.getNotificationList(userId);
+		return notificationList.stream()
+			.map(t -> new NotificationResponse(t.getId(), t.getNotificationType(), t.getContent(),
+					t.getCreatedDateTime(), false))
+			.collect(Collectors.toList());
+	}
 
-        List<Notification> notificationList = notificationReader.getNotificationList(userId);
-        return notificationList.stream().map(t -> new NotificationResponse(t.getId(), t.getNotificationType(), t.getContent()
-                , t.getCreatedDateTime(), false)).collect(Collectors.toList());
-    }
+	public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
 
+		User user = userReader.findById(userId);
+		return NotificationOnOffResponseDto.of(user.getEnableAppPush(), user.getEnableCommentPush(),
+				user.getEnableCommentLikePush());
+	}
 
-    public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
+	@Transactional
+	public void changeAppPushStatus(Long userId, boolean status) {
 
-        User user = userReader.findById(userId);
-        return NotificationOnOffResponseDto.of(user.getEnableAppPush(), user.getEnableCommentPush(), user.getEnableCommentLikePush());
-    }
+		User user = userReader.findById(userId);
+		user.changeAppPushStatus(status);
+	}
 
+	@Transactional
+	public void changeCommentLikePushStatus(Long userId, boolean status) {
 
-    @Transactional
-    public void changeAppPushStatus(Long userId, boolean status) {
+		User user = userReader.findById(userId);
+		user.changeCommentLikePushStatus(status);
+	}
 
-        User user = userReader.findById(userId);
-        user.changeAppPushStatus(status);
-    }
+	@Transactional
+	public void changeCommentPushStatus(Long userId, boolean status) {
 
+		User user = userReader.findById(userId);
+		user.changeCommenPushStatus(status);
+	}
 
-    @Transactional
-    public void changeCommentLikePushStatus(Long userId, boolean status) {
+	@Transactional
+	public Notification createNotification(String body, NotificationType notificationType, Long userId, Long memoryId) {
 
-        User user = userReader.findById(userId);
-        user.changeCommentLikePushStatus(status);
-    }
+		User user = userReader.findById(userId);
+		Memory memory = memoryReader.findById(memoryId);
+		return notificationWriter.save(Notification.createNotification(body, userId, notificationType, false,
+				user.getProfileImage(), user.getNickname(), memory.getId(), LocalDateTime.now()));
+	}
 
+	@Transactional
+	public void checkNotification(Long notificationId) {
 
-    @Transactional
-    public void changeCommentPushStatus(Long userId, boolean status) {
+		Notification notification = notificationReader.findById(notificationId);
+		notification.userCheckedNotification();
+	}
 
-        User user = userReader.findById(userId);
-        user.changeCommenPushStatus(status);
-    }
-
-
-    @Transactional
-    public Notification createNotification(String body, NotificationType notificationType, Long userId, Long memoryId) {
-
-        User user = userReader.findById(userId);
-        Memory memory = memoryReader.findById(memoryId);
-        return notificationWriter.save(Notification.createNotification(body, userId, notificationType, false, user.getProfileImage(), user.getNickname(), memory.getId(), LocalDateTime.now()));
-    }
-
-    @Transactional
-    public void checkNotification(Long notificationId) {
-
-        Notification notification = notificationReader.findById(notificationId);
-        notification.userCheckedNotification();
-    }
 }

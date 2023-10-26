@@ -27,56 +27,75 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OAuthService {
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
-    private final UserWriter userWriter;
+	private final UserWriter userWriter;
 
-    private final LoginClientFactory loginClientFactory;
+	private final LoginClientFactory loginClientFactory;
 
-    private final JwtTokenProvider tokenProvider;
+	private final JwtTokenProvider tokenProvider;
 
-    private final AuthTokenRepository tokenRepository;
+	private final AuthTokenRepository tokenRepository;
 
-    private final FcmTokenRepository fcmTokenRepository;
+	private final FcmTokenRepository fcmTokenRepository;
 
+	@Transactional
+	public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
 
-    @Transactional
-    public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
+		LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider()); // Provider에
+																								// 맞는
+																								// 리소스
+																								// 서버
+																								// 통신
+																								// 클라이언트
+																								// 선택
+		LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken()); // 실제
+																										// 통신
+																										// 후
+																										// 유저
+																										// 데이터
+																										// 반환
 
-        LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider()); // Provider에 맞는 리소스 서버 통신 클라이언트 선택
-        LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken()); // 실제 통신 후 유저 데이터 반환
+		User user = userReader.findBySocialId(socialUser.uid()); // 기존에 회원가입한 이력 있는지 체크
 
-        User user = userReader.findBySocialId(socialUser.uid()); // 기존에 회원가입한 이력 있는지 체크
+		// 회원가입이 필요한 유저라면 회원가입 로직으로 넘긴다
+		if (Objects.isNull(user)) {
+			return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialUser.uid(), socialUser.provider()));
+		}
 
-        // 회원가입이 필요한 유저라면 회원가입 로직으로 넘긴다
-        if (Objects.isNull(user)) {
-            return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialUser.uid(), socialUser.provider()));
-        }
+		String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
+		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
+		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()),
+				refreshToken.getExpiredAt());
 
-        String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
-        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt());
+		storeFCMToken(user, oAuthLoginRequestDto.getFcmToken());
 
-        storeFCMToken(user, oAuthLoginRequestDto.getFcmToken());
+		return new OAuthResponseDto(TokenResponseDto.of(accessToken, refreshToken.getToken()), null);
+	}
 
-        return new OAuthResponseDto(TokenResponseDto.of(accessToken, refreshToken.getToken()), null);
-    }
+	public TokenResponseDto signup(OAuthSignupRequestDto oAuthSignupRequestDto) {
 
+		User user = userWriter
+			.save(User.oauthUser(oAuthSignupRequestDto.getSocialId(), oAuthSignupRequestDto.getProvider(),
+					oAuthSignupRequestDto.getEmail(), oAuthSignupRequestDto.getNickname(),
+					oAuthSignupRequestDto.getAgeGroup(), oAuthSignupRequestDto.getGender()));
 
-    public TokenResponseDto signup(OAuthSignupRequestDto oAuthSignupRequestDto) {
+		String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType()); // Access
+																								// Token
+																								// 생성
+		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType()); // Refresh
+																											// Token
+																											// 생성
+		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()),
+				refreshToken.getExpiredAt()); // Refresh Token을 Redis에 저장
 
-        User user = userWriter.save(User.oauthUser(oAuthSignupRequestDto.getSocialId(), oAuthSignupRequestDto.getProvider(), oAuthSignupRequestDto.getEmail(), oAuthSignupRequestDto.getNickname(), oAuthSignupRequestDto.getAgeGroup(), oAuthSignupRequestDto.getGender()));
+		storeFCMToken(user, oAuthSignupRequestDto.getFcmToken()); // FCM 토큰 Redis에 저장
 
-        String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType()); // Access Token 생성
-        RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType()); // Refresh Token 생성
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()), refreshToken.getExpiredAt()); // Refresh Token을 Redis에 저장
+		return TokenResponseDto.of(accessToken, refreshToken.getToken());
+	}
 
-        storeFCMToken(user, oAuthSignupRequestDto.getFcmToken()); // FCM 토큰 Redis에 저장
+	private void storeFCMToken(User user, String oAuthLoginRequestDto) {
+		fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto);
+	}
 
-        return TokenResponseDto.of(accessToken, refreshToken.getToken());
-    }
-
-    private void storeFCMToken(User user, String oAuthLoginRequestDto) {
-        fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto);
-    }
 }

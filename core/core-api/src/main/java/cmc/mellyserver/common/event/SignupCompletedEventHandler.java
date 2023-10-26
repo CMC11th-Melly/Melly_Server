@@ -1,10 +1,9 @@
 package cmc.mellyserver.common.event;
 
-
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.comment.event.SignupCompletedEvent;
-import cmc.mellyserver.email.EmailSendService;
+import cmc.mellyserver.mail.EmailService;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +18,19 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class SignupCompletedEventHandler {
 
-    public static final String SIGNUP_CELEBRATION_MAIL = "회원가입 축하드립니다!";
+	public static final String SIGNUP_CELEBRATION_MAIL = "회원가입 축하드립니다!";
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    private final EmailSendService emailSendService;
+	private final EmailService emailService;
 
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void signupEvent(SignupCompletedEvent event) {
+	@Async
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void signupEvent(SignupCompletedEvent event) {
 
-        User user = userRepository.findById(event.getUserId()).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        emailSendService.sendMail(SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
-    }
+		User user = userRepository.findById(event.getUserId())
+			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+		emailService.send(SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
+	}
+
 }

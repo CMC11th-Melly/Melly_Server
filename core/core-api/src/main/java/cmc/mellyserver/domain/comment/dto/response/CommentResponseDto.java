@@ -7,13 +7,15 @@ import java.util.List;
 
 @Data
 public class CommentResponseDto {
-    private int commentCount;
 
-    private List<CommentDto> comments;
+	private int commentCount;
 
-    @Builder
-    public CommentResponseDto(int commentCount, List<CommentDto> comments) {
-        this.commentCount = commentCount;
-        this.comments = comments;
-    }
+	private List<CommentDto> comments;
+
+	@Builder
+	public CommentResponseDto(int commentCount, List<CommentDto> comments) {
+		this.commentCount = commentCount;
+		this.comments = comments;
+	}
+
 }

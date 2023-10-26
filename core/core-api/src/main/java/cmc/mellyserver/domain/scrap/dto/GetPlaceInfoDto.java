@@ -9,14 +9,14 @@ import java.util.List;
 @AllArgsConstructor
 public class GetPlaceInfoDto {
 
-    private String name;
+	private String name;
 
-    private Boolean isScraped;
+	private Boolean isScraped;
 
-    private String placeImage;
+	private String placeImage;
 
-    private List<MyMemoryDto> myMemoryDtoList;
+	private List<MyMemoryDto> myMemoryDtoList;
 
-    private List<OtherMemoryDto> otherMemoryDtoList;
+	private List<OtherMemoryDto> otherMemoryDtoList;
 
 }

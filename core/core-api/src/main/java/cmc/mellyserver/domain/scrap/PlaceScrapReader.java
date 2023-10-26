@@ -19,28 +19,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PlaceScrapReader {
 
-    private final PlaceScrapRepository placeScrapRepository;
+	private final PlaceScrapRepository placeScrapRepository;
 
-    private final PlaceScrapQueryRepository placeScrapQueryRepository;
+	private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
-    public Optional<PlaceScrap> findByUserIdAndPlaceId(Long userId, Long placeId) {
-        return placeScrapRepository.findByUserIdAndPlaceId(userId, placeId);
-    }
+	public Optional<PlaceScrap> findByUserIdAndPlaceId(Long userId, Long placeId) {
+		return placeScrapRepository.findByUserIdAndPlaceId(userId, placeId);
+	}
 
-    public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
-        return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
-    }
+	public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
+			ScrapType scrapType) {
+		return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
+	}
 
-    public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
-        return placeScrapQueryRepository.getScrapedPlaceGrouping(userId);
-    }
+	public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
+		return placeScrapQueryRepository.getScrapedPlaceGrouping(userId);
+	}
 
-    public boolean checkUserScraped(Long userId, Long placeId) {
-        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
-    }
+	public boolean checkUserScraped(Long userId, Long placeId) {
+		return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
+	}
 
-    public boolean checkUserScraped(Long userId, Position position) {
-        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
-    }
+	public boolean checkUserScraped(Long userId, Position position) {
+		return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
+	}
 
 }

@@ -20,61 +20,58 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 public class UserProfileService {
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
-    private final StorageService fileUploader;
+	private final StorageService fileUploader;
 
+	@Cacheable(value = "image-volume:user-id", key = "#userId")
+	public int checkImageStorageVolume(final Long userId) {
 
-    @Cacheable(value = "image-volume:user-id", key = "#userId")
-    public int checkImageStorageVolume(final Long userId) {
+		User user = userReader.findById(userId);
+		return fileUploader.calculateImageVolume(user.getEmail()).intValue();
+	}
 
-        User user = userReader.findById(userId);
-        return fileUploader.calculateImageVolume(user.getEmail()).intValue();
-    }
+	@Cacheable(value = "profile:user-id", key = "#userId")
+	public ProfileResponseDto getProfile(final Long userId) {
 
+		User user = userReader.findById(userId);
+		return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
+	}
 
-    @Cacheable(value = "profile:user-id", key = "#userId")
-    public ProfileResponseDto getProfile(final Long userId) {
+	@CachePut(value = "profile:user-id", key = "#userId")
+	@Transactional
+	public void updateProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
 
-        User user = userReader.findById(userId);
-        return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
-    }
+		User user = userReader.findById(userId);
+		user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(),
+				profileUpdateRequestDto.getAgeGroup());
+	}
 
+	@CachePut(value = "image-volume:user-id", key = "#userId")
+	@Transactional
+	public void updateProfileImage(final Long userId, MultipartFile profileImage) throws IOException {
 
-    @CachePut(value = "profile:user-id", key = "#userId")
-    @Transactional
-    public void updateProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
+		User user = userReader.findById(userId);
+		removeExistProfileImage(user); // 기존에 등록된 이미지가 있다면 삭제한다
 
-        User user = userReader.findById(userId);
-        user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(), profileUpdateRequestDto.getAgeGroup());
-    }
+		if (Objects.nonNull(profileImage)) {
+			user.changeProfileImage(fileUploader.saveFile(user.getId(), extractFileInfo(profileImage)));
+		}
+	}
 
+	private FileDto extractFileInfo(MultipartFile profileImage) throws IOException {
 
-    @CachePut(value = "image-volume:user-id", key = "#userId")
-    @Transactional
-    public void updateProfileImage(final Long userId, MultipartFile profileImage) throws IOException {
+		return new FileDto(profileImage.getOriginalFilename(), profileImage.getSize(), profileImage.getContentType(),
+				profileImage.getInputStream());
+	}
 
-        User user = userReader.findById(userId);
-        removeExistProfileImage(user); // 기존에 등록된 이미지가 있다면 삭제한다
+	private void removeExistProfileImage(User user) throws IOException {
 
-        if (Objects.nonNull(profileImage)) {
-            user.changeProfileImage(fileUploader.saveFile(user.getId(), extractFileInfo(profileImage)));
-        }
-    }
+		if (Objects.nonNull(user.getProfileImage())) {
 
+			fileUploader.deleteFile(user.getProfileImage());
+			user.changeProfileImage(null);
+		}
+	}
 
-    private FileDto extractFileInfo(MultipartFile profileImage) throws IOException {
-
-        return new FileDto(profileImage.getOriginalFilename(), profileImage.getSize(), profileImage.getContentType(), profileImage.getInputStream());
-    }
-
-
-    private void removeExistProfileImage(User user) throws IOException {
-
-        if (Objects.nonNull(user.getProfileImage())) {
-
-            fileUploader.deleteFile(user.getProfileImage());
-            user.changeProfileImage(null);
-        }
-    }
 }

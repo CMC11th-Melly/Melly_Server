@@ -17,55 +17,60 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
 public class CommentController {
 
-    private final CommentService commentService;
+	private final CommentService commentService;
 
-    private final CommentLikeService commentLikeService;
+	private final CommentLikeService commentLikeService;
 
-    @DeleteMapping("/{commentId}/like")
-    public ResponseEntity<ApiResponse<Void>> removeCommentLike(@AuthenticationPrincipal User user, @PathVariable Long commentId) {
+	@DeleteMapping("/{commentId}/like")
+	public ResponseEntity<ApiResponse<Void>> removeCommentLike(@AuthenticationPrincipal User user,
+			@PathVariable Long commentId) {
 
-        commentLikeService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
-        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-    }
+		commentLikeService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
 
-    @PostMapping("/like")
-    public ResponseEntity<ApiResponse<Void>> saveCommentLike(@AuthenticationPrincipal User user, @RequestBody LikeRequest likeRequest) {
+	@PostMapping("/like")
+	public ResponseEntity<ApiResponse<Void>> saveCommentLike(@AuthenticationPrincipal User user,
+			@RequestBody LikeRequest likeRequest) {
 
-        commentLikeService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		commentLikeService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> saveComment(@CurrentUser LoginUser loginUser, @RequestBody CommentRequest commentRequest) {
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> saveComment(@CurrentUser LoginUser loginUser,
+			@RequestBody CommentRequest commentRequest) {
 
-        commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @GetMapping("/memory/{memoryId}")
-    public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId) {
+	@GetMapping("/memory/{memoryId}")
+	public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(@CurrentUser LoginUser loginUser,
+			@PathVariable Long memoryId) {
 
-        CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
-    }
+		CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
+	}
 
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse<Void>> removeComment(@PathVariable Long commentId) {
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<ApiResponse<Void>> removeComment(@PathVariable Long commentId) {
 
-        commentService.deleteComment(commentId);
-        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-    }
+		commentService.deleteComment(commentId);
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
 
-    @PatchMapping("/{commentId}")
-    public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest commentUpdateRequest) {
+	@PatchMapping("/{commentId}")
+	public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long commentId,
+			@RequestBody CommentUpdateRequest commentUpdateRequest) {
 
-        commentService.updateComment(commentId, commentUpdateRequest.getContent());
-        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
-    }
+		commentService.updateComment(commentId, commentUpdateRequest.getContent());
+		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+	}
+
 }

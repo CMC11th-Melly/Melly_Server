@@ -1,0 +1,6 @@
+feature: ['feature/*', 'feat/*']
+fix: fix/*
+document: docs/*
+refactor: refactor/*
+test: test/*
+release: release/*

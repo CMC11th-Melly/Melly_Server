@@ -11,16 +11,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProfileResponseDto implements Serializable {
 
-    private Long userId;
+	private Long userId;
 
-    private String nickname;
+	private String nickname;
 
-    private String email;
+	private String email;
 
-    private String profileImage;
+	private String profileImage;
 
+	public static ProfileResponseDto of(Long userId, String nickname, String email, String profileImage) {
+		return new ProfileResponseDto(userId, nickname, email, profileImage);
+	}
 
-    public static ProfileResponseDto of(Long userId, String nickname, String email, String profileImage) {
-        return new ProfileResponseDto(userId, nickname, email, profileImage);
-    }
 }

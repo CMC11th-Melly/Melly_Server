@@ -18,75 +18,76 @@ import java.util.List;
 @Table(name = "tb_comment")
 public class Comment extends JpaBaseEntity {
 
-    private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id;
+	private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
 
-    @Column(name = "content", nullable = false)
-    @Lob
-    private String content;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "comment_id")
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	@Column(name = "content", nullable = false)
+	@Lob
+	private String content;
 
-    @Column(name = "memory_id")
-    private Long memoryId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<CommentLike> commentLikes = new ArrayList<>();
+	@Column(name = "memory_id")
+	private Long memoryId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Comment parent;
+	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<CommentLike> commentLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-    private List<Comment> children = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	private Comment parent;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
+	@OneToMany(mappedBy = "parent", orphanRemoval = true)
+	private List<Comment> children = new ArrayList<>();
 
-    public Comment(String content) {
-        this.content = content;
-    }
+	@Column(name = "is_deleted")
+	private Boolean isDeleted;
 
-    public static Comment createComment(String content, User user, Long memoryId, Comment parent) {
+	public Comment(String content) {
+		this.content = content;
+	}
 
-        return Comment.builder().content(content).user(user).memoryId(memoryId).parent(parent).build();
-    }
+	public static Comment createComment(String content, User user, Long memoryId, Comment parent) {
 
-    @Builder
-    public Comment(String content, User user, Long memoryId, Comment parent) {
-        this.content = content;
-        this.user = user;
-        this.memoryId = memoryId;
-        this.parent = parent;
-    }
+		return Comment.builder().content(content).user(user).memoryId(memoryId).parent(parent).build();
+	}
 
+	@Builder
+	public Comment(String content, User user, Long memoryId, Comment parent) {
+		this.content = content;
+		this.user = user;
+		this.memoryId = memoryId;
+		this.parent = parent;
+	}
 
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
-    }
+	public void delete() {
+		this.isDeleted = Boolean.TRUE;
+	}
 
-    private void setParent(Comment parent) {
-        this.parent = parent;
-        if (parent != null) {
-            parent.getChildren().add(this);
-        }
-    }
+	private void setParent(Comment parent) {
+		this.parent = parent;
+		if (parent != null) {
+			parent.getChildren().add(this);
+		}
+	}
 
-    @PrePersist
-    void init() {
-        this.isDeleted = Boolean.FALSE;
-    }
+	@PrePersist
+	void init() {
+		this.isDeleted = Boolean.FALSE;
+	}
 
-    public void updateComment(String content) {
-        this.content = content;
-    }
+	public void updateComment(String content) {
+		this.content = content;
+	}
 
-    public void removeContent() {
-        this.content = REMOVE_COMMENT;
-    }
+	public void removeContent() {
+		this.content = REMOVE_COMMENT;
+	}
+
 }

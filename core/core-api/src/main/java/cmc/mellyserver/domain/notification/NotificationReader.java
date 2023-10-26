@@ -13,13 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationReader {
 
-    private final NotificationRepository notificationRepository;
+	private final NotificationRepository notificationRepository;
 
-    public Notification findById(Long notificationId) {
-        return notificationRepository.findById(notificationId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION));
-    }
+	public Notification findById(Long notificationId) {
+		return notificationRepository.findById(notificationId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION));
+	}
 
-    public List<Notification> getNotificationList(Long userId) {
-        return notificationRepository.findAllByUserId(userId);
-    }
+	public List<Notification> getNotificationList(Long userId) {
+		return notificationRepository.findAllByUserId(userId);
+	}
+
 }

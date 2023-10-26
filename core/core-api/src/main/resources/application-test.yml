@@ -5,7 +5,6 @@ client:
       naver: https://openapi.naver.com/v1/nid/me
       google: https://oauth2.googleapis.com/tokeninfo
       apple: https://appleid.apple.com/auth/keys
-
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -27,9 +26,9 @@ spring:
       ddl-auto: create-drop
 
   data:
-    mongodb:
-      uri: dfdf
-      database: melly
+    redis:
+      host: 127.0.0.1
+      port: 6379
 app:
   auth:
     access-expiration-time: 20000000 # 30분
@@ -56,8 +55,4 @@ cloud:
     credentials:
       access-key:
       secret-key:
-
-retry:
-  count: 3
-  sleep: 3000
 

@@ -11,7 +11,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserDto implements Serializable {
 
-    private Long userId;
-    private String profileImage;
-    private String nickname;
+	private Long userId;
+
+	private String profileImage;
+
+	private String nickname;
+
 }

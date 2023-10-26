@@ -62,6 +62,7 @@ dependencies {
     implementation project(":storage:db-redis")
     implementation project(":infra:notification")
     implementation project(":infra:file")
+    implementation project(":infra:mail")
     implementation project(":support:logging")
     implementation project(":clients:client-auth")
     testImplementation project(":test:api-docs")

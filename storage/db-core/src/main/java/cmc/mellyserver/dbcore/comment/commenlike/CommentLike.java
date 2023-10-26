@@ -12,26 +12,26 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_comment_like")
 public class CommentLike {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_like_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "comment_like_id")
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "comment_id")
+	private Comment comment;
 
-    private Long userId;
+	private Long userId;
 
-    public static CommentLike createCommentLike(Long id, Comment comment) {
-        CommentLike commentLike = new CommentLike();
-        commentLike.setComment(comment);
-        commentLike.userId = id;
-        return commentLike;
-    }
+	public static CommentLike createCommentLike(Long id, Comment comment) {
+		CommentLike commentLike = new CommentLike();
+		commentLike.setComment(comment);
+		commentLike.userId = id;
+		return commentLike;
+	}
 
-    public void setComment(Comment comment) {
-        this.comment = comment;
-    }
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
 
 }

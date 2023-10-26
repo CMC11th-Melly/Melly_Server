@@ -13,17 +13,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GroupAndUserReader {
 
-    private final GroupAndUserRepository groupAndUserRepository;
+	private final GroupAndUserRepository groupAndUserRepository;
 
-    public List<User> getGroupMembers(Long groupId) {
-        return groupAndUserRepository.getUsersParticipatedInGroup(groupId);
-    }
+	public List<User> getGroupMembers(Long groupId) {
+		return groupAndUserRepository.getUsersParticipatedInGroup(groupId);
+	}
 
-    public int countGroupMembers(Long groupId) {
-        return groupAndUserRepository.countUserParticipatedInGroup(groupId);
-    }
+	public int countGroupMembers(Long groupId) {
+		return groupAndUserRepository.countUserParticipatedInGroup(groupId);
+	}
 
-    public Optional<GroupAndUser> findByUserIdAndGroupId(final Long userId, final Long groupId) {
-        return groupAndUserRepository.findByUserIdAndGroupId(userId, groupId);
-    }
+	public Optional<GroupAndUser> findByUserIdAndGroupId(final Long userId, final Long groupId) {
+		return groupAndUserRepository.findByUserIdAndGroupId(userId, groupId);
+	}
+
 }

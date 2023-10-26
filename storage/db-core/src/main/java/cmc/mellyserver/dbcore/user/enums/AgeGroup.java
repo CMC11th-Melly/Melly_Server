@@ -1,26 +1,23 @@
 package cmc.mellyserver.dbcore.user.enums;
 
 public enum AgeGroup {
-    ONE(10),
-    TWO(20),
-    THREE(30),
-    FOUR(40),
-    FIVE(50),
-    SIX(60),
-    SEVEN(70);
 
-    private int ageGroup;
+	ONE(10), TWO(20), THREE(30), FOUR(40), FIVE(50), SIX(60), SEVEN(70);
 
-    public static AgeGroup from(final String value) {
+	private int ageGroup;
 
-        try {
-            return AgeGroup.valueOf(value.toUpperCase());
-        } catch (final IllegalArgumentException e) {
-            return null;
-        }
-    }
+	public static AgeGroup from(final String value) {
 
-    AgeGroup(int age) {
-        this.ageGroup = age;
-    }
+		try {
+			return AgeGroup.valueOf(value.toUpperCase());
+		}
+		catch (final IllegalArgumentException e) {
+			return null;
+		}
+	}
+
+	AgeGroup(int age) {
+		this.ageGroup = age;
+	}
+
 }

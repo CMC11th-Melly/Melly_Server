@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.group.query.dto;
 
-
 import cmc.mellyserver.dbcore.group.enums.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupListForSaveMemoryResponseDto {
 
-    private Long groupId;
-    private String groupName;
-    private GroupType groupType;
+	private Long groupId;
+
+	private String groupName;
+
+	private GroupType groupType;
+
 }

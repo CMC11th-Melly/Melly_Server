@@ -9,5 +9,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class KeywordRequest {
-    private List<String> keyword;
+
+	private List<String> keyword;
+
 }

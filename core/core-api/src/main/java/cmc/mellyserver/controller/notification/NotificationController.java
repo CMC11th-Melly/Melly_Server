@@ -15,59 +15,62 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
-    private final NotificationService notificationService;
+	private final NotificationService notificationService;
 
-    @GetMapping("/setting")
-    public ResponseEntity<ApiResponse<NotificationOnOffResponseDto>> getNotificationStatus(@CurrentUser LoginUser loginUser) {
+	@GetMapping("/setting")
+	public ResponseEntity<ApiResponse<NotificationOnOffResponseDto>> getNotificationStatus(
+			@CurrentUser LoginUser loginUser) {
 
-        NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
-    }
+		NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
+	}
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> saveNotification() {
-        notificationService.createNotification("내용", NotificationType.COMMENT_ENROLL, 1L, 1L);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> saveNotification() {
+		notificationService.createNotification("내용", NotificationType.COMMENT_ENROLL, 1L, 1L);
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<NotificationResponse>>> getNotifications(@CurrentUser LoginUser loginUser) {
+	@GetMapping
+	public ResponseEntity<ApiResponse<List<NotificationResponse>>> getNotifications(@CurrentUser LoginUser loginUser) {
 
-        List<NotificationResponse> notificationList = notificationService.getNotificationList(loginUser.getId());
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationList);
-    }
+		List<NotificationResponse> notificationList = notificationService.getNotificationList(loginUser.getId());
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationList);
+	}
 
-    @PostMapping("/setting")
-    public ResponseEntity<ApiResponse<Void>> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+	@PostMapping("/setting")
+	public ResponseEntity<ApiResponse<Void>> changeAppPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
-        notificationService.changeAppPushStatus(loginUser.getId(), status);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		notificationService.changeAppPushStatus(loginUser.getId(), status);
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @PostMapping("/setting/comment")
-    public ResponseEntity<ApiResponse<Void>> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+	@PostMapping("/setting/comment")
+	public ResponseEntity<ApiResponse<Void>> changeCommentPushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
 
-        notificationService.changeCommentPushStatus(loginUser.getId(), status);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		notificationService.changeCommentPushStatus(loginUser.getId(), status);
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @PostMapping("/setting/comment/like")
-    public ResponseEntity<ApiResponse<Void>> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser, Boolean status) {
+	@PostMapping("/setting/comment/like")
+	public ResponseEntity<ApiResponse<Void>> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser,
+			Boolean status) {
 
-        notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @PostMapping("/check")
-    public ResponseEntity<ApiResponse<Void>> checkNotification(@RequestBody NotificationCheckRequest notificationCheckRequest) {
+	@PostMapping("/check")
+	public ResponseEntity<ApiResponse<Void>> checkNotification(
+			@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
-        notificationService.checkNotification(notificationCheckRequest.getNotificationId());
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		notificationService.checkNotification(notificationCheckRequest.getNotificationId());
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
+
 }

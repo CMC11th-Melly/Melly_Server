@@ -15,15 +15,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GroupReader {
 
-    private final GroupRepository groupRepository;
+	private final GroupRepository groupRepository;
 
-    private final UserGroupQueryRepository userGroupQueryRepository;
+	private final UserGroupQueryRepository userGroupQueryRepository;
 
-    public UserGroup findById(Long groupId) {
-        return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
-    }
+	public UserGroup findById(Long groupId) {
+		return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
+	}
 
-    public Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate(Long userId, Long groupId, Pageable pageable) {
-        return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
-    }
+	public Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate(Long userId, Long groupId,
+			Pageable pageable) {
+		return userGroupQueryRepository.getGroupListLoginUserParticipate(userId, groupId, pageable);
+	}
+
 }

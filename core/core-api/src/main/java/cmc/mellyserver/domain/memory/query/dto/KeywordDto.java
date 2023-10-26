@@ -9,6 +9,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class KeywordDto implements Serializable {
 
-    private Long id;
-    private String content;
+	private Long id;
+
+	private String content;
+
 }

@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataExtractor {
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    public String extractDataField(String body) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(objectMapper.readValue(body, ApiResponse.class).getData());
-    }
+	public String extractDataField(String body) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(objectMapper.readValue(body, ApiResponse.class).getData());
+	}
+
 }
