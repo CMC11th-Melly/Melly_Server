@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDataWrappingDto {
 
-    private AccessTokenUserData user;
+	private AccessTokenUserData user;
+
 }

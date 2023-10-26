@@ -1,6 +1,5 @@
 package cmc.mellyserver.config;
 
-
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLikeRepository;
 import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
 import cmc.mellyserver.dbcore.config.jpa.JpaAuditingConfig;
@@ -17,47 +16,41 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
-@EnableJpaRepositories(basePackageClasses = {
-        UserRepository.class,
-        MemoryRepository.class,
-        PlaceRepository.class,
-        CommentRepository.class,
-        CommentLikeRepository.class,
-        PlaceScrapRepository.class,
-        JdbcTemplate.class,
-        GroupRepository.class,
-        GroupAndUserRepository.class,
-        NotificationRepository.class}
-)
+@EnableJpaRepositories(basePackageClasses = { UserRepository.class, MemoryRepository.class, PlaceRepository.class,
+		CommentRepository.class, CommentLikeRepository.class, PlaceScrapRepository.class, JdbcTemplate.class,
+		GroupRepository.class, GroupAndUserRepository.class, NotificationRepository.class })
 @EnableJpaAuditing
 @TestConfiguration
 @Import(JpaAuditingConfig.class)
 public class JpaTestConfig {
 
+	// @Bean
+	// public PlaceScrapQueryRepository placeScrapQueryRepository(JPAQueryFactory
+	// jpaQueryFactory) {
+	// return new PlaceScrapQueryRepository(jpaQueryFactory);
+	// }
+	//
+	// @Bean
+	// public PlaceQueryRepository placeQueryRepository(JPAQueryFactory jpaQueryFactory) {
+	// return new PlaceQueryRepository(jpaQueryFactory);
+	// }
+	//
+	// @Bean
+	// public MemoryQueryRepository memoryQueryRepository(JPAQueryFactory jpaQueryFactory)
+	// {
+	// return new MemoryQueryRepository(jpaQueryFactory);
+	// }
+	//
+	// @Bean
+	// public CommentQueryRepository commentQueryRepository(JPAQueryFactory
+	// jpaQueryFactory) {
+	// return new CommentQueryRepository(jpaQueryFactory);
+	// }
+	//
+	// @Bean
+	// public UserGroupQueryRepository userGroupQueryRepository(JPAQueryFactory
+	// jpaQueryFactory) {
+	// return new UserGroupQueryRepository(jpaQueryFactory);
+	// }
 
-//    @Bean
-//    public PlaceScrapQueryRepository placeScrapQueryRepository(JPAQueryFactory jpaQueryFactory) {
-//        return new PlaceScrapQueryRepository(jpaQueryFactory);
-//    }
-//
-//    @Bean
-//    public PlaceQueryRepository placeQueryRepository(JPAQueryFactory jpaQueryFactory) {
-//        return new PlaceQueryRepository(jpaQueryFactory);
-//    }
-//
-//    @Bean
-//    public MemoryQueryRepository memoryQueryRepository(JPAQueryFactory jpaQueryFactory) {
-//        return new MemoryQueryRepository(jpaQueryFactory);
-//    }
-//
-//    @Bean
-//    public CommentQueryRepository commentQueryRepository(JPAQueryFactory jpaQueryFactory) {
-//        return new CommentQueryRepository(jpaQueryFactory);
-//    }
-//
-//    @Bean
-//    public UserGroupQueryRepository userGroupQueryRepository(JPAQueryFactory jpaQueryFactory) {
-//        return new UserGroupQueryRepository(jpaQueryFactory);
-//    }
 }

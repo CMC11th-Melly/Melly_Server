@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceSimpleRequest {
-    private Double lat;
-    private Double lng;
+
+	private Double lat;
+
+	private Double lng;
+
 }

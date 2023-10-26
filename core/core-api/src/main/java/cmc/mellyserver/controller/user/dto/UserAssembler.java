@@ -11,14 +11,17 @@ import java.util.stream.Collectors;
  */
 public abstract class UserAssembler {
 
-    private UserAssembler() {
-    }
+	private UserAssembler() {
+	}
 
-    public static List<PlaceScrapCountResponse> placeScrapCountResponses(
-            List<PlaceScrapCountResponseDto> placeScrapCountResponseDtos) {
-        return placeScrapCountResponseDtos.stream().map(response -> PlaceScrapCountResponse.builder()
-                                .scrapType(response.getScrapType())
-                                .scrapCount(response.getScrapCount()).build())
-                .collect(Collectors.toList());
-    }
+	public static List<PlaceScrapCountResponse> placeScrapCountResponses(
+			List<PlaceScrapCountResponseDto> placeScrapCountResponseDtos) {
+		return placeScrapCountResponseDtos.stream()
+			.map(response -> PlaceScrapCountResponse.builder()
+				.scrapType(response.getScrapType())
+				.scrapCount(response.getScrapCount())
+				.build())
+			.collect(Collectors.toList());
+	}
+
 }

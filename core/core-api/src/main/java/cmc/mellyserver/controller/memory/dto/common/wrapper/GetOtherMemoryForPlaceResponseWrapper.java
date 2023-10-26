@@ -8,6 +8,9 @@ import org.springframework.data.domain.Slice;
 @Data
 @AllArgsConstructor
 public class GetOtherMemoryForPlaceResponseWrapper {
-    private Long memoryCount;
-    private Slice<MemoryResponse> memoryList;
+
+	private Long memoryCount;
+
+	private Slice<MemoryResponse> memoryList;
+
 }

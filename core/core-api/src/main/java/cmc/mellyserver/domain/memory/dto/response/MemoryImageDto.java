@@ -1,7 +1,5 @@
 package cmc.mellyserver.domain.memory.dto.response;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,6 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class MemoryImageDto {
 
-    private Long imageId;
-    private String memoryImage;
+	private Long imageId;
+
+	private String memoryImage;
+
 }

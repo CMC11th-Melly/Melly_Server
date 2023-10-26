@@ -7,12 +7,15 @@ import lombok.Data;
 @AllArgsConstructor
 public class OAuthLoginResponse {
 
-    private AccessTokenUserData user;
-    private String token;
-    private boolean isNewUser;
+	private AccessTokenUserData user;
 
-    public OAuthLoginResponse(boolean isNewUser, AccessTokenUserData user) {
-        this.isNewUser = isNewUser;
-        this.user = AccessTokenUserData.builder().uid(user.getUid()).build();
-    }
+	private String token;
+
+	private boolean isNewUser;
+
+	public OAuthLoginResponse(boolean isNewUser, AccessTokenUserData user) {
+		this.isNewUser = isNewUser;
+		this.user = AccessTokenUserData.builder().uid(user.getUid()).build();
+	}
+
 }

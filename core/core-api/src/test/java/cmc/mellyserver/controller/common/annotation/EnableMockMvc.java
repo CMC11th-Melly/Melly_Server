@@ -13,10 +13,14 @@ import java.lang.annotation.*;
 @AutoConfigureMockMvc
 @Import(EnableMockMvc.Config.class)
 public @interface EnableMockMvc {
-    class Config {
-        @Bean
-        public CharacterEncodingFilter characterEncodingFilter() {
-            return new CharacterEncodingFilter("UTF-8", true);
-        }
-    }
+
+	class Config {
+
+		@Bean
+		public CharacterEncodingFilter characterEncodingFilter() {
+			return new CharacterEncodingFilter("UTF-8", true);
+		}
+
+	}
+
 }

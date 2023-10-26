@@ -4,8 +4,9 @@ import java.util.Random;
 
 public class RandomNumberGenerator {
 
-    public static final String makeRandomNumber() {
-        Random random = new Random();
-        return String.valueOf(random.nextInt(900000));
-    }
+	public static final String makeRandomNumber() {
+		Random random = new Random();
+		return String.valueOf(random.nextInt(900000));
+	}
+
 }

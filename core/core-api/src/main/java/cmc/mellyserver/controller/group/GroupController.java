@@ -20,47 +20,52 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/groups")
 public class GroupController {
 
-    private final GroupService groupService;
+	private final GroupService groupService;
 
-    @GetMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<GroupLoginUserParticipatedResponse>> getGroupDetail(@PathVariable Long groupId) {
+	@GetMapping("/{groupId}")
+	public ResponseEntity<ApiResponse<GroupLoginUserParticipatedResponse>> getGroupDetail(@PathVariable Long groupId) {
 
-        GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId);
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, GroupAssembler.getUserGroupResponse(groupDetail));
-    }
+		GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, GroupAssembler.getUserGroupResponse(groupDetail));
+	}
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> addGroup(@CurrentUser LoginUser loginUser, @Valid @RequestBody GroupCreateRequest groupCreateRequest) {
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> addGroup(@CurrentUser LoginUser loginUser,
+			@Valid @RequestBody GroupCreateRequest groupCreateRequest) {
 
-        groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @PatchMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<Void>> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser, @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
+	@PatchMapping("/{groupId}")
+	public ResponseEntity<ApiResponse<Void>> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser,
+			@Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
 
-        groupService.updateGroup(GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
-        return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
-    }
+		groupService.updateGroup(GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
+		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+	}
 
-    @PostMapping("/{groupId}/participate")
-    public ResponseEntity<ApiResponse<Void>> participateToGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
+	@PostMapping("/{groupId}/participate")
+	public ResponseEntity<ApiResponse<Void>> participateToGroup(@CurrentUser LoginUser loginUser,
+			@PathVariable(name = "groupId") Long groupId) {
 
-        groupService.participateToGroup(loginUser.getId(), groupId);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
+		groupService.participateToGroup(loginUser.getId(), groupId);
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-    @DeleteMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<Void>> deleteGroup(@CurrentUser LoginUser loginUser, @PathVariable(name = "groupId") Long groupId) {
+	@DeleteMapping("/{groupId}")
+	public ResponseEntity<ApiResponse<Void>> deleteGroup(@CurrentUser LoginUser loginUser,
+			@PathVariable(name = "groupId") Long groupId) {
 
-        groupService.removeGroup(groupId);
-        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-    }
+		groupService.removeGroup(groupId);
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
 
-    @DeleteMapping("/{groupId}/exit")
-    public ResponseEntity<ApiResponse<Void>> exitGroup(@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
+	@DeleteMapping("/{groupId}/exit")
+	public ResponseEntity<ApiResponse<Void>> exitGroup(@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
 
-        groupService.exitGroup(loginUser.getId(), groupId);
-        return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-    }
+		groupService.exitGroup(loginUser.getId(), groupId);
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
+
 }

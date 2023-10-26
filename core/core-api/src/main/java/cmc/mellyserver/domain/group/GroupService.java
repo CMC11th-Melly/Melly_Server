@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.group;
 
-
 import cmc.mellyserver.common.aop.lock.annotation.DistributedLock;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
@@ -32,115 +31,108 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupService {
 
-    private static final int GROUP_MEMBER_MAX_COUNT = 9;
+	private static final int GROUP_MEMBER_MAX_COUNT = 9;
 
-    private final GroupReader groupReader;
+	private final GroupReader groupReader;
 
-    private final GroupWriter groupWriter;
+	private final GroupWriter groupWriter;
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
-    private final GroupAndUserReader groupAndUserReader;
+	private final GroupAndUserReader groupAndUserReader;
 
-    private final GroupAndUserWriter groupAndUserWriter;
+	private final GroupAndUserWriter groupAndUserWriter;
 
+	@Cacheable(value = "group:group-id", key = "#groupId")
+	public GroupDetailResponseDto getGroupDetail(final Long groupId) {
 
-    @Cacheable(value = "group:group-id", key = "#groupId")
-    public GroupDetailResponseDto getGroupDetail(final Long groupId) {
+		UserGroup userGroup = groupReader.findById(groupId);
+		List<User> groupMembers = groupAndUserReader.getGroupMembers(groupId);
+		return GroupDetailResponseDto.of(userGroup, groupMembers);
+	}
 
-        UserGroup userGroup = groupReader.findById(groupId);
-        List<User> groupMembers = groupAndUserReader.getGroupMembers(groupId);
-        return GroupDetailResponseDto.of(userGroup, groupMembers);
-    }
+	public GroupListLoginUserParticipatedResponse findGroupListLoginUserParticiated(final Long userId,
+			final Long groupId, final Pageable pageable) {
 
-    
-    public GroupListLoginUserParticipatedResponse findGroupListLoginUserParticiated(final Long userId, final Long groupId, final Pageable pageable) {
+		Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = groupReader
+			.groupListLoginUserParticipate(userId, groupId, pageable);
+		return transferToList(groupListLoginUserParticipate);
+	}
 
-        Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate = groupReader.groupListLoginUserParticipate(userId, groupId, pageable);
-        return transferToList(groupListLoginUserParticipate);
-    }
+	@Transactional
+	public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
 
+		User user = userReader.findById(createGroupRequestDto.getCreatorId());
+		UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
+		return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
+	}
 
-    @Transactional
-    public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
+	@Retry(name = "optimisticLock", fallbackMethod = "optimisticFallback")
+	@DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 3L)
+	@Transactional
+	public void participateToGroup(final Long userId, final Long groupId) {
 
-        User user = userReader.findById(createGroupRequestDto.getCreatorId());
-        UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
-        return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
-    }
+		User user = userReader.findById(userId);
+		UserGroup userGroup = groupReader.findById(groupId);
 
+		validateNewUserParticipateEnable(groupId);
+		checkUserAlreadyParticipatedInGroup(user.getId(), userGroup.getId());
 
-    @Retry(name = "optimisticLock", fallbackMethod = "optimisticFallback")
-    @DistributedLock(key = "#groupId", waitTime = 10L, leaseTime = 3L)
-    @Transactional
-    public void participateToGroup(final Long userId, final Long groupId) {
+		groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
+	}
 
-        User user = userReader.findById(userId);
-        UserGroup userGroup = groupReader.findById(groupId);
+	public void optimisticFallback(Long userId, Long groupId) {
+		throw new IllegalArgumentException("낙관적 락 실패");
+	}
 
-        validateNewUserParticipateEnable(groupId);
-        checkUserAlreadyParticipatedInGroup(user.getId(), userGroup.getId());
+	@CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
+	@Transactional
+	public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 
-        groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
-    }
+		UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
+		userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),
+				updateGroupRequestDto.getGroupIcon());
+	}
 
-    public void optimisticFallback(Long userId, Long groupId)
-    {
-        throw new IllegalArgumentException("낙관적 락 실패");
-    }
+	@CacheEvict(value = "group:group-id", key = "#groupId")
+	@Transactional
+	public void removeGroup(final Long groupId) {
 
+		UserGroup userGroup = groupReader.findById(groupId);
+		userGroup.remove();
+	}
 
-    @CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
-    @Transactional
-    public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
+	@CacheEvict(value = "group:group-id", key = "#groupId")
+	@Transactional
+	public void exitGroup(final Long userId, final Long groupId) {
 
-        UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
-        userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(), updateGroupRequestDto.getGroupIcon());
-    }
+		if (groupAndUserReader.countGroupMembers(groupId) < 2) {
+			removeGroup(groupId);
+		}
 
+		groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
+	}
 
-    @CacheEvict(value = "group:group-id", key = "#groupId")
-    @Transactional
-    public void removeGroup(final Long groupId) {
+	private void checkUserAlreadyParticipatedInGroup(final Long userId, final Long groupId) {
 
-        UserGroup userGroup = groupReader.findById(groupId);
-        userGroup.remove();
-    }
+		if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
+			throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
+		}
+	}
 
+	private void validateNewUserParticipateEnable(Long groupId) {
 
-    @CacheEvict(value = "group:group-id", key = "#groupId")
-    @Transactional
-    public void exitGroup(final Long userId, final Long groupId) {
+		if (groupAndUserReader.countGroupMembers(groupId) > GROUP_MEMBER_MAX_COUNT) {
+			throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
+		}
+	}
 
-        if (groupAndUserReader.countGroupMembers(groupId) < 2) {
-            removeGroup(groupId);
-        }
+	private GroupListLoginUserParticipatedResponse transferToList(
+			Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate) {
 
-        groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
-    }
-
-
-    private void checkUserAlreadyParticipatedInGroup(final Long userId, final Long groupId) {
-
-        if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
-        }
-    }
-
-
-    private void validateNewUserParticipateEnable(Long groupId) {
-
-        if (groupAndUserReader.countGroupMembers(groupId) > GROUP_MEMBER_MAX_COUNT) {
-            throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
-        }
-    }
-
-
-    private GroupListLoginUserParticipatedResponse transferToList(Slice<GroupLoginUserParticipatedResponseDto> groupListLoginUserParticipate) {
-
-        List<GroupLoginUserParticipatedResponseDto> contents = groupListLoginUserParticipate.getContent();
-        boolean next = groupListLoginUserParticipate.hasNext();
-        return GroupListLoginUserParticipatedResponse.from(contents, next);
-    }
+		List<GroupLoginUserParticipatedResponseDto> contents = groupListLoginUserParticipate.getContent();
+		boolean next = groupListLoginUserParticipate.hasNext();
+		return GroupListLoginUserParticipatedResponse.from(contents, next);
+	}
 
 }

@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class KeywordResponseDto {
-    private Long memoryId;
-    private String keyword;
+
+	private Long memoryId;
+
+	private String keyword;
+
 }

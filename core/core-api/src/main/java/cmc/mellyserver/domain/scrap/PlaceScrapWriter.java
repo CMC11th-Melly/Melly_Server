@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PlaceScrapWriter {
 
-    private final PlaceScrapRepository placeScrapRepository;
+	private final PlaceScrapRepository placeScrapRepository;
 
-    public PlaceScrap save(PlaceScrap placeScrap) {
-        return placeScrapRepository.save(placeScrap);
-    }
+	public PlaceScrap save(PlaceScrap placeScrap) {
+		return placeScrapRepository.save(placeScrap);
+	}
 
-    public void deleteByUserIdAndPlacePosition(Long userId, Position position) {
-        placeScrapRepository.deleteByUserIdAndPlacePosition(userId, position);
-    }
+	public void deleteByUserIdAndPlacePosition(Long userId, Position position) {
+		placeScrapRepository.deleteByUserIdAndPlacePosition(userId, position);
+	}
+
 }

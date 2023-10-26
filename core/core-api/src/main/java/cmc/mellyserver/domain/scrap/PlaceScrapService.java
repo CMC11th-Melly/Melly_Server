@@ -1,6 +1,5 @@
 package cmc.mellyserver.domain.scrap;
 
-
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
@@ -24,71 +23,67 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PlaceScrapService {
 
-    private final UserReader userReader;
+	private final UserReader userReader;
 
-    private final PlaceReader placeReader;
+	private final PlaceReader placeReader;
 
-    private final PlaceScrapReader placeScrapReader;
+	private final PlaceScrapReader placeScrapReader;
 
-    private final PlaceScrapWriter placeScrapWriter;
+	private final PlaceScrapWriter placeScrapWriter;
 
+	public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
 
-    public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
+		Slice<ScrapedPlaceResponseDto> userScrapedPlace = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
+				scrapType);
+		return ScrapedPlaceListResponse.from(userScrapedPlace.getContent(), userScrapedPlace.hasNext());
+	}
 
-        Slice<ScrapedPlaceResponseDto> userScrapedPlace = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId, scrapType);
-        return ScrapedPlaceListResponse.from(userScrapedPlace.getContent(), userScrapedPlace.hasNext());
-    }
+	@Cacheable(value = "scrap-count:user-id", key = "#userId")
+	public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
 
+		return placeScrapReader.getScrapedPlaceGrouping(userId);
+	}
 
-    @Cacheable(value = "scrap-count:user-id", key = "#userId")
-    public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
+	@CachePut(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
+	@Transactional
+	public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-        return placeScrapReader.getScrapedPlaceGrouping(userId);
-    }
+		Place place = placeReader
+			.findByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
+		User user = userReader.findById(createPlaceScrapRequestDto.getId());
 
+		checkScrapDuplicated(user.getId(), place.getId());
 
-    @CachePut(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
-    @Transactional
-    public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
+		placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
+	}
 
-        Place place = placeReader.findByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
-        User user = userReader.findById(createPlaceScrapRequestDto.getId());
+	@CachePut(value = "scrap-count:user-id", key = "#userId")
+	@Transactional
+	public void removeScrap(Long userId, Position position) {
 
-        checkScrapDuplicated(user.getId(), place.getId());
+		Place place = placeReader.findByPosition(position);
+		checkScrapExisted(userId, place.getId());
 
-        placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
-    }
+		placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
+	}
 
+	private void checkScrapDuplicated(Long userId, Long placeId) {
 
-    @CachePut(value = "scrap-count:user-id", key = "#userId")
-    @Transactional
-    public void removeScrap(Long userId, Position position) {
+		placeScrapReader.findByUserIdAndPlaceId(userId, placeId).ifPresent(x -> {
+			throw new BusinessException(ErrorCode.DUPLICATE_SCRAP);
+		});
+	}
 
-        Place place = placeReader.findByPosition(position);
-        checkScrapExisted(userId, place.getId());
+	private void checkScrapExisted(Long userId, Long placeId) {
 
-        placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
-    }
+		placeScrapReader.findByUserIdAndPlaceId(userId, placeId).orElseThrow(() -> {
+			throw new BusinessException(ErrorCode.NOT_EXIST_SCRAP);
+		});
+	}
 
-
-    private void checkScrapDuplicated(Long userId, Long placeId) {
-
-        placeScrapReader.findByUserIdAndPlaceId(userId, placeId).ifPresent(x -> {
-            throw new BusinessException(ErrorCode.DUPLICATE_SCRAP);
-        });
-    }
-
-
-    private void checkScrapExisted(Long userId, Long placeId) {
-
-        placeScrapReader.findByUserIdAndPlaceId(userId, placeId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NOT_EXIST_SCRAP);
-        });
-    }
 }

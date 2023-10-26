@@ -1,6 +1,5 @@
 package cmc.mellyserver.common.aop.place;
 
-
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.place.Position;
@@ -19,28 +18,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ValidatePlaceExistedAop {
 
-    private final PlaceRepository placeRepository;
+	private final PlaceRepository placeRepository;
 
-    @Around("@annotation(cmc.mellyserver.common.aop.place.ValidatePlaceExisted)")
-    public Object createPlace(final ProceedingJoinPoint joinPoint) throws Throwable {
+	@Around("@annotation(cmc.mellyserver.common.aop.place.ValidatePlaceExisted)")
+	public Object createPlace(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-        Object[] args = joinPoint.getArgs();
+		Object[] args = joinPoint.getArgs();
 
-        for (Object arg : args) {
-            if (arg instanceof Position) {
-                Optional<Place> place = placeRepository.findByPosition((Position) arg);
+		for (Object arg : args) {
+			if (arg instanceof Position) {
+				Optional<Place> place = placeRepository.findByPosition((Position) arg);
 
-//                if (place.isEmpty()) {
-//                    Place savePlace = createMemoryRequestDto.toPlace();
-//                    placeRepository.save(savePlace);
-//                }
+				// if (place.isEmpty()) {
+				// Place savePlace = createMemoryRequestDto.toPlace();
+				// placeRepository.save(savePlace);
+				// }
 
-                return joinPoint.proceed();
-            }
-        }
+				return joinPoint.proceed();
+			}
+		}
 
+		return null;
+	}
 
-        return null;
-    }
 }
-

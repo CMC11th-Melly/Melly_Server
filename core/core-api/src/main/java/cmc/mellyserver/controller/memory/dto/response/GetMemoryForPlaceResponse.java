@@ -13,18 +13,29 @@ import java.util.List;
 @AllArgsConstructor
 public class GetMemoryForPlaceResponse {
 
-    private Long placeId;
-    private String placeName;
-    private Long memoryId;
-    private List<ImageDto> memoryImages;
-    private String title;
-    private String content;
-    private GroupType groupType;
-    private String groupName;
-    private Long stars;
-    private List<String> keyword;
-    private boolean loginUserWrite;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
-    private LocalDateTime visitedDate;
+	private Long placeId;
+
+	private String placeName;
+
+	private Long memoryId;
+
+	private List<ImageDto> memoryImages;
+
+	private String title;
+
+	private String content;
+
+	private GroupType groupType;
+
+	private String groupName;
+
+	private Long stars;
+
+	private List<String> keyword;
+
+	private boolean loginUserWrite;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
+	private LocalDateTime visitedDate;
 
 }

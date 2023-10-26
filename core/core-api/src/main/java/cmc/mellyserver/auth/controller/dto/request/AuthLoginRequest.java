@@ -9,19 +9,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthLoginRequest {
 
-    @Email(message = "이메일 형식을 지켜야 합니다")
-    private String email;
+	@Email(message = "이메일 형식을 지켜야 합니다")
+	private String email;
 
-    private String password;
+	private String password;
 
-    private String fcmToken;
+	private String fcmToken;
 
-    public AuthLoginRequestDto toDto() {
-        return new AuthLoginRequestDto(email, password, fcmToken);
-    }
+	public AuthLoginRequestDto toDto() {
+		return new AuthLoginRequestDto(email, password, fcmToken);
+	}
 
-    public AuthLoginRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+	public AuthLoginRequest(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
 }

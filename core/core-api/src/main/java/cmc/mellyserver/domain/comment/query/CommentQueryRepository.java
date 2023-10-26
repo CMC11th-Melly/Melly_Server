@@ -10,26 +10,25 @@ import java.util.List;
 import static cmc.mellyserver.dbcore.comment.comment.QComment.comment;
 import static cmc.mellyserver.dbcore.user.QUser.user;
 
-
 @Repository
 @RequiredArgsConstructor
 public class CommentQueryRepository {
 
-    private final JPAQueryFactory query;
+	private final JPAQueryFactory query;
 
+	public List<Comment> findComment(Long userId, Long memoryId) {
 
-    public List<Comment> findComment(Long userId, Long memoryId) {
+		return query.selectFrom(comment)
+			.innerJoin(user)
+			.on(user.id.eq(userId))
+			.fetchJoin()
+			// .innerJoin(commentLike).on(comment.id.eq(commentLike.comment.id)).fetchJoin()
+			.where(comment.memoryId.eq(memoryId))
+			.orderBy(
+					// comment.parent.id.asc().nullsFirst(),
+					comment.createdDate.asc())
+			.fetch();
 
-        return query.selectFrom(comment)
-                .innerJoin(user).on(user.id.eq(userId)).fetchJoin()
-//                .innerJoin(commentLike).on(comment.id.eq(commentLike.comment.id)).fetchJoin()
-                .where(
-                        comment.memoryId.eq(memoryId)
-                )
-                .orderBy(
-//                        comment.parent.id.asc().nullsFirst(),
-                        comment.createdDate.asc()
-                ).fetch();
+	}
 
-    }
 }

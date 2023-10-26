@@ -13,23 +13,23 @@ import java.util.List;
 @Profile("test")
 public class MockFileUploader implements StorageService {
 
+	@Override
+	public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
+		return null;
+	}
 
-    @Override
-    public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
-        return null;
-    }
+	@Override
+	public String saveFile(Long userId, FileDto file) {
+		return "mock.jpg";
+	}
 
-    @Override
-    public String saveFile(Long userId, FileDto file) {
-        return "mock.jpg";
-    }
+	@Override
+	public void deleteFile(String fileName) {
+	}
 
-    @Override
-    public void deleteFile(String fileName) {
-    }
+	@Override
+	public Long calculateImageVolume(String username) {
+		return 1L;
+	}
 
-    @Override
-    public Long calculateImageVolume(String username) {
-        return 1L;
-    }
 }

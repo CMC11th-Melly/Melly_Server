@@ -8,19 +8,20 @@ import java.util.Objects;
 @Slf4j
 public class HeaderUtil {
 
-    private static final String HEADER_AUTHORIZATION = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
+	private static final String HEADER_AUTHORIZATION = "Authorization";
 
-    public static String getAccessToken(HttpServletRequest request) {
+	private static final String TOKEN_PREFIX = "Bearer ";
 
-        String headerValue = request.getHeader(HEADER_AUTHORIZATION);
+	public static String getAccessToken(HttpServletRequest request) {
 
-        if (!Objects.isNull(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
+		String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
-            return headerValue.substring(TOKEN_PREFIX.length());
-        }
+		if (!Objects.isNull(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
 
-        return null;
-    }
+			return headerValue.substring(TOKEN_PREFIX.length());
+		}
+
+		return null;
+	}
 
 }
