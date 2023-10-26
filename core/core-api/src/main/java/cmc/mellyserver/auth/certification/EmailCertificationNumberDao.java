@@ -1,12 +1,13 @@
 package cmc.mellyserver.auth.certification;
 
-import static cmc.mellyserver.mail.constant.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
-import static cmc.mellyserver.mail.constant.EmailConstants.PREFIX_CERTIFICATION;
+import static cmc.mellyserver.mail.EmailConstants.LIMIT_TIME_CERTIFICATION_NUMBER;
+import static cmc.mellyserver.mail.EmailConstants.PREFIX_CERTIFICATION;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ class EmailCertificationNumberDao implements CertificationNumberDao {
     public void saveCertificationNumber(String email, String certificationNumber) {
 
         redisTemplate.opsForValue()
-                .set(PREFIX_CERTIFICATION + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
+                .set(  PREFIX_CERTIFICATION + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
 
     }
 

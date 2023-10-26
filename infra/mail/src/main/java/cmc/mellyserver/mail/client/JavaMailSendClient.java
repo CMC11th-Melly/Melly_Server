@@ -1,19 +1,19 @@
-package cmc.mellyserver.mail.javamail;
+package cmc.mellyserver.mail.client;
 
-import cmc.mellyserver.mail.EmailSendService;
+import cmc.mellyserver.mail.EmailSendClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
 @Profile({"local", "prod"})
+@Component
 @RequiredArgsConstructor
-class JavaMailSendService implements EmailSendService {
+class JavaMailSendClient implements EmailSendClient {
 
     private final JavaMailSender mailSender;
 
@@ -22,7 +22,7 @@ class JavaMailSendService implements EmailSendService {
 
     @Override
     public void sendMail(String subject, String content, String... receivers) {
-
+        log.info("{} send mail to {}", subject, receivers);
         mailSender.send(createMessage(subject, content, receivers));
     }
 

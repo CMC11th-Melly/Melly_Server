@@ -1,4 +1,4 @@
-package cmc.mellyserver.mail.constant;
+package cmc.mellyserver.mail;
 
 public abstract class EmailConstants {
 
