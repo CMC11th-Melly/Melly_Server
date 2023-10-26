@@ -18,7 +18,7 @@ include 'infra:file'
 include 'infra:notification'
 include 'test:api-docs'
 include 'clients:client-auth'
-
+include 'infra:mail'
 
 
 
