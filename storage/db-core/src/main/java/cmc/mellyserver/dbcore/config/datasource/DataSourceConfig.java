@@ -14,46 +14,45 @@ import java.util.HashMap;
 
 import static cmc.mellyserver.dbcore.config.datasource.DatabaseType.SOURCE;
 
-
 @Configuration
-@Profile({"local", "prod"})
+@Profile({ "local", "prod" })
 public class DataSourceConfig {
 
-    @Bean
-    @Qualifier(SOURCE)
-    @ConfigurationProperties(prefix = "spring.datasource.source")
-    public DataSource sourceDataSource() {
-        return DataSourceBuilder.create()
-                .build();
-    }
+	@Bean
+	@Qualifier(SOURCE)
+	@ConfigurationProperties(prefix = "spring.datasource.source")
+	public DataSource sourceDataSource() {
+		return DataSourceBuilder.create().build();
+	}
 
-//    @Bean
-//    @Qualifier(REPLICA)
-//    @ConfigurationProperties(prefix = "spring.datasource.replica1")
-//    public DataSource replica1DataSource() {
-//        return DataSourceBuilder.create()
-//                .build();
-//    }
+	// @Bean
+	// @Qualifier(REPLICA)
+	// @ConfigurationProperties(prefix = "spring.datasource.replica1")
+	// public DataSource replica1DataSource() {
+	// return DataSourceBuilder.create()
+	// .build();
+	// }
 
-    @Bean
-    public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource) {
+	@Bean
+	public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource) {
 
-        RoutingDataSource routingDataSource = new RoutingDataSource();
+		RoutingDataSource routingDataSource = new RoutingDataSource();
 
-        HashMap<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(SOURCE, sourceDataSource);
-//        dataSourceMap.put(REPLICA, replica1DataSource);
+		HashMap<Object, Object> dataSourceMap = new HashMap<>();
+		dataSourceMap.put(SOURCE, sourceDataSource);
+		// dataSourceMap.put(REPLICA, replica1DataSource);
 
-        routingDataSource.setTargetDataSources(dataSourceMap);
-        routingDataSource.setDefaultTargetDataSource(sourceDataSource);
-        routingDataSource.afterPropertiesSet();
+		routingDataSource.setTargetDataSources(dataSourceMap);
+		routingDataSource.setDefaultTargetDataSource(sourceDataSource);
+		routingDataSource.afterPropertiesSet();
 
-        return routingDataSource;
-    }
+		return routingDataSource;
+	}
 
-    @Bean
-    @Primary
-    public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
-        return new LazyConnectionDataSourceProxy(routingDataSource);
-    }
+	@Bean
+	@Primary
+	public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
+		return new LazyConnectionDataSourceProxy(routingDataSource);
+	}
+
 }

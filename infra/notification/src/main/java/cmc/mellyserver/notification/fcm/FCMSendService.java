@@ -15,36 +15,34 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class FCMSendService implements NotificationService {
 
-    private final FcmTokenRepository tokenRepository;
+	private final FcmTokenRepository tokenRepository;
 
+	@Override
+	public void sendCommentCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
 
-    @Override
-    public void sendCommentCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
+		String token = tokenRepository.getToken(userId.toString());
+		Message message = createMessage(NotificationConstants.COMMENT_CREATED_TITLE,
+				nickname + NotificationConstants.COMMENT_CREATED_CONTENT, token);
+		send(message);
+	}
 
-        String token = tokenRepository.getToken(userId.toString());
-        Message message = createMessage(NotificationConstants.COMMENT_CREATED_TITLE, nickname + NotificationConstants.COMMENT_CREATED_CONTENT, token);
-        send(message);
-    }
+	@Override
+	public void sendCommentLikeCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
 
-    @Override
-    public void sendCommentLikeCreatedMessage(final Long userId, final Long memoryId, final String nickname) {
+		String token = tokenRepository.getToken(userId.toString());
+		Message message = createMessage(NotificationConstants.COMMENT_LIKE_NOTI_TITLE,
+				nickname + NotificationConstants.COMMENT_LIKE_NOTI_CONTENT, token);
+		send(message);
+	}
 
-        String token = tokenRepository.getToken(userId.toString());
-        Message message = createMessage(NotificationConstants.COMMENT_LIKE_NOTI_TITLE, nickname + NotificationConstants.COMMENT_LIKE_NOTI_CONTENT, token);
-        send(message);
-    }
+	private Message createMessage(String title, String content, String token) {
+		return Message.builder().putData("title", title).putData("content", content).setToken(token).build();
+	}
 
-
-    private Message createMessage(String title, String content, String token) {
-        return Message.builder()
-                .putData("title", title)
-                .putData("content", content)
-                .setToken(token)
-                .build();
-    }
-
-    public void send(Message message) {
-        FirebaseMessaging.getInstance(FirebaseApp.getInstance()).sendAsync(message); // 비동기로 메세지 전송
-    }
+	public void send(Message message) {
+		FirebaseMessaging.getInstance(FirebaseApp.getInstance()).sendAsync(message); // 비동기로
+																						// 메세지
+																						// 전송
+	}
 
 }

@@ -6,19 +6,19 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import static cmc.mellyserver.dbcore.config.datasource.DatabaseType.SOURCE;
 
-
 @Slf4j
 public class RoutingDataSource extends AbstractRoutingDataSource {
 
-    @Override
-    protected Object determineCurrentLookupKey() {
+	@Override
+	protected Object determineCurrentLookupKey() {
 
-        boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+		boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
-        if (isReadOnly) {
-            return SOURCE;
-        }
+		if (isReadOnly) {
+			return SOURCE;
+		}
 
-        return SOURCE;
-    }
+		return SOURCE;
+	}
+
 }

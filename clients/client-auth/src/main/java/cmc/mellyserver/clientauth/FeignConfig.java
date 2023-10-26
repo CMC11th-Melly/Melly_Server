@@ -7,14 +7,14 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @EnableFeignClients
-@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@ImportAutoConfiguration({ FeignAutoConfiguration.class })
 @Configuration
 public class FeignConfig {
 
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.FULL;
-    }
+	@Bean
+	Logger.Level feignLoggerLevel() {
+		return Logger.Level.FULL;
+	}
+
 }

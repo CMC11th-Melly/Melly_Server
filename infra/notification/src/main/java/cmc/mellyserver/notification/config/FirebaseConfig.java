@@ -11,22 +11,20 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-
 @Configuration
-@Profile({"local"})
+@Profile({ "local" })
 public class FirebaseConfig {
 
-    @PostConstruct
-    public void initializeFCM() throws IOException {
+	@PostConstruct
+	public void initializeFCM() throws IOException {
 
-        Resource resource = new ClassPathResource("firebase-key.json");
-        FileInputStream fis = new FileInputStream(resource.getFile());
+		Resource resource = new ClassPathResource("firebase-key.json");
+		FileInputStream fis = new FileInputStream(resource.getFile());
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(fis))
-                .build();
+		FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(fis))
+			.build();
 
-        FirebaseApp.initializeApp(options);
-    }
+		FirebaseApp.initializeApp(options);
+	}
 
 }

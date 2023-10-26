@@ -7,17 +7,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class FcmTokenRepository {
-    private final StringRedisTemplate tokenRedisTemplate;
 
-    public void saveToken(String key, String fcmToken) {
-        tokenRedisTemplate.opsForValue().set(key, fcmToken);
-    }
+	private final StringRedisTemplate tokenRedisTemplate;
 
-    public String getToken(String key) {
-        return tokenRedisTemplate.opsForValue().get(key);
-    }
+	public void saveToken(String key, String fcmToken) {
+		tokenRedisTemplate.opsForValue().set(key, fcmToken);
+	}
 
-    public void deleteToken(String key) {
-        tokenRedisTemplate.delete(key);
-    }
+	public String getToken(String key) {
+		return tokenRedisTemplate.opsForValue().get(key);
+	}
+
+	public void deleteToken(String key) {
+		tokenRedisTemplate.delete(key);
+	}
+
 }
