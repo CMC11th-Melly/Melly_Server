@@ -22,9 +22,10 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'io.spring.javaformat'
+  //  apply plugin: 'io.spring.javaformat'
     apply plugin: 'org.sonarqube'
-
+    apply plugin: 'jacoco'
+    apply plugin: 'jacoco-report-aggregation'
 
     dependencyManagement {
         imports {
@@ -32,6 +33,80 @@ subprojects {
         }
     }
 
+    jacoco {
+        toolVersion = '0.8.8' // 작성일(20.10.05) 기준
+        // reportsDir = ${project.reporting.baseDir}/jacoco
+    }
+
+    jacocoTestReport {
+        reports {
+            html.required = true
+            csv.required = true
+        }
+        def Qdomains = []
+
+        for (qPattern in '**/QA'..'**/QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+            Qdomains.add(qPattern + '*')
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(
+                    files(classDirectories.files.collect {
+                        fileTree(dir: it, excludes: [] + Qdomains)
+                    })
+            )
+        }
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+
+        def Qdomains = []
+
+        for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+            Qdomains.add(qPattern + '*')
+        }
+
+        violationRules {
+            rule {
+                enabled = true
+                element = 'CLASS'
+                // includes = []
+
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.00
+                }
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.00
+                }
+
+                limit {
+                    counter = 'LINE'
+                    value = 'TOTALCOUNT'
+                    maximum = 200
+                }
+
+                excludes = [] + Qdomains
+            }
+
+
+
+        }
+    }
+
+    sonar {
+        properties {
+            property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
+            property "sonar.organization", "cmc11th-melly"
+            property "sonar.host.url", "https://sonarcloud.io"
+        }
+    }
 
     dependencies {
 
@@ -51,6 +126,10 @@ subprojects {
     bootJar.enabled = false
     jar.enabled = true
 
+    test{
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+    }
 }
 
 // Sub-Module 적용
