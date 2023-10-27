@@ -10,15 +10,16 @@ pluginManagement {
 
 rootProject.name = "mellyServer"
 
-include 'storage:db-core'
-include 'storage:db-redis'
-include 'core:core-api'
-include 'support:logging'
-include 'infra:file'
-include 'infra:notification'
-include 'test:api-docs'
-include 'clients:client-auth'
-include 'infra:mail'
+
+include ':storage:db-core'
+include ':storage:db-redis'
+include ':core:core-api'
+include ':support:logging'
+include ':infra:file'
+include ':infra:notification'
+include ':test:api-docs'
+include ':clients:client-auth'
+include ':infra:mail'
 
 
 
