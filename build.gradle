@@ -106,7 +106,7 @@ subprojects {
             property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
             property "sonar.organization", "cmc11th-melly"
             property "sonar.host.url", "https://sonarcloud.io"
-            property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/test/jacocoTestReport.xml"
+            property "sonar.coverage.jacoco.xmlReportPaths", "/build/reports/jacoco/test/jacocoTestReport.xml"
         }
     }
 
