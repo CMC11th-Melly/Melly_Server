@@ -17,3 +17,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
+sonar {
+    properties {
+        property "sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/build/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
