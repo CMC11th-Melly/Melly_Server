@@ -19,22 +19,9 @@
 <br>
 <br>
 
-## 📕 Development Environment
+## 서비스 구조도
+![Source (6)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5381eaa9-f9af-48d8-aa45-0b943447fd0d)
 
-- <b>Language</b> :  Java 11
-
-- <b>Framework</b> : SpringBoot, Spring Security
-- <b>Database</b> : MySQL 8.0 , Spring Data JPA, QueryDSL
-- <b>DevOps</b> : EC2, S3, Redis, AWS CloudFront, AWS Lambda
-- <b>CI/CD</b> : Github actions, Docker
-- <b>Docs</b> : Swagger (SpringDocs)
-
-
-<br>
-
-## 🗓 Development
-
-2022.09.12 ~ 2021.11.12
 
 <br>
 
@@ -66,9 +53,9 @@
 
 <br>
 
-## 🏛 System Structure (구축중입니다)
 
-![Source (5)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/3f3aee3c-6359-48be-8617-20e1987d0329)
+
+
 
 
 
