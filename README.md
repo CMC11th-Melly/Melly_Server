@@ -19,19 +19,23 @@
 <br>
 <br>
 
-## 서비스 구조도
+## 🏗️ 서비스 구조도
 ![Source (6)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5381eaa9-f9af-48d8-aa45-0b943447fd0d)
 
 
 <br>
 
-## 📚 Folder Structure
+## 📚 모듈 아키텍처
 
 ```
-├── melly-api                     # 모바일 어플리케이션과 통신하는 REST API
-├── melly-batch                   # 내부 배치 서비스        
-├── melly-core                    # 서비스 로직, 도메인, 외부 모듈          
-└── melly-common                  # Utils           
+├── client:client-auth            # OAuth 리소스 서버와 통신하는 Client 모듈
+├── core:core-api                 # 모바일 클라이언트와 통신하는 API 모듈    
+├── storage:db-core               # MySQL 기반의 저장소 모듈
+├── storage:db-redis              # Redis 기반의 인메모리 저장소 모듈
+├── infra:file                    # 파일 저장소 모듈 (현재 S3 의존성 사용)     
+├── infra:mail                    # 메일 서비스 모듈 (현재 Java Mail 의존성 사용)
+├── infra:notification            # 알림 서비스 모듈 (현재 FCM 의존성 사용) 
+└── support:logging               # 로깅 모듈          
 ```
 
 <br>
