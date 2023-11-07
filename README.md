@@ -43,6 +43,7 @@
 ## ✅ Technical Issue
 
 - 분산 처리 환경에서 대용량 트래픽을 견디기 위한 로그인 기능 구현
+- Cursor 기반 페이징을 통한 조회 성능 최적화
 - AOP를 적용하여 부가 로직 제거
 - Spring Cache 적용으로 읽기 작업 성능 향상
 - Redis LRU Eviction 정책을 적용하여 효율적인 캐시 설정
