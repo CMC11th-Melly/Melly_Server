@@ -56,5 +56,5 @@
 - 분산락과 낙관적락을 사용한 동시성 제어
 - Spring Context Caching을 통한 통합 테스트 시간 최적화
 
-
+자세한 사항 : [테크니컬 이슈 위키](https://github.com/CMC11th-Melly/Melly_Server/wiki/Technical-Issue)
 
