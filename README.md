@@ -36,6 +36,8 @@
 ```
 <br>
 
+## 🏛️ Database Schema
+
 ## ⚙️ 주요 기능
 - [기능별 유즈케이스](https://github.com/CMC11th-Melly/Melly_Server/wiki/Use-Case)
 <br>
