@@ -36,11 +36,11 @@
 ```
 <br>
 
-## ✅ 주요 기능
+## ⚙️ 주요 기능
 - [기능별 유즈케이스](https://github.com/CMC11th-Melly/Melly_Server/wiki/Use-Case)
 <br>
 
-## ✅ Technical Issue
+## 📋 Technical Issue
 
 - 분산 처리 환경에서 대용량 트래픽을 견디기 위한 로그인 기능 구현
 - Cursor 기반 페이징을 통한 조회 성능 최적화
