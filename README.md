@@ -47,7 +47,7 @@
 - 대용량 트래픽 상황을 가정한 로그인 기능 성능 개선
 - Cursor 기반 페이징을 통한 조회 성능 최적화
 - Spring Cache 적용으로 읽기 작업 성능 향상
-- Redis LRU Eviction 정책을 적용하여 효율적인 캐시 설정
+- Redis LRU Eviction 정책과 서버 인스턴스 스펙에 적합한 max-memory 옵션을 적용하여 효율적인 캐시 설정
 - 부하 분산을 위한 MySQL Replication 구성 및 쿼리 요청 분기
 - 분산락과 낙관적락을 사용한 동시성 제어
 - AOP를 적용하여 부가 로직 제거
