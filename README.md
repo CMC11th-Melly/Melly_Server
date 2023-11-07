@@ -44,17 +44,18 @@
 
 ## 📋 Technical Issue
 
-- 분산 처리 환경에서 대용량 트래픽을 견디기 위한 로그인 기능 구현
+- 대용량 트래픽 상황을 가정한 로그인 기능 성능 개선
 - Cursor 기반 페이징을 통한 조회 성능 최적화
-- AOP를 적용하여 부가 로직 제거
 - Spring Cache 적용으로 읽기 작업 성능 향상
 - Redis LRU Eviction 정책을 적용하여 효율적인 캐시 설정
 - 부하 분산을 위한 MySQL Replication 구성 및 쿼리 요청 분기
+- 분산락과 낙관적락을 사용한 동시성 제어
+- AOP를 적용하여 부가 로직 제거
 - 멀티 모듈 구성를 통한 의존성 격리
 - 객체지향원칙 SOLID를 고려한 코드 설계
 - 도메인 주도 설계(DDD) 기반으로 애그리거트 간 객체 참조를 ID 참조로 변환
-- 분산락과 낙관적락을 사용한 동시성 제어
 - Spring Context Caching을 통한 통합 테스트 시간 최적화
+- Test Fixture를 사용한 테스트 코드 가독성 향상
 
 자세한 사항 : [테크니컬 이슈 위키](https://github.com/CMC11th-Melly/Melly_Server/wiki/Technical-Issue)
 
