@@ -37,6 +37,7 @@
 <br>
 
 ## 🏛️ Database Schema
+![Untitled](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/959d78e6-596b-4af7-8c12-48d6ce10e776)
 
 ## ⚙️ 주요 기능
 - [기능별 유즈케이스](https://github.com/CMC11th-Melly/Melly_Server/wiki/Use-Case)
