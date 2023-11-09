@@ -58,5 +58,3 @@
 - Spring Context Caching을 통한 통합 테스트 시간 최적화
 - Test Fixture를 사용한 테스트 코드 가독성 향상
 
-자세한 사항 : [테크니컬 이슈 위키](https://github.com/CMC11th-Melly/Melly_Server/wiki/Technical-Issue)
-
