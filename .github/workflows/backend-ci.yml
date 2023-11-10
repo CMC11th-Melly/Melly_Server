@@ -43,4 +43,4 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: ${{always()}}
         with:
-          files: /home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
+          files: /home/runner/work/Melly_Server/Melly_Server/core/core-api/build/test-results/**/**.xml
