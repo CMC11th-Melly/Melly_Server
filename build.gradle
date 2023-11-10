@@ -22,6 +22,7 @@ sonar {
         property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
         property "sonar.organization", "cmc11th-melly"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoAggregatedReport/jacocoAggregatedReport.xml"
     }
 }
 
@@ -111,12 +112,6 @@ subprojects {
 
     }
 
-    sonar {
-        properties {
-            property 'sonar.core.codeCoveragePlugin', 'jacoco'
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/testCodeCoverageReport/**.xml"
-        }
-    }
     dependencies {
 
         // Lombok
