@@ -1,6 +1,6 @@
 apply plugin: 'jacoco-report-aggregation'
-
 dependencies {
+
     jacocoAggregation project(":core:core-api")
     jacocoAggregation project(":storage:db-core")
     jacocoAggregation project(":storage:db-redis")

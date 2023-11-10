@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
     id 'org.sonarqube' version '4.4.1.3373'
+
 }
 
 allprojects {
@@ -30,7 +31,6 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
-
 
     dependencyManagement {
         imports {

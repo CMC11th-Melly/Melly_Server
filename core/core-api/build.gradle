@@ -12,6 +12,7 @@ configurations {
     }
     asciidoctorExt
 }
+apply plugin: 'jacoco-report-aggregation'
 
 dependencies {
 
