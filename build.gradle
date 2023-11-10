@@ -18,7 +18,7 @@ allprojects {
 
 
 sonar {
-    
+
     properties {
         property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
         property "sonar.organization", "cmc11th-melly"
@@ -115,8 +115,6 @@ subprojects {
     }
 
 
-
-    }
     dependencies {
 
         // Lombok
@@ -143,8 +141,9 @@ subprojects {
         useJUnitPlatform()
         finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport를 실행합니다.
     }
-}
 
+
+}
 // Sub-Module 적용
 task copyPrivate(type: Copy) {
     copy {
