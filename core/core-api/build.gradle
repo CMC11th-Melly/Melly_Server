@@ -94,7 +94,7 @@ asciidoctor { // asciidoctor 작업 구성입니다.
     configurations 'asciidoctorExt'
     baseDirFollowsSourceFile()
     inputs.dir snippetsDir
-    dependsOn test
+    dependsOn testCodeCoverageReport
 }
 
 // refresh를 위해 static/docs 폴더를 비웁니다.
