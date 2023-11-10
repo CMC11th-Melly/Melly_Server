@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
 import cmc.mellyserver.controller.place.dto.PlaceAssembler;
@@ -24,6 +23,7 @@ import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

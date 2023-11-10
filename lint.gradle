@@ -1,8 +1,0 @@
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'io.spring.javaformat'
-
-    dependencies {
-        compileOnly "io.spring.javaformat:spring-javaformat-gradle-plugin:${springJavaFormatVersion}"
-    }
-}

@@ -1,17 +1,22 @@
 package cmc.mellyserver.controller.scrap;
 
-import cmc.mellyserver.common.code.SuccessCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import cmc.mellyserver.controller.scrap.dto.ScrapAssembler;
 import cmc.mellyserver.controller.scrap.dto.request.ScrapCancelRequest;
 import cmc.mellyserver.controller.scrap.dto.request.ScrapRequest;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +27,7 @@ public class PlaceScrapController {
 
 	@PostMapping("/place/scrap")
 	public ResponseEntity<ApiResponse<Void>> scrapPlace(@AuthenticationPrincipal User user,
-			@RequestBody ScrapRequest scrapRequest) {
+		@RequestBody ScrapRequest scrapRequest) {
 
 		scrapService
 			.createScrap(ScrapAssembler.createPlaceScrapRequestDto(Long.parseLong(user.getUsername()), scrapRequest));
@@ -31,10 +36,10 @@ public class PlaceScrapController {
 
 	@DeleteMapping("/place/scrap")
 	public ResponseEntity<ApiResponse<Void>> removeScrap(@AuthenticationPrincipal User user,
-			@RequestBody ScrapCancelRequest scrapCancelRequest) {
+		@RequestBody ScrapCancelRequest scrapCancelRequest) {
 
 		scrapService.removeScrap(Long.parseLong(user.getUsername()),
-				new Position(scrapCancelRequest.getLat(), scrapCancelRequest.getLng()));
+			new Position(scrapCancelRequest.getLat(), scrapCancelRequest.getLng()));
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
 	}
 

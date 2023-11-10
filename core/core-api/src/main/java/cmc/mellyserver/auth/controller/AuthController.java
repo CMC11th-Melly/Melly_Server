@@ -1,24 +1,36 @@
 package cmc.mellyserver.auth.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import cmc.mellyserver.auth.AuthService;
 import cmc.mellyserver.auth.OAuthService;
 import cmc.mellyserver.auth.certification.CertificationService;
 import cmc.mellyserver.auth.certification.EmailCertificationRequest;
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
-import cmc.mellyserver.auth.controller.dto.request.*;
+import cmc.mellyserver.auth.controller.dto.request.AuthLoginRequest;
+import cmc.mellyserver.auth.controller.dto.request.CommonSignupRequest;
+import cmc.mellyserver.auth.controller.dto.request.OAuthLoginRequest;
+import cmc.mellyserver.auth.controller.dto.request.OAuthSignupRequest;
+import cmc.mellyserver.auth.controller.dto.request.ReIssueAccessTokenRequest;
 import cmc.mellyserver.auth.controller.dto.response.OAuthResponseDto;
 import cmc.mellyserver.auth.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.auth.dto.response.TokenResponseDto;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -35,7 +47,7 @@ public class AuthController {
 	// OAuth2를 사용한 소셜 인증
 	@PostMapping("/social")
 	public ResponseEntity<ApiResponse<OAuthResponseDto>> socialLogin(
-			@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
+		@Valid @RequestBody OAuthLoginRequest oAuthLoginRequest) {
 
 		OAuthResponseDto oAuthResponseDto = oAuthService.login(oAuthLoginRequest.toDto());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS, oAuthResponseDto);
@@ -43,7 +55,7 @@ public class AuthController {
 
 	@PostMapping("/social-signup")
 	public ResponseEntity<ApiResponse<TokenResponseDto>> socialSignup(
-			@Valid @RequestBody OAuthSignupRequest oAuthSignupRequest) {
+		@Valid @RequestBody OAuthSignupRequest oAuthSignupRequest) {
 
 		TokenResponseDto tokenResponseDto = oAuthService.signup(oAuthSignupRequest.toDto());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS, tokenResponseDto);
@@ -76,7 +88,7 @@ public class AuthController {
 	// 인증번호 재전송
 	@PostMapping("/email-certification/resends")
 	public ResponseEntity<ApiResponse<Void>> resendEmailCertification(
-			@RequestBody EmailCertificationRequest requestDto) {
+		@RequestBody EmailCertificationRequest requestDto) {
 
 		certificationService.sendCertification(requestDto.getEmail());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
@@ -108,14 +120,14 @@ public class AuthController {
 
 	@PatchMapping("/forget/password")
 	public ResponseEntity<ApiResponse<Void>> changePasswordByForget(
-			@Valid @RequestBody ChangePasswordRequest requestDto) {
+		@Valid @RequestBody ChangePasswordRequest requestDto) {
 		authService.updateForgetPassword(requestDto);
 		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
 	}
 
 	@PatchMapping("/password")
 	public ResponseEntity<ApiResponse<Void>> changePassword(@CurrentUser LoginUser loginUser,
-			@Valid @RequestBody ChangePasswordRequest requestDto) {
+		@Valid @RequestBody ChangePasswordRequest requestDto) {
 		authService.changePassword(loginUser.getId(), requestDto);
 		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
 	}
@@ -138,7 +150,7 @@ public class AuthController {
 
 	@PostMapping("/token/reissue")
 	public ResponseEntity<ApiResponse<TokenResponseDto>> generateAccessToken(
-			@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
+		@RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
 
 		TokenResponseDto tokenResponseDto = authService
 			.reIssueAccessTokenAndRefreshToken(reIssueAccessTokenRequest.getRefreshToken());

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.comment.dto.CommentAssembler;
 import cmc.mellyserver.controller.comment.dto.request.CommentRequest;
 import cmc.mellyserver.controller.comment.dto.request.CommentUpdateRequest;
@@ -21,6 +20,7 @@ import cmc.mellyserver.domain.comment.CommentLikeService;
 import cmc.mellyserver.domain.comment.CommentService;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 
 @RestController

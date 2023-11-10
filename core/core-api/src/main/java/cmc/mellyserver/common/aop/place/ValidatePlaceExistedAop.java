@@ -31,7 +31,6 @@ public class ValidatePlaceExistedAop {
 
 			if (arg instanceof CreatePlaceScrapRequestDto) {
 
-				log.info("AOP 실행 - CreatePlaceScrapRequestDto");
 				Optional<Place> place = placeRepository.findByPosition(((CreatePlaceScrapRequestDto)arg).getPosition());
 
 				if (place.isEmpty()) {
@@ -43,7 +42,7 @@ public class ValidatePlaceExistedAop {
 			}
 
 			if (arg instanceof CreateMemoryRequestDto) {
-				log.info("AOP 실행 - CreateMemoryRequestDto");
+
 				Optional<Place> place = placeRepository.findByPosition(((CreateMemoryRequestDto)arg).getPosition());
 
 				if (place.isEmpty()) {

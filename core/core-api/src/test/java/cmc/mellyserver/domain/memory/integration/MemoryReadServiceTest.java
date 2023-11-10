@@ -24,7 +24,7 @@ import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
-import cmc.mellyserver.domain.memory.MemoryReadService;
+import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
 import cmc.mellyserver.fixtures.GroupFixtures;
 import cmc.mellyserver.fixtures.MemoryFixtures;
@@ -34,7 +34,7 @@ import cmc.mellyserver.support.IntegrationTestSupport;
 public class MemoryReadServiceTest extends IntegrationTestSupport {
 
 	@Autowired
-	private MemoryReadService memoryReadService;
+	private MemoryService memoryService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -67,7 +67,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		}
 
 		// when
-		MemoryListResponse result = memoryReadService.findUserMemories(-1L, PageRequest.of(0, pageSize), 모카.getId(),
+		MemoryListResponse result = memoryService.getUserMemories(-1L, PageRequest.of(0, pageSize), 모카.getId(),
 			null,
 			null);
 
@@ -91,7 +91,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		Collections.reverse(all);
 
 		// when
-		MemoryListResponse result = memoryReadService.findUserMemories(all.get(0).getId() - 2, PageRequest.of(0, 1),
+		MemoryListResponse result = memoryService.getUserMemories(all.get(0).getId() - 2, PageRequest.of(0, 1),
 			모카.getId(), null,
 			null);
 
@@ -99,33 +99,6 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		assertThat(result.getContents()).hasSize(1);
 		assertThat(result.getNext()).isEqualTo(true);
 	}
-
-	// @DisplayName("특정 장소에 대해 내가 작성한 메모리를 조회한다")
-	// @ParameterizedTest
-	// @CsvSource({
-	// 	"5,    false",
-	// 	"4,   true",
-	// })
-	// void 특정_장소에_대해_내가_작성한_메모리를_조회한다(int pageSize, boolean hasNext) {
-	//
-	// 	// given
-	// 	User 모카 = userRepository.save(모카());
-	// 	Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
-	//
-	// 	for (int i = 0; i < 5; i++) {
-	// 		memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "성수 재밌었다", OpenType.ALL));
-	// 	}
-	//
-	// 	// when
-	// 	MemoryListResponse result = memoryReadService.findUserMemories(-1L,
-	// 		PageRequest.of(0, pageSize),
-	// 		모카.getId(),
-	// 		스타벅스.getId(), null);
-	//
-	// 	// then
-	// 	assertThat(result.getContents()).hasSize(pageSize);
-	// 	assertThat(result.getNext()).isEqualTo(hasNext);
-	// }
 
 	@DisplayName("특정 장소에 대해 내가 작성한 메모리를 조회한다2")
 	@Test
@@ -143,7 +116,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		Collections.reverse(all);
 
 		// when
-		MemoryListResponse result = memoryReadService.findUserMemoriesInPlace(all.get(0).getId() - 2,
+		MemoryListResponse result = memoryService.getUserMemoriesInPlace(all.get(0).getId() - 2,
 			PageRequest.of(0, 1),
 			모카.getId(),
 			스타벅스.getId(), null);
@@ -170,7 +143,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		}
 
 		// when
-		MemoryListResponse result = memoryReadService.findOtherMemoriesInPlace(-1L,
+		MemoryListResponse result = memoryService.getOtherMemoriesInPlace(-1L,
 			PageRequest.of(0, 10),
 			모카.getId(),
 			스타벅스.getId(), null);
@@ -200,7 +173,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		Collections.reverse(all);
 
 		// when
-		MemoryListResponse result = memoryReadService.findOtherMemoriesInPlace(all.get(0).getId() - 2,
+		MemoryListResponse result = memoryService.getOtherMemoriesInPlace(all.get(0).getId() - 2,
 			PageRequest.of(0, 5),
 			모카.getId(),
 			스타벅스.getId(), null);
@@ -230,7 +203,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 		}
 
 		// when
-		MemoryListResponse result = memoryReadService.findGroupMemoriesInPlace(-1L,
+		MemoryListResponse result = memoryService.getGroupMemoriesInPlace(-1L,
 			PageRequest.of(0, 10), 모카.getId(), 스타벅스.getId(), null);
 
 		// then

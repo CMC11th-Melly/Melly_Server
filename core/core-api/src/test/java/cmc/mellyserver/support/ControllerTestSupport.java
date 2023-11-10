@@ -23,8 +23,7 @@ import cmc.mellyserver.controller.user.UserController;
 import cmc.mellyserver.domain.comment.CommentLikeService;
 import cmc.mellyserver.domain.comment.CommentService;
 import cmc.mellyserver.domain.group.GroupService;
-import cmc.mellyserver.domain.memory.MemoryReadService;
-import cmc.mellyserver.domain.memory.MemoryWriteService;
+import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.notification.NotificationService;
 import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
@@ -51,10 +50,10 @@ public abstract class ControllerTestSupport {
 	protected PlaceScrapService placeScrapService;
 
 	@MockBean
-	protected MemoryReadService memoryReadService;
+	protected MemoryService memoryReadService;
 
 	@MockBean
-	protected MemoryWriteService memoryWriteService;
+	protected MemoryService memoryService;
 
 	@MockBean
 	protected CommentService commentService;

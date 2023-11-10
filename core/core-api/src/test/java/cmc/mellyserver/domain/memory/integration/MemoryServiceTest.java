@@ -17,8 +17,7 @@ import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
-import cmc.mellyserver.domain.memory.MemoryReadService;
-import cmc.mellyserver.domain.memory.MemoryWriteService;
+import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.fixtures.MemoryFixtures;
 import cmc.mellyserver.support.IntegrationTestSupport;
@@ -28,10 +27,7 @@ import cmc.mellyserver.support.exception.ErrorCode;
 public class MemoryServiceTest extends IntegrationTestSupport {
 
 	@Autowired
-	private MemoryReadService memoryReadService;
-
-	@Autowired
-	private MemoryWriteService memoryWriteService;
+	private MemoryService memoryService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -55,7 +51,7 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 
 			// when
 			Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(1L, 모카.getId(), null, "성수 재밌었다", OpenType.ALL));
-			memoryWriteService.removeMemory(메모리.getId());
+			memoryService.removeMemory(메모리.getId());
 
 			// then
 			Memory memory = memoryRepository.findById(메모리.getId()).get();
@@ -70,7 +66,7 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 			User 모카 = userRepository.save(모카());
 
 			// when & then
-			assertThatThrownBy(() -> memoryWriteService.removeMemory(-1L))
+			assertThatThrownBy(() -> memoryService.removeMemory(-1L))
 				.isInstanceOf(BusinessException.class)
 				.hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
 		}
@@ -84,7 +80,7 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 		CreateMemoryRequestDto 스타벅스 = CreateMemoryRequestDto.builder().lng(1.234).lat(1.234).placeName("스타벅스").build();
 
 		// when
-		memoryWriteService.createMemory(스타벅스);
+		memoryService.createMemory(스타벅스);
 
 		// then
 		Optional<Place> place = placeRepository.findByPosition(스타벅스.getPosition());

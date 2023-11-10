@@ -1,10 +1,10 @@
 package cmc.mellyserver.support.response;
 
-import cmc.mellyserver.common.code.SuccessCode;
+import org.springframework.http.ResponseEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.ResponseEntity;
 
 @Data
 @AllArgsConstructor

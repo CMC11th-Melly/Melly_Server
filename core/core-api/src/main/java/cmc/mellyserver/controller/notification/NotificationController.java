@@ -1,22 +1,24 @@
 package cmc.mellyserver.controller.notification;
 
-import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
-import cmc.mellyserver.auth.controller.dto.common.LoginUser;
-import cmc.mellyserver.common.code.SuccessCode;
-import cmc.mellyserver.controller.notification.dto.request.NotificationCheckRequest;
-import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
-import cmc.mellyserver.dbcore.notification.enums.NotificationType;
-import cmc.mellyserver.domain.notification.NotificationService;
-import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffResponseDto;
-import cmc.mellyserver.support.response.ApiResponse;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.controller.notification.dto.request.NotificationCheckRequest;
+import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
+import cmc.mellyserver.dbcore.notification.enums.NotificationType;
+import cmc.mellyserver.domain.notification.NotificationService;
+import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffResponseDto;
+import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class NotificationController {
 
 	@GetMapping("/setting")
 	public ResponseEntity<ApiResponse<NotificationOnOffResponseDto>> getNotificationStatus(
-			@CurrentUser LoginUser loginUser) {
+		@CurrentUser LoginUser loginUser) {
 
 		NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(loginUser.getId());
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, notificationOnOff);
@@ -62,7 +64,7 @@ public class NotificationController {
 
 	@PostMapping("/setting/comment/like")
 	public ResponseEntity<ApiResponse<Void>> changeCommentLikePushStatus(@CurrentUser LoginUser loginUser,
-			Boolean status) {
+		Boolean status) {
 
 		notificationService.changeCommentLikePushStatus(loginUser.getId(), status);
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
@@ -70,7 +72,7 @@ public class NotificationController {
 
 	@PostMapping("/check")
 	public ResponseEntity<ApiResponse<Void>> checkNotification(
-			@RequestBody NotificationCheckRequest notificationCheckRequest) {
+		@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
 		notificationService.readNotification(notificationCheckRequest.getNotificationId());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);

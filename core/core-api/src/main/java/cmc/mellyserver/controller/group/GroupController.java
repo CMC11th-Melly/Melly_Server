@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.group.dto.GroupAssembler;
 import cmc.mellyserver.controller.group.dto.request.GroupCreateRequest;
 import cmc.mellyserver.controller.group.dto.request.GroupUpdateRequest;
@@ -20,6 +19,7 @@ import cmc.mellyserver.controller.user.dto.response.GroupLoginUserParticipatedRe
 import cmc.mellyserver.domain.group.GroupService;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

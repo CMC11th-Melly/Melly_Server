@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
-import cmc.mellyserver.common.code.SuccessCode;
 import cmc.mellyserver.controller.user.dto.UserAssembler;
 import cmc.mellyserver.controller.user.dto.request.ProfileUpdateRequest;
 import cmc.mellyserver.controller.user.dto.response.PlaceScrapCountResponse;
@@ -26,7 +25,7 @@ import cmc.mellyserver.dbcore.group.enums.GroupType;
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
 import cmc.mellyserver.domain.group.GroupService;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
-import cmc.mellyserver.domain.memory.MemoryReadService;
+import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
 import cmc.mellyserver.domain.scrap.dto.response.ScrapedPlaceListResponse;
@@ -34,6 +33,7 @@ import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.domain.user.UserProfileService;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import cmc.mellyserver.support.response.SuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +46,7 @@ public class UserController {
 
 	private final UserProfileService userProfileService;
 
-	private final MemoryReadService memoryReadService;
+	private final MemoryService memoryService;
 
 	private final GroupService groupService;
 
@@ -83,7 +83,7 @@ public class UserController {
 		@RequestParam(required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
 		@RequestParam(required = false) GroupType groupType) {
 
-		MemoryListResponse memoryListResponse = memoryReadService.findUserMemories(lastId, pageable,
+		MemoryListResponse memoryListResponse = memoryService.getUserMemories(lastId, pageable,
 			loginUser.getId(), null, groupType);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
 	}
@@ -105,7 +105,7 @@ public class UserController {
 		@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
 		@PathVariable Long groupId, @RequestParam(required = false) GroupType groupType) {
 
-		MemoryListResponse memoryListResponse = memoryReadService.findGroupMemoriesById(lastId, pageable, groupId,
+		MemoryListResponse memoryListResponse = memoryService.getGroupMemoriesById(lastId, pageable, groupId,
 			loginUser.getId(), groupType);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
 	}

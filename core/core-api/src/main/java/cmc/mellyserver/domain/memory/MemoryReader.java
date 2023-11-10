@@ -35,7 +35,7 @@ public class MemoryReader {
 		return memoryQueryRepository.countMemoriesBelongToPlace(userId, placeId);
 	}
 
-	public MemoryDetailResponseDto findMemoryDetail(final Long memoryId) {
+	public MemoryDetailResponseDto getMemory(final Long memoryId) {
 		MemoryDetailResponseDto memoryDetail = memoryQueryRepository.findMemoryDetail(memoryId);
 		List<ImageDto> memoryImage = memoryQueryRepository.findMemoryImage(memoryDetail.getMemoryId());
 		memoryDetail.setMemoryImages(memoryImage);
@@ -43,7 +43,7 @@ public class MemoryReader {
 		return memoryDetail;
 	}
 
-	public MemoryListResponse findUserMemories(final Long lastId, final Pageable pageable, final Long userId,
+	public MemoryListResponse getUserMemories(final Long lastId, final Pageable pageable, final Long userId,
 		final Long placeId, final GroupType groupType) {
 		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.findUserMemories(lastId, pageable, userId,
 			placeId, groupType);
@@ -64,10 +64,10 @@ public class MemoryReader {
 		return transferToList(memoryResponseDtos);
 	}
 
-	public MemoryListResponse findGroupMemories(final Long lastId, final Pageable pageable, final Long groupId,
-		final Long userId, final GroupType groupType) {
+	public MemoryListResponse findGroupMemories(final Long lastId, final Pageable pageable, final Long userId,
+		final Long placeId, final GroupType groupType) {
 		Slice<MemoryResponseDto> groupMemories = memoryQueryRepository.findGroupMemories(lastId, pageable, userId,
-			groupId, groupType);
+			placeId, groupType);
 		return transferToList(groupMemories);
 	}
 
