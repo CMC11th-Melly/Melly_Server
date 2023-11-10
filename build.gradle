@@ -18,6 +18,7 @@ allprojects {
 
 
 sonar {
+    
     properties {
         property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
         property "sonar.organization", "cmc11th-melly"
