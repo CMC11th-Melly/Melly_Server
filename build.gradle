@@ -109,7 +109,8 @@ subprojects {
 
     sonar {
         properties {
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/testCodeCoverageReport/**.xml"
+            property 'sonar.core.codeCoveragePlugin', 'jacoco'
+            property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/testCodeCoverageReport/**.xml"
         }
     }
     dependencies {
