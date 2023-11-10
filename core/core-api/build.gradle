@@ -69,6 +69,13 @@ dependencies {
     implementation project(":clients:client-auth")
 
 
+    jacocoAggregation project(":storage:db-core")
+    jacocoAggregation project(":storage:db-redis")
+    jacocoAggregation project(":infra:notification")
+    jacocoAggregation project(":infra:file")
+    jacocoAggregation project(":infra:mail")
+    jacocoAggregation project(":support:logging")
+    jacocoAggregation project(":clients:client-auth")
 }
 
 
