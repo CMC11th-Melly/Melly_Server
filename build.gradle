@@ -17,17 +17,6 @@ allprojects {
 }
 
 
-sonar {
-
-    properties {
-        property "sonar.verbose", true
-        property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
-        property "sonar.organization", "cmc11th-melly"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.coverage.jacoco.xmlReportPaths", "/home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
-    }
-}
-
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
@@ -36,7 +25,14 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'jacoco-report-aggregation'
 
-
+    sonar {
+        properties {
+            property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
+            property "sonar.organization", "cmc11th-melly"
+            property "sonar.host.url", "https://sonarcloud.io"
+            property "sonar.coverage.jacoco.xmlReportPaths", "/home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+        }
+    }
     dependencyManagement {
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
