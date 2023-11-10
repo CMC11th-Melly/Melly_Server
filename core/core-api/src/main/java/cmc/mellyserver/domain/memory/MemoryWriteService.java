@@ -1,20 +1,18 @@
 package cmc.mellyserver.domain.memory;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
-import cmc.mellyserver.dbcore.group.UserGroup;
+import cmc.mellyserver.common.event.MemoryCreatedEvent;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.place.Place;
-import cmc.mellyserver.dbcore.place.Position;
-import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.domain.group.GroupReader;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.place.PlaceReader;
-import cmc.mellyserver.domain.user.UserReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +24,7 @@ public class MemoryWriteService {
 
 	private final MemoryWriter memoryWriter;
 
-	private final UserReader userReader;
-
-	private final GroupReader groupReader;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@ValidatePlaceExisted
 	@Transactional
@@ -37,7 +33,7 @@ public class MemoryWriteService {
 		Memory memory = createMemoryRequestDto.toMemory();
 		enrollPlaceInfo(createMemoryRequestDto, memory);
 		enrollMemoryImage(createMemoryRequestDto, memory);
-
+		applicationEventPublisher.publishEvent(new MemoryCreatedEvent(memory.getId()));
 		return memoryWriter.save(memory).getId();
 	}
 
@@ -45,16 +41,6 @@ public class MemoryWriteService {
 	@Transactional
 	public void updateMemory(final UpdateMemoryRequestDto updateMemoryRequestDto) {
 
-		Memory memory = memoryReader.findById(updateMemoryRequestDto.getMemoryId());
-		UserGroup userGroup = groupReader.findById(updateMemoryRequestDto.getGroupId());
-		User user = userReader.findById(updateMemoryRequestDto.getId());
-
-		// memory.updateMemory(updateMemoryRequestDto.getTitle(),
-		// updateMemoryRequestDto.getContent(), updateMemoryRequestDto.getKeyword(),
-		// userGroup.getId(), updateMemoryRequestDto.getOpenType(),
-		// updateMemoryRequestDto.getVisitedDate(), updateMemoryRequestDto.getStar(),
-		// updateMemoryRequestDto.getDeleteImageList(),
-		// storageService.saveFileList(user.getId(), updateMemoryRequestDto.getImages()));
 	}
 
 	@CacheEvict(value = "memory", key = "#memoryId")
@@ -67,8 +53,7 @@ public class MemoryWriteService {
 
 	private void enrollPlaceInfo(final CreateMemoryRequestDto createMemoryRequestDto, final Memory memory) {
 
-		Place place = placeReader
-			.findByPosition(new Position(createMemoryRequestDto.getLat(), createMemoryRequestDto.getLng()));
+		Place place = placeReader.findByPosition(createMemoryRequestDto.getPosition());
 		memory.setPlaceId(place.getId());
 	}
 

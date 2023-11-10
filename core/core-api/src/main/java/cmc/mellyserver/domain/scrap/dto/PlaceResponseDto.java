@@ -1,16 +1,19 @@
 package cmc.mellyserver.domain.scrap.dto;
 
+import java.util.HashMap;
+
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.HashMap;
-
 @Data
 @AllArgsConstructor
 public class PlaceResponseDto {
+
+	private static final String MY_MEMORY = "myMemory";
+	private static final String OTHER_MEMORY = "otherMemory";
 
 	private Long placeId = -1L;
 
@@ -39,9 +42,9 @@ public class PlaceResponseDto {
 	}
 
 	public static PlaceResponseDto of(Place place, boolean isUserScraped, HashMap<String, Long> memoryCount) {
-		return new PlaceResponseDto(place.getId(), place.getPosition(), memoryCount.get("myMemory"),
-				memoryCount.get("otherMemory"), isUserScraped, place.getPlaceCategory(), place.getPlaceName(),
-				place.getPlaceImage());
+		return new PlaceResponseDto(place.getId(), place.getPosition(), memoryCount.get(MY_MEMORY),
+			memoryCount.get(OTHER_MEMORY), isUserScraped, place.getPlaceCategory(), place.getPlaceName(),
+			place.getPlaceImage());
 	}
 
 }

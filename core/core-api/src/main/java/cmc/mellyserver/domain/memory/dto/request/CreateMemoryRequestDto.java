@@ -1,24 +1,23 @@
 package cmc.mellyserver.domain.memory.dto.request;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.enums.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class CreateMemoryRequestDto {
 
 	Long userId;
 
-	Double lat;
-
-	Double lng;
+	Position position;
 
 	String title;
 
@@ -42,11 +41,10 @@ public class CreateMemoryRequestDto {
 
 	@Builder
 	public CreateMemoryRequestDto(Long userId, Double lat, Double lng, String title, String placeName,
-			String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword,
-			LocalDate visitedDate, List<MultipartFile> multipartFiles) {
+		String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword,
+		LocalDate visitedDate, List<MultipartFile> multipartFiles) {
 		this.userId = userId;
-		this.lat = lat;
-		this.lng = lng;
+		this.position = new Position(lat, lng);
 		this.title = title;
 		this.placeName = placeName;
 		this.placeCategory = placeCategory;
@@ -61,7 +59,7 @@ public class CreateMemoryRequestDto {
 
 	public Place toPlace() {
 		return Place.builder()
-			.position(new Position(lat, lng))
+			.position(position)
 			.placeCategory(placeCategory)
 			.placeName(placeName)
 			.build();

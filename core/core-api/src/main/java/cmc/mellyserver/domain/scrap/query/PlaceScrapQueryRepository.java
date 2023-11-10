@@ -1,5 +1,9 @@
 package cmc.mellyserver.domain.scrap.query;
 
+import static cmc.mellyserver.dbcore.place.QPlace.place;
+import static cmc.mellyserver.dbcore.scrap.QPlaceScrap.placeScrap;
+import static cmc.mellyserver.dbcore.user.QUser.user;
+
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
 import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
@@ -7,17 +11,12 @@ import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-import static cmc.mellyserver.dbcore.place.QPlace.place;
-import static cmc.mellyserver.dbcore.scrap.QPlaceScrap.placeScrap;
-import static cmc.mellyserver.dbcore.user.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -75,13 +74,10 @@ public class PlaceScrapQueryRepository {
 			ScrapType scrapType) {
 
 		List<ScrapedPlaceResponseDto> results = query
-			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory,
-					place.placeName, place.placeImage))
+			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory, place.placeName, place.placeImage))
 			.from(placeScrap)
 			.innerJoin(placeScrap.place, place)
-			.fetchJoin()
 			.innerJoin(placeScrap.user, user)
-			.fetchJoin()
 			.where(ltPlaceId(lastId), placeScrap.user.id.eq(userId), placeScrap.scrapType.eq(scrapType))
 			.orderBy(place.id.desc())
 			.limit(pageable.getPageSize() + 1)
@@ -99,7 +95,7 @@ public class PlaceScrapQueryRepository {
 
 	private BooleanExpression ltPlaceId(Long placeId) {
 
-		if (placeId == null) {
+		if (placeId == -1L) {
 			return null;
 		}
 

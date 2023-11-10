@@ -1,5 +1,15 @@
 package cmc.mellyserver.domain.scrap;
 
+import java.util.List;
+
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
@@ -11,17 +21,7 @@ import cmc.mellyserver.domain.scrap.dto.response.ScrapedPlaceListResponse;
 import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
 import cmc.mellyserver.domain.user.UserReader;
-import cmc.mellyserver.support.exception.BusinessException;
-import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,54 +36,39 @@ public class PlaceScrapService {
 
 	private final PlaceScrapWriter placeScrapWriter;
 
-	public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
+	private final PlaceScrapValidator placeScrapValidator;
 
-		Slice<ScrapedPlaceResponseDto> userScrapedPlace = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
-				scrapType);
-		return ScrapedPlaceListResponse.from(userScrapedPlace.getContent(), userScrapedPlace.hasNext());
+	public ScrapedPlaceListResponse findScrapedPlace(final Long lastId, final Pageable pageable, final Long userId,
+		final ScrapType scrapType) {
+
+		Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
+			scrapType);
+		return ScrapedPlaceListResponse.from(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
 	}
 
 	@Cacheable(value = "scrap-count:user-id", key = "#userId")
-	public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
+	public List<PlaceScrapCountResponseDto> countByPlaceScrapType(final Long userId) {
 
 		return placeScrapReader.getScrapedPlaceGrouping(userId);
 	}
 
 	@CachePut(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
+	@ValidatePlaceExisted
 	@Transactional
-	public void createScrap(CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
+	public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-		Place place = placeReader
-			.findByPosition(new Position(createPlaceScrapRequestDto.getLat(), createPlaceScrapRequestDto.getLng()));
+		Place place = placeReader.findByPosition(createPlaceScrapRequestDto.getPosition());
 		User user = userReader.findById(createPlaceScrapRequestDto.getId());
-
-		checkScrapDuplicated(user.getId(), place.getId());
-
+		placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
 		placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
 	}
 
 	@CachePut(value = "scrap-count:user-id", key = "#userId")
 	@Transactional
-	public void removeScrap(Long userId, Position position) {
+	public void removeScrap(final Long userId, final Position position) {
 
 		Place place = placeReader.findByPosition(position);
-		checkScrapExisted(userId, place.getId());
-
+		placeScrapValidator.validateExistedScrap(userId, place.getId());
 		placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
 	}
-
-	private void checkScrapDuplicated(Long userId, Long placeId) {
-
-		placeScrapReader.findByUserIdAndPlaceId(userId, placeId).ifPresent(x -> {
-			throw new BusinessException(ErrorCode.DUPLICATE_SCRAP);
-		});
-	}
-
-	private void checkScrapExisted(Long userId, Long placeId) {
-
-		placeScrapReader.findByUserIdAndPlaceId(userId, placeId).orElseThrow(() -> {
-			throw new BusinessException(ErrorCode.NOT_EXIST_SCRAP);
-		});
-	}
-
 }

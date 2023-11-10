@@ -1,25 +1,24 @@
 package cmc.mellyserver.config.cache;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
-import java.time.Duration;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @EnableCaching
 @Configuration
-@Profile({ "local", "prod" })
 public class CacheConfig {
 
 	@Autowired
@@ -64,8 +63,7 @@ public class CacheConfig {
 	public RedisCacheManager redisCacheManager() {
 
 		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-			.entryTtl(Duration.ofSeconds(60))
-			.disableCachingNullValues()
+			.entryTtl(Duration.ofHours(1L))
 			.serializeValuesWith(RedisSerializationContext.SerializationPair
 				.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
 

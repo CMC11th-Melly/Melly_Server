@@ -1,5 +1,15 @@
 package cmc.mellyserver.controller.group;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.common.code.SuccessCode;
@@ -12,8 +22,6 @@ import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,15 +31,16 @@ public class GroupController {
 	private final GroupService groupService;
 
 	@GetMapping("/{groupId}")
-	public ResponseEntity<ApiResponse<GroupLoginUserParticipatedResponse>> getGroupDetail(@PathVariable Long groupId) {
+	public ResponseEntity<ApiResponse<GroupLoginUserParticipatedResponse>> getGroupDetail(
+		@CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
 
-		GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId);
+		GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId, loginUser.getId());
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, GroupAssembler.getUserGroupResponse(groupDetail));
 	}
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> addGroup(@CurrentUser LoginUser loginUser,
-			@Valid @RequestBody GroupCreateRequest groupCreateRequest) {
+		@Valid @RequestBody GroupCreateRequest groupCreateRequest) {
 
 		groupService.saveGroup(GroupAssembler.createGroupRequestDto(loginUser.getId(), groupCreateRequest));
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
@@ -39,23 +48,23 @@ public class GroupController {
 
 	@PatchMapping("/{groupId}")
 	public ResponseEntity<ApiResponse<Void>> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser,
-			@Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
+		@Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
 
 		groupService.updateGroup(GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
 		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
 	}
 
-	@PostMapping("/{groupId}/participate")
-	public ResponseEntity<ApiResponse<Void>> participateToGroup(@CurrentUser LoginUser loginUser,
-			@PathVariable(name = "groupId") Long groupId) {
+	@PostMapping("/{groupId}/join")
+	public ResponseEntity<ApiResponse<Void>> joinGroup(@CurrentUser LoginUser loginUser,
+		@PathVariable(name = "groupId") Long groupId) {
 
-		groupService.participateToGroup(loginUser.getId(), groupId);
+		groupService.joinGroup(loginUser.getId(), groupId);
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
 	}
 
 	@DeleteMapping("/{groupId}")
 	public ResponseEntity<ApiResponse<Void>> deleteGroup(@CurrentUser LoginUser loginUser,
-			@PathVariable(name = "groupId") Long groupId) {
+		@PathVariable(name = "groupId") Long groupId) {
 
 		groupService.removeGroup(groupId);
 		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);

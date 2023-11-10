@@ -1,19 +1,14 @@
 package cmc.mellyserver.domain.memory;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
-import cmc.mellyserver.domain.memory.query.MemoryQueryRepository;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
-import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
-import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
+import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,62 +17,55 @@ public class MemoryReadService {
 
 	private final MemoryReader memoryReader;
 
-	private final MemoryQueryRepository memoryQueryRepository;
-
+	/*
+	메모리 상세 정보 조회
+	 */
 	@Cacheable(value = "memory-detail:memory-id", key = "#memoryId")
 	public MemoryDetailResponseDto findMemoryDetail(final Long memoryId) {
 
-		MemoryDetailResponseDto memoryDetail = memoryQueryRepository.findMemoryDetail(memoryId);
-		List<ImageDto> memoryImage = memoryQueryRepository.findMemoryImage(memoryDetail.getMemoryId());
-		memoryDetail.setMemoryImages(memoryImage);
-		memoryDetail.setKeyword(null);
-		return memoryDetail;
+		return memoryReader.findMemoryDetail(memoryId);
 	}
 
-	public MemoryListResponse findLoginUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable,
-			final Long userId, final Long placeId, final GroupType groupType) {
+	/*
+	특정 장소에 내가 작성한 메모리 조회
+	 */
+	public MemoryListResponse findUserMemoriesInPlace(final Long lastId, final Pageable pageable, final Long userId,
+		final Long placeId, final GroupType groupType) {
 
-		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForPlace(lastId,
-				pageable, userId, placeId, groupType);
-		return transferToList(memoryResponseDtos);
+		return memoryReader.findUserMemories(lastId, pageable, userId, placeId, groupType);
 	}
 
-	public MemoryListResponse findOtherUserWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable,
-			final Long userId, final Long placeId, final GroupType groupType) {
-		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryOtherCreate(lastId, pageable,
-				userId, placeId, groupType);
+	/*
+	특정 장소에 나 이외의 사람이 작성한 메모리 조회
+	 */
+	public MemoryListResponse findOtherMemoriesInPlace(final Long lastId, final Pageable pageable,
+		final Long userId, final Long placeId, final GroupType groupType) {
 
-		return transferToList(memoryResponseDtos);
+		return memoryReader.findOtherMemories(lastId, pageable, userId, placeId, groupType);
 	}
 
-	public MemoryListResponse findMyGroupMemberWriteMemoryBelongToPlace(final Long lastId, final Pageable pageable,
-			final Long userId, final Long placeId, final GroupType groupType) {
+	/*
+	특정 장소에 우리 그룹 사람들이 작성한 메모리 조회
+	 */
+	public MemoryListResponse findGroupMemoriesInPlace(final Long lastId, final Pageable pageable,
+		final Long userId, final Long placeId, final GroupType groupType) {
 
-		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.getMyGroupMemoryInPlace(lastId, pageable,
-				userId, placeId, groupType);
-		return transferToList(memoryResponseDtos);
+		return memoryReader.findGroupMemories(lastId, pageable, userId, placeId, groupType);
 	}
 
-	public MemoryListResponse findMemoriesLoginUserWrite(final Long lastId, final Pageable pageable, final Long userId,
-			final GroupType groupType) {
-
-		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.searchMemoryUserCreatedForMyPage(lastId,
-				pageable, userId, groupType);
-		return transferToList(memoryResponseDtos);
+	/*
+    유저가 작성한 메모리 조회
+    */
+	public MemoryListResponse findUserMemories(final Long lastId, final Pageable pageable, final Long userId,
+		final Long placeId, final GroupType groupType) {
+		return memoryReader.findUserMemories(lastId, pageable, userId, placeId, groupType);
 	}
 
-	public MemoryListResponse findMemoriesUsersBelongToMyGroupWrite(final Long lastId, final Pageable pageable,
-			final Long groupId, final Long userId, final GroupType groupType) {
-
-		Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.getMyGroupMemory(lastId, pageable, groupId,
-				groupType);
-		return transferToList(memoryResponseDtos);
+	/*
+	내 그룹이 작성한 메모리 조회
+	 */
+	public MemoryListResponse findGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId,
+		final Long userId, final GroupType groupType) {
+		return memoryReader.findGroupMemoriesById(lastId, pageable, groupId, userId, groupType);
 	}
-
-	private MemoryListResponse transferToList(Slice<MemoryResponseDto> memoryResponseDtos) {
-		List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
-		boolean next = memoryResponseDtos.hasNext();
-		return MemoryListResponse.from(contents, next);
-	}
-
 }

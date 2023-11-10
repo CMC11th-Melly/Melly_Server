@@ -1,0 +1,93 @@
+package cmc.mellyserver.domain.memory.integration;
+
+import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.dbcore.place.PlaceRepository;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.dbcore.user.UserRepository;
+import cmc.mellyserver.domain.memory.MemoryReadService;
+import cmc.mellyserver.domain.memory.MemoryWriteService;
+import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
+import cmc.mellyserver.fixtures.MemoryFixtures;
+import cmc.mellyserver.support.IntegrationTestSupport;
+import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.ErrorCode;
+
+public class MemoryServiceTest extends IntegrationTestSupport {
+
+	@Autowired
+	private MemoryReadService memoryReadService;
+
+	@Autowired
+	private MemoryWriteService memoryWriteService;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private MemoryRepository memoryRepository;
+
+	@Autowired
+	private PlaceRepository placeRepository;
+
+	@DisplayName("메모리를 삭제하려고 할때")
+	@Nested
+	class When_remove_memory {
+
+		@DisplayName("메모리가 존재한다면 삭제처리한다")
+		@Test
+		void 메모리가_존재한다면_삭제처리한다() {
+
+			// given
+			User 모카 = userRepository.save(모카());
+
+			// when
+			Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(1L, 모카.getId(), null, "성수 재밌었다", OpenType.ALL));
+			memoryWriteService.removeMemory(메모리.getId());
+
+			// then
+			Memory memory = memoryRepository.findById(메모리.getId()).get();
+			assertThat(memory.getIs_deleted()).isTrue();
+		}
+
+		@DisplayName("메모리가 없으면 예외를 발생시킨다.")
+		@Test
+		void memory_not_exist_exception() {
+
+			// given
+			User 모카 = userRepository.save(모카());
+
+			// when & then
+			assertThatThrownBy(() -> memoryWriteService.removeMemory(-1L))
+				.isInstanceOf(BusinessException.class)
+				.hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
+		}
+	}
+
+	@DisplayName("[AOP 동작 테스트] 메모리를 저장할때 장소가 DB에 없으면 추가한다")
+	@Test
+	void 메모리를_저장할때_장소가_DB에_없으면_추가한다() {
+
+		// given
+		CreateMemoryRequestDto 스타벅스 = CreateMemoryRequestDto.builder().lng(1.234).lat(1.234).placeName("스타벅스").build();
+
+		// when
+		memoryWriteService.createMemory(스타벅스);
+
+		// then
+		Optional<Place> place = placeRepository.findByPosition(스타벅스.getPosition());
+		assertThat(place).isPresent();
+	}
+}

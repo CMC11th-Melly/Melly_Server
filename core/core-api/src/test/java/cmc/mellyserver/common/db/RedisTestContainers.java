@@ -11,8 +11,8 @@ import org.testcontainers.utility.DockerImageName;
 @Profile("test")
 public class RedisTestContainers {
 
-	private static final String REDIS_DOCKER_IMAGE = "redis:5.0.3-alpine"; // redis 도커 이미지
-																			// 명시
+	private static final String REDIS_DOCKER_IMAGE = "redis:5.0.3-alpine";
+
 
 	static {
 		GenericContainer<?> REDIS_CONTAINER = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))

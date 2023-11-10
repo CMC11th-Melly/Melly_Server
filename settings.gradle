@@ -3,22 +3,21 @@ pluginManagement {
         id 'org.springframework.boot' version "${springBootVersion}"
         id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
         id 'org.asciidoctor.jvm.convert' version "${asciidoctorConvertVersion}"
-        id 'io.spring.javaformat' version "${springJavaFormatVersion}"
     }
 }
 
 
 rootProject.name = "mellyServer"
 
-include 'storage:db-core'
-include 'storage:db-redis'
-include 'core:core-api'
-include 'support:logging'
-include 'infra:file'
-include 'infra:notification'
-include 'test:api-docs'
-include 'clients:client-auth'
-include 'infra:mail'
+
+include ':storage:db-core'
+include ':storage:db-redis'
+include ':core:core-api'
+include ':support:logging'
+include ':infra:file'
+include ':infra:notification'
+include ':clients:client-auth'
+include ':infra:mail'
 
 
 
