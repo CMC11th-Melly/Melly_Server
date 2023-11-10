@@ -1,50 +1,47 @@
 package cmc.mellyserver.domain.comment;
 
-import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
-import cmc.mellyserver.dbcore.comment.commenlike.CommentLikeRepository;
-import cmc.mellyserver.dbcore.comment.comment.Comment;
-import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
-import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
-import cmc.mellyserver.support.exception.BusinessException;
-import cmc.mellyserver.support.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
+import cmc.mellyserver.dbcore.comment.comment.Comment;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
+import cmc.mellyserver.domain.user.UserReader;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CommentLikeService {
 
-	private final CommentRepository commentRepository;
+	private final CommentLikeReader commentLikeReader;
 
-	private final CommentLikeRepository commentLikeRepository;
+	private final CommentLikeWriter commentLikeWriter;
+
+	private final CommentLikeValidator commentLikeValidator;
+
+	private final CommentReader commentReader;
+
+	private final UserReader userReader;
 
 	private final ApplicationEventPublisher publisher;
 
 	@Transactional
-	public void saveCommentLike(Long userId, Long commentId) {
+	public void saveCommentLike(final Long userId, final Long commentId) {
 
-		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-			throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
-		});
-
-		commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, userId).ifPresent(commentLike -> {
-			throw new BusinessException(ErrorCode.DUPLICATED_COMMENT_LIKE);
-		});
-
-		commentLikeRepository.save(CommentLike.createCommentLike(userId, comment));
+		Comment comment = commentReader.findById(commentId);
+		User writer = userReader.findById(userId);
+		commentLikeValidator.validateDuplicatedLike(commentId, userId);
+		commentLikeWriter.save(writer, comment);
 		publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
 	}
 
 	@Transactional
-	public void deleteCommentLike(Long id, Long commentId) {
+	public void deleteCommentLike(final Long userId, final Long commentId) {
 
-		CommentLike commentLike = commentLikeRepository.findCommentLikeByCommentIdAndUserId(commentId, id)
-			.orElseThrow(() -> {
-				throw new BusinessException(ErrorCode.NO_SUCH_COMMENT_LIKE);
-			});
-		commentLikeRepository.delete(commentLike);
+		CommentLike commentLike = commentLikeReader.find(userId, commentId);
+		commentLikeWriter.delete(commentLike);
 	}
 
 }

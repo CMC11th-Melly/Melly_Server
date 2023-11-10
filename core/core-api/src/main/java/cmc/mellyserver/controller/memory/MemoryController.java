@@ -1,5 +1,21 @@
 package cmc.mellyserver.controller.memory;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.common.code.SuccessCode;
@@ -17,13 +33,6 @@ import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,48 +47,48 @@ public class MemoryController {
 
 	@GetMapping("/group")
 	public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getGroupListForSaveMemory(
-			@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId,
-			@PageableDefault(size = 10) Pageable pageable) {
+		@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId,
+		@PageableDefault(size = 10) Pageable pageable) {
 
 		GroupListLoginUserParticipatedResponse groupListLoginUserParticiated = groupService
-			.findGroupListLoginUserParticiated(loginUser.getId(), lastId, pageable);
+			.findUserParticipatedGroups(loginUser.getId(), lastId, pageable);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
 	}
 
-	@GetMapping("/user/place/{placeId}")
+	@GetMapping("/user/places/{placeId}")
 	public ResponseEntity<ApiResponse<MemoryListResponse>> getUserMemory(@CurrentUser LoginUser loginUser,
-			@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
-			@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
+		@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
+		@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
 		MemoryListResponse loginUserWriteMemoryBelongToPlace = memoryReadService
-			.findLoginUserWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+			.findUserMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, loginUserWriteMemoryBelongToPlace);
 	}
 
 	@GetMapping("/other/place/{placeId}")
 	public ResponseEntity<ApiResponse<MemoryListResponse>> getOtherMemory(@CurrentUser LoginUser loginUser,
-			@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
-			@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
+		@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
+		@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
 		MemoryListResponse otherUserWriteMemoryBelongToPlace = memoryReadService
-			.findOtherUserWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+			.findOtherMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, otherUserWriteMemoryBelongToPlace);
 	}
 
-	@GetMapping("/group/place/{placeId}")
+	@GetMapping("/groups/places/{placeId}")
 	public ResponseEntity<ApiResponse<MemoryListResponse>> getMyGroupMemory(@CurrentUser LoginUser loginUser,
-			@RequestParam(name = "lastId", required = false) Long lastId, @PathVariable Long placeId,
-			@PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
+		@RequestParam(name = "lastId", required = false) Long lastId, @PathVariable Long placeId,
+		@PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
 
 		MemoryListResponse myGroupMemberWriteMemoryBelongToPlace = memoryReadService
-			.findMyGroupMemberWriteMemoryBelongToPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+			.findGroupMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, myGroupMemberWriteMemoryBelongToPlace);
 	}
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> save(@CurrentUser LoginUser loginUser,
-			@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
-			@Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
+		@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
+		@Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
 
 		memoryWriteService
 			.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
@@ -88,11 +97,11 @@ public class MemoryController {
 
 	@PutMapping("/{memoryId}")
 	public ResponseEntity<ApiResponse<Void>> updateMemory(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId,
-			@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
-			@RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
+		@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
+		@RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
 
 		memoryWriteService.updateMemory(
-				MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
+			MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
 		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
 	}
 

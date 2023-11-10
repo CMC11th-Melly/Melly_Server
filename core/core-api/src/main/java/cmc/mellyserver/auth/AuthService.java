@@ -22,8 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -50,8 +48,6 @@ public class AuthService {
 		User savedUser = userWriter.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(),
 				passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
 				authSignupRequestDto.getAgeGroup(), authSignupRequestDto.getGender()));
-
-		savedUser.updateLastLoginTime(LocalDateTime.now());
 
 		String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType());
 		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType());
@@ -83,7 +79,6 @@ public class AuthService {
 
 		User user = checkEmail(authLoginRequestDto.getEmail());
 		checkPassword(authLoginRequestDto.getPassword(), user.getPassword());
-		user.updateLastLoginTime(LocalDateTime.now());
 
 		String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
 		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());

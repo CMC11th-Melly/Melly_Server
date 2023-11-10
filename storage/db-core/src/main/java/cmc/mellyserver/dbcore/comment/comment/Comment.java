@@ -1,16 +1,28 @@
 package cmc.mellyserver.dbcore.comment.comment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.User;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -82,11 +94,11 @@ public class Comment extends JpaBaseEntity {
 		this.isDeleted = Boolean.FALSE;
 	}
 
-	public void updateComment(String content) {
+	public void update(String content) {
 		this.content = content;
 	}
 
-	public void removeContent() {
+	public void remove() {
 		this.content = REMOVE_COMMENT;
 	}
 

@@ -1,14 +1,17 @@
 package cmc.mellyserver.clientauth.api;
 
-import cmc.mellyserver.clientauth.LoginClient;
-import lombok.RequiredArgsConstructor;
+import static cmc.mellyserver.clientauth.api.Provider.*;
+
 import org.springframework.stereotype.Component;
 
-import static cmc.mellyserver.clientauth.api.Provider.KAKAO;
+import cmc.mellyserver.clientauth.LoginClient;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class KakaoClient implements LoginClient {
+
+	private static final String AUTH_PREFIX = "Bearer ";
 
 	private final KakaoLoginApi kakaoLoginApi;
 
@@ -22,5 +25,4 @@ public class KakaoClient implements LoginClient {
 
 		return kakaoLoginApi.call(AUTH_PREFIX + accessToken).toResult();
 	}
-
 }

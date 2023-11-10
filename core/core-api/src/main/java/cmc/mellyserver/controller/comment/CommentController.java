@@ -1,5 +1,15 @@
 package cmc.mellyserver.controller.comment;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.common.code.SuccessCode;
@@ -12,10 +22,6 @@ import cmc.mellyserver.domain.comment.CommentService;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,24 +33,24 @@ public class CommentController {
 	private final CommentLikeService commentLikeService;
 
 	@DeleteMapping("/{commentId}/like")
-	public ResponseEntity<ApiResponse<Void>> removeCommentLike(@AuthenticationPrincipal User user,
-			@PathVariable Long commentId) {
+	public ResponseEntity<ApiResponse<Void>> removeCommentLike(@CurrentUser LoginUser loginUser,
+		@PathVariable Long commentId) {
 
-		commentLikeService.deleteCommentLike(commentId, Long.parseLong(user.getUsername()));
+		commentLikeService.deleteCommentLike(loginUser.getId(), commentId);
 		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
 	}
 
 	@PostMapping("/like")
-	public ResponseEntity<ApiResponse<Void>> saveCommentLike(@AuthenticationPrincipal User user,
-			@RequestBody LikeRequest likeRequest) {
+	public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
+		@RequestBody LikeRequest likeRequest) {
 
-		commentLikeService.saveCommentLike(Long.parseLong(user.getUsername()), likeRequest.getCommentId());
+		commentLikeService.saveCommentLike(loginUser.getId(), likeRequest.getCommentId());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
 	}
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> saveComment(@CurrentUser LoginUser loginUser,
-			@RequestBody CommentRequest commentRequest) {
+		@RequestBody CommentRequest commentRequest) {
 
 		commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
@@ -52,7 +58,7 @@ public class CommentController {
 
 	@GetMapping("/memory/{memoryId}")
 	public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(@CurrentUser LoginUser loginUser,
-			@PathVariable Long memoryId) {
+		@PathVariable Long memoryId) {
 
 		CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
 		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
@@ -67,7 +73,7 @@ public class CommentController {
 
 	@PatchMapping("/{commentId}")
 	public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long commentId,
-			@RequestBody CommentUpdateRequest commentUpdateRequest) {
+		@RequestBody CommentUpdateRequest commentUpdateRequest) {
 
 		commentService.updateComment(commentId, commentUpdateRequest.getContent());
 		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);

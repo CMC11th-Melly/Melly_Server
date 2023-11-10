@@ -1,12 +1,12 @@
 package cmc.mellyserver.controller.user.dto.response;
 
+import java.util.List;
+
 import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.dbcore.user.UserDto;
+import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class GroupLoginUserParticipatedResponse {
 
 	private String groupName;
 
-	private List<UserDto> users;
+	private List<GroupMemberResponseDto> users;
 
 	private GroupType groupType;
 
@@ -26,7 +26,7 @@ public class GroupLoginUserParticipatedResponse {
 
 	@Builder
 	public GroupLoginUserParticipatedResponse(Long groupId, int groupIcon, String groupName, GroupType groupType,
-			List<UserDto> users, String invitationLink) {
+		List<GroupMemberResponseDto> users, String invitationLink) {
 		this.groupId = groupId;
 		this.groupIcon = groupIcon;
 		this.users = users;

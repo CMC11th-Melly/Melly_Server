@@ -26,7 +26,7 @@ public class QCommentLike extends EntityPathBase<CommentLike> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> userId = createNumber("userId", Long.class);
+    public final cmc.mellyserver.dbcore.user.QUser user;
 
     public QCommentLike(String variable) {
         this(CommentLike.class, forVariable(variable), INITS);
@@ -47,6 +47,7 @@ public class QCommentLike extends EntityPathBase<CommentLike> {
     public QCommentLike(Class<? extends CommentLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.comment = inits.isInitialized("comment") ? new cmc.mellyserver.dbcore.comment.comment.QComment(forProperty("comment"), inits.get("comment")) : null;
+        this.user = inits.isInitialized("user") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

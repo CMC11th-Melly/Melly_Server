@@ -1,20 +1,21 @@
 package cmc.mellyserver.controller.memory.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import cmc.mellyserver.controller.memory.dto.request.MemoryCreateRequest;
 import cmc.mellyserver.controller.memory.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
-import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponseDto;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 
 public abstract class MemoryAssembler {
 
 	public static List<FindPlaceInfoByMemoryNameResponse> findPlaceInfoByMemoryNameResponses(
-			List<FindPlaceInfoByMemoryNameResponseDto> findPlaceInfoByMemoryNameResponseDtos) {
+		List<FindPlaceByMemoryTitleResponseDto> findPlaceInfoByMemoryNameResponseDtos) {
 		return findPlaceInfoByMemoryNameResponseDtos.stream()
 			.map(each -> FindPlaceInfoByMemoryNameResponse.builder()
 				.placeId(each.getPlaceId())
@@ -24,7 +25,7 @@ public abstract class MemoryAssembler {
 	}
 
 	public static UpdateMemoryRequestDto updateMemoryRequestDto(Long id, Long memoryId,
-			MemoryUpdateRequest memoryUpdateRequest, List<MultipartFile> images) {
+		MemoryUpdateRequest memoryUpdateRequest, List<MultipartFile> images) {
 		return UpdateMemoryRequestDto.builder()
 			.id(id)
 			.memoryId(memoryId)
@@ -41,7 +42,7 @@ public abstract class MemoryAssembler {
 	}
 
 	public static CreateMemoryRequestDto createMemoryRequestDto(Long id, List<MultipartFile> images,
-			MemoryCreateRequest placeInfoRequest) {
+		MemoryCreateRequest placeInfoRequest) {
 		return CreateMemoryRequestDto.builder()
 			.userId(id)
 			.lat(placeInfoRequest.getLat())

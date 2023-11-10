@@ -11,9 +11,7 @@ public class CreatePlaceScrapRequestDto {
 
 	private Long id;
 
-	private Double lat;
-
-	private Double lng;
+    private Position position;
 
 	private ScrapType scrapType;
 
@@ -25,8 +23,7 @@ public class CreatePlaceScrapRequestDto {
 	public CreatePlaceScrapRequestDto(Long id, Double lat, Double lng, ScrapType scrapType, String placeName,
 			String placeCategory) {
 		this.id = id;
-		this.lat = lat;
-		this.lng = lng;
+        this.position = new Position(lat, lng);
 		this.scrapType = scrapType;
 		this.placeName = placeName;
 		this.placeCategory = placeCategory;
@@ -36,7 +33,7 @@ public class CreatePlaceScrapRequestDto {
 		return Place.builder()
 			.placeName(placeName)
 			.placeCategory(placeCategory)
-			.position(new Position(lat, lng))
+			.position(position)
 			.build();
 	}
 

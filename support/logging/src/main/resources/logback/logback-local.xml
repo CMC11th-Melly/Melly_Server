@@ -5,7 +5,8 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                [%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %red([%thread]) %highlight(%-5level) cyan%([%C.%M:%yellow(%L)]) - %msg%n"
+                [%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %red([%thread]) %highlight(%-5level) cyan%([%C.%M:%yellow(%L)]) -
+                %msg%n"
             </pattern>
             <charset>utf8</charset>
         </encoder>
@@ -13,8 +14,8 @@
 
     <logger name="org.springframework" level="INFO"/>
 
-<!-- Local 환경에서는 DEBUG 레벨을 사용합니다 -->
-    <root level="DEBUG">
+    <!-- Local 환경에서는 DEBUG 레벨을 사용합니다 -->
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

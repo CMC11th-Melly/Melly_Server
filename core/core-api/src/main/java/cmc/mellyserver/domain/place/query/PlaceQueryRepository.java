@@ -1,18 +1,20 @@
 package cmc.mellyserver.domain.place.query;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.dbcore.place.Place;
-import cmc.mellyserver.domain.memory.query.dto.FindPlaceInfoByMemoryNameResponseDto;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import static cmc.mellyserver.dbcore.memory.QMemory.*;
+import static cmc.mellyserver.dbcore.place.QPlace.*;
 
 import java.util.List;
 
-import static cmc.mellyserver.dbcore.memory.QMemory.memory;
-import static cmc.mellyserver.dbcore.place.QPlace.place;
+import org.springframework.stereotype.Repository;
+
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,12 +31,12 @@ public class PlaceQueryRepository {
 
 	}
 
-	public List<FindPlaceInfoByMemoryNameResponseDto> searchPlaceByContainMemoryName(Long id, String memoryName) {
+	public List<FindPlaceByMemoryTitleResponseDto> searchPlaceByContainMemoryName(Long userId, String memoryName) {
 
 		return query
-			.select(Projections.constructor(FindPlaceInfoByMemoryNameResponseDto.class, memory.placeId, memory.title))
+			.select(Projections.constructor(FindPlaceByMemoryTitleResponseDto.class, memory.placeId, memory.title))
 			.from(memory)
-			.where(memory.userId.eq(id), memory.title.contains(memoryName))
+			.where(memory.userId.eq(userId), memory.title.contains(memoryName))
 			.distinct()
 			.fetch();
 	}
