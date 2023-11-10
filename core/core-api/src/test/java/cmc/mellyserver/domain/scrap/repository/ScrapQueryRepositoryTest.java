@@ -1,6 +1,10 @@
 package cmc.mellyserver.domain.scrap.repository;
 
-import cmc.mellyserver.config.RepositoryTest;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.place.Position;
@@ -11,12 +15,9 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.dbcore.user.enums.Provider;
 import cmc.mellyserver.domain.scrap.query.PlaceScrapQueryRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import cmc.mellyserver.support.RepositoryTestSupport;
 
-public class ScrapQueryRepositoryTest extends RepositoryTest {
+public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 
 	@Autowired
 	private UserRepository userRepository;

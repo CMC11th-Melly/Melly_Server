@@ -1,6 +1,6 @@
 client:
   oauth:
-    uri:
+    uri: # OAuth2 리소스 서버 주소
       kakao: https://kapi.kakao.com/v2/user/me
       naver: https://openapi.naver.com/v1/nid/me
       google: https://oauth2.googleapis.com/tokeninfo
@@ -10,41 +10,35 @@ spring.cloud.openfeign:
   client:
     config:
       default:
-        connectTimeout: 1000 # 3-way handshake 과정에서 발생하는 타임아웃을 제한합니다.
-        readTimeout: 2000 # 커넥션 연결 후, 실제 데이터 송/수신할때 발생하는 타임아웃을 제한합니다.
-        loggerLevel: full
+        connectTimeout: 1000 # 3-way handshake 과정에서 발생하는 타임아웃 설정
+        readTimeout: 2000 # 커넥션 연결 후, 실제 데이터 송/수신할때 발생하는 타임아웃 설정
+        loggerLevel: full # openFeign 관련 모든 로그 출력
 
   httpclient:
-    max-connections: 2000 # 전체 커넥션 수를 나타냅니다.
-    max-connections-per-route: 500 # route당 할당되는 최대 커넥션 수를 나타냅니다.
+    max-connections: 2000 # 전체 커넥션 수
+    max-connections-per-route: 500 # Route당 할당되는 최대 커넥션 수
 
   circuitbreaker:
-    enabled: true # OpenFeign에 CircuitBreaker를 적용합니다.
+    enabled: true
 
 resilience4j.circuitbreaker:
   configs:
     default:
       slidingWindowType: COUNT_BASED
-      minimumNumberOfCalls: 7 # Circuit Open 여부를 판단하기 위해 실행해야 하는 최소 요청 횟수입니다.
-      slidingWindowSize: 10 # 슬라이딩 윈도우의 크기입니다.
-      waitDurationInOpenState: 10s # Circuit이 Open 상태에 머무는 시간입니다.
+      minimumNumberOfCalls: 7 # Circuit Open 여부를 판단하기 위해 실행해야 하는 최소 요청 횟수
+      slidingWindowSize: 10 # Circuit Open 여부를 체크하는 윈도우 크기
+      waitDurationInOpenState: 10s # Circuit이 Open 상태에 머무는 시간
 
-      failureRateThreshold: 80 # 슬라이딩 윈도우 내에서 몇 %이상되면 Circuit을 Open할지 결정하는 비율입니다.
+      failureRateThreshold: 80 # 슬라이딩 윈도우 내에서 몇 %이상되면 Circuit을 Open할지 결정하는 비율
 
-      slowCallDurationThreshold: 3000 # 몇초동안 요청이 지속되면 슬로우 콜로 판별하는지 기준입니다.
-      slowCallRateThreshold: 80 # 슬라이딩 윈도우 내 요청 중 몇 %이상 슬로우 콜이 발생하면 Circuit을 Open할지 결정하는 비율입니다.
+      slowCallDurationThreshold: 3000 # 몇초동안 요청이 지속되면 슬로우 콜로 판별되는지 기준
+      slowCallRateThreshold: 80 # 슬라이딩 윈도우 내 요청 중 몇 %이상 슬로우 콜이 발생하면 Circuit을 Open할지 결정하는 비율
 
-      permittedNumberOfCallsInHalfOpenState: 5 # Half Open 상태에서 상태 변화를 위해 테스트 해보는 요청 횟수입니다.
-      automaticTransitionFromOpenToHalfOpenEnabled: true # Half Open으로 자동으로 변경시킬지를 판별합니다.
+      permittedNumberOfCallsInHalfOpenState: 5 # Half Open 상태에서 상태 변화를 위해 테스트 해보는 요청 횟수
+      automaticTransitionFromOpenToHalfOpenEnabled: true # Half Open으로 자동으로 변경시킬지 여부
 
-      eventConsumerBufferSize: 10 # Actuator에서 CircuitBreaker 상태를 보여줄때 이벤트를 몇개까지 버퍼에 쌓을지 결정합니다.
+      eventConsumerBufferSize: 10 # Actuator에서 CircuitBreaker 상태를 보여줄때 이벤트를 몇개까지 버퍼에 쌓을지 결정
 
   instances:
-    default: # Circuit Breaker 인스턴스명입니다.
-      baseConfig: default # 어떤 설정을 사용할지 결정합니다. 상단의 default config를 그대로 적용합니다.
-
-resilience4j.timelimiter:
-  configs:
-    default:
-      timeoutDuration: 5s
-      cancelRunningFuture: true
+    default: # Circuit Breaker 인스턴스 이름
+      baseConfig: default # 어떤 설정을 사용할지 결정. default라면 상단의 default config를 그대로 사용함

@@ -1,5 +1,6 @@
 plugins {
-    id 'org.asciidoctor.jvm.convert' version '3.3.2' // Rest Docs는 API 문서화 & 테스트로만 필요합니다. 따라서 core-api 모듈에서만 플러그인을 사용하도록 만들었습니다.
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    // Rest Docs는 API 문서화 & 테스트로만 필요합니다. 따라서 core-api 모듈에서만 플러그인을 사용하도록 만들었습니다.
 }
 
 bootJar.enabled = true
@@ -65,10 +66,8 @@ dependencies {
     implementation project(":infra:mail")
     implementation project(":support:logging")
     implementation project(":clients:client-auth")
-    testImplementation project(":test:api-docs")
 
 }
-
 
 
 // ===== Rest Docs Config =====
@@ -97,8 +96,8 @@ asciidoctor.doFirst {
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
-        from("${asciidoctor.outputDir}") // build/docs/asciidoc 경로에 만들어지는 결과물을 static/docs로 복사합니다.
-        into 'src/main/resources/static/docs'
+    from("${asciidoctor.outputDir}") // build/docs/asciidoc 경로에 만들어지는 결과물을 static/docs로 복사합니다.
+    into 'src/main/resources/static/docs'
 
 }
 

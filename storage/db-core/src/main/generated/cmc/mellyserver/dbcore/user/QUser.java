@@ -41,8 +41,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final DateTimePath<java.time.LocalDateTime> lastLoginDateTime = createDateTime("lastLoginDateTime", java.time.LocalDateTime.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
@@ -50,13 +48,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
-    public final EnumPath<cmc.mellyserver.dbcore.user.enums.PasswordExpired> passwordExpired = createEnum("passwordExpired", cmc.mellyserver.dbcore.user.enums.PasswordExpired.class);
-
     public final StringPath profileImage = createString("profileImage");
 
     public final EnumPath<cmc.mellyserver.dbcore.user.enums.Provider> provider = createEnum("provider", cmc.mellyserver.dbcore.user.enums.Provider.class);
-
-    public final DateTimePath<java.time.LocalDateTime> pwInitDateTime = createDateTime("pwInitDateTime", java.time.LocalDateTime.class);
 
     public final QRecommend recommend;
 

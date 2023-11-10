@@ -1,16 +1,30 @@
 package cmc.mellyserver.dbcore.user;
 
+import java.util.UUID;
+
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
-import cmc.mellyserver.dbcore.user.enums.*;
-import jakarta.persistence.*;
+import cmc.mellyserver.dbcore.user.enums.AgeGroup;
+import cmc.mellyserver.dbcore.user.enums.Gender;
+import cmc.mellyserver.dbcore.user.enums.Provider;
+import cmc.mellyserver.dbcore.user.enums.RecommendActivity;
+import cmc.mellyserver.dbcore.user.enums.RecommendGroup;
+import cmc.mellyserver.dbcore.user.enums.RecommendPlace;
+import cmc.mellyserver.dbcore.user.enums.RoleType;
+import cmc.mellyserver.dbcore.user.enums.UserStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +36,7 @@ public class User extends JpaBaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(name = "social_id")
@@ -72,18 +86,8 @@ public class User extends JpaBaseEntity {
 	@Column(name = "user_status")
 	private UserStatus userStatus;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "password_expired")
-	private PasswordExpired passwordExpired;
-
-	@Column(name = "password_init_date")
-	private LocalDateTime pwInitDateTime;
-
-	@Column(name = "last_login_time")
-	private LocalDateTime lastLoginDateTime;
-
 	public void addSurveyData(final RecommendGroup recommendGroup, final RecommendPlace recommendPlace,
-			final RecommendActivity recommendActivity) {
+		final RecommendActivity recommendActivity) {
 		this.recommend = new Recommend(recommendGroup, recommendPlace, recommendActivity);
 	}
 
@@ -93,25 +97,12 @@ public class User extends JpaBaseEntity {
 		this.ageGroup = ageGroup;
 	}
 
-	public void updateOauthInfo(final String nickname, final String socialId) {
-		this.nickname = nickname;
-		this.socialId = socialId;
-	}
-
 	public void changePassword(String password) {
 		this.password = password;
 	}
 
 	public void changeProfileImage(String image) {
 		this.profileImage = image;
-	}
-
-	public void changePwInitDate(LocalDateTime now) {
-		this.pwInitDateTime = now;
-	}
-
-	public void updateLastLoginTime(LocalDateTime now) {
-		this.lastLoginDateTime = now;
 	}
 
 	public void block() {
@@ -134,12 +125,8 @@ public class User extends JpaBaseEntity {
 		this.enableCommentLikePush = enableCommentLikePush;
 	}
 
-	public void changeCommenPushStatus(boolean enableCommentPush) {
+	public void changeCommentPushStatus(boolean enableCommentPush) {
 		this.enableCommentPush = enableCommentPush;
-	}
-
-	private boolean isDefaultEmailUser() {
-		return !Objects.isNull(this.provider) && this.provider.equals(Provider.DEFAULT);
 	}
 
 	@PrePersist
@@ -149,20 +136,12 @@ public class User extends JpaBaseEntity {
 		this.enableAppPush = true;
 		this.enableCommentPush = true;
 		this.enableCommentLikePush = true;
-
-		if (isDefaultEmailUser()) {
-
-			this.pwInitDateTime = LocalDateTime.now();
-			this.passwordExpired = PasswordExpired.N;
-		}
 	}
 
 	@Builder
 	private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
-			Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
-			boolean enableAppPush, PasswordExpired passwordExpired, LocalDateTime pwInitDateTime,
-			boolean enableCommentLikePush, boolean enableCommentPush) {
-
+		Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
+		boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -177,12 +156,10 @@ public class User extends JpaBaseEntity {
 		this.enableAppPush = enableAppPush;
 		this.enableCommentPush = enableCommentPush;
 		this.enableCommentLikePush = enableCommentLikePush;
-		this.passwordExpired = passwordExpired;
-		this.pwInitDateTime = pwInitDateTime;
 	}
 
 	public static User createEmailLoginUser(String email, String password, String nickname, AgeGroup ageGroup,
-			Gender gender) {
+		Gender gender) {
 
 		return User.builder()
 			.email(email) // 이메일
@@ -198,7 +175,7 @@ public class User extends JpaBaseEntity {
 
 	// 처음 로그인 시에 얻어올 수 있는 정보는 OAuth에서는 없다.
 	public static User oauthUser(String socialId, Provider provider, String email, String nickname, AgeGroup ageGroup,
-			Gender gender) {
+		Gender gender) {
 
 		return User.builder()
 			.socialId(socialId)
@@ -212,4 +189,7 @@ public class User extends JpaBaseEntity {
 			.build();
 	}
 
+	public void removeProfileImage() {
+		this.profileImage = null;
+	}
 }

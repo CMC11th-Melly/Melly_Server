@@ -1,13 +1,14 @@
 package cmc.mellyserver.common.aop.lock;
 
-import jakarta.persistence.OptimisticLockException;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
+
+import jakarta.persistence.OptimisticLockException;
+import lombok.extern.slf4j.Slf4j;
 
 @Aspect
 @Slf4j
@@ -16,9 +17,9 @@ public class OptimisticLockAop {
 
 	private static int RETRY_MAX_COUNT = 3;
 
-	@Around("@annotation(cmc.mellyserver.common.aop.lock.annotation.DistributedLock)")
+	@Around("@annotation(cmc.mellyserver.common.aop.lock.annotation.OptimisticLock)")
 	public Object doOneMoreRetryTransactionIfOptimisticLockExceptionThrow(ProceedingJoinPoint joinPoint)
-			throws Throwable {
+		throws Throwable {
 
 		Exception exceptionHolder = null;
 
@@ -27,8 +28,7 @@ public class OptimisticLockAop {
 			try {
 				return joinPoint.proceed();
 
-			}
-			catch (OptimisticLockException | ObjectOptimisticLockingFailureException | CannotAcquireLockException e) {
+			} catch (OptimisticLockException | ObjectOptimisticLockingFailureException | CannotAcquireLockException e) {
 
 				exceptionHolder = e;
 			}

@@ -9,11 +9,14 @@ import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import cmc.mellyserver.domain.notification.NotificationService;
 import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,7 +72,7 @@ public class NotificationController {
 	public ResponseEntity<ApiResponse<Void>> checkNotification(
 			@RequestBody NotificationCheckRequest notificationCheckRequest) {
 
-		notificationService.checkNotification(notificationCheckRequest.getNotificationId());
+		notificationService.readNotification(notificationCheckRequest.getNotificationId());
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
 	}
 

@@ -13,11 +13,11 @@ public abstract class GroupAssembler {
 	}
 
 	public static GroupLoginUserParticipatedResponse getUserGroupResponse(
-			GroupDetailResponseDto groupDetailResponseDto) {
+		GroupDetailResponseDto groupDetailResponseDto) {
 		return new GroupLoginUserParticipatedResponse(groupDetailResponseDto.getGroupId(),
-				groupDetailResponseDto.getGroupIcon(), groupDetailResponseDto.getGroupName(),
-				groupDetailResponseDto.getGroupType(), groupDetailResponseDto.getUsers(),
-				groupDetailResponseDto.getInvitationLink());
+			groupDetailResponseDto.getGroupIcon(), groupDetailResponseDto.getGroupName(),
+			groupDetailResponseDto.getGroupType(), groupDetailResponseDto.getGroupMembers(),
+			groupDetailResponseDto.getInvitationLink());
 	}
 
 	public static CreateGroupRequestDto createGroupRequestDto(Long id, GroupCreateRequest groupCreateRequest) {

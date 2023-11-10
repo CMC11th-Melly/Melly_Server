@@ -1,19 +1,17 @@
 package cmc.mellyserver.domain.user;
 
-import cmc.mellyserver.FileDto;
-import cmc.mellyserver.StorageService;
-import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
-import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Objects;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
+import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,20 +20,19 @@ public class UserProfileService {
 
 	private final UserReader userReader;
 
-	private final StorageService fileUploader;
+	private final ProfileImageUploader profileImageUploader;
 
 	@Cacheable(value = "image-volume:user-id", key = "#userId")
-	public int checkImageStorageVolume(final Long userId) {
+	public int calculateImageTotalVolume(final Long userId) {
 
 		User user = userReader.findById(userId);
-		return fileUploader.calculateImageVolume(user.getEmail()).intValue();
+		return profileImageUploader.calculateImageVolume(user.getEmail());
 	}
 
 	@Cacheable(value = "profile:user-id", key = "#userId")
 	public ProfileResponseDto getProfile(final Long userId) {
 
-		User user = userReader.findById(userId);
-		return ProfileResponseDto.of(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
+		return ProfileResponseDto.of(userReader.findById(userId));
 	}
 
 	@CachePut(value = "profile:user-id", key = "#userId")
@@ -44,34 +41,15 @@ public class UserProfileService {
 
 		User user = userReader.findById(userId);
 		user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(),
-				profileUpdateRequestDto.getAgeGroup());
+			profileUpdateRequestDto.getAgeGroup());
 	}
 
 	@CachePut(value = "image-volume:user-id", key = "#userId")
 	@Transactional
-	public void updateProfileImage(final Long userId, MultipartFile profileImage) throws IOException {
+	public void updateProfileImage(final Long userId, MultipartFile newProfileImage, boolean isDeleted) throws
+		IOException {
 
 		User user = userReader.findById(userId);
-		removeExistProfileImage(user); // 기존에 등록된 이미지가 있다면 삭제한다
-
-		if (Objects.nonNull(profileImage)) {
-			user.changeProfileImage(fileUploader.saveFile(user.getId(), extractFileInfo(profileImage)));
-		}
+		profileImageUploader.update(user, newProfileImage, isDeleted);
 	}
-
-	private FileDto extractFileInfo(MultipartFile profileImage) throws IOException {
-
-		return new FileDto(profileImage.getOriginalFilename(), profileImage.getSize(), profileImage.getContentType(),
-				profileImage.getInputStream());
-	}
-
-	private void removeExistProfileImage(User user) throws IOException {
-
-		if (Objects.nonNull(user.getProfileImage())) {
-
-			fileUploader.deleteFile(user.getProfileImage());
-			user.changeProfileImage(null);
-		}
-	}
-
 }

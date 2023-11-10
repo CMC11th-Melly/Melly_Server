@@ -10,12 +10,12 @@ spring:
   # Datasource
   datasource:
     source:
-      jdbc-url: jdbc:mysql://192.168.0.8:3309/melly_db
+      jdbc-url: jdbc:mysql://localhost:3306/melly_db
       username: root
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver
     replica1:
-      jdbc-url: jdbc:mysql://192.168.0.8:3309/melly_db
+      jdbc-url: jdbc:mysql://localhost:3306/melly_db
       username: root
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver
