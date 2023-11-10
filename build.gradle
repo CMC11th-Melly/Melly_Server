@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
     id 'org.sonarqube' version '4.4.1.3373'
+
 }
 
 allprojects {
@@ -30,6 +31,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
+    apply plugin: 'jacoco-report-aggregation'
 
 
     dependencyManagement {
@@ -37,6 +39,7 @@ subprojects {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
         }
     }
+
 
     jacoco {
         toolVersion = '0.8.8'
@@ -53,7 +56,7 @@ subprojects {
 
         def Qdomains = []
 
-        for (qPattern in '**/QA'..'**/QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        for (qPattern in '**/QA'..'**/QZ') {
             Qdomains.add(qPattern + '*')
         }
 
@@ -105,15 +108,15 @@ subprojects {
 
 
         }
+
     }
 
     sonar {
         properties {
-            property 'sonar.java.binaries', "${buildDir}/classes"
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+            property 'sonar.core.codeCoveragePlugin', 'jacoco'
+            property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/testCodeCoverageReport/**.xml"
         }
     }
-
     dependencies {
 
         // Lombok

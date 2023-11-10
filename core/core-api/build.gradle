@@ -13,6 +13,7 @@ configurations {
     asciidoctorExt
 }
 
+
 dependencies {
 
     // Spring
@@ -68,6 +69,13 @@ dependencies {
     implementation project(":clients:client-auth")
 
 
+    jacocoAggregation project(":storage:db-core")
+    jacocoAggregation project(":storage:db-redis")
+    jacocoAggregation project(":infra:notification")
+    jacocoAggregation project(":infra:file")
+    jacocoAggregation project(":infra:mail")
+    jacocoAggregation project(":support:logging")
+    jacocoAggregation project(":clients:client-auth")
 }
 
 
@@ -86,7 +94,7 @@ asciidoctor { // asciidoctor 작업 구성입니다.
     configurations 'asciidoctorExt'
     baseDirFollowsSourceFile()
     inputs.dir snippetsDir
-    dependsOn test
+    dependsOn testCodeCoverageReport
 }
 
 // refresh를 위해 static/docs 폴더를 비웁니다.

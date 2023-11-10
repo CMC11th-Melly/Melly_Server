@@ -18,7 +18,6 @@ include ':infra:file'
 include ':infra:notification'
 include ':clients:client-auth'
 include ':infra:mail'
-include ':test-coverage-report'
 
 
 
