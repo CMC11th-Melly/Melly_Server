@@ -30,7 +30,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
-    apply plugin: 'jacoco-report-aggregation'
+
 
     dependencyManagement {
         imports {
@@ -43,12 +43,14 @@ subprojects {
     }
 
     jacocoTestReport {
+
+        // jacoco report 형식 및 경로 설정
         reports {
             html.required = true
             csv.required = true
             xml.required = true
-            xml.destination file("${buildDir}/reports/jacoco.xml")
         }
+
         def Qdomains = []
 
         for (qPattern in '**/QA'..'**/QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
@@ -108,7 +110,7 @@ subprojects {
     sonar {
         properties {
             property 'sonar.java.binaries', "${buildDir}/classes"
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco.xml"
+            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
         }
     }
 
@@ -136,7 +138,7 @@ subprojects {
 
     test {
         useJUnitPlatform()
-        finalizedBy 'jacocoTestReport'
+        finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport를 실행합니다.
     }
 }
 

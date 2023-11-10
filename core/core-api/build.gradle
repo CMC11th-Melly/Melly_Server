@@ -4,7 +4,7 @@ plugins {
 }
 
 bootJar.enabled = true
-jar.enabled = false
+jar.enabled = true
 
 configurations {
     compileOnly {
@@ -66,6 +66,7 @@ dependencies {
     implementation project(":infra:mail")
     implementation project(":support:logging")
     implementation project(":clients:client-auth")
+
 
 }
 
