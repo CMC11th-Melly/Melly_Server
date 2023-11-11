@@ -22,7 +22,6 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
     apply plugin: 'jacoco-report-aggregation'
 
 
@@ -31,6 +30,7 @@ subprojects {
             property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
             property "sonar.organization", "cmc11th-melly"
             property "sonar.host.url", "https://sonarcloud.io"
+            property "sonar.coverage.jacoco.xmlReportPaths", "/home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
         }
     }
 
