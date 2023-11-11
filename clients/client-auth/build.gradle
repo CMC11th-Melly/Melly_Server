@@ -1,3 +1,11 @@
+/*
+Client 기능만을 위한 모듈을 분리함으로써 외부 통신을 위한 의존성만 독립적으로 implementation 할 수 있습니다.
+장점 :
+ - 다른 모듈의 의존성 변화에 영향을 받지 않으므로 모듈을 안정적으로 관리할 수 있습니다.
+ - Client 기능만을 위한 의존성만 남아서 관리가 편하고 쉽게 파악이 가능합니다.
+ - implementation은 compile 단계와 runtime 모두에 의존성이 들어옵니다. 즉, implementation한 의존성이 많아지면 compile시 시간이 오래 걸립니다.
+   client 기능에 필요한 의존성만 compile함으로 compile 시간이 단축됩니다.
+ */
 dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
