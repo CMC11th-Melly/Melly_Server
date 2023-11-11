@@ -33,8 +33,6 @@ public class QMemory extends EntityPathBase<Memory> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<Keyword, QKeyword> keywords = this.<Keyword, QKeyword>createList("keywords", Keyword.class, QKeyword.class, PathInits.DIRECT2);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 

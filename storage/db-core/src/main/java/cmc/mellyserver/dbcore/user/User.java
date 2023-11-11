@@ -9,7 +9,6 @@ import cmc.mellyserver.dbcore.user.enums.Provider;
 import cmc.mellyserver.dbcore.user.enums.RoleType;
 import cmc.mellyserver.dbcore.user.enums.UserStatus;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -55,9 +54,6 @@ public class User extends JpaBaseEntity {
 	@Column(name = "profile_image")
 	private String profileImage;
 
-	@Embedded
-	private Recommend recommend;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
 	private Gender gender;
@@ -82,6 +78,9 @@ public class User extends JpaBaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "user_status")
 	private UserStatus userStatus;
+
+	@Column(name = "fcm_token")
+	private String fcmToken;
 
 	public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
 		this.nickname = nickname;

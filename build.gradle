@@ -2,8 +2,7 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
-    id 'org.sonarqube' version '4.4.1.3373'
-
+    id 'org.sonarqube' version '4.4.1.3373' apply(false)
 }
 
 allprojects {
@@ -17,29 +16,32 @@ allprojects {
 }
 
 
-sonar {
-    properties {
-        property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
-        property "sonar.organization", "cmc11th-melly"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
-
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
     apply plugin: 'jacoco-report-aggregation'
 
+
+    sonar {
+        properties {
+            property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
+            property "sonar.organization", "cmc11th-melly"
+            property "sonar.host.url", "https://sonarcloud.io"
+        }
+    }
+
+    bootJar.enabled = false // core-api 모듈 이외에는 모두 boot 되지 않는 모듈
+    jar.enabled = true // jar는 필요함
 
     dependencyManagement {
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
         }
     }
-
 
     jacoco {
         toolVersion = '0.8.8'
@@ -50,7 +52,7 @@ subprojects {
         // jacoco report 형식 및 경로 설정
         reports {
             html.required = true
-            csv.required = true
+            csv.required = false
             xml.required = true
         }
 
@@ -68,7 +70,7 @@ subprojects {
             )
         }
 
-        finalizedBy 'jacocoTestCoverageVerification'
+        finalizedBy 'jacocoTestCoverageVerification' // jacocoTestReport를 실행 후 jacocoTestCoverageVerification 실행
     }
 
     jacocoTestCoverageVerification {
@@ -88,13 +90,13 @@ subprojects {
                 limit {
                     counter = 'BRANCH'
                     value = 'COVEREDRATIO'
-                    minimum = 0.00
+                    minimum = 0.0
                 }
 
                 limit {
                     counter = 'LINE'
                     value = 'COVEREDRATIO'
-                    minimum = 0.00
+                    minimum = 0.0
                 }
 
                 limit {
@@ -106,42 +108,28 @@ subprojects {
                 excludes = [] + Qdomains
             }
 
-
         }
 
     }
 
-    sonar {
-        properties {
-            property 'sonar.core.codeCoveragePlugin', 'jacoco'
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/testCodeCoverageReport/**.xml"
-        }
-    }
     dependencies {
 
-        // Lombok
+        // lombok
         implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
-
-
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
+
+        // test
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
         testImplementation "com.h2database:h2"
-
-        implementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-        implementation 'org.springframework.restdocs:spring-restdocs-restassured'
-        implementation 'io.rest-assured:spring-mock-mvc'
     }
-
-    bootJar.enabled = false
-    jar.enabled = true
 
     test {
         useJUnitPlatform()
-        finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport를 실행합니다.
+        finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport를 실행
     }
 }
 

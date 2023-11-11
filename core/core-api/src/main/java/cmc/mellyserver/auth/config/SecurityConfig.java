@@ -1,11 +1,5 @@
 package cmc.mellyserver.auth.config;
 
-import cmc.mellyserver.auth.common.filter.JwtExceptionFilter;
-import cmc.mellyserver.auth.common.filter.RestAuthenticationEntryPoint;
-import cmc.mellyserver.auth.common.filter.TokenAccessDeniedHandler;
-import cmc.mellyserver.auth.common.filter.TokenAuthenticationFilter;
-import cmc.mellyserver.auth.token.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import cmc.mellyserver.auth.common.filter.JwtExceptionFilter;
+import cmc.mellyserver.auth.common.filter.RestAuthenticationEntryPoint;
+import cmc.mellyserver.auth.common.filter.TokenAccessDeniedHandler;
+import cmc.mellyserver.auth.common.filter.TokenAuthenticationFilter;
+import cmc.mellyserver.auth.token.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -45,14 +46,17 @@ public class SecurityConfig {
 			.cors(CorsConfigurer::disable)
 			.httpBasic(HttpBasicConfigurer::disable)
 			.sessionManagement(
-					(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.exceptionHandling(
-					(authenticationManager) -> authenticationManager.authenticationEntryPoint(authenticationEntryPoint)
-						.accessDeniedHandler(accessDeniedHandler))
+				(authenticationManager) -> authenticationManager.authenticationEntryPoint(authenticationEntryPoint)
+					.accessDeniedHandler(accessDeniedHandler))
 			.authorizeHttpRequests(authorize -> authorize.requestMatchers(WhiteList.WHITE_LIST)
 				.permitAll()
 				.requestMatchers(HttpMethod.OPTIONS, "/**")
-				.permitAll())
+				.permitAll()
+				.anyRequest()
+				.authenticated()
+			)
 			.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtExceptionFilter, TokenAuthenticationFilter.class);
 
