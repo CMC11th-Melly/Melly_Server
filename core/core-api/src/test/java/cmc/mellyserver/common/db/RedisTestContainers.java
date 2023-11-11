@@ -20,10 +20,16 @@ public class RedisTestContainers {
 
 		REDIS_CONTAINER.start();
 
+		GenericContainer<?> REDIS_CONTAINER_CACHE = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
+			.withExposedPorts(6379)
+			.withReuse(true);
+
+		REDIS_CONTAINER_CACHE.start();
+
 		System.setProperty("spring.redis.token.host", REDIS_CONTAINER.getHost());
 		System.setProperty("spring.redis.token.port", REDIS_CONTAINER.getMappedPort(6379).toString());
-		System.setProperty("spring.redis.cache.host", REDIS_CONTAINER.getHost());
-		System.setProperty("spring.redis.cache.port", REDIS_CONTAINER.getMappedPort(6379).toString());
+		System.setProperty("spring.redis.cache.host", REDIS_CONTAINER_CACHE.getHost());
+		System.setProperty("spring.redis.cache.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
 	}
 
 }
