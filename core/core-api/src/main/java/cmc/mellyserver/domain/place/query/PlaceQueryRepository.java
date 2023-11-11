@@ -11,7 +11,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 import lombok.RequiredArgsConstructor;

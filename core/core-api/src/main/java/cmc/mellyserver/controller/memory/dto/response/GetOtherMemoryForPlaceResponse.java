@@ -1,13 +1,14 @@
 package cmc.mellyserver.controller.memory.dto.response;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cmc.mellyserver.dbcore.group.GroupType;
+import cmc.mellyserver.domain.memory.query.dto.ImageDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

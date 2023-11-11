@@ -1,12 +1,14 @@
 package cmc.mellyserver.auth.dto.request;
 
+import org.hibernate.validator.constraints.Length;
+
+import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 public class AuthSignupRequestDto {
@@ -28,13 +30,17 @@ public class AuthSignupRequestDto {
 
 	@Builder
 	public AuthSignupRequestDto(String email, String password, String nickname, AgeGroup ageGroup, Gender gender,
-			String fcmToken) {
+		String fcmToken) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.ageGroup = ageGroup;
 		this.gender = gender;
 		this.fcmToken = fcmToken;
+	}
+
+	public User toEntity() {
+		return null;
 	}
 
 }

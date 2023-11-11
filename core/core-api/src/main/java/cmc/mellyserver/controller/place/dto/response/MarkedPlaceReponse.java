@@ -1,6 +1,6 @@
 package cmc.mellyserver.controller.place.dto.response;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.Builder;
 import lombok.Data;

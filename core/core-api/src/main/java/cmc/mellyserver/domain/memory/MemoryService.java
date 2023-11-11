@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
 import cmc.mellyserver.common.constants.CacheNames;
 import cmc.mellyserver.common.event.MemoryCreatedEvent;
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;

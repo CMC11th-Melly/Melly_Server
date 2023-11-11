@@ -1,11 +1,11 @@
 package cmc.mellyserver.domain.memory.query.dto;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import java.time.LocalDate;
+
+import cmc.mellyserver.dbcore.group.GroupType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor

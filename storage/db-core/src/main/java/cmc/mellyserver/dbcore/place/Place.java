@@ -1,7 +1,13 @@
 package cmc.mellyserver.dbcore.place;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +15,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Table(name = "tb_place")
+@Entity
 public class Place extends JpaBaseEntity {
 
 	@Id
@@ -31,23 +37,12 @@ public class Place extends JpaBaseEntity {
 	@Column(name = "place_category")
 	private String placeCategory;
 
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
-
 	@Builder
-	public Place(Long id, Position position, String placeImage, String placeCategory, String placeName,
-			Boolean isDeleted) {
+	public Place(Long id, Position position, String placeImage, String placeCategory, String placeName) {
 		this.id = id;
 		this.position = position;
 		this.placeName = placeName;
 		this.placeImage = placeImage;
 		this.placeCategory = placeCategory;
-		this.isDeleted = isDeleted;
 	}
-
-	@PrePersist
-	public void init() {
-		this.isDeleted = Boolean.FALSE;
-	}
-
 }

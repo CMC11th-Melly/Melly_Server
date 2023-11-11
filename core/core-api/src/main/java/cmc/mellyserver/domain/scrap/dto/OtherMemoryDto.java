@@ -1,10 +1,10 @@
 package cmc.mellyserver.domain.scrap.dto;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import java.util.List;
+
+import cmc.mellyserver.dbcore.group.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

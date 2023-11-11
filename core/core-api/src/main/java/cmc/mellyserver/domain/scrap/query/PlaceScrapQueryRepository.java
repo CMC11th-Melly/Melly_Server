@@ -1,22 +1,25 @@
 package cmc.mellyserver.domain.scrap.query;
 
-import static cmc.mellyserver.dbcore.place.QPlace.place;
-import static cmc.mellyserver.dbcore.scrap.QPlaceScrap.placeScrap;
-import static cmc.mellyserver.dbcore.user.QUser.user;
+import static cmc.mellyserver.dbcore.place.QPlace.*;
+import static cmc.mellyserver.dbcore.scrap.QPlaceScrap.*;
+import static cmc.mellyserver.dbcore.user.QUser.*;
 
-import cmc.mellyserver.dbcore.place.Position;
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
-import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
-import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import cmc.mellyserver.dbcore.place.Position;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
+import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
+import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -60,7 +63,7 @@ public class PlaceScrapQueryRepository {
 
 		return query
 			.select(Projections.fields(PlaceScrapCountResponseDto.class, placeScrap.scrapType,
-					placeScrap.count().as("scrapCount")))
+				placeScrap.count().as("scrapCount")))
 			.from(placeScrap)
 			.innerJoin(user)
 			.on(placeScrap.user.id.eq(user.id))
@@ -71,10 +74,11 @@ public class PlaceScrapQueryRepository {
 	}
 
 	public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
-			ScrapType scrapType) {
+		ScrapType scrapType) {
 
 		List<ScrapedPlaceResponseDto> results = query
-			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory, place.placeName, place.placeImage))
+			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory,
+				place.placeName, place.placeImage))
 			.from(placeScrap)
 			.innerJoin(placeScrap.place, place)
 			.innerJoin(placeScrap.user, user)

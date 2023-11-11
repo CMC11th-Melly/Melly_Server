@@ -1,17 +1,24 @@
 package cmc.mellyserver.dbcore.memory;
 
+import java.util.Objects;
+
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Table(name = "tb_memory_image")
+@Entity
 public class MemoryImage extends JpaBaseEntity {
 
 	@Id
@@ -30,7 +37,7 @@ public class MemoryImage extends JpaBaseEntity {
 		this.imagePath = imagePath;
 	}
 
-	public void setMemory(Memory memory) {
+	public void addMemory(Memory memory) {
 		this.memory = memory;
 	}
 
@@ -40,7 +47,7 @@ public class MemoryImage extends JpaBaseEntity {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		MemoryImage that = (MemoryImage) o;
+		MemoryImage that = (MemoryImage)o;
 		return Objects.equals(id, that.id);
 	}
 

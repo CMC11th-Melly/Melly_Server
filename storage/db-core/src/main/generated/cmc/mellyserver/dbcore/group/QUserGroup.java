@@ -24,17 +24,17 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
+
     public final NumberPath<Integer> groupIcon = createNumber("groupIcon", Integer.class);
 
     public final StringPath groupName = createString("groupName");
 
-    public final EnumPath<cmc.mellyserver.dbcore.group.enums.GroupType> groupType = createEnum("groupType", cmc.mellyserver.dbcore.group.enums.GroupType.class);
+    public final EnumPath<GroupType> groupType = createEnum("groupType", GroupType.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath inviteLink = createString("inviteLink");
-
-    public final BooleanPath isDeleted = createBoolean("isDeleted");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.Builder;
@@ -69,7 +69,6 @@ public class CreateMemoryRequestDto {
 		return Memory.builder()
 			.title(title)
 			.userId(userId)
-			.keyword(keyword)
 			.content(content)
 			.groupId(groupId)
 			.openType(openType)

@@ -1,16 +1,18 @@
 package cmc.mellyserver.controller.memory.dto.request;
 
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cmc.mellyserver.dbcore.memory.OpenType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,7 +47,7 @@ public class MemoryCreateRequest {
 
 	@Builder
 	public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory, String title,
-			String content, List<String> keyword, Long groupId, OpenType openType, LocalDate visitedDate, Long star) {
+		String content, List<String> keyword, Long groupId, OpenType openType, LocalDate visitedDate, Long star) {
 		this.lat = lat;
 		this.lng = lng;
 		this.placeName = placeName;

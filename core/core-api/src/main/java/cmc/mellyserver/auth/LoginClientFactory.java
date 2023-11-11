@@ -1,21 +1,24 @@
 package cmc.mellyserver.auth;
 
-import cmc.mellyserver.clientauth.LoginClient;
-import cmc.mellyserver.dbcore.user.enums.Provider;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import cmc.mellyserver.clientauth.LoginClient;
+import cmc.mellyserver.dbcore.user.enums.Provider;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class LoginClientFactory {
 
-	// LoginClient 타입의 모든게 다 들어온다.
 	private final List<LoginClient> loginClientList;
 
+	/*
+	한번 생성된 Client 객체를 런타임 내에 메모리상에 캐싱합니다
+	 */
 	private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
 
 	public LoginClient find(Provider provider) {
@@ -23,12 +26,6 @@ public class LoginClientFactory {
 		if (loginClient != null) {
 			return loginClient;
 		}
-
-		// 이 부분이 중요하다.
-		// loginClient = loginClientList.stream()
-		// .filter(v -> v.supports(provider))
-		// .findFirst()
-		// .orElseThrow();
 
 		loginClient = loginClientList.stream()
 			.filter(client -> client.supports(provider.name()))

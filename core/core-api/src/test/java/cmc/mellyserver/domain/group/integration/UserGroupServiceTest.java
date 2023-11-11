@@ -12,8 +12,8 @@ import org.springframework.data.domain.PageRequest;
 
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
 import cmc.mellyserver.dbcore.group.GroupRepository;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.group.enums.GroupType;
 import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
@@ -145,7 +145,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
 
 		// then
 		UserGroup userGroup = groupRepository.findById(친구들.getId()).get();
-		Assertions.assertThat(userGroup.getIsDeleted()).isTrue();
+		Assertions.assertThat(userGroup.getDeletedAt()).isNotNull();
 	}
 
 	@DisplayName("그룹에 참여한다")

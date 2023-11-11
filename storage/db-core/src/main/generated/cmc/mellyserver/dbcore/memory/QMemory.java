@@ -27,20 +27,18 @@ public class QMemory extends EntityPathBase<Memory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final BooleanPath is_deleted = createBoolean("is_deleted");
-
-    public final ListPath<Keyword, QKeyword> keywords = this.<Keyword, QKeyword>createList("keywords", Keyword.class, QKeyword.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final ListPath<MemoryImage, QMemoryImage> memoryImages = this.<MemoryImage, QMemoryImage>createList("memoryImages", MemoryImage.class, QMemoryImage.class, PathInits.DIRECT2);
 
-    public final EnumPath<cmc.mellyserver.dbcore.memory.enums.OpenType> openType = createEnum("openType", cmc.mellyserver.dbcore.memory.enums.OpenType.class);
+    public final EnumPath<OpenType> openType = createEnum("openType", OpenType.class);
 
     public final NumberPath<Long> placeId = createNumber("placeId", Long.class);
 

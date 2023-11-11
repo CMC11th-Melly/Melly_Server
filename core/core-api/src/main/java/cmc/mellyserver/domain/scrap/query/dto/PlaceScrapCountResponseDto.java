@@ -1,11 +1,11 @@
 package cmc.mellyserver.domain.scrap.query.dto;
 
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import java.io.Serializable;
+
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Data
 @AllArgsConstructor

@@ -16,7 +16,7 @@ import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameR
 import cmc.mellyserver.controller.place.dto.PlaceAssembler;
 import cmc.mellyserver.controller.place.dto.request.PlaceSimpleRequest;
 import cmc.mellyserver.controller.place.dto.response.PlaceResponse;
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 import cmc.mellyserver.domain.place.PlaceService;

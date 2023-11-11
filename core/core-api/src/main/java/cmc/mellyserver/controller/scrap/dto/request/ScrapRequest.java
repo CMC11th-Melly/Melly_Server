@@ -1,6 +1,6 @@
 package cmc.mellyserver.controller.scrap.dto.request;
 
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

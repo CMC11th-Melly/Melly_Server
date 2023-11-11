@@ -1,15 +1,16 @@
 package cmc.mellyserver.controller.memory.dto.response;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.domain.memory.query.dto.ImageDto;
 import cmc.mellyserver.domain.memory.query.dto.KeywordDto;
 import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class MemoryDetailResponse {
@@ -48,8 +49,8 @@ public class MemoryDetailResponse {
 
 	@Builder
 	public MemoryDetailResponse(Long placeId, String placeName, Long memoryId, List<ImageDto> imageDtos, String title,
-			String content, GroupType groupType, int groupIcon, String groupName, Long stars, List<KeywordDto> keyword,
-			Long groupId, LocalDate visitedDate) {
+		String content, GroupType groupType, int groupIcon, String groupName, Long stars, List<KeywordDto> keyword,
+		Long groupId, LocalDate visitedDate) {
 		this.placeId = placeId;
 		this.placeName = placeName;
 		this.memoryId = memoryId;

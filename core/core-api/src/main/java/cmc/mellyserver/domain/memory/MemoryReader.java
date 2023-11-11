@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;

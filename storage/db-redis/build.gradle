@@ -1,4 +1,5 @@
 dependencies {
-    api 'org.redisson:redisson-spring-boot-starter:3.23.1'
+    api 'org.redisson:redisson-spring-boot-starter:3.21.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }

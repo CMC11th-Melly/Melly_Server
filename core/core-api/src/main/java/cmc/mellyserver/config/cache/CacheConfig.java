@@ -4,13 +4,16 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
@@ -25,8 +28,19 @@ import cmc.mellyserver.common.constants.CacheNames;
 @Configuration
 public class CacheConfig {
 
-	@Autowired
-	RedisConnectionFactory redisConnectionFactory;
+	@Value("${spring.redis.cache.host}")
+	private String host;
+
+	@Value("${spring.redis.cache.port}")
+	private int port;
+
+	@Bean(name = "redisCacheConnectionFactory")
+	RedisConnectionFactory redisCacheConnectionFactory() {
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+		redisStandaloneConfiguration.setHostName(host);
+		redisStandaloneConfiguration.setPort(port);
+		return new LettuceConnectionFactory(redisStandaloneConfiguration);
+	}
 
 	/*
 	설정 종류
@@ -54,7 +68,8 @@ public class CacheConfig {
 	 - Group 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
 	 */
 	@Bean
-	public RedisCacheManager redisCacheManager() {
+	public RedisCacheManager redisCacheManager(
+		@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory connectionFactory) {
 
 		RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
 			.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
@@ -66,7 +81,7 @@ public class CacheConfig {
 		redisCacheConfigMap.put(CacheNames.FEED, defaultConfig.entryTtl(Duration.ofMinutes(1)));
 		redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofHours(1)));
 
-		return RedisCacheManager.builder(redisConnectionFactory)
+		return RedisCacheManager.builder(connectionFactory)
 			.withInitialCacheConfigurations(redisCacheConfigMap)
 			.build();
 	}

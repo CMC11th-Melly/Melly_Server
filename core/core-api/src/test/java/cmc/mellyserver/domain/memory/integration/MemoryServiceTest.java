@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;
@@ -55,7 +55,7 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 
 			// then
 			Memory memory = memoryRepository.findById(메모리.getId()).get();
-			assertThat(memory.getIs_deleted()).isTrue();
+			assertThat(memory.getDeletedAt()).isNotNull();
 		}
 
 		@DisplayName("메모리가 없으면 예외를 발생시킨다.")
