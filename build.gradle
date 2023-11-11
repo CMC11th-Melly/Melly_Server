@@ -28,7 +28,7 @@ subprojects {
     sonar {
         properties {
             property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
-            property "sonar.organization", "cmc11th-melly"
+            property "sonar.organization", "melly"
             property "sonar.host.url", "https://sonarcloud.io"
             property "sonar.coverage.jacoco.xmlReportPaths", "/home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
         }
