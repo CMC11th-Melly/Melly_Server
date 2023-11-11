@@ -26,9 +26,9 @@ public class RedisTestContainers {
 
 		REDIS_CONTAINER_CACHE.start();
 
-		System.setProperty("spring.redis.token.host", REDIS_CONTAINER.getHost());
+		System.setProperty("spring.redis.token.host", "127.0.0.1");
 		System.setProperty("spring.redis.token.port", REDIS_CONTAINER.getMappedPort(6379).toString());
-		System.setProperty("spring.redis.cache.host", REDIS_CONTAINER_CACHE.getHost());
+		System.setProperty("spring.redis.cache.host", "127.0.0.1");
 		System.setProperty("spring.redis.cache.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
 	}
 
