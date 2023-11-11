@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SignupCompletedEvent {
+public class SignupEnvent {
 
 	private Long userId;
 
