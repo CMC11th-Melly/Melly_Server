@@ -6,9 +6,6 @@ import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import cmc.mellyserver.dbcore.user.enums.Provider;
-import cmc.mellyserver.dbcore.user.enums.RecommendActivity;
-import cmc.mellyserver.dbcore.user.enums.RecommendGroup;
-import cmc.mellyserver.dbcore.user.enums.RecommendPlace;
 import cmc.mellyserver.dbcore.user.enums.RoleType;
 import cmc.mellyserver.dbcore.user.enums.UserStatus;
 import jakarta.persistence.Column;
@@ -28,8 +25,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Table(name = "tb_user")
+@Entity
 public class User extends JpaBaseEntity {
 
 	private static String NO_PASSWORD = "NO_PASSWORD";
@@ -43,7 +40,7 @@ public class User extends JpaBaseEntity {
 	private String socialId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "provider")
+	@Column(name = "provider", nullable = false)
 	private Provider provider;
 
 	@Column(name = "email")
@@ -52,7 +49,7 @@ public class User extends JpaBaseEntity {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "nickname")
+	@Column(name = "nickname", nullable = false)
 	private String nickname;
 
 	@Column(name = "profile_image")
@@ -74,22 +71,17 @@ public class User extends JpaBaseEntity {
 	private RoleType roleType;
 
 	@Column(name = "enable_app_push")
-	private Boolean enableAppPush;
+	private boolean enableAppPush;
 
 	@Column(name = "enable_comment_like_push")
-	private Boolean enableCommentLikePush;
+	private boolean enableCommentLikePush;
 
 	@Column(name = "enable_comment_push")
-	private Boolean enableCommentPush;
+	private boolean enableCommentPush;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "user_status")
 	private UserStatus userStatus;
-
-	public void addSurveyData(final RecommendGroup recommendGroup, final RecommendPlace recommendPlace,
-		final RecommendActivity recommendActivity) {
-		this.recommend = new Recommend(recommendGroup, recommendPlace, recommendActivity);
-	}
 
 	public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
 		this.nickname = nickname;
@@ -111,10 +103,6 @@ public class User extends JpaBaseEntity {
 
 	public void remove() {
 		this.userStatus = UserStatus.DELETE;
-	}
-
-	public void inActive() {
-		this.userStatus = UserStatus.INACTIVE;
 	}
 
 	public void changeAppPushStatus(boolean enableAppPush) {

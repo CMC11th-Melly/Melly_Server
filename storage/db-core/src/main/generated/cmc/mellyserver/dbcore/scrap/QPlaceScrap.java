@@ -34,7 +34,7 @@ public class QPlaceScrap extends EntityPathBase<PlaceScrap> {
 
     public final cmc.mellyserver.dbcore.place.QPlace place;
 
-    public final EnumPath<cmc.mellyserver.dbcore.scrap.enums.ScrapType> scrapType = createEnum("scrapType", cmc.mellyserver.dbcore.scrap.enums.ScrapType.class);
+    public final EnumPath<ScrapType> scrapType = createEnum("scrapType", ScrapType.class);
 
     public final cmc.mellyserver.dbcore.user.QUser user;
 

@@ -20,8 +20,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import cmc.mellyserver.dbcore.group.GroupType;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.domain.memory.query.dto.ImageDto;
 import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
 import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
@@ -237,7 +237,7 @@ public class MemoryQueryRepository {
 	}
 
 	private BooleanExpression isActive() {
-		return memory.is_deleted.eq(Boolean.FALSE);
+		return memory.deletedAt.isNull();
 	}
 
 	private BooleanExpression createdByNotCurrentLoginUser(Long id) {
@@ -254,9 +254,4 @@ public class MemoryQueryRepository {
 
 		return new SliceImpl<>(results, pageable, hasNext);
 	}
-
-	private BooleanExpression checkOpenTypeAllOrGroup() {
-		return memory.openType.ne(OpenType.PRIVATE);
-	}
-
 }

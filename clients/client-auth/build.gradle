@@ -21,4 +21,6 @@ dependencies {
 
     // JSON
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
 }

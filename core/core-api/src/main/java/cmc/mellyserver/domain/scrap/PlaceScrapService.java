@@ -13,7 +13,7 @@ import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.place.PlaceReader;
 import cmc.mellyserver.domain.scrap.dto.request.CreatePlaceScrapRequestDto;

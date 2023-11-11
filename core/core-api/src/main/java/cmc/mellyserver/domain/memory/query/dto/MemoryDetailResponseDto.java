@@ -1,12 +1,12 @@
 package cmc.mellyserver.domain.memory.query.dto;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+
+import cmc.mellyserver.dbcore.group.GroupType;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -44,7 +44,7 @@ public class MemoryDetailResponseDto implements Serializable {
 	private int groupIcon;
 
 	public MemoryDetailResponseDto(Long placeId, String placeName, Long memoryId, String title, String content,
-			Long stars, LocalDate visitedDate, Long groupId, GroupType groupType, String groupName, int groupIcon) {
+		Long stars, LocalDate visitedDate, Long groupId, GroupType groupType, String groupName, int groupIcon) {
 
 		this.placeId = placeId;
 		this.placeName = placeName;

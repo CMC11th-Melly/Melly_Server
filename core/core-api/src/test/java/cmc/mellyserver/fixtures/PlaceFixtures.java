@@ -29,7 +29,6 @@ public abstract class PlaceFixtures {
 			.placeName(스타벅스_이름)
 			.placeCategory(스타벅스_카테고리)
 			.position(스타벅스_좌표)
-			.isDeleted(Boolean.FALSE)
 			.placeImage(스타벅스_이미지_URL)
 			.build();
 	}
@@ -40,7 +39,6 @@ public abstract class PlaceFixtures {
 			.placeName(이디야_이름)
 			.placeCategory(이디야_카테고리)
 			.position(이디야_좌표)
-			.isDeleted(Boolean.FALSE)
 			.placeImage(이디야_이미지_URL)
 			.build();
 	}

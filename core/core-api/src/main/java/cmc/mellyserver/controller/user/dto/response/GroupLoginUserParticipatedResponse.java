@@ -2,7 +2,7 @@ package cmc.mellyserver.controller.user.dto.response;
 
 import java.util.List;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import lombok.Builder;
 import lombok.Data;

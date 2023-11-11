@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import cmc.mellyserver.domain.scrap.query.PlaceScrapQueryRepository;
 import cmc.mellyserver.domain.scrap.query.dto.PlaceScrapCountResponseDto;
 import cmc.mellyserver.domain.scrap.query.dto.ScrapedPlaceResponseDto;

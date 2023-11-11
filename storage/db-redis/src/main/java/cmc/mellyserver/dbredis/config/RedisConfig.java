@@ -21,6 +21,7 @@ public class RedisConfig {
 
 	/*
 	Redis를 Cluster mode가 아닌 single node 모드로 사용하기에 RedisStandaloneConfiguration을 사용했습니다.
+	Lettuce : Netty 기반의 비동기 클라이언트이므로 다른 Client보다 고성능입니다.
 	 */
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {

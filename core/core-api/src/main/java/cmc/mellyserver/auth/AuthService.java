@@ -1,5 +1,10 @@
 package cmc.mellyserver.auth;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import cmc.mellyserver.auth.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.auth.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.auth.dto.request.ChangePasswordRequest;
@@ -17,10 +22,6 @@ import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -46,14 +47,14 @@ public class AuthService {
 
 		checkDuplicatedEmail(authSignupRequestDto);
 		User savedUser = userWriter.save(User.createEmailLoginUser(authSignupRequestDto.getEmail(),
-				passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
-				authSignupRequestDto.getAgeGroup(), authSignupRequestDto.getGender()));
+			passwordEncoder.encode(authSignupRequestDto.getPassword()), authSignupRequestDto.getNickname(),
+			authSignupRequestDto.getAgeGroup(), authSignupRequestDto.getGender()));
 
 		String accessToken = tokenProvider.createAccessToken(savedUser.getId(), savedUser.getRoleType());
 		RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(savedUser.getId(), savedUser.getRoleType());
 
 		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), savedUser.getId()),
-				refreshToken.getExpiredAt());
+			refreshToken.getExpiredAt());
 		fcmTokenRepository.saveToken(savedUser.getId().toString(), authSignupRequestDto.getFcmToken());
 
 		publisher.publishEvent(new SignupCompletedEvent(savedUser.getId()));
@@ -61,18 +62,12 @@ public class AuthService {
 		return TokenResponseDto.of(accessToken, refreshToken.getToken());
 	}
 
-	/**
-	 * 로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
-	 * <p>
-	 * 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
-	 * <p>
-	 * 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화
-	 * 강도 조절
-	 * <p>
-	 * 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O
-	 * 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
-	 * <p>
-	 * 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
+	/*
+	 로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
+	  - 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
+	  - 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
+	  - 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
+	  - 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
 	 */
 	@Transactional
 	public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
@@ -85,7 +80,7 @@ public class AuthService {
 
 		// ------ 3. 레디스에 Refresh token 저장, EC2 간 네트워크 I/O 발생
 		tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.getToken(), user.getId()),
-				refreshToken.getExpiredAt());
+			refreshToken.getExpiredAt());
 		fcmTokenRepository.saveToken(user.getId().toString(), authLoginRequestDto.getFcmToken());
 
 		return TokenResponseDto.of(accessToken, refreshToken.getToken());
@@ -109,9 +104,9 @@ public class AuthService {
 
 		String newAccessToken = tokenProvider.createAccessToken(refreshToken.getUserId(), user.getRoleType());
 		RefreshTokenDto newRefreshToken = tokenProvider.createRefreshToken(refreshToken.getUserId(),
-				user.getRoleType());
+			user.getRoleType());
 		tokenRepository.saveRefreshToken(new RefreshToken(newRefreshToken.getToken(), user.getId()),
-				newRefreshToken.getExpiredAt());
+			newRefreshToken.getExpiredAt());
 
 		return TokenResponseDto.of(newAccessToken, newRefreshToken.getToken());
 	}

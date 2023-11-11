@@ -1,12 +1,13 @@
 package cmc.mellyserver.domain.memory.dto.request;
 
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import cmc.mellyserver.dbcore.memory.OpenType;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 public class UpdateMemoryRequestDto {
@@ -35,8 +36,8 @@ public class UpdateMemoryRequestDto {
 
 	@Builder
 	public UpdateMemoryRequestDto(Long id, Long memoryId, String title, String content, List<String> keyword,
-			Long groupId, OpenType openType, LocalDate visitedDate, Long star, List<Long> deleteImageList,
-			List<MultipartFile> images) {
+		Long groupId, OpenType openType, LocalDate visitedDate, Long star, List<Long> deleteImageList,
+		List<MultipartFile> images) {
 		this.id = id;
 		this.memoryId = memoryId;
 		this.title = title;

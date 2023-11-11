@@ -42,8 +42,8 @@ public class NotificationService {
 	public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
 
 		User user = userReader.findById(userId);
-		return NotificationOnOffResponseDto.of(user.getEnableAppPush(), user.getEnableCommentPush(),
-			user.getEnableCommentLikePush());
+		return NotificationOnOffResponseDto.of(user.isEnableAppPush(), user.isEnableCommentPush(),
+			user.isEnableCommentLikePush());
 	}
 
 	@Transactional

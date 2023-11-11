@@ -12,7 +12,7 @@ import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
 import cmc.mellyserver.dbcore.scrap.PlaceScrapRepository;
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.support.RepositoryTestSupport;

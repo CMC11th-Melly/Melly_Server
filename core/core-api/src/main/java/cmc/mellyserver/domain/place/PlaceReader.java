@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.place.Position;

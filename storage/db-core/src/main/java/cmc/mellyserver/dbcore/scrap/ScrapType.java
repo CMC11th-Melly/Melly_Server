@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.scrap.enums;
+package cmc.mellyserver.dbcore.scrap;
 
 public enum ScrapType {
 

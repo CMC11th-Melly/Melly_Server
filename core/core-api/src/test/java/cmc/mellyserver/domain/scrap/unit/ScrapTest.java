@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
+import cmc.mellyserver.dbcore.scrap.ScrapType;
 import cmc.mellyserver.dbcore.user.User;
 
 public class ScrapTest {

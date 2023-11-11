@@ -19,7 +19,7 @@ import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
-import cmc.mellyserver.dbcore.memory.enums.OpenType;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;

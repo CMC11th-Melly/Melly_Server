@@ -22,7 +22,7 @@ import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.request.MemoryCreateRequest;
 import cmc.mellyserver.controller.memory.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.controller.memory.dto.response.MemoryDetailResponse;
-import cmc.mellyserver.dbcore.group.enums.GroupType;
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.domain.group.GroupService;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
 import cmc.mellyserver.domain.memory.MemoryService;

@@ -2,9 +2,18 @@ package cmc.mellyserver.dbcore.scrap;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.place.Place;
-import cmc.mellyserver.dbcore.scrap.enums.ScrapType;
 import cmc.mellyserver.dbcore.user.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Table(name = "tb_place_scrap")
+@Entity
 public class PlaceScrap extends JpaBaseEntity {
 
 	@Id
@@ -30,7 +39,7 @@ public class PlaceScrap extends JpaBaseEntity {
 	private Place place;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "scrap_type", nullable = false)
+	@Column(name = "scrap_type")
 	private ScrapType scrapType;
 
 	@Builder
@@ -41,7 +50,6 @@ public class PlaceScrap extends JpaBaseEntity {
 	}
 
 	public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType) {
-		return new PlaceScrap(user, place, scrapType);
+		return PlaceScrap.builder().user(user).place(place).scrapType(scrapType).build();
 	}
-
 }

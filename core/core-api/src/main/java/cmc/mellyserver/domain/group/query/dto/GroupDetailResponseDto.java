@@ -3,8 +3,8 @@ package cmc.mellyserver.domain.group.query.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.group.enums.GroupType;
 import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import lombok.Builder;
 import lombok.Data;
