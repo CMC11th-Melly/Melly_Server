@@ -48,6 +48,8 @@
 - 대용량 트래픽 상황을 가정한 로그인 기능 성능 개선
 - Cursor 기반 페이징을 통한 조회 성능 최적화
 - Spring Cache 적용으로 읽기 작업 성능 향상
+- Token 저장용 Redis와 캐싱용 Redis 분리를 통한 가용성 확보
+- Redis 분산 캐시에 Circuit Breaker 적용을 통해 Redis 서버 다운 시 DB 직접 조회를 통한 가용성 확보
 - Redis LRU Eviction 정책과 서버 인스턴스 스펙에 적합한 max-memory 옵션을 적용하여 효율적인 캐시 설정
 - 부하 분산을 위한 MySQL Replication 구성 및 쿼리 요청 분기
 - 분산락을 사용한 동시성 제어
