@@ -1,5 +1,6 @@
 package cmc.mellyserver.auth.controller.dto.request;
 
+import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import cmc.mellyserver.dbcore.user.enums.Provider;
@@ -23,5 +24,9 @@ public class OAuthSignupRequestDto {
 	private AgeGroup ageGroup;
 
 	private String fcmToken;
+
+	public User toEntity() {
+		return null;
+	}
 
 }

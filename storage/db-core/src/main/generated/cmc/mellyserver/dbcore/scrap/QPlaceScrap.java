@@ -57,7 +57,7 @@ public class QPlaceScrap extends EntityPathBase<PlaceScrap> {
     public QPlaceScrap(Class<? extends PlaceScrap> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.place = inits.isInitialized("place") ? new cmc.mellyserver.dbcore.place.QPlace(forProperty("place"), inits.get("place")) : null;
-        this.user = inits.isInitialized("user") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("user")) : null;
     }
 
 }

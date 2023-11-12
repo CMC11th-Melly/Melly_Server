@@ -6,13 +6,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -23,9 +26,19 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import cmc.mellyserver.common.constants.CacheNames;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.core.registry.EntryAddedEvent;
+import io.github.resilience4j.core.registry.EntryRemovedEvent;
+import io.github.resilience4j.core.registry.EntryReplacedEvent;
+import io.github.resilience4j.core.registry.RegistryEventConsumer;
+import lombok.extern.slf4j.Slf4j;
 
 @EnableCaching
 @Configuration
+@Slf4j
 public class CacheConfig {
 
 	@Value("${spring.redis.cache.host}")
@@ -34,12 +47,18 @@ public class CacheConfig {
 	@Value("${spring.redis.cache.port}")
 	private int port;
 
+	private static final String CACHE_CURCUIT_BREAKER = "cache_curcuit_breaker";
+
 	@Bean(name = "redisCacheConnectionFactory")
 	RedisConnectionFactory redisCacheConnectionFactory() {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 		redisStandaloneConfiguration.setHostName(host);
 		redisStandaloneConfiguration.setPort(port);
-		return new LettuceConnectionFactory(redisStandaloneConfiguration);
+		LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
+			.commandTimeout(Duration.ofSeconds(1))
+			.build();
+
+		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
 	}
 
 	/*
@@ -66,9 +85,14 @@ public class CacheConfig {
 	 - Memory 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
 	 - Memory 리스트인 FEED는 수정이 잦을 것으로 예상되어 1분으로 TTL을 설정했습니다.
 	 - Group 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
+
+	Circuit breaker를 통한 HA 보장
+	레디스로 분산 캐시를 구현 시 레디스 서버가 다운될 수 있습니다. 이때 Spring Cache는 자동으로 DB 조회를 하는 것이 아니라 예외가 발생합니다.
+	이를 해결하기 위해 레디스 서버 장애시 fallback으로 DB 조회를 수행하고, 임계치 이상 예외 발생 시, Circuit을 Open하고 Redis 서버 조회 자체를
+	막음으로써 Fail Fast를 통한 Redis Server Recovery를 유도했습니다.
 	 */
 	@Bean
-	public RedisCacheManager redisCacheManager(
+	public CacheManager redisCacheManager(
 		@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory connectionFactory) {
 
 		RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
@@ -81,9 +105,53 @@ public class CacheConfig {
 		redisCacheConfigMap.put(CacheNames.FEED, defaultConfig.entryTtl(Duration.ofMinutes(1)));
 		redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofHours(1)));
 
-		return RedisCacheManager.builder(connectionFactory)
+		RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
 			.withInitialCacheConfigurations(redisCacheConfigMap)
 			.build();
+
+		CircuitBreakerRegistry circuitBreakerRegistry = configCircuitBreaker();
+
+		return new CustomCacheManager(redisCacheManager, circuitBreakerRegistry.circuitBreaker(CACHE_CURCUIT_BREAKER));
+	}
+
+	private CircuitBreakerRegistry configCircuitBreaker() {
+
+		CircuitBreakerConfig config = CircuitBreakerConfig
+			.custom()
+			.slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
+			.slidingWindowSize(5)
+			.failureRateThreshold(80)
+			.waitDurationInOpenState(Duration.ofSeconds(20))
+			.permittedNumberOfCallsInHalfOpenState(4)
+			.automaticTransitionFromOpenToHalfOpenEnabled(true)
+			.recordExceptions(CallNotPermittedException.class, QueryTimeoutException.class)
+			.build();
+
+		CircuitBreakerRegistry circuitBreakerRegistry = CircuitBreakerRegistry.custom().withCircuitBreakerConfig(config)
+			.addRegistryEventConsumer(new RegistryEventConsumer<CircuitBreaker>() {
+
+				@Override
+				public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+
+					CircuitBreaker.EventPublisher eventPublisher = entryAddedEvent.getAddedEntry().getEventPublisher();
+
+					eventPublisher.onStateTransition(event -> log.info("onStateTransition {}", event));
+					eventPublisher.onError(event -> log.error("onError {}", event));
+					eventPublisher.onSuccess(event -> log.info("onSuccess {}", event));
+					eventPublisher.onCallNotPermitted(event -> log.info("onCallNotPermitted {}", event));
+				}
+
+				@Override
+				public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
+
+				}
+
+				@Override
+				public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
+
+				}
+			}).build();
+		return circuitBreakerRegistry;
 	}
 
 }

@@ -49,8 +49,7 @@ dependencies {
     core-api 모듈에서 client-auth 모듈을 의존하고 있기에 core-api의 compile classpath에 resilence4j가 들어오지는 않지만 runtime에는 사용이 가능합니다.
     따라서 core-api 모듈에서는 중복으로 implementation을 하지 않고 compileOnly로 compile classpath에만 의존성을 추가했습니다.
      */
-    compileOnly 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
-
+    implementation "io.github.resilience4j:resilience4j-all"
 
     // Test
     testImplementation 'org.springframework.security:spring-security-test'

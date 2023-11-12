@@ -1,14 +1,7 @@
 package cmc.mellyserver.controller.exception;
 
-import cmc.mellyserver.support.exception.BusinessException;
-import cmc.mellyserver.support.exception.ErrorCode;
-import cmc.mellyserver.support.response.ErrorResponse;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,7 +15,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.ErrorCode;
+import cmc.mellyserver.support.response.ErrorResponse;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderExceptionException(
-			MissingServletRequestParameterException ex) {
+		MissingServletRequestParameterException ex) {
 		log.error("handleMissingServletRequestParameterException", ex);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER_ERROR, ex.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
@@ -126,14 +126,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(CallNotPermittedException.class)
 	public ResponseEntity<ErrorResponse> handleCallNotPermittedException(CallNotPermittedException ex) {
 		log.error("callNotPermittedException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.SERVER_ERROR, ex.getMessage());
-		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	@ExceptionHandler(NoFallbackAvailableException.class)
-	public ResponseEntity<Object> noFallbackAvailableException(HttpServletRequest request,
-			NoFallbackAvailableException ex) {
-		log.error("uri: {}, exception : ", request.getRequestURI(), ex.getCause());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.SERVER_ERROR, ex.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

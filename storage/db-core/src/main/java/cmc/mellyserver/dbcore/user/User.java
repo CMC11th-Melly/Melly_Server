@@ -1,7 +1,5 @@
 package cmc.mellyserver.dbcore.user;
 
-import java.util.UUID;
-
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
@@ -104,6 +102,10 @@ public class User extends JpaBaseEntity {
 		this.userStatus = UserStatus.DELETE;
 	}
 
+	public void initPassword(String password) {
+		this.password = password;
+	}
+
 	public void changeAppPushStatus(boolean enableAppPush) {
 		this.enableAppPush = enableAppPush;
 	}
@@ -128,7 +130,7 @@ public class User extends JpaBaseEntity {
 	@Builder
 	private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
 		Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
-		boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush) {
+		boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush, String fcmToken) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -143,21 +145,7 @@ public class User extends JpaBaseEntity {
 		this.enableAppPush = enableAppPush;
 		this.enableCommentPush = enableCommentPush;
 		this.enableCommentLikePush = enableCommentLikePush;
-	}
-
-	public static User createEmailLoginUser(String email, String password, String nickname, AgeGroup ageGroup,
-		Gender gender) {
-
-		return User.builder()
-			.email(email) // 이메일
-			.password(password) // 비밀번호
-			.nickname(nickname) // 닉네임
-			.socialId(UUID.randomUUID().toString())
-			.ageGroup(ageGroup)
-			.gender(gender)
-			.provider(Provider.DEFAULT)
-			.roleType(RoleType.USER)
-			.build();
+		this.fcmToken = fcmToken;
 	}
 
 	// 처음 로그인 시에 얻어올 수 있는 정보는 OAuth에서는 없다.

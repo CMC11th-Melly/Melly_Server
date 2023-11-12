@@ -12,4 +12,8 @@ public class OAuthResponseDto<T> {
 
 	public T data;
 
+	public static OAuthResponseDto newUser(String socialId, String provider) {
+		return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialId, provider));
+	}
+
 }

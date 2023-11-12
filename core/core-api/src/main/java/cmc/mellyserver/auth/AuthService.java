@@ -44,7 +44,7 @@ public class AuthService {
 
 		checkDuplicatedEmail(authSignupRequestDto.getEmail());
 		User user = userWriter.save(authSignupRequestDto.toEntity());
-
+		System.out.println(user.getPassword());
 		TokenDto tokenDto = tokenService.createToken(user);
 
 		fcmTokenRepository.saveToken(user.getId().toString(), user.getFcmToken());
@@ -97,7 +97,7 @@ public class AuthService {
 
 		User user = userReader.findById(userId);
 		user.remove();
-		
+
 		tokenService.makeAccessTokenDisabled(accessToken);
 		tokenService.removeRefreshToken(userId);
 		fcmTokenRepository.deleteToken(userId.toString());
@@ -148,7 +148,7 @@ public class AuthService {
 	}
 
 	private void checkPassword(final String password, final String originPassword) {
-
+		System.out.println(password + " " + originPassword);
 		if (!passwordEncoder.matches(password, originPassword)) {
 			throw new BusinessException(ErrorCode.INVALID_PASSWORD);
 		}

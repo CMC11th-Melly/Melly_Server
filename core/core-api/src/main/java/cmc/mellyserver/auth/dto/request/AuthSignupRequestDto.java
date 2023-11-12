@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.Length;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
+import cmc.mellyserver.dbcore.user.enums.Provider;
+import cmc.mellyserver.dbcore.user.enums.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -40,7 +42,17 @@ public class AuthSignupRequestDto {
 	}
 
 	public User toEntity() {
-		return null;
+		return User.builder()
+			.email(email)
+			.password("passowrd")
+			.nickname(nickname)
+			.ageGroup(ageGroup)
+			.gender(gender)
+			.fcmToken(fcmToken)
+			.roleType(
+				RoleType.USER)
+			.provider(Provider.DEFAULT)
+			.build();
 	}
 
 }
