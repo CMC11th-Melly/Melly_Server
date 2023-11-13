@@ -6,8 +6,8 @@ import cmc.mellyserver.dbcore.place.Position;
 
 public interface PlaceScrapRepository extends JpaRepository<PlaceScrap, Long> {
 
-	boolean existsByUserIdAndPlaceId(Long id, Long placeId);
+    boolean existsByUserIdAndPlaceId(Long id, Long placeId);
 
-	void deleteByUserIdAndPlacePosition(Long id, Position position);
+    void deleteByUserIdAndPlacePosition(Long id, Position position);
 
 }

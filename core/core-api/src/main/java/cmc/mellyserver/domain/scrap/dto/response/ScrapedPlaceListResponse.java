@@ -10,12 +10,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class ScrapedPlaceListResponse {
 
-	private List<ScrapedPlaceResponseDto> contents;
+    private List<ScrapedPlaceResponseDto> contents;
 
-	private Boolean next;
+    private Boolean next;
 
-	public static ScrapedPlaceListResponse from(List<ScrapedPlaceResponseDto> contents, Boolean next) {
-		return new ScrapedPlaceListResponse(contents, next);
-	}
+    public static ScrapedPlaceListResponse from(List<ScrapedPlaceResponseDto> contents, Boolean next) {
+        return new ScrapedPlaceListResponse(contents, next);
+    }
 
 }

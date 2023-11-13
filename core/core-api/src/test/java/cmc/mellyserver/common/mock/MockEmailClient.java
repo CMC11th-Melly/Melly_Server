@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 @Profile("test")
 public class MockEmailClient implements EmailSendClient {
 
-	@Override
-	public void sendMail(String subject, String content, String... to) {
-		log.info("send mail by mockEmailClient");
-	}
+    @Override
+    public void sendMail(String subject, String content, String... to) {
+        log.info("send mail by mockEmailClient");
+    }
 
 }

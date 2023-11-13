@@ -6,14 +6,14 @@ import lombok.Data;
 @Data
 public class FindPlaceInfoByMemoryNameResponse {
 
-	private Long placeId;
+    private Long placeId;
 
-	private String memoryName;
+    private String memoryName;
 
-	@Builder
-	public FindPlaceInfoByMemoryNameResponse(Long placeId, String memoryName) {
-		this.placeId = placeId;
-		this.memoryName = memoryName;
-	}
+    @Builder
+    public FindPlaceInfoByMemoryNameResponse(Long placeId, String memoryName) {
+        this.placeId = placeId;
+        this.memoryName = memoryName;
+    }
 
 }

@@ -24,89 +24,89 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemoryWriter {
 
-	private final MemoryRepository memoryRepository;
+    private final MemoryRepository memoryRepository;
 
-	private final MemoryReader memoryReader;
+    private final MemoryReader memoryReader;
 
-	private final PlaceReader placeReader;
+    private final PlaceReader placeReader;
 
-	private final FileService fileService;
+    private final FileService fileService;
 
-	public Memory save(CreateMemoryRequestDto createMemoryRequestDto) {
+    public Memory save(CreateMemoryRequestDto createMemoryRequestDto) {
 
-		Memory memory = createMemoryRequestDto.toMemory();
-		addPlace(createMemoryRequestDto.getPosition(), memory);
-		addMemoryImages(createMemoryRequestDto, memory);
-		return memoryRepository.save(memory);
-	}
+        Memory memory = createMemoryRequestDto.toMemory();
+        addPlace(createMemoryRequestDto.getPosition(), memory);
+        addMemoryImages(createMemoryRequestDto, memory);
+        return memoryRepository.save(memory);
+    }
 
-	public void update(UpdateMemoryRequestDto updateDto) {
+    public void update(UpdateMemoryRequestDto updateDto) {
 
-		Memory memory = memoryReader.findById(updateDto.getMemoryId());
-		memory.update(updateDto.getTitle(), updateDto.getContent(), updateDto.getGroupId(), updateDto.getOpenType(),
-			updateDto.getVisitedDate(), updateDto.getStar());
-		List<String> imageUrls = updateImages(updateDto.getDeleteImageList(), updateDto.getImages(),
-			memory.getUserId());
-		memory.updateMemoryImages(updateDto.getDeleteImageList(), imageUrls);
-	}
+        Memory memory = memoryReader.findById(updateDto.getMemoryId());
+        memory.update(updateDto.getTitle(), updateDto.getContent(), updateDto.getGroupId(), updateDto.getOpenType(),
+            updateDto.getVisitedDate(), updateDto.getStar());
+        List<String> imageUrls = updateImages(updateDto.getDeleteImageList(), updateDto.getImages(),
+            memory.getUserId());
+        memory.updateMemoryImages(updateDto.getDeleteImageList(), imageUrls);
+    }
 
-	private List<String> updateImages(List<Long> deleteImages, List<MultipartFile> newImages, Long userId) {
-		fileService.deleteFileList(deleteImages);
-		return saveImages(userId, newImages);
-	}
+    private List<String> updateImages(List<Long> deleteImages, List<MultipartFile> newImages, Long userId) {
+        fileService.deleteFileList(deleteImages);
+        return saveImages(userId, newImages);
+    }
 
-	private List<String> saveImages(Long userId, List<MultipartFile> newImages) {
-		return fileService.saveFileList(userId, extractFileDtos(newImages));
-	}
+    private List<String> saveImages(Long userId, List<MultipartFile> newImages) {
+        return fileService.saveFileList(userId, extractFileDtos(newImages));
+    }
 
-	private List<FileDto> extractFileDtos(List<MultipartFile> newImages) {
-		return newImages.stream()
-			.map(image -> {
-				try {
-					return new FileDto(image.getOriginalFilename(), image.getSize(), image.getContentType(),
-						image.getInputStream());
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			})
-			.toList();
-	}
+    private List<FileDto> extractFileDtos(List<MultipartFile> newImages) {
+        return newImages.stream()
+            .map(image -> {
+                try {
+                    return new FileDto(image.getOriginalFilename(), image.getSize(), image.getContentType(),
+                        image.getInputStream());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            })
+            .toList();
+    }
 
-	public void remove(final Long memoryId) {
-		Memory memory = memoryReader.findById(memoryId);
-		memory.delete();
-	}
+    public void remove(final Long memoryId) {
+        Memory memory = memoryReader.findById(memoryId);
+        memory.delete();
+    }
 
-	private void addPlace(final Position position, final Memory memory) {
+    private void addPlace(final Position position, final Memory memory) {
 
-		Place place = placeReader.findByPosition(position);
-		memory.setPlaceId(place.getId());
-	}
+        Place place = placeReader.findByPosition(position);
+        memory.setPlaceId(place.getId());
+    }
 
-	private void addMemoryImages(final CreateMemoryRequestDto createMemoryRequestDto, final Memory memory) {
+    private void addMemoryImages(final CreateMemoryRequestDto createMemoryRequestDto, final Memory memory) {
 
-		List<FileDto> fileList = extractFileList(createMemoryRequestDto.getMultipartFiles());
+        List<FileDto> fileList = extractFileList(createMemoryRequestDto.getMultipartFiles());
 
-		if (Objects.nonNull(fileList)) {
-			List<String> multipartFileNames = fileService.saveFileList(createMemoryRequestDto.getUserId(), fileList);
-			memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
-		}
-	}
+        if (Objects.nonNull(fileList)) {
+            List<String> multipartFileNames = fileService.saveFileList(createMemoryRequestDto.getUserId(), fileList);
+            memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
+        }
+    }
 
-	private List<FileDto> extractFileList(List<MultipartFile> multipartFiles) {
+    private List<FileDto> extractFileList(List<MultipartFile> multipartFiles) {
 
-		if (Objects.isNull(multipartFiles)) {
-			return null;
-		}
+        if (Objects.isNull(multipartFiles)) {
+            return null;
+        }
 
-		return multipartFiles.stream().map(file -> {
-			try {
-				return new FileDto(file.getOriginalFilename(), file.getSize(), file.getContentType(),
-					file.getInputStream());
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}).toList();
-	}
+        return multipartFiles.stream().map(file -> {
+            try {
+                return new FileDto(file.getOriginalFilename(), file.getSize(), file.getContentType(),
+                    file.getInputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+    }
 
 }

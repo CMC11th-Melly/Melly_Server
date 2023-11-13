@@ -10,13 +10,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class GroupListLoginUserParticipatedResponse {
 
-	private List<GroupLoginUserParticipatedResponseDto> contents;
+    private List<GroupLoginUserParticipatedResponseDto> contents;
 
-	private Boolean next;
+    private Boolean next;
 
-	public static GroupListLoginUserParticipatedResponse from(List<GroupLoginUserParticipatedResponseDto> contents,
-		Boolean next) {
-		return new GroupListLoginUserParticipatedResponse(contents, next);
-	}
+    public static GroupListLoginUserParticipatedResponse from(List<GroupLoginUserParticipatedResponseDto> contents,
+        Boolean next) {
+        return new GroupListLoginUserParticipatedResponse(contents, next);
+    }
 
 }

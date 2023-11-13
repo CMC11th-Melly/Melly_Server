@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GoogleResource {
 
-	private String sub;
+    private String sub;
 
-	private String email;
+    private String email;
 
-	private Boolean email_verified;
+    private Boolean email_verified;
 
-	public LoginClientResult toResult() {
-		return new LoginClientResult(sub, "google");
-	}
+    public LoginClientResult toResult() {
+        return new LoginClientResult(sub, "google");
+    }
 
 }

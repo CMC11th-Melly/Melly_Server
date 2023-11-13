@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Position {
 
-	private Double lat;
+    private Double lat;
 
-	private Double lng;
+    private Double lng;
 
 }

@@ -11,7 +11,7 @@ OAuth 리소스 서버로부터 데이터를 받아와야 하는 쪽에서는 �
  */
 public interface LoginClient {
 
-	boolean supports(String provider);
+    boolean supports(String provider);
 
-	LoginClientResult getUserData(String accessToken);
+    LoginClientResult getUserData(String accessToken);
 }

@@ -11,13 +11,13 @@ import cmc.mellyserver.dbcore.user.User;
 
 public interface GroupAndUserRepository extends JpaRepository<GroupAndUser, Long> {
 
-	Optional<GroupAndUser> findByUserIdAndGroupId(Long userId, Long groupId);
+    Optional<GroupAndUser> findByUserIdAndGroupId(Long userId, Long groupId);
 
-	@Query("select count(*) from GroupAndUser ga where ga.group.id = :groupId")
-	int countUserParticipatedInGroup(@Param("groupId") Long groupId);
+    @Query("select count(*) from GroupAndUser ga where ga.group.id = :groupId")
+    int countUserParticipatedInGroup(@Param("groupId") Long groupId);
 
-	@Query("select u from GroupAndUser ga inner join User u on u.id = ga.user.id where ga.group.id = :groupId")
-	List<User> getUsersParticipatedInGroup(@Param("groupId") Long groupId);
+    @Query("select u from GroupAndUser ga inner join User u on u.id = ga.user.id where ga.group.id = :groupId")
+    List<User> getUsersParticipatedInGroup(@Param("groupId") Long groupId);
 
-	void deleteByUserIdAndGroupId(Long userId, Long groupId);
+    void deleteByUserIdAndGroupId(Long userId, Long groupId);
 }

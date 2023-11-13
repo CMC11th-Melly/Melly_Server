@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
-	Optional<Place> findByPosition(Position position);
+    Optional<Place> findByPosition(Position position);
 
 }

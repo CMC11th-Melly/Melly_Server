@@ -16,34 +16,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentService {
 
-	private final MemoryReader memoryReader;
+    private final MemoryReader memoryReader;
 
-	private final CommentReader commentReader;
+    private final CommentReader commentReader;
 
-	private final CommentWriter commentWriter;
+    private final CommentWriter commentWriter;
 
-	private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
-	@Transactional(readOnly = true)
-	public CommentResponseDto getComments(final Long userId, final Long memoryId) {
-		return commentReader.findByMemoryId(userId, memoryId);
-	}
+    @Transactional(readOnly = true)
+    public CommentResponseDto getComments(final Long userId, final Long memoryId) {
+        return commentReader.findByMemoryId(userId, memoryId);
+    }
 
-	@Transactional
-	public Comment saveComment(final CommentRequestDto commentRequestDto) {
-		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
-		Comment comment = commentWriter.save(commentRequestDto);
-		publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getUser().getId()));
-		return comment;
-	}
+    @Transactional
+    public Comment saveComment(final CommentRequestDto commentRequestDto) {
+        Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
+        Comment comment = commentWriter.save(commentRequestDto);
+        publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getUser().getId()));
+        return comment;
+    }
 
-	@Transactional
-	public void updateComment(final Long commentId, final String content) {
-		commentWriter.update(commentId, content);
-	}
+    @Transactional
+    public void updateComment(final Long commentId, final String content) {
+        commentWriter.update(commentId, content);
+    }
 
-	@Transactional
-	public void deleteComment(Long commentId) {
-		commentWriter.remove(commentId);
-	}
+    @Transactional
+    public void deleteComment(Long commentId) {
+        commentWriter.remove(commentId);
+    }
 }

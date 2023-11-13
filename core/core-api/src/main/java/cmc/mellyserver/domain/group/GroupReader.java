@@ -19,23 +19,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupReader {
 
-	private final GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-	private final UserGroupQueryRepository userGroupQueryRepository;
+    private final UserGroupQueryRepository userGroupQueryRepository;
 
-	public UserGroup findById(Long groupId) {
-		return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
-	}
+    public UserGroup findById(Long groupId) {
+        return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
+    }
 
-	public GroupListLoginUserParticipatedResponse groupListLoginUserParticipate(Long userId, Long lastId,
-		Pageable pageable) {
-		return transferToList(userGroupQueryRepository.getGroupListLoginUserParticipate(userId, lastId, pageable));
-	}
+    public GroupListLoginUserParticipatedResponse groupListLoginUserParticipate(Long userId, Long lastId,
+        Pageable pageable) {
+        return transferToList(userGroupQueryRepository.getGroupListLoginUserParticipate(userId, lastId, pageable));
+    }
 
-	private GroupListLoginUserParticipatedResponse transferToList(
-		Slice<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos) {
-		List<GroupLoginUserParticipatedResponseDto> contents = groupLoginUserParticipatedResponseDtos.getContent();
-		boolean next = groupLoginUserParticipatedResponseDtos.hasNext();
-		return GroupListLoginUserParticipatedResponse.from(contents, next);
-	}
+    private GroupListLoginUserParticipatedResponse transferToList(
+        Slice<GroupLoginUserParticipatedResponseDto> groupLoginUserParticipatedResponseDtos) {
+        List<GroupLoginUserParticipatedResponseDto> contents = groupLoginUserParticipatedResponseDtos.getContent();
+        boolean next = groupLoginUserParticipatedResponseDtos.hasNext();
+        return GroupListLoginUserParticipatedResponse.from(contents, next);
+    }
 }

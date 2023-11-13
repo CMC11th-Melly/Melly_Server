@@ -19,19 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SignupCompletedEventHandler {
 
-	public static final String SIGNUP_CELEBRATION_MAIL = "회원가입 축하드립니다!";
+    public static final String SIGNUP_CELEBRATION_MAIL = "회원가입 축하드립니다!";
 
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-	private final EmailService emailService;
+    private final EmailService emailService;
 
-	@Async
-	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void signupEvent(SignupEvent event) {
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void signupEvent(SignupEvent event) {
 
-		User user = userRepository.findById(event.getUserId())
-			.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-		emailService.send(SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
-	}
+        User user = userRepository.findById(event.getUserId())
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        emailService.send(SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
+    }
 
 }

@@ -15,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 class SignupCertificationEventHandler {
 
-	private final EmailService emailService;
+    private final EmailService emailService;
 
-	@Async
-	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handle(SignupCertificationEvent event) {
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handle(SignupCertificationEvent event) {
 
-		emailService.send(EmailConstants.TITLE_CERTIFICATION, event.getContent(), event.getEmail());
-	}
+        emailService.send(EmailConstants.TITLE_CERTIFICATION, event.getContent(), event.getEmail());
+    }
 
 }

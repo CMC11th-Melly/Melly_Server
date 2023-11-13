@@ -10,26 +10,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NaverResource {
 
-	private String resultcode;
+    private String resultcode;
 
-	private String message;
+    private String message;
 
-	private Response response;
+    private Response response;
 
-	public LoginClientResult toResult() {
-		return new LoginClientResult(response.id, "naver");
-	}
+    public LoginClientResult toResult() {
+        return new LoginClientResult(response.id, "naver");
+    }
 
-	@Data
-	@NoArgsConstructor
-	public class Response {
+    @Data
+    @NoArgsConstructor
+    public class Response {
 
-		private String id;
+        private String id;
 
-		private String email;
+        private String email;
 
-		private String nickname;
+        private String nickname;
 
-	}
+    }
 
 }

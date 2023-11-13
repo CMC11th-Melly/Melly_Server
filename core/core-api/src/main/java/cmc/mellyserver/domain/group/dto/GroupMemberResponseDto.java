@@ -11,16 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupMemberResponseDto implements Serializable {
 
-	private Long userId;
+    private Long userId;
 
-	private String profileImage;
+    private String profileImage;
 
-	private String nickname;
+    private String nickname;
 
-	private boolean isCurrentUser;
+    private boolean isCurrentUser;
 
-	public static GroupMemberResponseDto of(Long userId, String profileImage, String nickname, boolean isCurrentUser) {
-		return new GroupMemberResponseDto(userId, profileImage, nickname, isCurrentUser);
-	}
+    public static GroupMemberResponseDto of(Long userId, String profileImage, String nickname, boolean isCurrentUser) {
+        return new GroupMemberResponseDto(userId, profileImage, nickname, isCurrentUser);
+    }
 
 }

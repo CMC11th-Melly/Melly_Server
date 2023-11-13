@@ -20,17 +20,17 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-		AuthenticationException authException) throws IOException {
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+        AuthenticationException authException) throws IOException {
 
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.OK.value());
 
-		ErrorResponse error = ErrorResponse.of(ErrorCode.UNAUTHORIZED);
+        ErrorResponse error = ErrorResponse.of(ErrorCode.UNAUTHORIZED);
 
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(response.getOutputStream(), error);
-	}
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(response.getOutputStream(), error);
+    }
 
 }

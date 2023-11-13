@@ -27,78 +27,78 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GroupService {
 
-	private final GroupReader groupReader;
+    private final GroupReader groupReader;
 
-	private final GroupWriter groupWriter;
+    private final GroupWriter groupWriter;
 
-	private final UserReader userReader;
+    private final UserReader userReader;
 
-	private final GroupAndUserReader groupAndUserReader;
+    private final GroupAndUserReader groupAndUserReader;
 
-	private final GroupAndUserWriter groupAndUserWriter;
+    private final GroupAndUserWriter groupAndUserWriter;
 
-	private final GroupValidator groupValidator;
+    private final GroupValidator groupValidator;
 
-	@Cacheable(value = "group:group-id", key = "#groupId")
-	public GroupDetailResponseDto getGroupDetail(final Long groupId, final Long userId) {
+    @Cacheable(value = "group:group-id", key = "#groupId")
+    public GroupDetailResponseDto getGroupDetail(final Long groupId, final Long userId) {
 
-		UserGroup userGroup = groupReader.findById(groupId); // 그룹을 찾는다
-		List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(groupId,
-			userId);// 그룹에 속한 멤버들을 찾는다
-		return GroupDetailResponseDto.of(userGroup, groupMembers);
-	}
+        UserGroup userGroup = groupReader.findById(groupId); // 그룹을 찾는다
+        List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(groupId,
+            userId);// 그룹에 속한 멤버들을 찾는다
+        return GroupDetailResponseDto.of(userGroup, groupMembers);
+    }
 
-	public GroupListLoginUserParticipatedResponse findUserParticipatedGroups(final Long userId, final Long lastId,
-		final Pageable pageable) {
+    public GroupListLoginUserParticipatedResponse findUserParticipatedGroups(final Long userId, final Long lastId,
+        final Pageable pageable) {
 
-		return groupReader.groupListLoginUserParticipate(userId, lastId, pageable);
-	}
+        return groupReader.groupListLoginUserParticipate(userId, lastId, pageable);
+    }
 
-	@Transactional
-	public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
+    @Transactional
+    public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
 
-		User user = userReader.findById(createGroupRequestDto.getCreatorId());
-		UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
-		return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
-	}
+        User user = userReader.findById(createGroupRequestDto.getCreatorId());
+        UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
+        return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
+    }
 
-	@Transactional
-	public void joinGroup(final Long userId, final Long groupId) {
+    @Transactional
+    public void joinGroup(final Long userId, final Long groupId) {
 
-		User user = userReader.findById(userId);
-		UserGroup userGroup = groupReader.findById(groupId);
+        User user = userReader.findById(userId);
+        UserGroup userGroup = groupReader.findById(groupId);
 
-		groupValidator.isMaximumGroupMember(groupId);
-		groupValidator.isDuplicatedJoin(user.getId(), userGroup.getId());
+        groupValidator.isMaximumGroupMember(groupId);
+        groupValidator.isDuplicatedJoin(user.getId(), userGroup.getId());
 
-		groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
-	}
+        groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
+    }
 
-	@CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
-	@Transactional
-	public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
+    @CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
+    @Transactional
+    public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 
-		UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
-		userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),
-			updateGroupRequestDto.getGroupIcon());
-	}
+        UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
+        userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),
+            updateGroupRequestDto.getGroupIcon());
+    }
 
-	@CacheEvict(value = "group:group-id", key = "#groupId")
-	@Transactional
-	public void removeGroup(final Long groupId) {
+    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @Transactional
+    public void removeGroup(final Long groupId) {
 
-		UserGroup userGroup = groupReader.findById(groupId);
-		userGroup.delete();
-	}
+        UserGroup userGroup = groupReader.findById(groupId);
+        userGroup.delete();
+    }
 
-	@CacheEvict(value = "group:group-id", key = "#groupId")
-	@Transactional
-	public void exitGroup(final Long userId, final Long groupId) {
+    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @Transactional
+    public void exitGroup(final Long userId, final Long groupId) {
 
-		if (groupValidator.isGroupRemovable(groupId)) {
-			UserGroup userGroup = groupReader.findById(groupId);
-			userGroup.delete();
-		}
-		groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
-	}
+        if (groupValidator.isGroupRemovable(groupId)) {
+            UserGroup userGroup = groupReader.findById(groupId);
+            userGroup.delete();
+        }
+        groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
+    }
 }

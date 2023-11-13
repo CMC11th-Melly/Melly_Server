@@ -28,47 +28,47 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class PlaceScrapService {
 
-	private final UserReader userReader;
+    private final UserReader userReader;
 
-	private final PlaceReader placeReader;
+    private final PlaceReader placeReader;
 
-	private final PlaceScrapReader placeScrapReader;
+    private final PlaceScrapReader placeScrapReader;
 
-	private final PlaceScrapWriter placeScrapWriter;
+    private final PlaceScrapWriter placeScrapWriter;
 
-	private final PlaceScrapValidator placeScrapValidator;
+    private final PlaceScrapValidator placeScrapValidator;
 
-	public ScrapedPlaceListResponse findScrapedPlace(final Long lastId, final Pageable pageable, final Long userId,
-		final ScrapType scrapType) {
+    public ScrapedPlaceListResponse findScrapedPlace(final Long lastId, final Pageable pageable, final Long userId,
+        final ScrapType scrapType) {
 
-		Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
-			scrapType);
-		return ScrapedPlaceListResponse.from(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
-	}
+        Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
+            scrapType);
+        return ScrapedPlaceListResponse.from(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
+    }
 
-	@Cacheable(value = "scrap-count:user-id", key = "#userId")
-	public List<PlaceScrapCountResponseDto> countByPlaceScrapType(final Long userId) {
+    @Cacheable(value = "scrap-count:user-id", key = "#userId")
+    public List<PlaceScrapCountResponseDto> countByPlaceScrapType(final Long userId) {
 
-		return placeScrapReader.getScrapedPlaceGrouping(userId);
-	}
+        return placeScrapReader.getScrapedPlaceGrouping(userId);
+    }
 
-	@CacheEvict(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
-	@ValidatePlaceExisted
-	@Transactional
-	public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
+    @CacheEvict(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
+    @ValidatePlaceExisted
+    @Transactional
+    public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-		Place place = placeReader.findByPosition(createPlaceScrapRequestDto.getPosition());
-		User user = userReader.findById(createPlaceScrapRequestDto.getId());
-		placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
-		placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
-	}
+        Place place = placeReader.findByPosition(createPlaceScrapRequestDto.getPosition());
+        User user = userReader.findById(createPlaceScrapRequestDto.getId());
+        placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
+        placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
+    }
 
-	@CacheEvict(value = "scrap-count:user-id", key = "#userId")
-	@Transactional
-	public void removeScrap(final Long userId, final Position position) {
+    @CacheEvict(value = "scrap-count:user-id", key = "#userId")
+    @Transactional
+    public void removeScrap(final Long userId, final Position position) {
 
-		Place place = placeReader.findByPosition(position);
-		placeScrapValidator.validateExistedScrap(userId, place.getId());
-		placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
-	}
+        Place place = placeReader.findByPosition(position);
+        placeScrapValidator.validateExistedScrap(userId, place.getId());
+        placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
+    }
 }

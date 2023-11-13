@@ -10,8 +10,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetOtherMemoryForPlaceResponseWrapper {
 
-	private Long memoryCount;
+    private Long memoryCount;
 
-	private Slice<MemoryResponse> memoryList;
+    private Slice<MemoryResponse> memoryList;
 
 }

@@ -12,51 +12,51 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemoryDetailResponseDto implements Serializable {
 
-	// ==== place =====
-	private Long placeId;
+    // ==== place =====
+    private Long placeId;
 
-	private String placeName;
+    private String placeName;
 
-	// ==== memory ====
+    // ==== memory ====
 
-	private Long memoryId;
+    private Long memoryId;
 
-	private String title;
+    private String title;
 
-	private String content;
+    private String content;
 
-	private List<ImageDto> memoryImages;
+    private List<ImageDto> memoryImages;
 
-	private List<KeywordDto> keyword;
+    private List<KeywordDto> keyword;
 
-	private LocalDate visitedDate;
+    private LocalDate visitedDate;
 
-	private Long stars;
+    private Long stars;
 
-	// ==== group ====
+    // ==== group ====
 
-	private Long groupId;
+    private Long groupId;
 
-	private GroupType groupType;
+    private GroupType groupType;
 
-	private String groupName;
+    private String groupName;
 
-	private int groupIcon;
+    private int groupIcon;
 
-	public MemoryDetailResponseDto(Long placeId, String placeName, Long memoryId, String title, String content,
-		Long stars, LocalDate visitedDate, Long groupId, GroupType groupType, String groupName, int groupIcon) {
+    public MemoryDetailResponseDto(Long placeId, String placeName, Long memoryId, String title, String content,
+        Long stars, LocalDate visitedDate, Long groupId, GroupType groupType, String groupName, int groupIcon) {
 
-		this.placeId = placeId;
-		this.placeName = placeName;
-		this.memoryId = memoryId;
-		this.title = title;
-		this.content = content;
-		this.stars = stars;
-		this.visitedDate = visitedDate;
-		this.groupId = groupId;
-		this.groupType = groupType;
-		this.groupName = groupName;
-		this.groupIcon = groupIcon;
-	}
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.memoryId = memoryId;
+        this.title = title;
+        this.content = content;
+        this.stars = stars;
+        this.visitedDate = visitedDate;
+        this.groupId = groupId;
+        this.groupType = groupType;
+        this.groupName = groupName;
+        this.groupIcon = groupIcon;
+    }
 
 }

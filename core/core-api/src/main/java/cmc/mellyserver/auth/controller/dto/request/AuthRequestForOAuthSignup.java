@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthRequestForOAuthSignup {
 
-	private String uid;
+    private String uid;
 
-	private String nickname;
+    private String nickname;
 
-	private Gender gender;
+    private Gender gender;
 
-	@Nullable
-	private MultipartFile profileImage;
+    @Nullable
+    private MultipartFile profileImage;
 
-	@Nullable
-	private AgeGroup ageGroup;
+    @Nullable
+    private AgeGroup ageGroup;
 
-	@Nullable
-	private String fcmToken;
+    @Nullable
+    private String fcmToken;
 
 }

@@ -13,37 +13,37 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-	@Value("${spring.redis.token.host}")
-	private String host;
+    @Value("${spring.redis.token.host}")
+    private String host;
 
-	@Value("${spring.redis.token.port}")
-	private int port;
+    @Value("${spring.redis.token.port}")
+    private int port;
 
-	/*
-	Redis를 Cluster mode가 아닌 single node 모드로 사용하기에 RedisStandaloneConfiguration을 사용했습니다.
-	Lettuce : Netty 기반의 비동기 클라이언트이므로 다른 Client보다 고성능입니다.
-	 */
-	@Bean
-	public RedisConnectionFactory redisConnectionFactory() {
+    /*
+    Redis를 Cluster mode가 아닌 single node 모드로 사용하기에 RedisStandaloneConfiguration을 사용했습니다.
+    Lettuce : Netty 기반의 비동기 클라이언트이므로 다른 Client보다 고성능입니다.
+     */
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
 
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-		redisStandaloneConfiguration.setHostName(host);
-		redisStandaloneConfiguration.setPort(port);
-		return new LettuceConnectionFactory(redisStandaloneConfiguration);
-	}
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+    }
 
-	/*
-	RedisTemplate의 key는 String 타입을 사용합니다.
-	Value는 어떤 타입이든 들어올 수 있기 때문에 GenericJackson2JsonRedisSerializer를 사용합니다.
-	 */
-	@Bean
-	public RedisTemplate<?, ?> redisTemplate() {
+    /*
+    RedisTemplate의 key는 String 타입을 사용합니다.
+    Value는 어떤 타입이든 들어올 수 있기 때문에 GenericJackson2JsonRedisSerializer를 사용합니다.
+     */
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate() {
 
-		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setConnectionFactory(redisConnectionFactory());
-		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-		redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-		return redisTemplate;
-	}
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+        return redisTemplate;
+    }
 }

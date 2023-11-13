@@ -14,17 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfileUpdateRequest {
 
-	@Size(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하로 입력해야 합니다.")
-	private String nickname;
+    @Size(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하로 입력해야 합니다.")
+    private String nickname;
 
-	@NotEmpty(message = "성별을 입력해야 합니다.")
-	private Gender gender;
+    @NotEmpty(message = "성별을 입력해야 합니다.")
+    private Gender gender;
 
-	@NotEmpty(message = "연령대를 입력해야 합니다.")
-	private AgeGroup ageGroup;
+    @NotEmpty(message = "연령대를 입력해야 합니다.")
+    private AgeGroup ageGroup;
 
-	public ProfileUpdateRequestDto toServiceRequest() {
-		return new ProfileUpdateRequestDto(nickname, gender, ageGroup);
-	}
+    public ProfileUpdateRequestDto toServiceRequest() {
+        return new ProfileUpdateRequestDto(nickname, gender, ageGroup);
+    }
 
 }

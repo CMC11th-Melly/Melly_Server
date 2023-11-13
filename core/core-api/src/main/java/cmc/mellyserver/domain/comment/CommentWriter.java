@@ -18,56 +18,56 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentWriter {
 
-	private final CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-	private final UserReader userReader;
+    private final UserReader userReader;
 
-	private final MemoryReader memoryReader;
+    private final MemoryReader memoryReader;
 
-	private final CommentReader commentReader;
+    private final CommentReader commentReader;
 
-	public Comment save(CommentRequestDto commentRequestDto) {
+    public Comment save(CommentRequestDto commentRequestDto) {
 
-		Comment parentComment = findRoot(commentRequestDto.getRootId());
-		return saveComment(parentComment, commentRequestDto);
-	}
+        Comment parentComment = findRoot(commentRequestDto.getRootId());
+        return saveComment(parentComment, commentRequestDto);
+    }
 
-	public void remove(Long commentId) {
-		Comment comment = commentReader.findById(commentId);
-		comment.delete();
-		List<Comment> children = comment.getChildren();
-		children.forEach(Comment::delete);
-	}
+    public void remove(Long commentId) {
+        Comment comment = commentReader.findById(commentId);
+        comment.delete();
+        List<Comment> children = comment.getChildren();
+        children.forEach(Comment::delete);
+    }
 
-	public void update(Long commentId, String content) {
-		Comment comment = commentReader.findById(commentId);
-		comment.update(content);
-	}
+    public void update(Long commentId, String content) {
+        Comment comment = commentReader.findById(commentId);
+        comment.update(content);
+    }
 
-	private Comment saveComment(Comment rootComment, CommentRequestDto commentRequestDto) {
+    private Comment saveComment(Comment rootComment, CommentRequestDto commentRequestDto) {
 
-		User user = userReader.findById(commentRequestDto.getUserId());
-		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
+        User user = userReader.findById(commentRequestDto.getUserId());
+        Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 
-		if (Objects.isNull(rootComment)) {
-			return commentRepository.save(
-				Comment.createRoot(commentRequestDto.getContent(), user, memory.getId(), null));
-		}
+        if (Objects.isNull(rootComment)) {
+            return commentRepository.save(
+                Comment.createRoot(commentRequestDto.getContent(), user, memory.getId(), null));
+        }
 
-		User mentionUser = userReader.findById(commentRequestDto.getMentionId());
+        User mentionUser = userReader.findById(commentRequestDto.getMentionId());
 
-		Comment comment = commentRepository.save(
-			Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), rootComment));
-		rootComment.getChildren().add(comment);
-		return comment;
-	}
+        Comment comment = commentRepository.save(
+            Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), rootComment));
+        rootComment.getChildren().add(comment);
+        return comment;
+    }
 
-	private Comment findRoot(Long rootId) {
+    private Comment findRoot(Long rootId) {
 
-		if (Objects.isNull(rootId)) {
-			return null;
-		}
+        if (Objects.isNull(rootId)) {
+            return null;
+        }
 
-		return commentReader.findById(rootId);
-	}
+        return commentReader.findById(rootId);
+    }
 }

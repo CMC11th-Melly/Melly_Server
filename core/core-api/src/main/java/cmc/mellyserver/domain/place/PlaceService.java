@@ -20,34 +20,34 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class PlaceService {
 
-	private final PlaceReader placeReader;
+    private final PlaceReader placeReader;
 
-	private final MemoryReader memoryReader;
+    private final MemoryReader memoryReader;
 
-	private final UserScrapChecker userScrapChecker;
+    private final UserScrapChecker userScrapChecker;
 
-	public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
-		return placeReader.placeUserMemoryExist(id, groupType);
-	}
+    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
+        return placeReader.placeUserMemoryExist(id, groupType);
+    }
 
-	public PlaceResponseDto findByPlaceId(Long userId, Long placeId) {
-		Place place = placeReader.findById(placeId);
-		HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
-		boolean isUserScraped = userScrapChecker.check(placeId, userId);
+    public PlaceResponseDto findByPlaceId(Long userId, Long placeId) {
+        Place place = placeReader.findById(placeId);
+        HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
+        boolean isUserScraped = userScrapChecker.check(placeId, userId);
 
-		return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
-	}
+        return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
+    }
 
-	public PlaceResponseDto findByPosition(Long userId, Position position) {
-		Place place = placeReader.findByPosition(position);
-		HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
-		boolean isUserScraped = userScrapChecker.check(userId, position);
+    public PlaceResponseDto findByPosition(Long userId, Position position) {
+        Place place = placeReader.findByPosition(position);
+        HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
+        boolean isUserScraped = userScrapChecker.check(userId, position);
 
-		return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
-	}
+        return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
+    }
 
-	public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryTitle) {
-		return placeReader.findByMemoryTitle(id, memoryTitle);
-	}
+    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryTitle) {
+        return placeReader.findByMemoryTitle(id, memoryTitle);
+    }
 
 }

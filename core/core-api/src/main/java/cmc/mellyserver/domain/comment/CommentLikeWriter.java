@@ -12,14 +12,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentLikeWriter {
 
-	private final CommentLikeRepository commentLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
-	public void save(final User user, final Comment comment) {
-		commentLikeRepository.save(CommentLike.createCommentLike(user, comment));
-	}
+    public void save(final User user, final Comment comment) {
+        commentLikeRepository.save(CommentLike.createCommentLike(user, comment));
+    }
 
-	public void delete(final CommentLike commentLike) {
-		commentLikeRepository.delete(commentLike);
-	}
+    public void delete(final CommentLike commentLike) {
+        commentLikeRepository.delete(commentLike);
+    }
 
 }

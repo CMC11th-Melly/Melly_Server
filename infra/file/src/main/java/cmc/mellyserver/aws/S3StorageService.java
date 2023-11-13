@@ -27,89 +27,89 @@ import lombok.RequiredArgsConstructor;
 @Profile(value = {"local", "prod"})
 class S3StorageService implements FileService {
 
-	private final AmazonS3 amazonS3Client;
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
-	@Value("${cloud.aws.s3.cloud-front-url}")
-	private String CLOUD_FRONT_URL;
+    private final AmazonS3 amazonS3Client;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+    @Value("${cloud.aws.s3.cloud-front-url}")
+    private String CLOUD_FRONT_URL;
 
-	public List<String> saveFileList(Long userId, List<FileDto> files) {
+    public List<String> saveFileList(Long userId, List<FileDto> files) {
 
-		List<String> fileNameList = new ArrayList<>();
+        List<String> fileNameList = new ArrayList<>();
 
-		files.forEach(file -> {
-			String fileName = saveFile(userId, file);
-			fileNameList.add(getFileUrl(fileName));
-		});
+        files.forEach(file -> {
+            String fileName = saveFile(userId, file);
+            fileNameList.add(getFileUrl(fileName));
+        });
 
-		return fileNameList;
-	}
+        return fileNameList;
+    }
 
-	public String saveFile(Long userId, FileDto file) {
+    public String saveFile(Long userId, FileDto file) {
 
-		String fileName = createFileName(userId, file.getOriginalFilename());
-		ObjectMetadata objectMetadata = setupS3Object(file);
+        String fileName = createFileName(userId, file.getOriginalFilename());
+        ObjectMetadata objectMetadata = setupS3Object(file);
 
-		try (InputStream inputStream = file.getInputStream()) {
-			uploadFile(inputStream, objectMetadata, fileName);
-		} catch (IOException e) {
-			throw new IllegalArgumentException();
-		}
+        try (InputStream inputStream = file.getInputStream()) {
+            uploadFile(inputStream, objectMetadata, fileName);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
 
-		return getFileUrl(fileName);
-	}
+        return getFileUrl(fileName);
+    }
 
-	public void deleteFile(String fileName) throws IOException {
-		try {
-			amazonS3Client.deleteObject(bucket, fileName);
-		} catch (SdkClientException e) {
-			throw new IOException();
-		}
-	}
+    public void deleteFile(String fileName) throws IOException {
+        try {
+            amazonS3Client.deleteObject(bucket, fileName);
+        } catch (SdkClientException e) {
+            throw new IOException();
+        }
+    }
 
-	@Override
-	public void deleteFileList(List<Long> deleteFileIds) {
+    @Override
+    public void deleteFileList(List<Long> deleteFileIds) {
 
-	}
+    }
 
-	public Long calculateImageVolume(String username) {
+    public Long calculateImageVolume(String username) {
 
-		ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);
-		List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
+        ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);
+        List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
 
-		return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
+        return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
 
-	}
+    }
 
-	private String createFileName(Long userId, String fileName) {
+    private String createFileName(Long userId, String fileName) {
 
-		return "dev/" + userId + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
-	}
+        return "dev/" + userId + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
 
-	private String getFileExtension(String fileName) {
+    private String getFileExtension(String fileName) {
 
-		try {
-			return fileName.substring(fileName.lastIndexOf("."));
-		} catch (StringIndexOutOfBoundsException e) {
-			throw new IllegalArgumentException("잘못된 형식 입니다.");
-		}
-	}
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("잘못된 형식 입니다.");
+        }
+    }
 
-	private void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String filename) {
+    private void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String filename) {
 
-		amazonS3Client.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata)
-			.withCannedAcl(CannedAccessControlList.PublicRead));
-	}
+        amazonS3Client.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata)
+            .withCannedAcl(CannedAccessControlList.PublicRead));
+    }
 
-	private String getFileUrl(String filename) {
-		return CLOUD_FRONT_URL + "/" + filename;
-	}
+    private String getFileUrl(String filename) {
+        return CLOUD_FRONT_URL + "/" + filename;
+    }
 
-	private ObjectMetadata setupS3Object(FileDto file) {
-		ObjectMetadata objectMetadata = new ObjectMetadata();
-		objectMetadata.setContentLength(file.getSize());
-		objectMetadata.setContentType(file.getContentType());
-		return objectMetadata;
-	}
+    private ObjectMetadata setupS3Object(FileDto file) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+        return objectMetadata;
+    }
 
 }

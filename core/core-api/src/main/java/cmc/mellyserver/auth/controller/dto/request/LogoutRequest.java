@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class LogoutRequest {
 
-	private String accessToken;
+    private String accessToken;
 
 }

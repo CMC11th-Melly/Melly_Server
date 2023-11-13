@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentLikeValidator {
 
-	private final CommentLikeRepository commentLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
-	public void validateDuplicatedLike(final Long commentId, final Long userId) {
-		commentLikeRepository.findByUserIdAndCommentId(commentId, userId).ifPresent(commentLike -> {
-			throw new BusinessException(ErrorCode.DUPLICATED_COMMENT_LIKE);
-		});
-	}
+    public void validateDuplicatedLike(final Long commentId, final Long userId) {
+        commentLikeRepository.findByUserIdAndCommentId(commentId, userId).ifPresent(commentLike -> {
+            throw new BusinessException(ErrorCode.DUPLICATED_COMMENT_LIKE);
+        });
+    }
 
 }
 

@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FindPlaceByMemoryTitleResponseDto {
 
-	private Long placeId;
+    private Long placeId;
 
-	private String memoryName;
+    private String memoryName;
 
-	@Builder
-	public FindPlaceByMemoryTitleResponseDto(Long placeId, String memoryName) {
-		this.placeId = placeId;
-		this.memoryName = memoryName;
-	}
+    @Builder
+    public FindPlaceByMemoryTitleResponseDto(Long placeId, String memoryName) {
+        this.placeId = placeId;
+        this.memoryName = memoryName;
+    }
 
 }

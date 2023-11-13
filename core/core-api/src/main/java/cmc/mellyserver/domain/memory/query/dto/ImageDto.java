@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ImageDto implements Serializable {
 
-	private Long imageId;
+    private Long imageId;
 
-	private String memoryImage;
+    private String memoryImage;
 
 }

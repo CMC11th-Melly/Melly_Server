@@ -13,22 +13,22 @@ import jakarta.persistence.PersistenceContext;
 @TestConfiguration
 public class QueryDslTestConfig {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Bean
-	public JPAQueryFactory jpaQueryFactory() {
-		return new JPAQueryFactory(entityManager);
-	}
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(entityManager);
+    }
 
-	@Bean
-	public PlaceScrapQueryRepository placeScrapQueryRepository() {
-		return new PlaceScrapQueryRepository(jpaQueryFactory());
-	}
+    @Bean
+    public PlaceScrapQueryRepository placeScrapQueryRepository() {
+        return new PlaceScrapQueryRepository(jpaQueryFactory());
+    }
 
-	@Bean
-	public PlaceQueryRepository placeQueryRepository() {
-		return new PlaceQueryRepository(jpaQueryFactory());
-	}
+    @Bean
+    public PlaceQueryRepository placeQueryRepository() {
+        return new PlaceQueryRepository(jpaQueryFactory());
+    }
 
 }

@@ -20,30 +20,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlaceReader {
 
-	private final PlaceRepository placeRepository;
+    private final PlaceRepository placeRepository;
 
-	private final PlaceQueryRepository placeQueryRepository;
+    private final PlaceQueryRepository placeQueryRepository;
 
-	public Place findById(Long placeId) {
-		return placeRepository.findById(placeId).orElseThrow(() -> {
-			throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
-		});
-	}
+    public Place findById(Long placeId) {
+        return placeRepository.findById(placeId).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
+        });
+    }
 
-	public Place findByPosition(Position position) {
-		return placeRepository.findByPosition(position)
-			.orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
-	}
+    public Place findByPosition(Position position) {
+        return placeRepository.findByPosition(position)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
+    }
 
-	public List<MarkedPlaceResponseDto> placeUserMemoryExist(Long userId, GroupType groupType) {
-		List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userId, groupType);
-		return placeUserMemoryExist.stream()
-			.map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), 0L))
-			.collect(Collectors.toList());
-	}
+    public List<MarkedPlaceResponseDto> placeUserMemoryExist(Long userId, GroupType groupType) {
+        List<Place> placeUserMemoryExist = placeQueryRepository.getPlaceUserMemoryExist(userId, groupType);
+        return placeUserMemoryExist.stream()
+            .map(each -> new MarkedPlaceResponseDto(each.getPosition(), null, each.getId(), 0L))
+            .collect(Collectors.toList());
+    }
 
-	public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryName) {
-		return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
-	}
+    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryName) {
+        return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
+    }
 
 }

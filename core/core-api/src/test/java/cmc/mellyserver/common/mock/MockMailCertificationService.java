@@ -12,14 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 @Profile("test")
 public class MockMailCertificationService implements CertificationService {
 
-	@Override
-	public void sendCertification(String email) {
+    @Override
+    public void sendCertification(String email) {
 
-	}
+    }
 
-	@Override
-	public void verify(EmailCertificationRequest requestDto) {
+    @Override
+    public void verify(EmailCertificationRequest requestDto) {
 
-	}
+    }
 
 }

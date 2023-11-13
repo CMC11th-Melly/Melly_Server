@@ -14,28 +14,28 @@ import lombok.extern.slf4j.Slf4j;
 @Profile("test")
 public class MockFileService implements FileService {
 
-	@Override
-	public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
-		return null;
-	}
+    @Override
+    public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
+        return null;
+    }
 
-	@Override
-	public String saveFile(Long userId, FileDto file) {
-		return "수정된프로필.jpg";
-	}
+    @Override
+    public String saveFile(Long userId, FileDto file) {
+        return "수정된프로필.jpg";
+    }
 
-	@Override
-	public void deleteFile(String fileName) {
-	}
+    @Override
+    public void deleteFile(String fileName) {
+    }
 
-	@Override
-	public void deleteFileList(List<Long> deleteFileIds) {
+    @Override
+    public void deleteFileList(List<Long> deleteFileIds) {
 
-	}
+    }
 
-	@Override
-	public Long calculateImageVolume(String username) {
-		return 1L;
-	}
+    @Override
+    public Long calculateImageVolume(String username) {
+        return 1L;
+    }
 
 }

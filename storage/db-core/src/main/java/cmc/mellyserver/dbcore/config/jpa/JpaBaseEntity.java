@@ -16,11 +16,11 @@ import lombok.Getter;
 @EntityListeners(AuditingEntityListener.class)
 public class JpaBaseEntity {
 
-	@CreatedDate
-	@Column(updatable = false)
-	private LocalDateTime createdDate;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
 
-	@LastModifiedDate
-	private LocalDateTime lastModifiedDate;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 
 }

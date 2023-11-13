@@ -21,32 +21,32 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_comment_like")
 public class CommentLike {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "comment_like_id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_like_id")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "comment_id")
-	private Comment comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	public static CommentLike createCommentLike(User user, Comment comment) {
-		CommentLike commentLike = new CommentLike();
-		commentLike.setComment(comment);
-		commentLike.setUser(user);
-		return commentLike;
-	}
+    public static CommentLike createCommentLike(User user, Comment comment) {
+        CommentLike commentLike = new CommentLike();
+        commentLike.setComment(comment);
+        commentLike.setUser(user);
+        return commentLike;
+    }
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
-	}
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }

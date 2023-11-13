@@ -15,20 +15,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentQueryRepository {
 
-	private final JPAQueryFactory query;
+    private final JPAQueryFactory query;
 
-	public List<Comment> getComments(Long memoryId) {
+    public List<Comment> getComments(Long memoryId) {
 
-		return query.selectFrom(comment)
-			.where(
-				comment.memoryId.eq(memoryId),
-				comment.deletedAt.isNull()
-			)
-			.orderBy(
-				comment.root.id.asc().nullsFirst(),
-				comment.createdDate.asc())
-			.fetch();
+        return query.selectFrom(comment)
+            .where(
+                comment.memoryId.eq(memoryId),
+                comment.deletedAt.isNull()
+            )
+            .orderBy(
+                comment.root.id.asc().nullsFirst(),
+                comment.createdDate.asc())
+            .fetch();
 
-	}
+    }
 
 }

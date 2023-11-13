@@ -10,8 +10,8 @@ import lombok.Data;
 @Builder
 public class PlaceScrapCountResponse {
 
-	private ScrapType scrapType;
+    private ScrapType scrapType;
 
-	private Long scrapCount;
+    private Long scrapCount;
 
 }

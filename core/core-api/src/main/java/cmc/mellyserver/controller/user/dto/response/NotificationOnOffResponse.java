@@ -7,10 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class NotificationOnOffResponse {
 
-	private boolean enableAppPush;
+    private boolean enableAppPush;
 
-	private boolean enableContentLike;
+    private boolean enableContentLike;
 
-	private boolean enableContent;
+    private boolean enableContent;
 
 }

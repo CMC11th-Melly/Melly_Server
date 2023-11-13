@@ -8,12 +8,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class OAuthResponseDto<T> {
 
-	public TokenResponseDto tokenInfo;
+    public TokenResponseDto tokenInfo;
 
-	public T data;
+    public T data;
 
-	public static OAuthResponseDto newUser(String socialId, String provider) {
-		return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialId, provider));
-	}
+    public static OAuthResponseDto newUser(String socialId, String provider) {
+        return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialId, provider));
+    }
 
 }

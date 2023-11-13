@@ -10,32 +10,32 @@ import lombok.Getter;
 @Builder
 class FCMMessage {
 
-	private boolean validateOnly;
+    private boolean validateOnly;
 
-	private Message message;
+    private Message message;
 
-	@Builder
-	@AllArgsConstructor
-	@Getter
-	public static class Message {
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class Message {
 
-		private Notification notification;
+        private Notification notification;
 
-		private String token;
+        private String token;
 
-	}
+    }
 
-	@Builder
-	@AllArgsConstructor
-	@Getter
-	public static class Notification {
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class Notification {
 
-		private String title;
+        private String title;
 
-		private String body;
+        private String body;
 
-		private String image;
+        private String image;
 
-	}
+    }
 
 }

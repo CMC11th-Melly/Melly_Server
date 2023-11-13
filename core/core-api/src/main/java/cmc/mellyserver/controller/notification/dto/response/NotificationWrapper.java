@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class NotificationWrapper {
 
-	private List<NotificationResponse> notifications;
+    private List<NotificationResponse> notifications;
 
 }

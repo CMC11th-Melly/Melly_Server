@@ -19,60 +19,60 @@ import cmc.mellyserver.support.RepositoryTestSupport;
 
 public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private PlaceRepository placeRepository;
+    @Autowired
+    private PlaceRepository placeRepository;
 
-	@Autowired
-	private PlaceScrapRepository placeScrapRepository;
+    @Autowired
+    private PlaceScrapRepository placeScrapRepository;
 
-	@Autowired
-	private PlaceScrapQueryRepository placeScrapQueryRepository;
+    @Autowired
+    private PlaceScrapQueryRepository placeScrapQueryRepository;
 
-	@DisplayName("로그인한 유저가 현재 장소를 스크랩했는지를 장소 좌표 기준으로 체크한다.")
-	@Test
-	void check_login_user_scraped_by_position() {
+    @DisplayName("로그인한 유저가 현재 장소를 스크랩했는지를 장소 좌표 기준으로 체크한다.")
+    @Test
+    void check_login_user_scraped_by_position() {
 
-		// given
-		User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
-		User savedUser = userRepository.save(user);
+        // given
+        User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
+        User savedUser = userRepository.save(user);
 
-		Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
-		Place savedPlace = placeRepository.save(place);
+        Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
+        Place savedPlace = placeRepository.save(place);
 
-		PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);
-		placeScrapRepository.save(scrap);
+        PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);
+        placeScrapRepository.save(scrap);
 
-		// when
-		Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
-			.checkCurrentLoginUserScrapedPlaceByPosition(savedUser.getId(), savedPlace.getPosition());
+        // when
+        Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
+            .checkCurrentLoginUserScrapedPlaceByPosition(savedUser.getId(), savedPlace.getPosition());
 
-		// then
-		Assertions.assertThat(isLoginUserScrapedPlace).isTrue();
-	}
+        // then
+        Assertions.assertThat(isLoginUserScrapedPlace).isTrue();
+    }
 
-	@DisplayName("로그인한 유저가 현재 장소를 스크랩했는지를 장소 식별자를 기준으로 체크한다.")
-	@Test
-	void check_login_user_scraped_by_place_id() {
+    @DisplayName("로그인한 유저가 현재 장소를 스크랩했는지를 장소 식별자를 기준으로 체크한다.")
+    @Test
+    void check_login_user_scraped_by_place_id() {
 
-		// given
-		User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
-		User savedUser = userRepository.save(user);
+        // given
+        User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
+        User savedUser = userRepository.save(user);
 
-		Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
-		Place savedPlace = placeRepository.save(place);
+        Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
+        Place savedPlace = placeRepository.save(place);
 
-		PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);
-		placeScrapRepository.save(scrap);
+        PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);
+        placeScrapRepository.save(scrap);
 
-		// when
-		Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
-			.checkCurrentLoginUserScrapedPlaceByPlaceId(savedUser.getId(), savedPlace.getId());
+        // when
+        Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
+            .checkCurrentLoginUserScrapedPlaceByPlaceId(savedUser.getId(), savedPlace.getId());
 
-		// then
-		Assertions.assertThat(isLoginUserScrapedPlace).isTrue();
-	}
+        // then
+        Assertions.assertThat(isLoginUserScrapedPlace).isTrue();
+    }
 
 }

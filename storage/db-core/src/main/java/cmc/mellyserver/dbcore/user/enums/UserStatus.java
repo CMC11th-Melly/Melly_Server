@@ -2,18 +2,18 @@ package cmc.mellyserver.dbcore.user.enums;
 
 public enum UserStatus {
 
-	ACTIVE("활성화"),
+    ACTIVE("활성화"),
 
-	INACTIVE("휴면"),
+    INACTIVE("휴면"),
 
-	BLOCK("차단"),
+    BLOCK("차단"),
 
-	DELETE("탈퇴");
+    DELETE("탈퇴");
 
-	private String type;
+    private String type;
 
-	UserStatus(String type) {
-		this.type = type;
-	}
+    UserStatus(String type) {
+        this.type = type;
+    }
 
 }

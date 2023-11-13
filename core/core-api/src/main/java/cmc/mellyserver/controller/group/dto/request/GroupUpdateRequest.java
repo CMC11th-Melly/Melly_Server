@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupUpdateRequest {
 
-	@Size(max = 23, message = "그룹명은 23자 이하입니다.")
-	private String groupName;
+    @Size(max = 23, message = "그룹명은 23자 이하입니다.")
+    private String groupName;
 
-	private GroupType groupType;
+    private GroupType groupType;
 
-	private Integer groupIcon;
+    private Integer groupIcon;
 
-	@Builder
-	public GroupUpdateRequest(String groupName, GroupType groupType, Integer groupIcon) {
-		this.groupName = groupName;
-		this.groupType = groupType;
-		this.groupIcon = groupIcon;
-	}
+    @Builder
+    public GroupUpdateRequest(String groupName, GroupType groupType, Integer groupIcon) {
+        this.groupName = groupName;
+        this.groupType = groupType;
+        this.groupIcon = groupIcon;
+    }
 
 }

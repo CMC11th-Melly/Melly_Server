@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScrapCancelRequest {
 
-	private Double lat;
+    private Double lat;
 
-	private Double lng;
+    private Double lng;
 
 }

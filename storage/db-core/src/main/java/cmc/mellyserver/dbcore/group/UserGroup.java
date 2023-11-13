@@ -23,45 +23,45 @@ import lombok.NoArgsConstructor;
 @Entity
 public class UserGroup extends JpaBaseEntity {
 
-	@Id
-	@Column(name = "group_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @Column(name = "group_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "name")
-	private String name;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "group_icon")
-	private int icon;
+    @Column(name = "group_icon")
+    private int icon;
 
-	@Column(name = "invite_link")
-	private String inviteLink;
+    @Column(name = "invite_link")
+    private String inviteLink;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "group_type")
-	private GroupType groupType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "group_type")
+    private GroupType groupType;
 
-	@Column(name = "deleted_at")
-	private LocalDateTime deletedAt;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
-	@Version
-	private Long version;
+    @Version
+    private Long version;
 
-	@Builder
-	public UserGroup(String name, String inviteLink, GroupType groupType, int icon) {
-		this.name = name;
-		this.inviteLink = inviteLink;
-		this.groupType = groupType;
-		this.icon = icon;
-	}
+    @Builder
+    public UserGroup(String name, String inviteLink, GroupType groupType, int icon) {
+        this.name = name;
+        this.inviteLink = inviteLink;
+        this.groupType = groupType;
+        this.icon = icon;
+    }
 
-	public void delete() {
-		this.deletedAt = LocalDateTime.now();
-	}
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 
-	public void update(String name, GroupType groupType, int icon) {
-		this.name = name;
-		this.groupType = groupType;
-		this.icon = icon;
-	}
+    public void update(String name, GroupType groupType, int icon) {
+        this.name = name;
+        this.groupType = groupType;
+        this.icon = icon;
+    }
 }

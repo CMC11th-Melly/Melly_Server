@@ -16,23 +16,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupAndUserReader {
 
-	private final GroupAndUserRepository groupAndUserRepository;
+    private final GroupAndUserRepository groupAndUserRepository;
 
-	public List<GroupMemberResponseDto> getGroupMembers(Long groupId, Long userId) {
-		List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
-		return users.stream()
-			.map(user -> GroupMemberResponseDto.of(user.getId(), user.getProfileImage(), user.getNickname(),
-				user.getId().equals(userId))
-			)
-			.collect(Collectors.toList());
-	}
+    public List<GroupMemberResponseDto> getGroupMembers(Long groupId, Long userId) {
+        List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
+        return users.stream()
+            .map(user -> GroupMemberResponseDto.of(user.getId(), user.getProfileImage(), user.getNickname(),
+                user.getId().equals(userId))
+            )
+            .collect(Collectors.toList());
+    }
 
-	public int countGroupMembers(Long groupId) {
-		return groupAndUserRepository.countUserParticipatedInGroup(groupId);
-	}
+    public int countGroupMembers(Long groupId) {
+        return groupAndUserRepository.countUserParticipatedInGroup(groupId);
+    }
 
-	public Optional<GroupAndUser> findByUserIdAndGroupId(final Long userId, final Long groupId) {
-		return groupAndUserRepository.findByUserIdAndGroupId(userId, groupId);
-	}
+    public Optional<GroupAndUser> findByUserIdAndGroupId(final Long userId, final Long groupId) {
+        return groupAndUserRepository.findByUserIdAndGroupId(userId, groupId);
+    }
 
 }

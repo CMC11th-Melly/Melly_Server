@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParticipateGroupRequest {
 
-	private Long groupId;
+    private Long groupId;
 
-	public ParticipateGroupRequest(Long groupId) {
-		this.groupId = groupId;
-	}
+    public ParticipateGroupRequest(Long groupId) {
+        this.groupId = groupId;
+    }
 
 }

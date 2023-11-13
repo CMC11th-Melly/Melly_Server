@@ -11,27 +11,27 @@ import org.testcontainers.utility.DockerImageName;
 @Profile("test")
 public class RedisTestContainers {
 
-	private static final String REDIS_DOCKER_IMAGE = "redis:5.0.3-alpine";
+    private static final String REDIS_DOCKER_IMAGE = "redis:5.0.3-alpine";
 
-	static {
-		GenericContainer<?> REDIS_CONTAINER = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
-			.withExposedPorts(6379)
-			.withReuse(true);
+    static {
+        GenericContainer<?> REDIS_CONTAINER = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
+            .withExposedPorts(6379)
+            .withReuse(true);
 
-		REDIS_CONTAINER.start();
+        REDIS_CONTAINER.start();
 
-		GenericContainer<?> REDIS_CONTAINER_CACHE = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
-			.withExposedPorts(6379)
-			.withReuse(true);
+        GenericContainer<?> REDIS_CONTAINER_CACHE = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
+            .withExposedPorts(6379)
+            .withReuse(true);
 
-		REDIS_CONTAINER_CACHE.start();
+        REDIS_CONTAINER_CACHE.start();
 
-		System.setProperty("spring.redis.token.host", REDIS_CONTAINER.getHost());
-		System.setProperty("spring.redis.token.port", REDIS_CONTAINER.getMappedPort(6379).toString());
-		System.setProperty("spring.redis.cache.host", REDIS_CONTAINER.getHost());
-		System.setProperty("spring.redis.cache.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
-		System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
-		System.setProperty("spring.data.redis.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
-	}
+        System.setProperty("spring.redis.token.host", REDIS_CONTAINER.getHost());
+        System.setProperty("spring.redis.token.port", REDIS_CONTAINER.getMappedPort(6379).toString());
+        System.setProperty("spring.redis.cache.host", REDIS_CONTAINER.getHost());
+        System.setProperty("spring.redis.cache.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
+        System.setProperty("spring.data.redis.host", REDIS_CONTAINER.getHost());
+        System.setProperty("spring.data.redis.port", REDIS_CONTAINER_CACHE.getMappedPort(6379).toString());
+    }
 
 }

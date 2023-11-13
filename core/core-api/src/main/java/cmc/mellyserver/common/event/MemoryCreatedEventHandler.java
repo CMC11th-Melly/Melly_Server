@@ -20,17 +20,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemoryCreatedEventHandler {
 
-	private final MemoryReader memoryReader;
-	private final GroupAndUserRepository groupAndUserRepository;
-	private final NotificationService notificationService;
+    private final MemoryReader memoryReader;
+    private final GroupAndUserRepository groupAndUserRepository;
+    private final NotificationService notificationService;
 
-	@Async
-	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void messageCreatedEvent(MemoryCreatedEvent event) {
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void messageCreatedEvent(MemoryCreatedEvent event) {
 
-		Memory memory = memoryReader.findById(event.memoryId());
-		Long groupId = memory.getGroupId();
-		List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
+        Memory memory = memoryReader.findById(event.memoryId());
+        Long groupId = memory.getGroupId();
+        List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
 
-	}
+    }
 }

@@ -26,130 +26,130 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User extends JpaBaseEntity {
 
-	private static String NO_PASSWORD = "NO_PASSWORD";
+    private static String NO_PASSWORD = "NO_PASSWORD";
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
 
-	@Column(name = "social_id")
-	private String socialId;
+    @Column(name = "social_id")
+    private String socialId;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "provider")
-	private Provider provider;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private Provider provider;
 
-	@Column(name = "email")
-	private String email;
+    @Column(name = "email")
+    private String email;
 
-	@Column(name = "password")
-	private String password;
+    @Column(name = "password")
+    private String password;
 
-	@Column(name = "nickname")
-	private String nickname;
+    @Column(name = "nickname")
+    private String nickname;
 
-	@Column(name = "profile_image")
-	private String profileImage;
+    @Column(name = "profile_image")
+    private String profileImage;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "gender")
-	private Gender gender;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "age_group")
-	private AgeGroup ageGroup;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "age_group")
+    private AgeGroup ageGroup;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "role_type")
-	private RoleType roleType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type")
+    private RoleType roleType;
 
-	@Column(name = "enable_app_push")
-	private boolean enableAppPush;
+    @Column(name = "enable_app_push")
+    private boolean enableAppPush;
 
-	@Column(name = "enable_comment_like_push")
-	private boolean enableCommentLikePush;
+    @Column(name = "enable_comment_like_push")
+    private boolean enableCommentLikePush;
 
-	@Column(name = "enable_comment_push")
-	private boolean enableCommentPush;
+    @Column(name = "enable_comment_push")
+    private boolean enableCommentPush;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "user_status")
-	private UserStatus userStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_status")
+    private UserStatus userStatus;
 
-	@Column(name = "fcm_token")
-	private String fcmToken;
+    @Column(name = "fcm_token")
+    private String fcmToken;
 
-	@Builder
-	private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
-		Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
-		boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush, String fcmToken) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.roleType = roleType;
-		this.profileImage = profileImage;
-		this.ageGroup = ageGroup;
-		this.userStatus = userStatus;
-		this.gender = gender;
-		this.socialId = socialId;
-		this.provider = provider;
-		this.nickname = nickname;
-		this.enableAppPush = enableAppPush;
-		this.enableCommentPush = enableCommentPush;
-		this.enableCommentLikePush = enableCommentLikePush;
-		this.fcmToken = fcmToken;
-	}
+    @Builder
+    private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
+        Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
+        boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush, String fcmToken) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.roleType = roleType;
+        this.profileImage = profileImage;
+        this.ageGroup = ageGroup;
+        this.userStatus = userStatus;
+        this.gender = gender;
+        this.socialId = socialId;
+        this.provider = provider;
+        this.nickname = nickname;
+        this.enableAppPush = enableAppPush;
+        this.enableCommentPush = enableCommentPush;
+        this.enableCommentLikePush = enableCommentLikePush;
+        this.fcmToken = fcmToken;
+    }
 
-	public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
-		this.nickname = nickname;
-		this.gender = gender;
-		this.ageGroup = ageGroup;
-	}
+    public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
+        this.nickname = nickname;
+        this.gender = gender;
+        this.ageGroup = ageGroup;
+    }
 
-	public void changePassword(String password) {
-		this.password = password;
-	}
+    public void changePassword(String password) {
+        this.password = password;
+    }
 
-	public void changeProfileImage(String image) {
-		this.profileImage = image;
-	}
+    public void changeProfileImage(String image) {
+        this.profileImage = image;
+    }
 
-	public void removeProfileImage() {
-		this.profileImage = null;
-	}
+    public void removeProfileImage() {
+        this.profileImage = null;
+    }
 
-	public void block() {
-		this.userStatus = UserStatus.BLOCK;
-	}
+    public void block() {
+        this.userStatus = UserStatus.BLOCK;
+    }
 
-	public void remove() {
-		this.userStatus = UserStatus.DELETE;
-	}
+    public void remove() {
+        this.userStatus = UserStatus.DELETE;
+    }
 
-	public void initPassword(String password) {
-		this.password = password;
-	}
+    public void initPassword(String password) {
+        this.password = password;
+    }
 
-	public void changeAppPushStatus(boolean enableAppPush) {
-		this.enableAppPush = enableAppPush;
-	}
+    public void changeAppPushStatus(boolean enableAppPush) {
+        this.enableAppPush = enableAppPush;
+    }
 
-	public void changeCommentLikePushStatus(boolean enableCommentLikePush) {
-		this.enableCommentLikePush = enableCommentLikePush;
-	}
+    public void changeCommentLikePushStatus(boolean enableCommentLikePush) {
+        this.enableCommentLikePush = enableCommentLikePush;
+    }
 
-	public void changeCommentPushStatus(boolean enableCommentPush) {
-		this.enableCommentPush = enableCommentPush;
-	}
+    public void changeCommentPushStatus(boolean enableCommentPush) {
+        this.enableCommentPush = enableCommentPush;
+    }
 
-	@PrePersist
-	private void init() {
+    @PrePersist
+    private void init() {
 
-		this.userStatus = UserStatus.ACTIVE;
-		this.enableAppPush = true;
-		this.enableCommentPush = true;
-		this.enableCommentLikePush = true;
-	}
+        this.userStatus = UserStatus.ACTIVE;
+        this.enableAppPush = true;
+        this.enableCommentPush = true;
+        this.enableCommentLikePush = true;
+    }
 
 }

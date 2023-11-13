@@ -27,50 +27,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AppleClient implements LoginClient {
 
-	private final AppleLoginApi appleLoginApi;
+    private final AppleLoginApi appleLoginApi;
 
-	@Override
-	public boolean supports(String provider) {
-		return provider.equals(APPLE);
-	}
+    @Override
+    public boolean supports(String provider) {
+        return provider.equals(APPLE);
+    }
 
-	@Override
-	public LoginClientResult getUserData(String accessToken) {
+    @Override
+    public LoginClientResult getUserData(String accessToken) {
 
-		AppleResource response = appleLoginApi.call();
+        AppleResource response = appleLoginApi.call();
 
-		try {
-			Claims body = extractClaims(accessToken, response);
-			return new LoginClientResult(body.getSubject(), APPLE);
+        try {
+            Claims body = extractClaims(accessToken, response);
+            return new LoginClientResult(body.getSubject(), APPLE);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	private Claims extractClaims(String accessToken, AppleResource response) throws JsonProcessingException,
-		UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
-		String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
+    private Claims extractClaims(String accessToken, AppleResource response) throws JsonProcessingException,
+        UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
+        String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
-		Map<String, String> header = new ObjectMapper()
-			.readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), "UTF-8"), Map.class);
+        Map<String, String> header = new ObjectMapper()
+            .readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), "UTF-8"), Map.class);
 
-		AppleResource.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
-			.orElseThrow(() -> new IllegalAccessException());
+        AppleResource.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
+            .orElseThrow(() -> new IllegalAccessException());
 
-		byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
-		byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
+        byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
+        byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
 
-		BigInteger n = new BigInteger(1, nBytes);
-		BigInteger e = new BigInteger(1, eBytes);
+        BigInteger n = new BigInteger(1, nBytes);
+        BigInteger e = new BigInteger(1, eBytes);
 
-		RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
-		KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
-		PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+        RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
+        KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
+        PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-		return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
-	}
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
+    }
 
 }

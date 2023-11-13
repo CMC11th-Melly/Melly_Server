@@ -11,18 +11,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class KakaoClient implements LoginClient {
 
-	private static final String AUTH_PREFIX = "Bearer ";
+    private static final String AUTH_PREFIX = "Bearer ";
 
-	private final KakaoLoginApi kakaoLoginApi;
+    private final KakaoLoginApi kakaoLoginApi;
 
-	@Override
-	public boolean supports(String provider) {
-		return provider.equals(KAKAO);
-	}
+    @Override
+    public boolean supports(String provider) {
+        return provider.equals(KAKAO);
+    }
 
-	@Override
-	public LoginClientResult getUserData(String accessToken) {
+    @Override
+    public LoginClientResult getUserData(String accessToken) {
 
-		return kakaoLoginApi.call(AUTH_PREFIX + accessToken).toResult();
-	}
+        return kakaoLoginApi.call(AUTH_PREFIX + accessToken).toResult();
+    }
 }
