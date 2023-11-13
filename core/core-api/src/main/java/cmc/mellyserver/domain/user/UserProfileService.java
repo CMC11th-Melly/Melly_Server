@@ -24,7 +24,7 @@ public class UserProfileService {
 
     private final ProfileImageUploader profileImageUploader;
 
-    @Cacheable(cacheNames = CacheNames.USER, value = "image-volume", key = "#userId")
+    @Cacheable(cacheNames = CacheNames.USER_VOLUME, key = "#userId")
     public int calculateImageTotalVolume(final Long userId) {
 
         User user = userReader.findById(userId);
@@ -47,7 +47,7 @@ public class UserProfileService {
     }
 
     @Caching(evict = {
-        @CacheEvict(cacheNames = CacheNames.USER, value = "image-volume", key = "#userId"),
+        @CacheEvict(cacheNames = CacheNames.USER_VOLUME, key = "#userId"),
         @CacheEvict(cacheNames = CacheNames.USER, key = "#userId")
     })
     @Transactional
