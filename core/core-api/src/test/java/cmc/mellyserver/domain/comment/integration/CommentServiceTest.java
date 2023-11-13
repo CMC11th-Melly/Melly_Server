@@ -73,10 +73,11 @@ public class CommentServiceTest extends IntegrationTestSupport {
 		Comment comment = commentRepository.save(Comment.createRoot("테스트 제목", 모카, 메모리.getId(), null));
 
 		// when
-		Comment updatedComment = commentService.updateComment(comment.getId(), "수정된 내용");
+		commentService.updateComment(comment.getId(), "수정된 내용");
 
 		// then
-		assertThat(updatedComment.getContent()).isEqualTo("수정된 내용");
+		Comment 수정댓글 = commentRepository.findById(comment.getId()).get();
+		assertThat(수정댓글.getContent()).isEqualTo("수정된 내용");
 	}
 
 	@DisplayName("자식 댓글을 등록하면 부모 댓글과 함께 조회된다")
@@ -90,10 +91,8 @@ public class CommentServiceTest extends IntegrationTestSupport {
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
 		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
-		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
-		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
-		자식댓글1.setMentionUser(모카);
-		자식댓글2.setMentionUser(머식);
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 모카, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 머식, 메모리.getId(), 부모댓글);
 		commentRepository.save(자식댓글1);
 		commentRepository.save(자식댓글2);
 
@@ -118,10 +117,8 @@ public class CommentServiceTest extends IntegrationTestSupport {
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
 		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
-		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
-		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
-		자식댓글1.setMentionUser(모카);
-		자식댓글2.setMentionUser(머식);
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 모카, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 머식, 메모리.getId(), 부모댓글);
 		commentRepository.save(자식댓글1);
 		commentRepository.save(자식댓글2);
 
@@ -144,10 +141,8 @@ public class CommentServiceTest extends IntegrationTestSupport {
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
 		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
-		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
-		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
-		자식댓글1.setMentionUser(모카);
-		자식댓글2.setMentionUser(머식);
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 모카, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 머식, 메모리.getId(), 부모댓글);
 		commentRepository.save(자식댓글1);
 		commentRepository.save(자식댓글2);
 

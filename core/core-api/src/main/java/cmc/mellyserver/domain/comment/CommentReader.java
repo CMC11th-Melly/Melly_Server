@@ -41,39 +41,33 @@ public class CommentReader {
 
 	public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
 		User user = userReader.findById(userId);
-		List<Comment> comment = commentQueryRepository.getComments(memoryId);
-		return convertNestedStructure(comment, user);
+		List<Comment> comments = commentQueryRepository.getComments(memoryId);
+		int count = calculateTotalCommentCount(comments);
+		List<CommentDto> commentDtos = createNestedStructure(comments, user);
+		return new CommentResponseDto(count, commentDtos);
 	}
 
-	private CommentResponseDto convertNestedStructure(List<Comment> comments, User user) {
+	private List<CommentDto> createNestedStructure(List<Comment> comments, User user) {
 
-		int commentCount = calculateTotalCommentCount(comments);
-		List<CommentDto> result = new ArrayList<>();
-		Map<Long, CommentDto> map = new HashMap<>();
-
-		createNestedStructure(comments, user, result, map);
-		return new CommentResponseDto(commentCount, result);
-	}
-
-	private void createNestedStructure(List<Comment> comments, User user, List<CommentDto> result,
-		Map<Long, CommentDto> map) {
+		List<CommentDto> rootComments = new ArrayList<>();
+		Map<Long, CommentDto> totalCommentMap = new HashMap<>();
 
 		List<Long> commentIds = extractCurrentUserLikeComment(user);
 
 		comments.forEach(comment -> {
-
 				CommentDto commentDto = CommentDto.of(comment, user);
 				checkCurrentUserLiked(commentIds, commentDto);
-				map.put(commentDto.getId(), commentDto);
+				totalCommentMap.put(commentDto.getId(), commentDto);
 
 				if (isChildComment(comment)) {
-					map.get(comment.getRoot().getId()).getChildren().add(commentDto);
+					totalCommentMap.get(comment.getRoot().getId()).getChildren().add(commentDto);
 				} else {
-					result.add(commentDto);
+					rootComments.add(commentDto);
 				}
-
 			}
 		);
+
+		return rootComments;
 	}
 
 	private void checkCurrentUserLiked(List<Long> commentIds, CommentDto commentDto) {

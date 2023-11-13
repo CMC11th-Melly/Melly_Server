@@ -75,10 +75,11 @@ public class Comment extends JpaBaseEntity {
 		return Comment.builder().content(content).user(user).memoryId(memoryId).root(root).build();
 	}
 
-	public static Comment createChild(String content, User user, Long memoryId, Comment root) {
+	public static Comment createChild(String content, User user, User mentionUser, Long memoryId, Comment root) {
 		return Comment.builder()
 			.content(content)
 			.user(user)
+			.mentionUser(mentionUser)
 			.memoryId(memoryId)
 			.root(root)
 			.build();
@@ -102,10 +103,6 @@ public class Comment extends JpaBaseEntity {
 		if (root != null) {
 			root.getChildren().add(this);
 		}
-	}
-
-	public void setMentionUser(User user) {
-		this.mentionUser = user;
 	}
 
 	public void update(String content) {

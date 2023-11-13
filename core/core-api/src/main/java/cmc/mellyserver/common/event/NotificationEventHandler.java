@@ -1,17 +1,22 @@
 package cmc.mellyserver.common.event;
 
-import static cmc.mellyserver.notification.constants.NotificationConstants.COMMENT_LIKE_NOTI_CONTENT;
+import static cmc.mellyserver.notification.constants.NotificationConstants.*;
 
-import cmc.mellyserver.dbcore.notification.enums.NotificationType;
-import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;
-import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
-import cmc.mellyserver.notification.NotificationService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+
+import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.notification.enums.NotificationType;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;
+import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
+import cmc.mellyserver.domain.memory.MemoryReader;
+import cmc.mellyserver.domain.user.UserReader;
+import cmc.mellyserver.notification.NotificationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -22,13 +27,19 @@ public class NotificationEventHandler {
 
 	private final cmc.mellyserver.domain.notification.NotificationService notificationService;
 
+	private final MemoryReader memoryReader;
+
+	private final UserReader userReader;
+
 	@Async
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void sendCommentPush(CommentEnrollEvent event) {
 
-		pushService.sendCommentCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
+		Memory memory = memoryReader.findById(event.getMemoryId());
+		User memoryWriter = userReader.findById(memory.getId());
+		pushService.sendCommentCreatedMessage(memory.getId(), memoryWriter.getNickname());
 		notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL,
-				event.getUserId(), event.getMemoryId());
+			memory.getUserId(), event.getMemoryId());
 	}
 
 	@Async
@@ -37,7 +48,7 @@ public class NotificationEventHandler {
 
 		pushService.sendCommentLikeCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
 		notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE,
-				event.getUserId(), event.getMemoryId());
+			event.getUserId(), event.getMemoryId());
 	}
 
 }

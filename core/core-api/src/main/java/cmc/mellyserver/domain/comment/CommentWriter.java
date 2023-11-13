@@ -32,10 +32,16 @@ public class CommentWriter {
 		return saveComment(parentComment, commentRequestDto);
 	}
 
-	public void remove(Comment comment) {
+	public void remove(Long commentId) {
+		Comment comment = commentReader.findById(commentId);
 		comment.delete();
 		List<Comment> children = comment.getChildren();
-		children.stream().forEach(Comment::delete);
+		children.forEach(Comment::delete);
+	}
+
+	public void update(Long commentId, String content) {
+		Comment comment = commentReader.findById(commentId);
+		comment.update(content);
 	}
 
 	private Comment saveComment(Comment rootComment, CommentRequestDto commentRequestDto) {
@@ -43,18 +49,15 @@ public class CommentWriter {
 		User user = userReader.findById(commentRequestDto.getUserId());
 		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 
-		// 만약 root가 없다면?
 		if (Objects.isNull(rootComment)) {
 			return commentRepository.save(
 				Comment.createRoot(commentRequestDto.getContent(), user, memory.getId(), null));
 		}
 
-		// 내가 맨션한 유저 조회
 		User mentionUser = userReader.findById(commentRequestDto.getMentionId());
 
 		Comment comment = commentRepository.save(
-			Comment.createChild(commentRequestDto.getContent(), user, memory.getId(), rootComment));
-		comment.setMentionUser(mentionUser);
+			Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), rootComment));
 		rootComment.getChildren().add(comment);
 		return comment;
 	}

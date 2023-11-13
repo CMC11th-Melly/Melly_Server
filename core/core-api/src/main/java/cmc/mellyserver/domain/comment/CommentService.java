@@ -33,21 +33,17 @@ public class CommentService {
 	public Comment saveComment(final CommentRequestDto commentRequestDto) {
 		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 		Comment comment = commentWriter.save(commentRequestDto);
-		publisher.publishEvent(
-			new CommentEnrollEvent(memory.getUserId(), comment.getMemoryId(), comment.getUser().getNickname()));
+		publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getUser().getId()));
 		return comment;
 	}
 
 	@Transactional
-	public Comment updateComment(final Long commentId, final String content) {
-		Comment comment = commentReader.findById(commentId);
-		comment.update(content);
-		return comment;
+	public void updateComment(final Long commentId, final String content) {
+		commentWriter.update(commentId, content);
 	}
 
 	@Transactional
 	public void deleteComment(Long commentId) {
-		Comment comment = commentReader.findById(commentId);
-		commentWriter.remove(comment);
+		commentWriter.remove(commentId);
 	}
 }

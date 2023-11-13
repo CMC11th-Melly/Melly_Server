@@ -2,7 +2,7 @@ package cmc.mellyserver.domain.scrap;
 
 import java.util.List;
 
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -52,7 +52,7 @@ public class PlaceScrapService {
 		return placeScrapReader.getScrapedPlaceGrouping(userId);
 	}
 
-	@CachePut(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
+	@CacheEvict(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
 	@ValidatePlaceExisted
 	@Transactional
 	public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
@@ -63,7 +63,7 @@ public class PlaceScrapService {
 		placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
 	}
 
-	@CachePut(value = "scrap-count:user-id", key = "#userId")
+	@CacheEvict(value = "scrap-count:user-id", key = "#userId")
 	@Transactional
 	public void removeScrap(final Long userId, final Position position) {
 
