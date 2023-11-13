@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
+import cmc.mellyserver.common.constants.CacheNames;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
@@ -46,13 +47,13 @@ public class PlaceScrapService {
         return ScrapedPlaceListResponse.from(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
     }
 
-    @Cacheable(value = "scrap-count:user-id", key = "#userId")
+    @Cacheable(cacheNames = CacheNames.SCRAP, key = "#userId")
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(final Long userId) {
 
         return placeScrapReader.getScrapedPlaceGrouping(userId);
     }
 
-    @CacheEvict(value = "scrap-count:user-id", key = "#createPlaceScrapRequestDto.id")
+    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#createPlaceScrapRequestDto.id")
     @ValidatePlaceExisted
     @Transactional
     public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
@@ -63,7 +64,7 @@ public class PlaceScrapService {
         placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }
 
-    @CacheEvict(value = "scrap-count:user-id", key = "#userId")
+    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @Transactional
     public void removeScrap(final Long userId, final Position position) {
 

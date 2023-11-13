@@ -102,6 +102,7 @@ public class CacheConfig {
         redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofHours(1)));
         redisCacheConfigMap.put(CacheNames.FEED, defaultConfig.entryTtl(Duration.ofMinutes(1)));
         redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofHours(1)));
+        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofHours(1)));
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
             .withInitialCacheConfigurations(redisCacheConfigMap)

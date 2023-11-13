@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cmc.mellyserver.common.constants.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.user.User;
@@ -39,7 +40,7 @@ public class GroupService {
 
     private final GroupValidator groupValidator;
 
-    @Cacheable(value = "group:group-id", key = "#groupId")
+    @Cacheable(cacheNames = CacheNames.GROUP, key = "#groupId")
     public GroupDetailResponseDto getGroupDetail(final Long groupId, final Long userId) {
 
         UserGroup userGroup = groupReader.findById(groupId); // 그룹을 찾는다
@@ -74,7 +75,7 @@ public class GroupService {
         groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
     }
 
-    @CachePut(value = "group:group-id", key = "#updateGroupRequestDto.groupId")
+    @CachePut(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
     @Transactional
     public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
 
@@ -83,7 +84,7 @@ public class GroupService {
             updateGroupRequestDto.getGroupIcon());
     }
 
-    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void removeGroup(final Long groupId) {
 
@@ -91,7 +92,7 @@ public class GroupService {
         userGroup.delete();
     }
 
-    @CacheEvict(value = "group:group-id", key = "#groupId")
+    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void exitGroup(final Long userId, final Long groupId) {
 
