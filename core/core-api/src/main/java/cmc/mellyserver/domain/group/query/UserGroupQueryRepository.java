@@ -22,50 +22,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserGroupQueryRepository {
 
-  private final JPAQueryFactory query;
+	private final JPAQueryFactory query;
 
-  public Slice<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userId, Long lastId,
-	  Pageable pageable) {
+	public Slice<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userId, Long lastId,
+		Pageable pageable) {
 
-	List<GroupLoginUserParticipatedResponseDto> results = query
-		.select(
-			Projections.constructor(GroupLoginUserParticipatedResponseDto.class, userGroup.id, userGroup.icon,
-				userGroup.name, userGroup.groupType))
-		.from(groupAndUser)
-		.leftJoin(groupAndUser.group, userGroup)
-		.leftJoin(groupAndUser.user, user)
-		.where(
-			ltGroupId(lastId),
-			eqUser(userId)
-		)
-		.orderBy(userGroup.id.desc())
-		.limit(pageable.getPageSize() + 1)
-		.fetch();
+		List<GroupLoginUserParticipatedResponseDto> results = query
+			.select(
+				Projections.constructor(GroupLoginUserParticipatedResponseDto.class, userGroup.id, userGroup.icon,
+					userGroup.name, userGroup.groupType))
+			.from(groupAndUser)
+			.leftJoin(groupAndUser.group, userGroup)
+			.leftJoin(groupAndUser.user, user)
+			.where(
+				ltGroupId(lastId),
+				eqUser(userId)
+			)
+			.orderBy(userGroup.id.desc())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
 
-	boolean hasNext = false;
+		boolean hasNext = false;
 
-	if (results.size() > pageable.getPageSize()) {
-	  hasNext = true;
-	  results.remove(pageable.getPageSize());
+		if (results.size() > pageable.getPageSize()) {
+			hasNext = true;
+			results.remove(pageable.getPageSize());
+		}
+
+		return new SliceImpl<>(results, pageable, hasNext);
 	}
 
-	return new SliceImpl<>(results, pageable, hasNext);
-  }
+	private BooleanExpression ltGroupId(Long groupId) {
 
-  private BooleanExpression ltGroupId(Long groupId) {
+		if (groupId == -1L) {
+			return null;
+		}
 
-	if (groupId == -1L) {
-	  return null;
+		return userGroup.id.lt(groupId);
 	}
 
-	return userGroup.id.lt(groupId);
-  }
-
-  private BooleanExpression eqUser(Long userId) {
-	if (userId == null) {
-	  return null;
+	private BooleanExpression eqUser(Long userId) {
+		if (userId == null) {
+			return null;
+		}
+		return groupAndUser.user.id.eq(userId);
 	}
-	return groupAndUser.user.id.eq(userId);
-  }
 
 }

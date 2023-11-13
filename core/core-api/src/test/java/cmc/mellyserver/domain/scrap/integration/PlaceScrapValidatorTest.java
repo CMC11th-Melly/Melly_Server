@@ -22,46 +22,46 @@ import fixtures.UserFixtures;
 
 public class PlaceScrapValidatorTest extends IntegrationTestSupport {
 
-  @Autowired
-  private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-  @Autowired
-  private PlaceRepository placeRepository;
+	@Autowired
+	private PlaceRepository placeRepository;
 
-  @Autowired
-  private PlaceScrapRepository placeScrapRepository;
+	@Autowired
+	private PlaceScrapRepository placeScrapRepository;
 
-  @Autowired
-  private PlaceScrapValidator placeScrapValidator;
+	@Autowired
+	private PlaceScrapValidator placeScrapValidator;
 
-  @DisplayName("이미 스크랩을 한 상태라면 중복 예외가 발생한다")
-  @Test
-  void 이미_스크랩을_한_상태라면_예외가_발생한다() {
+	@DisplayName("이미 스크랩을 한 상태라면 중복 예외가 발생한다")
+	@Test
+	void 이미_스크랩을_한_상태라면_예외가_발생한다() {
 
-	// given
-	Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
-	User 모카 = userRepository.save(UserFixtures.모카());
+		// given
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		User 모카 = userRepository.save(UserFixtures.모카());
 
-	// when
-	placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
+		// when
+		placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
 
-	// then
-	assertThatThrownBy(() -> placeScrapValidator.validateDuplicatedScrap(모카.getId(), 스타벅스.getId()))
-		.isInstanceOf(BusinessException.class)
-		.hasMessage(ErrorCode.DUPLICATE_SCRAP.getMessage());
-  }
+		// then
+		assertThatThrownBy(() -> placeScrapValidator.validateDuplicatedScrap(모카.getId(), 스타벅스.getId()))
+			.isInstanceOf(BusinessException.class)
+			.hasMessage(ErrorCode.DUPLICATE_SCRAP.getMessage());
+	}
 
-  @DisplayName("기존에 스크랩이 존재하지 않는다면 삭제하지 못하고 예외가 발생한다.")
-  @Test
-  void 스크랩이_존재하지않는다면_삭제_불가능하다() {
+	@DisplayName("기존에 스크랩이 존재하지 않는다면 삭제하지 못하고 예외가 발생한다.")
+	@Test
+	void 스크랩이_존재하지않는다면_삭제_불가능하다() {
 
-	// given
-	Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
-	User 모카 = userRepository.save(UserFixtures.모카());
+		// given
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		User 모카 = userRepository.save(UserFixtures.모카());
 
-	// when & then
-	assertThatThrownBy(() -> placeScrapValidator.validateExistedScrap(모카.getId(), 스타벅스.getId()))
-		.isInstanceOf(BusinessException.class)
-		.hasMessage(ErrorCode.NOT_EXIST_SCRAP.getMessage());
-  }
+		// when & then
+		assertThatThrownBy(() -> placeScrapValidator.validateExistedScrap(모카.getId(), 스타벅스.getId()))
+			.isInstanceOf(BusinessException.class)
+			.hasMessage(ErrorCode.NOT_EXIST_SCRAP.getMessage());
+	}
 }

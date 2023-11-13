@@ -11,22 +11,22 @@ import lombok.Data;
 @AllArgsConstructor
 public class OAuthSignupRequestDto {
 
-  private String email;
+	private String email;
 
-  private String socialId;
+	private String socialId;
 
-  private Provider provider;
+	private Provider provider;
 
-  private String nickname;
+	private String nickname;
 
-  private Gender gender;
+	private Gender gender;
 
-  private AgeGroup ageGroup;
+	private AgeGroup ageGroup;
 
-  private String fcmToken;
+	private String fcmToken;
 
-  public User toEntity() {
-	return null;
-  }
+	public User toEntity() {
+		return null;
+	}
 
 }

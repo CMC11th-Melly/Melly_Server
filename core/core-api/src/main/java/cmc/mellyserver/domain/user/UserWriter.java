@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserWriter {
 
-  private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-  private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-  public User save(User user) {
-	user.initPassword(passwordEncoder.encode(user.getPassword()));
-	return userRepository.save(user);
-  }
+	public User save(User user) {
+		user.initPassword(passwordEncoder.encode(user.getPassword()));
+		return userRepository.save(user);
+	}
 
 }

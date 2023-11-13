@@ -28,55 +28,55 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/comments")
 public class CommentController {
 
-  private final CommentService commentService;
+	private final CommentService commentService;
 
-  private final CommentLikeService commentLikeService;
+	private final CommentLikeService commentLikeService;
 
-  @DeleteMapping("/{commentId}/like")
-  public ResponseEntity<ApiResponse<Void>> removeCommentLike(@CurrentUser LoginUser loginUser,
-	  @PathVariable Long commentId) {
+	@DeleteMapping("/{commentId}/like")
+	public ResponseEntity<ApiResponse<Void>> removeCommentLike(@CurrentUser LoginUser loginUser,
+		@PathVariable Long commentId) {
 
-	commentLikeService.deleteCommentLike(loginUser.getId(), commentId);
-	return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-  }
+		commentLikeService.deleteCommentLike(loginUser.getId(), commentId);
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
 
-  @PostMapping("/like")
-  public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
-	  @RequestBody LikeRequest likeRequest) {
+	@PostMapping("/like")
+	public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
+		@RequestBody LikeRequest likeRequest) {
 
-	commentLikeService.saveCommentLike(loginUser.getId(), likeRequest.getCommentId());
-	return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-  }
+		commentLikeService.saveCommentLike(loginUser.getId(), likeRequest.getCommentId());
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-  @PostMapping
-  public ResponseEntity<ApiResponse<Void>> saveComment(@CurrentUser LoginUser loginUser,
-	  @RequestBody CommentRequest commentRequest) {
+	@PostMapping
+	public ResponseEntity<ApiResponse<Void>> saveComment(@CurrentUser LoginUser loginUser,
+		@RequestBody CommentRequest commentRequest) {
 
-	commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
-	return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-  }
+		commentService.saveComment(CommentAssembler.commentRequestDto(loginUser.getId(), commentRequest));
+		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+	}
 
-  @GetMapping("/memories/{memoryId}")
-  public ResponseEntity<ApiResponse<CommentResponseDto>> getComments(@CurrentUser LoginUser loginUser,
-	  @PathVariable Long memoryId) {
+	@GetMapping("/memories/{memoryId}")
+	public ResponseEntity<ApiResponse<CommentResponseDto>> getComments(@CurrentUser LoginUser loginUser,
+		@PathVariable Long memoryId) {
 
-	CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
-	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
-  }
+		CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, comment);
+	}
 
-  @DeleteMapping("/{commentId}")
-  public ResponseEntity<ApiResponse<Void>> removeComment(@PathVariable Long commentId) {
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<ApiResponse<Void>> removeComment(@PathVariable Long commentId) {
 
-	commentService.deleteComment(commentId);
-	return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-  }
+		commentService.deleteComment(commentId);
+		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+	}
 
-  @PatchMapping("/{commentId}")
-  public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long commentId,
-	  @RequestBody CommentUpdateRequest commentUpdateRequest) {
+	@PatchMapping("/{commentId}")
+	public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long commentId,
+		@RequestBody CommentUpdateRequest commentUpdateRequest) {
 
-	commentService.updateComment(commentId, commentUpdateRequest.getContent());
-	return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
-  }
+		commentService.updateComment(commentId, commentUpdateRequest.getContent());
+		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+	}
 
 }

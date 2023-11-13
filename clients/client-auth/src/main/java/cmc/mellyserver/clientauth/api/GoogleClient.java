@@ -11,17 +11,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GoogleClient implements LoginClient {
 
-  private final GoogleLoginApi googleLoginApi;
+	private final GoogleLoginApi googleLoginApi;
 
-  @Override
-  public boolean supports(String provider) {
-	return provider.equals(GOOGLE);
-  }
+	@Override
+	public boolean supports(String provider) {
+		return provider.equals(GOOGLE);
+	}
 
-  @Override
-  public LoginClientResult getUserData(String accessToken) {
+	@Override
+	public LoginClientResult getUserData(String accessToken) {
 
-	return googleLoginApi.call(accessToken).toResult();
-  }
+		return googleLoginApi.call(accessToken).toResult();
+	}
 
 }

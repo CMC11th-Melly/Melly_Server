@@ -12,15 +12,15 @@ import lombok.Data;
 @AllArgsConstructor
 public class NotificationResponse {
 
-  private Long notificationId;
+	private Long notificationId;
 
-  private NotificationType type;
+	private NotificationType type;
 
-  private String content;
+	private String content;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
-  private LocalDateTime date;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
+	private LocalDateTime date;
 
-  private boolean checked;
+	private boolean checked;
 
 }

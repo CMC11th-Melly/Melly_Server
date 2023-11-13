@@ -24,35 +24,35 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-  private final TokenProvider tokenProvider;
+	private final TokenProvider tokenProvider;
 
-  private final RedisTemplate redisTemplate;
+	private final RedisTemplate redisTemplate;
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-	  throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+		throws ServletException, IOException {
 
-	String accessToken = HeaderUtil.getAccessToken(request);
+		String accessToken = HeaderUtil.getAccessToken(request);
 
-	if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
+		if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
 
-	  checkLogoutOrWithdrawUser(accessToken);
+			checkLogoutOrWithdrawUser(accessToken);
 
-	  Authentication authentication = tokenProvider.getAuthentication(accessToken);
+			Authentication authentication = tokenProvider.getAuthentication(accessToken);
 
-	  SecurityContextHolder.getContext().setAuthentication(authentication);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+
+		filterChain.doFilter(request, response);
 	}
 
-	filterChain.doFilter(request, response);
-  }
+	private void checkLogoutOrWithdrawUser(String jwt) {
 
-  private void checkLogoutOrWithdrawUser(String jwt) {
+		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
-	ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-
-	if (!Objects.isNull(valueOperations.get(jwt))) {
-	  throw new LogoutOrWithdrawExpcetion("이미 로그아웃하거나 탈퇴한 유저 입니다.");
+		if (!Objects.isNull(valueOperations.get(jwt))) {
+			throw new LogoutOrWithdrawExpcetion("이미 로그아웃하거나 탈퇴한 유저 입니다.");
+		}
 	}
-  }
 
 }

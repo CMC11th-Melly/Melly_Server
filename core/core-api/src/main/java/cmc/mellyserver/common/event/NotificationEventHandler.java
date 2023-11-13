@@ -23,32 +23,32 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class NotificationEventHandler {
 
-  private final NotificationService pushService;
+	private final NotificationService pushService;
 
-  private final cmc.mellyserver.domain.notification.NotificationService notificationService;
+	private final cmc.mellyserver.domain.notification.NotificationService notificationService;
 
-  private final MemoryReader memoryReader;
+	private final MemoryReader memoryReader;
 
-  private final UserReader userReader;
+	private final UserReader userReader;
 
-  @Async
-  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  public void sendCommentPush(CommentEnrollEvent event) {
+	@Async
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void sendCommentPush(CommentEnrollEvent event) {
 
-	Memory memory = memoryReader.findById(event.getMemoryId());
-	User memoryWriter = userReader.findById(memory.getId());
-	pushService.sendCommentCreatedMessage(memory.getId(), memoryWriter.getNickname());
-	notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL,
-		memory.getUserId(), event.getMemoryId());
-  }
+		Memory memory = memoryReader.findById(event.getMemoryId());
+		User memoryWriter = userReader.findById(memory.getId());
+		pushService.sendCommentCreatedMessage(memory.getId(), memoryWriter.getNickname());
+		notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL,
+			memory.getUserId(), event.getMemoryId());
+	}
 
-  @Async
-  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  public void sendCommentLikePush(CommentLikeEvent event) {
+	@Async
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void sendCommentLikePush(CommentLikeEvent event) {
 
-	pushService.sendCommentLikeCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
-	notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE,
-		event.getUserId(), event.getMemoryId());
-  }
+		pushService.sendCommentLikeCreatedMessage(event.getUserId(), event.getMemoryId(), event.getNickname());
+		notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_LIKE,
+			event.getUserId(), event.getMemoryId());
+	}
 
 }

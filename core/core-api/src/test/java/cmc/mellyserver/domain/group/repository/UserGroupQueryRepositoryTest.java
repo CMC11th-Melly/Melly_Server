@@ -9,12 +9,12 @@ import cmc.mellyserver.support.RepositoryTestSupport;
 
 public class UserGroupQueryRepositoryTest extends RepositoryTestSupport {
 
-  @Autowired
-  private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-  @Autowired
-  private GroupRepository groupRepository;
+	@Autowired
+	private GroupRepository groupRepository;
 
-  @Autowired
-  private GroupAndUserRepository groupAndUserRepository;
+	@Autowired
+	private GroupAndUserRepository groupAndUserRepository;
 }

@@ -9,14 +9,14 @@ import lombok.Data;
 @AllArgsConstructor
 public class SurveyResponse {
 
-  private RecommendGroup recommendGroup;
+	private RecommendGroup recommendGroup;
 
-  private RecommendPlace recommendPlace;
+	private RecommendPlace recommendPlace;
 
-  private String placeName;
+	private String placeName;
 
-  private Double lat;
+	private Double lat;
 
-  private Double lng;
+	private Double lng;
 
 }

@@ -14,26 +14,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginClientFactory {
 
-  private final List<LoginClient> loginClientList;
+	private final List<LoginClient> loginClientList;
 
-  /*
-  한번 생성된 Client 객체를 런타임 내에 메모리상에 캐싱합니다
-   */
-  private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
+	/*
+	한번 생성된 Client 객체를 런타임 내에 메모리상에 캐싱합니다
+	 */
+	private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
 
-  public LoginClient find(Provider provider) {
-	LoginClient loginClient = factoryCache.get(provider);
-	if (loginClient != null) {
-	  return loginClient;
+	public LoginClient find(Provider provider) {
+		LoginClient loginClient = factoryCache.get(provider);
+		if (loginClient != null) {
+			return loginClient;
+		}
+
+		loginClient = loginClientList.stream()
+			.filter(client -> client.supports(provider.name()))
+			.findFirst()
+			.orElseThrow();
+
+		factoryCache.put(provider, loginClient);
+		return loginClient;
 	}
-
-	loginClient = loginClientList.stream()
-		.filter(client -> client.supports(provider.name()))
-		.findFirst()
-		.orElseThrow();
-
-	factoryCache.put(provider, loginClient);
-	return loginClient;
-  }
 
 }

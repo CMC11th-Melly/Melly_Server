@@ -10,14 +10,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupAndUserWriter {
 
-  private final GroupAndUserRepository groupAndUserRepository;
+	private final GroupAndUserRepository groupAndUserRepository;
 
-  public GroupAndUser save(GroupAndUser groupAndUser) {
-	return groupAndUserRepository.save(groupAndUser);
-  }
+	public GroupAndUser save(GroupAndUser groupAndUser) {
+		return groupAndUserRepository.save(groupAndUser);
+	}
 
-  public void deleteByUserIdAndGroupId(Long userId, Long groupId) {
-	groupAndUserRepository.deleteByUserIdAndGroupId(userId, groupId);
-  }
+	public void deleteByUserIdAndGroupId(Long userId, Long groupId) {
+		groupAndUserRepository.deleteByUserIdAndGroupId(userId, groupId);
+	}
 
 }

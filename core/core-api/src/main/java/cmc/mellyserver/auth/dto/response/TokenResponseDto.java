@@ -7,12 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class TokenResponseDto {
 
-  private String accessToken;
+	private String accessToken;
 
-  private String refreshToken;
+	private String refreshToken;
 
-  public static TokenResponseDto of(String accessToken, String refreshToken) {
-	return new TokenResponseDto(accessToken, refreshToken);
-  }
+	public static TokenResponseDto of(String accessToken, String refreshToken) {
+		return new TokenResponseDto(accessToken, refreshToken);
+	}
 
 }

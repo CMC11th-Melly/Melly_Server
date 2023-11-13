@@ -12,27 +12,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupLoginUserParticipatedResponse {
 
-  private Long groupId;
+	private Long groupId;
 
-  private int groupIcon;
+	private int groupIcon;
 
-  private String groupName;
+	private String groupName;
 
-  private List<GroupMemberResponseDto> users;
+	private List<GroupMemberResponseDto> users;
 
-  private GroupType groupType;
+	private GroupType groupType;
 
-  private String invitationLink;
+	private String invitationLink;
 
-  @Builder
-  public GroupLoginUserParticipatedResponse(Long groupId, int groupIcon, String groupName, GroupType groupType,
-	  List<GroupMemberResponseDto> users, String invitationLink) {
-	this.groupId = groupId;
-	this.groupIcon = groupIcon;
-	this.users = users;
-	this.groupName = groupName;
-	this.groupType = groupType;
-	this.invitationLink = invitationLink;
-  }
+	@Builder
+	public GroupLoginUserParticipatedResponse(Long groupId, int groupIcon, String groupName, GroupType groupType,
+		List<GroupMemberResponseDto> users, String invitationLink) {
+		this.groupId = groupId;
+		this.groupIcon = groupIcon;
+		this.users = users;
+		this.groupName = groupName;
+		this.groupType = groupType;
+		this.invitationLink = invitationLink;
+	}
 
 }

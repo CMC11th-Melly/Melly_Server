@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentUpdateRequest {
 
-  private String content;
+	private String content;
 
-  public CommentUpdateRequest(String content) {
-	this.content = content;
-  }
+	public CommentUpdateRequest(String content) {
+		this.content = content;
+	}
 
 }

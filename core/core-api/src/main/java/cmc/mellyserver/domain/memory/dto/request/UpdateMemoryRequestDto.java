@@ -12,43 +12,43 @@ import lombok.Data;
 @Data
 public class UpdateMemoryRequestDto {
 
-  private Long id;
+	private Long id;
 
-  private Long memoryId;
+	private Long memoryId;
 
-  private String title;
+	private String title;
 
-  private String content;
+	private String content;
 
-  private List<MultipartFile> images;
+	private List<MultipartFile> images;
 
-  private List<String> keyword;
+	private List<String> keyword;
 
-  private Long groupId;
+	private Long groupId;
 
-  private OpenType openType;
+	private OpenType openType;
 
-  private LocalDate visitedDate;
+	private LocalDate visitedDate;
 
-  private Long star;
+	private Long star;
 
-  private List<Long> deleteImageList;
+	private List<Long> deleteImageList;
 
-  @Builder
-  public UpdateMemoryRequestDto(Long id, Long memoryId, String title, String content, List<String> keyword,
-	  Long groupId, OpenType openType, LocalDate visitedDate, Long star, List<Long> deleteImageList,
-	  List<MultipartFile> images) {
-	this.id = id;
-	this.memoryId = memoryId;
-	this.title = title;
-	this.content = content;
-	this.keyword = keyword;
-	this.groupId = groupId;
-	this.openType = openType;
-	this.visitedDate = visitedDate;
-	this.star = star;
-	this.deleteImageList = deleteImageList;
-	this.images = images;
-  }
+	@Builder
+	public UpdateMemoryRequestDto(Long id, Long memoryId, String title, String content, List<String> keyword,
+		Long groupId, OpenType openType, LocalDate visitedDate, Long star, List<Long> deleteImageList,
+		List<MultipartFile> images) {
+		this.id = id;
+		this.memoryId = memoryId;
+		this.title = title;
+		this.content = content;
+		this.keyword = keyword;
+		this.groupId = groupId;
+		this.openType = openType;
+		this.visitedDate = visitedDate;
+		this.star = star;
+		this.deleteImageList = deleteImageList;
+		this.images = images;
+	}
 
 }

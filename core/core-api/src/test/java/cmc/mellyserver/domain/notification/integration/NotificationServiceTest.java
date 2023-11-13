@@ -24,79 +24,79 @@ import fixtures.MemoryFixtures;
 
 public class NotificationServiceTest extends IntegrationTestSupport {
 
-  @Autowired
-  private NotificationRepository notificationRepository;
+	@Autowired
+	private NotificationRepository notificationRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-  @Autowired
-  private MemoryRepository memoryRepository;
+	@Autowired
+	private MemoryRepository memoryRepository;
 
-  @Autowired
-  private NotificationService notificationService;
+	@Autowired
+	private NotificationService notificationService;
 
-  @DisplayName("유저의 푸시 알림 관련 설정을 조회한다")
-  @Test
-  void 유저의_푸시알림_설정을_조회한다() {
+	@DisplayName("유저의 푸시 알림 관련 설정을 조회한다")
+	@Test
+	void 유저의_푸시알림_설정을_조회한다() {
 
-	// given
-	User 모카 = userRepository.save(모카());
+		// given
+		User 모카 = userRepository.save(모카());
 
-	// when
-	NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(모카.getId());
+		// when
+		NotificationOnOffResponseDto notificationOnOff = notificationService.getNotificationStatus(모카.getId());
 
-	// then
-	assertThat(notificationOnOff.isEnableAppPush()).isTrue();
-	assertThat(notificationOnOff.isEnableContent()).isTrue();
-	assertThat(notificationOnOff.isEnableContentLike()).isTrue();
-  }
+		// then
+		assertThat(notificationOnOff.isEnableAppPush()).isTrue();
+		assertThat(notificationOnOff.isEnableContent()).isTrue();
+		assertThat(notificationOnOff.isEnableContentLike()).isTrue();
+	}
 
-  @DisplayName("알림을 생성한다")
-  @Test
-  void 알림을_생성한다() {
-	// given
-	User 모카 = userRepository.save(모카());
-	Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(1L, 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
+	@DisplayName("알림을 생성한다")
+	@Test
+	void 알림을_생성한다() {
+		// given
+		User 모카 = userRepository.save(모카());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(1L, 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
 
-	// when
-	Notification notification = notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL,
-		모카.getId(), 메모리.getId());
+		// when
+		Notification notification = notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL,
+			모카.getId(), 메모리.getId());
 
-	// then
-	assertThat(notification.isRead()).isFalse();
-	assertThat(notification.getContent()).isEqualTo("메세지 본문");
-  }
+		// then
+		assertThat(notification.isRead()).isFalse();
+		assertThat(notification.getContent()).isEqualTo("메세지 본문");
+	}
 
-  @DisplayName("알림을 생성할 때 메모리가 DB에 존재하지 않으면 예외가 발생한다.")
-  @Test
-  void 알람_생성시_메모리가_존재하지_않으면_예외를_반환한다() {
+	@DisplayName("알림을 생성할 때 메모리가 DB에 존재하지 않으면 예외가 발생한다.")
+	@Test
+	void 알람_생성시_메모리가_존재하지_않으면_예외를_반환한다() {
 
-	// given
-	User 모카 = userRepository.save(모카());
+		// given
+		User 모카 = userRepository.save(모카());
 
-	// when & then
-	assertThatThrownBy(() -> {
-	  notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL, 모카.getId(), -1L);
-	})
-		.isInstanceOf(BusinessException.class)
-		.hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
-  }
+		// when & then
+		assertThatThrownBy(() -> {
+			notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL, 모카.getId(), -1L);
+		})
+			.isInstanceOf(BusinessException.class)
+			.hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
+	}
 
-  @DisplayName("사용자가 알림을 클릭하면 읽음처리된다")
-  @Test
-  void 사용자가_알림을_클릭하면_읽음처리된다() {
+	@DisplayName("사용자가 알림을 클릭하면 읽음처리된다")
+	@Test
+	void 사용자가_알림을_클릭하면_읽음처리된다() {
 
-	// given
-	Notification notification = Notification.builder().notificationType(NotificationType.COMMENT_ENROLL)
-		.isRead(false).build();
-	Notification savedNotification = notificationRepository.save(notification);
-	// when
-	notificationService.readNotification(savedNotification.getId());
+		// given
+		Notification notification = Notification.builder().notificationType(NotificationType.COMMENT_ENROLL)
+			.isRead(false).build();
+		Notification savedNotification = notificationRepository.save(notification);
+		// when
+		notificationService.readNotification(savedNotification.getId());
 
-	// then
-	Notification findNotification = notificationRepository.findById(savedNotification.getId()).get();
-	assertThat(findNotification.isRead()).isTrue();
-  }
+		// then
+		Notification findNotification = notificationRepository.findById(savedNotification.getId()).get();
+		assertThat(findNotification.isRead()).isTrue();
+	}
 
 }

@@ -8,20 +8,20 @@ import lombok.Data;
 @Data
 public class ProfileUpdateFormResponse {
 
-  private String profileImage;
+	private String profileImage;
 
-  private String nickname;
+	private String nickname;
 
-  private Gender gender;
+	private Gender gender;
 
-  private AgeGroup ageGroup;
+	private AgeGroup ageGroup;
 
-  @Builder
-  public ProfileUpdateFormResponse(String profileImage, String nickname, Gender gender, AgeGroup ageGroup) {
-	this.profileImage = profileImage;
-	this.nickname = nickname;
-	this.gender = gender;
-	this.ageGroup = ageGroup;
-  }
+	@Builder
+	public ProfileUpdateFormResponse(String profileImage, String nickname, Gender gender, AgeGroup ageGroup) {
+		this.profileImage = profileImage;
+		this.nickname = nickname;
+		this.gender = gender;
+		this.ageGroup = ageGroup;
+	}
 
 }

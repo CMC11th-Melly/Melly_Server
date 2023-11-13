@@ -16,26 +16,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 class JavaMailSendClient implements EmailSendClient {
 
-  private final JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 
-  @Value("${email.sender}")
-  private String sender;
+	@Value("${email.sender}")
+	private String sender;
 
-  @Override
-  public void sendMail(String subject, String content, String... receivers) {
-	log.info("{} send mail to {}", subject, receivers);
-	mailSender.send(createMessage(subject, content, receivers));
-  }
+	@Override
+	public void sendMail(String subject, String content, String... receivers) {
+		log.info("{} send mail to {}", subject, receivers);
+		mailSender.send(createMessage(subject, content, receivers));
+	}
 
-  private SimpleMailMessage createMessage(String subject, String content, String[] receivers) {
+	private SimpleMailMessage createMessage(String subject, String content, String[] receivers) {
 
-	SimpleMailMessage message = new SimpleMailMessage();
+		SimpleMailMessage message = new SimpleMailMessage();
 
-	message.setTo(receivers);
-	message.setFrom(sender);
-	message.setSubject(subject);
-	message.setText(content);
-	return message;
-  }
+		message.setTo(receivers);
+		message.setFrom(sender);
+		message.setSubject(subject);
+		message.setText(content);
+		return message;
+	}
 
 }

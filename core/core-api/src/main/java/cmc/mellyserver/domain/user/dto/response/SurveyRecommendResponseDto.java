@@ -9,14 +9,14 @@ import lombok.Data;
 @Data
 public class SurveyRecommendResponseDto {
 
-  private Position position;
+	private Position position;
 
-  private List<String> words;
+	private List<String> words;
 
-  @Builder
-  public SurveyRecommendResponseDto(Position position, List<String> words) {
-	this.position = position;
-	this.words = words;
-  }
+	@Builder
+	public SurveyRecommendResponseDto(Position position, List<String> words) {
+		this.position = position;
+		this.words = words;
+	}
 
 }

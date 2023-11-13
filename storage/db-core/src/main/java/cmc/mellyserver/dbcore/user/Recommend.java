@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Recommend {
 
-  @Enumerated(EnumType.STRING)
-  private RecommendGroup recommendGroup;
+	@Enumerated(EnumType.STRING)
+	private RecommendGroup recommendGroup;
 
-  @Enumerated(EnumType.STRING)
-  private RecommendPlace recommendPlace;
+	@Enumerated(EnumType.STRING)
+	private RecommendPlace recommendPlace;
 
-  @Enumerated(EnumType.STRING)
-  private RecommendActivity recommendActivity;
+	@Enumerated(EnumType.STRING)
+	private RecommendActivity recommendActivity;
 
 }

@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationWriter {
 
-  private final NotificationRepository notificationRepository;
+	private final NotificationRepository notificationRepository;
 
-  public Notification save(Notification notification) {
-	return notificationRepository.save(notification);
-  }
+	public Notification save(Notification notification) {
+		return notificationRepository.save(notification);
+	}
 
 }

@@ -19,29 +19,29 @@ import cmc.mellyserver.support.RepositoryTestSupport;
 
 public class ScrapRepositoryTest extends RepositoryTestSupport {
 
-  @Autowired
-  private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-  @Autowired
-  private PlaceRepository placeRepository;
+	@Autowired
+	private PlaceRepository placeRepository;
 
-  @Autowired
-  private PlaceScrapRepository placeScrapRepository;
+	@Autowired
+	private PlaceScrapRepository placeScrapRepository;
 
-  @DisplayName("스크랩을 한 유저의 ID와 장소 ID로 해당 스크랩을 찾을 수 있다")
-  @Test
-  public void 스크랩을한_유저의_ID와_장소ID로_스크랩을_찾을수_있다() {
+	@DisplayName("스크랩을 한 유저의 ID와 장소 ID로 해당 스크랩을 찾을 수 있다")
+	@Test
+	public void 스크랩을한_유저의_ID와_장소ID로_스크랩을_찾을수_있다() {
 
-	// Given
-	User 모카 = userRepository.save(모카());
-	Place 스타벅스 = placeRepository.save(스타벅스());
+		// Given
+		User 모카 = userRepository.save(모카());
+		Place 스타벅스 = placeRepository.save(스타벅스());
 
-	// when
-	placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
+		// when
+		placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
 
-	// then
-	boolean exist = placeScrapRepository.existsByUserIdAndPlaceId(모카.getId(), 스타벅스.getId());
-	Assertions.assertThat(exist).isTrue();
-  }
+		// then
+		boolean exist = placeScrapRepository.existsByUserIdAndPlaceId(모카.getId(), 스타벅스.getId());
+		Assertions.assertThat(exist).isTrue();
+	}
 
 }

@@ -7,10 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetPlaceInfo {
 
-  private Boolean isScraped;
+	private Boolean isScraped;
 
-  private Long myMemoryCount;
+	private Long myMemoryCount;
 
-  private Long otherMemoryCount;
+	private Long otherMemoryCount;
 
 }

@@ -33,42 +33,42 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api")
 public class PlaceController {
 
-  private final PlaceService placeService;
+	private final PlaceService placeService;
 
-  @GetMapping("/place/list")
-  public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaceList(@AuthenticationPrincipal User user,
-	  @RequestParam(value = "groupType") GroupType groupType) {
+	@GetMapping("/place/list")
+	public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaceList(@AuthenticationPrincipal User user,
+		@RequestParam(value = "groupType") GroupType groupType) {
 
-	List<MarkedPlaceResponseDto> placeReponseDtos = placeService
-		.displayMarkedPlace(Long.parseLong(user.getUsername()), groupType);
-	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeReponseDtos);
-  }
+		List<MarkedPlaceResponseDto> placeReponseDtos = placeService
+			.displayMarkedPlace(Long.parseLong(user.getUsername()), groupType);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeReponseDtos);
+	}
 
-  @GetMapping("/place/{placeId}/search")
-  public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@AuthenticationPrincipal User user,
-	  @PathVariable Long placeId) {
+	@GetMapping("/place/{placeId}/search")
+	public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@AuthenticationPrincipal User user,
+		@PathVariable Long placeId) {
 
-	PlaceResponseDto placeResponseDto = placeService.findByPlaceId(Long.parseLong(user.getUsername()), placeId);
-	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
-  }
+		PlaceResponseDto placeResponseDto = placeService.findByPlaceId(Long.parseLong(user.getUsername()), placeId);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
+	}
 
-  @GetMapping("/place")
-  public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user,
-	  PlaceSimpleRequest placeSimpleRequest) {
+	@GetMapping("/place")
+	public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user,
+		PlaceSimpleRequest placeSimpleRequest) {
 
-	PlaceResponseDto placeByPosition = placeService.findByPosition(Long.parseLong(user.getUsername()),
-		new Position(placeSimpleRequest.getLat(), placeSimpleRequest.getLng()));
-	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeByPosition));
-  }
+		PlaceResponseDto placeByPosition = placeService.findByPosition(Long.parseLong(user.getUsername()),
+			new Position(placeSimpleRequest.getLat(), placeSimpleRequest.getLng()));
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeByPosition));
+	}
 
-  @GetMapping("/search")
-  public ResponseEntity<ApiResponse<List<FindPlaceInfoByMemoryNameResponse>>> searchPlaceByMemoryTitle(
-	  @AuthenticationPrincipal User user, @RequestParam String memoryName) {
+	@GetMapping("/search")
+	public ResponseEntity<ApiResponse<List<FindPlaceInfoByMemoryNameResponse>>> searchPlaceByMemoryTitle(
+		@AuthenticationPrincipal User user, @RequestParam String memoryName) {
 
-	List<FindPlaceByMemoryTitleResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeService
-		.findByMemoryTitle(Long.parseLong(user.getUsername()), memoryName);
-	return ApiResponse.success(SuccessCode.SELECT_SUCCESS,
-		MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos));
-  }
+		List<FindPlaceByMemoryTitleResponseDto> findPlaceInfoByMemoryNameResponseDtos = placeService
+			.findByMemoryTitle(Long.parseLong(user.getUsername()), memoryName);
+		return ApiResponse.success(SuccessCode.SELECT_SUCCESS,
+			MemoryAssembler.findPlaceInfoByMemoryNameResponses(findPlaceInfoByMemoryNameResponseDtos));
+	}
 
 }

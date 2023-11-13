@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupWriter {
 
-  private final GroupRepository groupRepository;
+	private final GroupRepository groupRepository;
 
-  public UserGroup save(UserGroup userGroup) {
-	return groupRepository.save(userGroup);
-  }
+	public UserGroup save(UserGroup userGroup) {
+		return groupRepository.save(userGroup);
+	}
 
 }

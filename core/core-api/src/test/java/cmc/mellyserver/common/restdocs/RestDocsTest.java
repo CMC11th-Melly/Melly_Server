@@ -20,37 +20,37 @@ import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class RestDocsTest {
 
-  protected MockMvcRequestSpecification mockMvc;
+	protected MockMvcRequestSpecification mockMvc;
 
-  private RestDocumentationContextProvider restDocumentation;
+	private RestDocumentationContextProvider restDocumentation;
 
-  @BeforeEach
-  public void setUp(RestDocumentationContextProvider restDocumentation) {
-	this.restDocumentation = restDocumentation;
-  }
+	@BeforeEach
+	public void setUp(RestDocumentationContextProvider restDocumentation) {
+		this.restDocumentation = restDocumentation;
+	}
 
-  protected MockMvcRequestSpecification given() {
-	return mockMvc;
-  }
+	protected MockMvcRequestSpecification given() {
+		return mockMvc;
+	}
 
-  protected MockMvcRequestSpecification mockController(Object controller) {
-	MockMvc mockMvc = createMockMvc(controller);
-	return RestAssuredMockMvc.given().mockMvc(mockMvc);
-  }
+	protected MockMvcRequestSpecification mockController(Object controller) {
+		MockMvc mockMvc = createMockMvc(controller);
+		return RestAssuredMockMvc.given().mockMvc(mockMvc);
+	}
 
-  private MockMvc createMockMvc(Object controller) {
-	MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper());
+	private MockMvc createMockMvc(Object controller) {
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper());
 
-	return MockMvcBuilders.standaloneSetup(controller)
-		.apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
-		.setMessageConverters(converter)
-		.build();
-  }
+		return MockMvcBuilders.standaloneSetup(controller)
+			.apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
+			.setMessageConverters(converter)
+			.build();
+	}
 
-  private ObjectMapper objectMapper() {
-	return new ObjectMapper().findAndRegisterModules()
-		.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-		.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
-  }
+	private ObjectMapper objectMapper() {
+		return new ObjectMapper().findAndRegisterModules()
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+			.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
+	}
 
 }

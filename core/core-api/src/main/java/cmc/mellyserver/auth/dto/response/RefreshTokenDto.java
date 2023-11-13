@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class RefreshTokenDto {
 
-  private String token;
+	private String token;
 
-  private Long expiredAt;
+	private Long expiredAt;
 
 }

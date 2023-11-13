@@ -8,17 +8,17 @@ import lombok.Data;
 @AllArgsConstructor
 public class ProfileResponse {
 
-  private Long userId;
+	private Long userId;
 
-  private String nickname;
+	private String nickname;
 
-  private String profileImage;
+	private String profileImage;
 
-  private Integer imageVolume;
+	private Integer imageVolume;
 
-  public static ProfileResponse of(ProfileResponseDto profileResponseDto, Integer imageVolume) {
-	return new ProfileResponse(profileResponseDto.getUserId(), profileResponseDto.getNickname(),
-		profileResponseDto.getProfileImage(), imageVolume);
-  }
+	public static ProfileResponse of(ProfileResponseDto profileResponseDto, Integer imageVolume) {
+		return new ProfileResponse(profileResponseDto.getUserId(), profileResponseDto.getNickname(),
+			profileResponseDto.getProfileImage(), imageVolume);
+	}
 
 }

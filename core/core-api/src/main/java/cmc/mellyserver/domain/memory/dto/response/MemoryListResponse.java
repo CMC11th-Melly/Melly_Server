@@ -10,12 +10,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class MemoryListResponse {
 
-  private List<MemoryResponseDto> contents;
+	private List<MemoryResponseDto> contents;
 
-  private Boolean next;
+	private Boolean next;
 
-  public static MemoryListResponse from(List<MemoryResponseDto> contents, Boolean next) {
-	return new MemoryListResponse(contents, next);
-  }
+	public static MemoryListResponse from(List<MemoryResponseDto> contents, Boolean next) {
+		return new MemoryListResponse(contents, next);
+	}
 
 }

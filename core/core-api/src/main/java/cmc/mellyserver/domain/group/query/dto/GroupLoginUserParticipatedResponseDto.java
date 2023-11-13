@@ -10,29 +10,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupLoginUserParticipatedResponseDto {
 
-  private Long groupId;
+	private Long groupId;
 
-  private int groupIcon;
+	private int groupIcon;
 
-  private String groupName;
+	private String groupName;
 
-  private GroupType groupType;
+	private GroupType groupType;
 
-  @Builder
-  public GroupLoginUserParticipatedResponseDto(Long groupId, int groupIcon, String groupName, GroupType groupType) {
-	this.groupId = groupId;
-	this.groupIcon = groupIcon;
-	this.groupName = groupName;
-	this.groupType = groupType;
-  }
+	@Builder
+	public GroupLoginUserParticipatedResponseDto(Long groupId, int groupIcon, String groupName, GroupType groupType) {
+		this.groupId = groupId;
+		this.groupIcon = groupIcon;
+		this.groupName = groupName;
+		this.groupType = groupType;
+	}
 
-  public static GroupLoginUserParticipatedResponseDto of(GroupAndUser groupAndUser) {
-	return GroupLoginUserParticipatedResponseDto.builder()
-		.groupId(groupAndUser.getGroup().getId())
-		.groupIcon(groupAndUser.getGroup().getIcon())
-		.groupName(groupAndUser.getGroup().getName())
-		.groupType(groupAndUser.getGroup().getGroupType())
-		.build();
-  }
+	public static GroupLoginUserParticipatedResponseDto of(GroupAndUser groupAndUser) {
+		return GroupLoginUserParticipatedResponseDto.builder()
+			.groupId(groupAndUser.getGroup().getId())
+			.groupIcon(groupAndUser.getGroup().getIcon())
+			.groupName(groupAndUser.getGroup().getName())
+			.groupType(groupAndUser.getGroup().getGroupType())
+			.build();
+	}
 
 }

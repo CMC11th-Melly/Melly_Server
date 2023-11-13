@@ -16,15 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlaceScrapReader {
 
-  private final PlaceScrapQueryRepository placeScrapQueryRepository;
+	private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
-  public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
-	  ScrapType scrapType) {
-	return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
-  }
+	public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
+		ScrapType scrapType) {
+		return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
+	}
 
-  public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
-	return placeScrapQueryRepository.getScrapedPlaceGrouping(userId);
-  }
+	public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
+		return placeScrapQueryRepository.getScrapedPlaceGrouping(userId);
+	}
 
 }

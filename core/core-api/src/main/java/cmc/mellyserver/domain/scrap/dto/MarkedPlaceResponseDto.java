@@ -11,12 +11,12 @@ import lombok.Data;
 @Builder
 public class MarkedPlaceResponseDto {
 
-  private Position position;
+	private Position position;
 
-  private GroupType groupType;
+	private GroupType groupType;
 
-  private Long placeId;
+	private Long placeId;
 
-  private Long memoryCount;
+	private Long memoryCount;
 
 }

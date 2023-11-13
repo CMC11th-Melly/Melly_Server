@@ -9,18 +9,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FcmTokenRepository {
 
-  private final StringRedisTemplate tokenRedisTemplate;
+	private final StringRedisTemplate tokenRedisTemplate;
 
-  public void saveToken(String key, String fcmToken) {
-	tokenRedisTemplate.opsForValue().set(key, fcmToken);
-  }
+	public void saveToken(String key, String fcmToken) {
+		tokenRedisTemplate.opsForValue().set(key, fcmToken);
+	}
 
-  public String getToken(String key) {
-	return tokenRedisTemplate.opsForValue().get(key);
-  }
+	public String getToken(String key) {
+		return tokenRedisTemplate.opsForValue().get(key);
+	}
 
-  public void deleteToken(String key) {
-	tokenRedisTemplate.delete(key);
-  }
+	public void deleteToken(String key) {
+		tokenRedisTemplate.delete(key);
+	}
 
 }

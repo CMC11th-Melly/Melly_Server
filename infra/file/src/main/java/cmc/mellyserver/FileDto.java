@@ -9,12 +9,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class FileDto {
 
-  private String originalFilename;
+	private String originalFilename;
 
-  private long size;
+	private long size;
 
-  private String contentType;
+	private String contentType;
 
-  private InputStream inputStream;
+	private InputStream inputStream;
 
 }

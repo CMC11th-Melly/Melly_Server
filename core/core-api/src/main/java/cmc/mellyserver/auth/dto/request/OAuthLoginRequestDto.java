@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuthLoginRequestDto {
 
-  private String accessToken;
+	private String accessToken;
 
-  private Provider provider;
+	private Provider provider;
 
-  private String fcmToken;
+	private String fcmToken;
 
-  @Builder
-  public OAuthLoginRequestDto(String accessToken, Provider provider, String fcmToken) {
-	this.accessToken = accessToken;
-	this.provider = provider;
-	this.fcmToken = fcmToken;
-  }
+	@Builder
+	public OAuthLoginRequestDto(String accessToken, Provider provider, String fcmToken) {
+		this.accessToken = accessToken;
+		this.provider = provider;
+		this.fcmToken = fcmToken;
+	}
 
 }

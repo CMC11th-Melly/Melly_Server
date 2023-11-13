@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceScrapCountResponseDto implements Serializable {
 
-  private ScrapType scrapType;
+	private ScrapType scrapType;
 
-  private Long scrapCount;
+	private Long scrapCount;
 
 }

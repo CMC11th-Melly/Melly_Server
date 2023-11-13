@@ -10,14 +10,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginResponse {
 
-  private AccessTokenUserData user;
+	private AccessTokenUserData user;
 
-  private String token;
+	private String token;
 
-  @Builder
-  public LoginResponse(AccessTokenUserData user, String token) {
-	this.user = user;
-	this.token = token;
-  }
+	@Builder
+	public LoginResponse(AccessTokenUserData user, String token) {
+		this.user = user;
+		this.token = token;
+	}
 
 }

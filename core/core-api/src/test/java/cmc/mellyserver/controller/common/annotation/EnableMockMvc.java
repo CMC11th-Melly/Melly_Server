@@ -18,13 +18,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @Import(EnableMockMvc.Config.class)
 public @interface EnableMockMvc {
 
-  class Config {
+	class Config {
 
-	@Bean
-	public CharacterEncodingFilter characterEncodingFilter() {
-	  return new CharacterEncodingFilter("UTF-8", true);
+		@Bean
+		public CharacterEncodingFilter characterEncodingFilter() {
+			return new CharacterEncodingFilter("UTF-8", true);
+		}
+
 	}
-
-  }
 
 }
