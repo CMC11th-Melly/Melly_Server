@@ -37,40 +37,40 @@ import cmc.mellyserver.domain.user.UserProfileService;
 @ActiveProfiles("test") // test profile로 실행되도록 만듭니다.
 public abstract class ControllerTestSupport {
 
-	@Autowired
-	protected MockMvc mockMvc;
+  @Autowired
+  protected MockMvc mockMvc;
 
-	@Autowired
-	protected ObjectMapper objectMapper;
+  @Autowired
+  protected ObjectMapper objectMapper;
 
-	@MockBean
-	protected UserProfileService userProfileService;
+  @MockBean
+  protected UserProfileService userProfileService;
 
-	@MockBean
-	protected PlaceScrapService placeScrapService;
+  @MockBean
+  protected PlaceScrapService placeScrapService;
 
-	@MockBean
-	protected MemoryService memoryReadService;
+  @MockBean
+  protected MemoryService memoryReadService;
 
-	@MockBean
-	protected MemoryService memoryService;
+  @MockBean
+  protected MemoryService memoryService;
 
-	@MockBean
-	protected CommentService commentService;
+  @MockBean
+  protected CommentService commentService;
 
-	@MockBean
-	protected CommentLikeService commentLikeService;
+  @MockBean
+  protected CommentLikeService commentLikeService;
 
-	@MockBean
-	protected PlaceService placeService;
+  @MockBean
+  protected PlaceService placeService;
 
-	@MockBean
-	protected GroupService groupService;
+  @MockBean
+  protected GroupService groupService;
 
-	@MockBean
-	protected NotificationService notificationService;
+  @MockBean
+  protected NotificationService notificationService;
 
-	@MockBean
-	protected JwtTokenProvider jwtTokenProvider;
+  @MockBean
+  protected JwtTokenProvider jwtTokenProvider;
 
 }

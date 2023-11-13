@@ -5,14 +5,14 @@ import java.util.List;
 
 public interface FileService {
 
-	List<String> saveFileList(Long userId, List<FileDto> multipartFiles);
+  List<String> saveFileList(Long userId, List<FileDto> multipartFiles);
 
-	String saveFile(Long userId, FileDto file);
+  String saveFile(Long userId, FileDto file);
 
-	void deleteFile(String fileName) throws IOException;
+  void deleteFile(String fileName) throws IOException;
 
-	void deleteFileList(List<Long> deleteFileIds);
+  void deleteFileList(List<Long> deleteFileIds);
 
-	Long calculateImageVolume(String username);
+  Long calculateImageVolume(String username);
 
 }

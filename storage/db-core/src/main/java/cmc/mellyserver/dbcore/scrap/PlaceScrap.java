@@ -25,31 +25,31 @@ import lombok.NoArgsConstructor;
 @Entity
 public class PlaceScrap extends JpaBaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "place_scrap_id")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "place_scrap_id")
+  private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "place_id")
-	private Place place;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "place_id")
+  private Place place;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "scrap_type")
-	private ScrapType scrapType;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "scrap_type")
+  private ScrapType scrapType;
 
-	@Builder
-	public PlaceScrap(User user, Place place, ScrapType scrapType) {
-		this.user = user;
-		this.place = place;
-		this.scrapType = scrapType;
-	}
+  @Builder
+  public PlaceScrap(User user, Place place, ScrapType scrapType) {
+	this.user = user;
+	this.place = place;
+	this.scrapType = scrapType;
+  }
 
-	public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType) {
-		return PlaceScrap.builder().user(user).place(place).scrapType(scrapType).build();
-	}
+  public static PlaceScrap createScrap(User user, Place place, ScrapType scrapType) {
+	return PlaceScrap.builder().user(user).place(place).scrapType(scrapType).build();
+  }
 }

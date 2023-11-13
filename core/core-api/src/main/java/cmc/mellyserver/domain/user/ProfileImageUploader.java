@@ -15,36 +15,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfileImageUploader {
 
-	private final FileService fileService;
+  private final FileService fileService;
 
-	public void update(User user, MultipartFile profileImage, boolean isDeleted) throws IOException {
+  public void update(User user, MultipartFile profileImage, boolean isDeleted) throws IOException {
 
-		if (isDeleted) {
-			removeProfileImage(user);
-		}
-
-		if (Objects.nonNull(profileImage)) {
-			storeProfileImage(user, profileImage);
-		}
+	if (isDeleted) {
+	  removeProfileImage(user);
 	}
 
-	public int calculateImageVolume(String email) {
-		return fileService.calculateImageVolume(email).intValue();
+	if (Objects.nonNull(profileImage)) {
+	  storeProfileImage(user, profileImage);
 	}
+  }
 
-	private void storeProfileImage(User user, MultipartFile profileImage) throws IOException {
-		fileService.deleteFile(user.getProfileImage());
-		String profileImageUrl = fileService.saveFile(user.getId(), extractImageInfo(profileImage));
-		user.changeProfileImage(profileImageUrl);
-	}
+  public int calculateImageVolume(String email) {
+	return fileService.calculateImageVolume(email).intValue();
+  }
 
-	private void removeProfileImage(User user) throws IOException {
-		fileService.deleteFile(user.getProfileImage());
-		user.removeProfileImage();
-	}
+  private void storeProfileImage(User user, MultipartFile profileImage) throws IOException {
+	fileService.deleteFile(user.getProfileImage());
+	String profileImageUrl = fileService.saveFile(user.getId(), extractImageInfo(profileImage));
+	user.changeProfileImage(profileImageUrl);
+  }
 
-	private FileDto extractImageInfo(MultipartFile profileImage) throws IOException {
-		return new FileDto(profileImage.getOriginalFilename(), profileImage.getSize(), profileImage.getContentType(),
-			profileImage.getInputStream());
-	}
+  private void removeProfileImage(User user) throws IOException {
+	fileService.deleteFile(user.getProfileImage());
+	user.removeProfileImage();
+  }
+
+  private FileDto extractImageInfo(MultipartFile profileImage) throws IOException {
+	return new FileDto(profileImage.getOriginalFilename(), profileImage.getSize(), profileImage.getContentType(),
+		profileImage.getInputStream());
+  }
 }

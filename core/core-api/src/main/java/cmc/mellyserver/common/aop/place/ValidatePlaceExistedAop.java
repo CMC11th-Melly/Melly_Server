@@ -20,41 +20,41 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ValidatePlaceExistedAop {
 
-	private final PlaceRepository placeRepository;
+  private final PlaceRepository placeRepository;
 
-	@Around("@annotation(cmc.mellyserver.common.aop.place.ValidatePlaceExisted)")
-	public Object createPlace(final ProceedingJoinPoint joinPoint) throws Throwable {
+  @Around("@annotation(cmc.mellyserver.common.aop.place.ValidatePlaceExisted)")
+  public Object createPlace(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-		Object[] args = joinPoint.getArgs();
+	Object[] args = joinPoint.getArgs();
 
-		for (Object arg : args) {
+	for (Object arg : args) {
 
-			if (arg instanceof CreatePlaceScrapRequestDto) {
+	  if (arg instanceof CreatePlaceScrapRequestDto) {
 
-				Optional<Place> place = placeRepository.findByPosition(((CreatePlaceScrapRequestDto)arg).getPosition());
+		Optional<Place> place = placeRepository.findByPosition(((CreatePlaceScrapRequestDto)arg).getPosition());
 
-				if (place.isEmpty()) {
-					Place savePlace = ((CreatePlaceScrapRequestDto)arg).toEntity();
-					placeRepository.save(savePlace);
-				}
-
-				return joinPoint.proceed();
-			}
-
-			if (arg instanceof CreateMemoryRequestDto) {
-
-				Optional<Place> place = placeRepository.findByPosition(((CreateMemoryRequestDto)arg).getPosition());
-
-				if (place.isEmpty()) {
-					Place savePlace = ((CreateMemoryRequestDto)arg).toPlace();
-					placeRepository.save(savePlace);
-				}
-
-				return joinPoint.proceed();
-			}
+		if (place.isEmpty()) {
+		  Place savePlace = ((CreatePlaceScrapRequestDto)arg).toEntity();
+		  placeRepository.save(savePlace);
 		}
 
-		return null;
+		return joinPoint.proceed();
+	  }
+
+	  if (arg instanceof CreateMemoryRequestDto) {
+
+		Optional<Place> place = placeRepository.findByPosition(((CreateMemoryRequestDto)arg).getPosition());
+
+		if (place.isEmpty()) {
+		  Place savePlace = ((CreateMemoryRequestDto)arg).toPlace();
+		  placeRepository.save(savePlace);
+		}
+
+		return joinPoint.proceed();
+	  }
 	}
+
+	return null;
+  }
 
 }

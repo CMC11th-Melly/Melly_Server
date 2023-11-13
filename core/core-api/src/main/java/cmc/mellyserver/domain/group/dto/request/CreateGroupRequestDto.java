@@ -8,24 +8,24 @@ import lombok.Data;
 @Data
 public class CreateGroupRequestDto {
 
-	private Long creatorId;
+  private Long creatorId;
 
-	private String groupName;
+  private String groupName;
 
-	private GroupType groupType;
+  private GroupType groupType;
 
-	private int groupIcon;
+  private int groupIcon;
 
-	@Builder
-	public CreateGroupRequestDto(Long id, String groupName, GroupType groupType, int groupIcon) {
-		this.creatorId = id;
-		this.groupName = groupName;
-		this.groupType = groupType;
-		this.groupIcon = groupIcon;
-	}
+  @Builder
+  public CreateGroupRequestDto(Long id, String groupName, GroupType groupType, int groupIcon) {
+	this.creatorId = id;
+	this.groupName = groupName;
+	this.groupType = groupType;
+	this.groupIcon = groupIcon;
+  }
 
-	public UserGroup toEntity() {
-		return UserGroup.builder().name(groupName).icon(groupIcon).groupType(groupType).build();
-	}
+  public UserGroup toEntity() {
+	return UserGroup.builder().name(groupName).icon(groupIcon).groupType(groupType).build();
+  }
 
 }

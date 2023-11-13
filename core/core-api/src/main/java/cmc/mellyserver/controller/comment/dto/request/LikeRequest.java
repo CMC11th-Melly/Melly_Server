@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LikeRequest {
 
-	private Long commentId;
+  private Long commentId;
 
-	private Long userId;
+  private Long userId;
 
-	@Builder
-	public LikeRequest(Long commentId, Long userId) {
-		this.commentId = commentId;
-		this.userId = userId;
-	}
+  @Builder
+  public LikeRequest(Long commentId, Long userId) {
+	this.commentId = commentId;
+	this.userId = userId;
+  }
 
 }

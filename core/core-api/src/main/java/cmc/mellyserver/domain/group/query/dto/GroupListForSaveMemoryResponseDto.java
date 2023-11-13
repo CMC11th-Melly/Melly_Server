@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupListForSaveMemoryResponseDto {
 
-	private Long groupId;
+  private Long groupId;
 
-	private String groupName;
+  private String groupName;
 
-	private GroupType groupType;
+  private GroupType groupType;
 
 }

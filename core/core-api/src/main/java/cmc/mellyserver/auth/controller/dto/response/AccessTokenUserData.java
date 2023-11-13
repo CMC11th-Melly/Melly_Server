@@ -15,34 +15,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccessTokenUserData {
 
-	private Long id;
+  private Long id;
 
-	private String uid;
+  private String uid;
 
-	private Provider provider;
+  private Provider provider;
 
-	private String email;
+  private String email;
 
-	private String nickname;
+  private String nickname;
 
-	private String profileImage;
+  private String profileImage;
 
-	private Gender gender;
+  private Gender gender;
 
-	private AgeGroup ageGroup;
+  private AgeGroup ageGroup;
 
-	public static AccessTokenUserData from(User user) {
-		return AccessTokenUserData.builder()
-			.id(user.getId())
-			.uid(user.getSocialId())
-			.provider(user.getProvider())
-			.email(user.getEmail())
-			.nickname(user.getNickname())
-			.profileImage(user.getProfileImage())
-			.gender(user.getGender())
-			.ageGroup(user.getAgeGroup())
-			.build();
+  public static AccessTokenUserData from(User user) {
+	return AccessTokenUserData.builder()
+		.id(user.getId())
+		.uid(user.getSocialId())
+		.provider(user.getProvider())
+		.email(user.getEmail())
+		.nickname(user.getNickname())
+		.profileImage(user.getProfileImage())
+		.gender(user.getGender())
+		.ageGroup(user.getAgeGroup())
+		.build();
 
-	}
+  }
 
 }

@@ -20,25 +20,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlaceQueryRepository {
 
-	private final JPAQueryFactory query;
+  private final JPAQueryFactory query;
 
-	public List<Place> getPlaceUserMemoryExist(Long id, GroupType groupType) {
+  public List<Place> getPlaceUserMemoryExist(Long id, GroupType groupType) {
 
-		return query.select(place)
-			.from(place)
-			.where(JPAExpressions.selectFrom(memory).where(memory.placeId.eq(place.id), memory.userId.eq(id)).exists())
-			.fetch();
+	return query.select(place)
+		.from(place)
+		.where(JPAExpressions.selectFrom(memory).where(memory.placeId.eq(place.id), memory.userId.eq(id)).exists())
+		.fetch();
 
-	}
+  }
 
-	public List<FindPlaceByMemoryTitleResponseDto> searchPlaceByContainMemoryName(Long userId, String memoryName) {
+  public List<FindPlaceByMemoryTitleResponseDto> searchPlaceByContainMemoryName(Long userId, String memoryName) {
 
-		return query
-			.select(Projections.constructor(FindPlaceByMemoryTitleResponseDto.class, memory.placeId, memory.title))
-			.from(memory)
-			.where(memory.userId.eq(userId), memory.title.contains(memoryName))
-			.distinct()
-			.fetch();
-	}
+	return query
+		.select(Projections.constructor(FindPlaceByMemoryTitleResponseDto.class, memory.placeId, memory.title))
+		.from(memory)
+		.where(memory.userId.eq(userId), memory.title.contains(memoryName))
+		.distinct()
+		.fetch();
+  }
 
 }

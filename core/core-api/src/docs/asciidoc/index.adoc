@@ -12,4 +12,5 @@ jemlog
 
 [[User-프로필-조회]]
 === User 프로필 조회
+
 operation::user/profile[snippets='http-request,path-parameters,http-response,response-fields']

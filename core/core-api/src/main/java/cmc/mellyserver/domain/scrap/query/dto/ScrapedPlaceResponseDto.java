@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ScrapedPlaceResponseDto {
 
-	private Long placeId;
+  private Long placeId;
 
-	private Position position;
+  private Position position;
 
-	private String placeCategory;
+  private String placeCategory;
 
-	private String placeName;
+  private String placeName;
 
-	private String placeImage;
+  private String placeImage;
 
 }

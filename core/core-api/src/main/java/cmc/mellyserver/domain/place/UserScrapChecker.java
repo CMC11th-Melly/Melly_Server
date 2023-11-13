@@ -10,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserScrapChecker {
 
-	private final PlaceScrapQueryRepository placeScrapQueryRepository;
+  private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
-	public boolean check(Long userId, Long placeId) {
-		return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
-	}
+  public boolean check(Long userId, Long placeId) {
+	return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
+  }
 
-	public boolean check(Long userId, Position position) {
-		return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
-	}
+  public boolean check(Long userId, Position position) {
+	return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
+  }
 }

@@ -12,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentLikeReader {
 
-	private final CommentLikeRepository commentLikeRepository;
+  private final CommentLikeRepository commentLikeRepository;
 
-	public CommentLike find(final Long userId, final Long commentId) {
-		return commentLikeRepository.findByUserIdAndCommentId(userId, commentId).orElseThrow(() -> {
-			throw new BusinessException(
-				ErrorCode.NOT_EXIST_SCRAP);
-		});
-	}
+  public CommentLike find(final Long userId, final Long commentId) {
+	return commentLikeRepository.findByUserIdAndCommentId(userId, commentId).orElseThrow(() -> {
+	  throw new BusinessException(
+		  ErrorCode.NOT_EXIST_SCRAP);
+	});
+  }
 }

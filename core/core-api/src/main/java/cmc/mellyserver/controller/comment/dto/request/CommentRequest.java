@@ -10,20 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentRequest {
 
-	private String content;
+  private String content;
 
-	private Long memoryId;
+  private Long memoryId;
 
-	private Long parentId;
+  private Long parentId;
 
-	private Long mentionUserId;
+  private Long mentionUserId;
 
-	@Builder
-	public CommentRequest(String content, Long memoryId, @Nullable Long parentId, @Nullable Long mentionUserId) {
-		this.content = content;
-		this.memoryId = memoryId;
-		this.parentId = parentId;
-		this.mentionUserId = mentionUserId;
-	}
+  @Builder
+  public CommentRequest(String content, Long memoryId, @Nullable Long parentId, @Nullable Long mentionUserId) {
+	this.content = content;
+	this.memoryId = memoryId;
+	this.parentId = parentId;
+	this.mentionUserId = mentionUserId;
+  }
 
 }

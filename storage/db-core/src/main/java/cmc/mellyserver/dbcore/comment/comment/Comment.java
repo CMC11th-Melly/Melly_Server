@@ -31,81 +31,81 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_comment")
 public class Comment extends JpaBaseEntity {
 
-	private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
+  private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "comment_id")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "comment_id")
+  private Long id;
 
-	@Column(name = "content")
-	@Lob
-	private String content;
+  @Column(name = "content")
+  @Lob
+  private String content;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
-	@OneToOne
-	@JoinColumn(name = "mention_user_id")
-	private User mentionUser;
+  @OneToOne
+  @JoinColumn(name = "mention_user_id")
+  private User mentionUser;
 
-	@Column(name = "memory_id")
-	private Long memoryId;
+  @Column(name = "memory_id")
+  private Long memoryId;
 
-	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<CommentLike> commentLikes = new ArrayList<>();
+  @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<CommentLike> commentLikes = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "root_id")
-	private Comment root;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "root_id")
+  private Comment root;
 
-	@OneToMany(mappedBy = "root", orphanRemoval = true)
-	private List<Comment> children = new ArrayList<>();
+  @OneToMany(mappedBy = "root", orphanRemoval = true)
+  private List<Comment> children = new ArrayList<>();
 
-	@Column(name = "deleted_at")
-	private LocalDateTime deletedAt;
+  @Column(name = "deleted_at")
+  private LocalDateTime deletedAt;
 
-	public Comment(String content) {
-		this.content = content;
+  public Comment(String content) {
+	this.content = content;
+  }
+
+  @Builder
+  public Comment(String content, User user, User mentionUser, Long memoryId, Comment root) {
+	this.content = content;
+	this.user = user;
+	this.memoryId = memoryId;
+	this.mentionUser = mentionUser;
+	setRoot(root);
+  }
+
+  public static Comment createRoot(String content, User user, Long memoryId, Comment root) {
+
+	return Comment.builder().content(content).user(user).memoryId(memoryId).root(root).build();
+  }
+
+  public static Comment createChild(String content, User user, User mentionUser, Long memoryId, Comment root) {
+	return Comment.builder()
+		.content(content)
+		.user(user)
+		.mentionUser(mentionUser)
+		.memoryId(memoryId)
+		.root(root)
+		.build();
+  }
+
+  public void delete() {
+	this.deletedAt = LocalDateTime.now();
+  }
+
+  private void setRoot(Comment root) {
+	this.root = root;
+	if (root != null) {
+	  root.getChildren().add(this);
 	}
+  }
 
-	public static Comment createRoot(String content, User user, Long memoryId, Comment root) {
-
-		return Comment.builder().content(content).user(user).memoryId(memoryId).root(root).build();
-	}
-
-	public static Comment createChild(String content, User user, User mentionUser, Long memoryId, Comment root) {
-		return Comment.builder()
-			.content(content)
-			.user(user)
-			.mentionUser(mentionUser)
-			.memoryId(memoryId)
-			.root(root)
-			.build();
-	}
-
-	@Builder
-	public Comment(String content, User user, User mentionUser, Long memoryId, Comment root) {
-		this.content = content;
-		this.user = user;
-		this.memoryId = memoryId;
-		this.mentionUser = mentionUser;
-		setRoot(root);
-	}
-
-	public void delete() {
-		this.deletedAt = LocalDateTime.now();
-	}
-
-	private void setRoot(Comment root) {
-		this.root = root;
-		if (root != null) {
-			root.getChildren().add(this);
-		}
-	}
-
-	public void update(String content) {
-		this.content = content;
-	}
+  public void update(String content) {
+	this.content = content;
+  }
 }

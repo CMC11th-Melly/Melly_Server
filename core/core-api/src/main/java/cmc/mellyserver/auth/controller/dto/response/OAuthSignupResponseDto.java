@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class OAuthSignupResponseDto {
 
-	private String socialId;
+  private String socialId;
 
-	private String provider;
+  private String provider;
 
 }

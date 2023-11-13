@@ -19,23 +19,23 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class FirebaseConfig {
 
-	@PostConstruct
-	public void initializeFCM() throws IOException {
+  @PostConstruct
+  public void initializeFCM() throws IOException {
 
-		try {
-			Resource resource = new ClassPathResource("firebase-key.json");
-			FileInputStream fis = new FileInputStream(resource.getFile());
+	try {
+	  Resource resource = new ClassPathResource("firebase-key.json");
+	  FileInputStream fis = new FileInputStream(resource.getFile());
 
-			FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(fis))
-				.build();
+	  FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(fis))
+		  .build();
 
-			if (FirebaseApp.getApps().isEmpty()) {
-				FirebaseApp.initializeApp(options);
-			}
-		} catch (IOException e) {
-			log.error("Failed initializing FilebaseApp: {}", e.getMessage());
-		}
-
+	  if (FirebaseApp.getApps().isEmpty()) {
+		FirebaseApp.initializeApp(options);
+	  }
+	} catch (IOException e) {
+	  log.error("Failed initializing FilebaseApp: {}", e.getMessage());
 	}
+
+  }
 
 }

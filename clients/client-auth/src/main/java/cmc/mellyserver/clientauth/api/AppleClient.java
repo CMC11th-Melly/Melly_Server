@@ -1,13 +1,6 @@
 package cmc.mellyserver.clientauth.api;
 
-import cmc.mellyserver.clientauth.LoginClient;
-import cmc.mellyserver.clientauth.model.AppleResource;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import static cmc.mellyserver.clientauth.api.Provider.*;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -19,57 +12,65 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
-import static cmc.mellyserver.clientauth.api.Provider.APPLE;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import cmc.mellyserver.clientauth.LoginClient;
+import cmc.mellyserver.clientauth.model.AppleResource;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class AppleClient implements LoginClient {
 
-	private final AppleLoginApi appleLoginApi;
+  private final AppleLoginApi appleLoginApi;
 
-	@Override
-	public boolean supports(String provider) {
-		return provider.equals(APPLE);
+  @Override
+  public boolean supports(String provider) {
+	return provider.equals(APPLE);
+  }
+
+  @Override
+  public LoginClientResult getUserData(String accessToken) {
+
+	AppleResource response = appleLoginApi.call();
+
+	try {
+	  Claims body = extractClaims(accessToken, response);
+	  return new LoginClientResult(body.getSubject(), APPLE);
+
+	} catch (Exception e) {
+	  e.printStackTrace();
 	}
 
-	@Override
-	public LoginClientResult getUserData(String accessToken) {
+	return null;
+  }
 
-		AppleResource response = appleLoginApi.call();
+  private Claims extractClaims(String accessToken, AppleResource response) throws JsonProcessingException,
+	  UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
+	String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
 
-		try {
-			Claims body = extractClaims(accessToken, response);
-			return new LoginClientResult(body.getSubject(), APPLE);
+	Map<String, String> header = new ObjectMapper()
+		.readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), "UTF-8"), Map.class);
 
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	AppleResource.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
+		.orElseThrow(() -> new IllegalAccessException());
 
-		return null;
-	}
+	byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
+	byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
 
-	private Claims extractClaims(String accessToken, AppleResource response) throws JsonProcessingException,
-			UnsupportedEncodingException, IllegalAccessException, NoSuchAlgorithmException, InvalidKeySpecException {
-		String headerOfIdentityToken = accessToken.substring(0, accessToken.indexOf("."));
+	BigInteger n = new BigInteger(1, nBytes);
+	BigInteger e = new BigInteger(1, eBytes);
 
-		Map<String, String> header = new ObjectMapper()
-			.readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), "UTF-8"), Map.class);
+	RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
+	KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
+	PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-		AppleResource.Key key = response.getMatchedKeyBy(header.get("kid"), header.get("alg"))
-			.orElseThrow(() -> new IllegalAccessException());
-
-		byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
-		byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
-
-		BigInteger n = new BigInteger(1, nBytes);
-		BigInteger e = new BigInteger(1, eBytes);
-
-		RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
-		KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
-		PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-
-		return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
-	}
+	return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(accessToken).getBody();
+  }
 
 }

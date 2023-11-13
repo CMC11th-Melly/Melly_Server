@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class CommentEnrollEvent {
 
-	private Long memoryId;
+  private Long memoryId;
 
-	private Long commentWriterId;
+  private Long commentWriterId;
 
 }

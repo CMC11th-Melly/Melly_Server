@@ -8,12 +8,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class GroupCreateResponse {
 
-	private Long groupId;
+  private Long groupId;
 
-	private String groupName;
+  private String groupName;
 
-	private GroupType groupType;
+  private GroupType groupType;
 
-	private int groupIcon;
+  private int groupIcon;
 
 }

@@ -19,30 +19,30 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Place extends JpaBaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "place_id")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "place_id")
+  private Long id;
 
-	@Embedded
-	@Column(name = "position")
-	private Position position;
+  @Embedded
+  @Column(name = "position")
+  private Position position;
 
-	@Column(name = "name")
-	private String name;
+  @Column(name = "name")
+  private String name;
 
-	@Column(name = "image_url")
-	private String imageUrl;
+  @Column(name = "image_url")
+  private String imageUrl;
 
-	@Column(name = "category")
-	private String category;
+  @Column(name = "category")
+  private String category;
 
-	@Builder
-	public Place(Long id, Position position, String name, String imageUrl, String category) {
-		this.id = id;
-		this.position = position;
-		this.name = name;
-		this.imageUrl = imageUrl;
-		this.category = category;
-	}
+  @Builder
+  public Place(Long id, Position position, String name, String imageUrl, String category) {
+	this.id = id;
+	this.position = position;
+	this.name = name;
+	this.imageUrl = imageUrl;
+	this.category = category;
+  }
 }

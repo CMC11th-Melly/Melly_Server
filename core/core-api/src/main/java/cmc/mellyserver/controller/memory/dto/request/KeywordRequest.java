@@ -1,15 +1,15 @@
 package cmc.mellyserver.controller.memory.dto.request;
 
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class KeywordRequest {
 
-	private List<String> keyword;
+  private List<String> keyword;
 
 }

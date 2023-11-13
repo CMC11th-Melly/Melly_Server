@@ -8,20 +8,20 @@ import lombok.Data;
 @Data
 public class MarkedPlaceReponse {
 
-	private Position position;
+  private Position position;
 
-	private GroupType groupType;
+  private GroupType groupType;
 
-	private Long placeId;
+  private Long placeId;
 
-	private Long memoryCount;
+  private Long memoryCount;
 
-	@Builder
-	public MarkedPlaceReponse(Position position, GroupType groupType, Long placeId, Long memoryCount) {
-		this.position = position;
-		this.groupType = groupType;
-		this.placeId = placeId;
-		this.memoryCount = memoryCount;
-	}
+  @Builder
+  public MarkedPlaceReponse(Position position, GroupType groupType, Long placeId, Long memoryCount) {
+	this.position = position;
+	this.groupType = groupType;
+	this.placeId = placeId;
+	this.memoryCount = memoryCount;
+  }
 
 }

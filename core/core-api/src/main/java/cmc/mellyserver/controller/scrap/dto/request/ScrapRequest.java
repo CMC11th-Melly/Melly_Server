@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScrapRequest {
 
-	private Double lat;
+  private Double lat;
 
-	private Double lng;
+  private Double lng;
 
-	private ScrapType scrapType;
+  private ScrapType scrapType;
 
-	private String placeName;
+  private String placeName;
 
-	private String placeCategory;
+  private String placeCategory;
 
 }

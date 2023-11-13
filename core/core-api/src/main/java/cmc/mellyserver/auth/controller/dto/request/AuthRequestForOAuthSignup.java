@@ -1,30 +1,31 @@
 package cmc.mellyserver.auth.controller.dto.request;
 
+import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
+
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthRequestForOAuthSignup {
 
-	private String uid;
+  private String uid;
 
-	private String nickname;
+  private String nickname;
 
-	private Gender gender;
+  private Gender gender;
 
-	@Nullable
-	private MultipartFile profileImage;
+  @Nullable
+  private MultipartFile profileImage;
 
-	@Nullable
-	private AgeGroup ageGroup;
+  @Nullable
+  private AgeGroup ageGroup;
 
-	@Nullable
-	private String fcmToken;
+  @Nullable
+  private String fcmToken;
 
 }

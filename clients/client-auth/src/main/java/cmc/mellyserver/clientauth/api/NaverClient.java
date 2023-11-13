@@ -15,17 +15,17 @@ OpenFeign 인터페이스에 대한 접근은 패키지 내부로 숨겼습니�
 @RequiredArgsConstructor
 public class NaverClient implements LoginClient {
 
-	private final NaverLoginApi naverLoginApi;
+  private final NaverLoginApi naverLoginApi;
 
-	@Override
-	public boolean supports(String provider) {
-		return provider.equals(NAVER);
-	}
+  @Override
+  public boolean supports(String provider) {
+	return provider.equals(NAVER);
+  }
 
-	@Override
-	public LoginClientResult getUserData(String accessToken) {
+  @Override
+  public LoginClientResult getUserData(String accessToken) {
 
-		return naverLoginApi.call(accessToken).toResult();
-	}
+	return naverLoginApi.call(accessToken).toResult();
+  }
 
 }

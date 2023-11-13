@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NotificationCheckRequest {
 
-	private Long notificationId;
+  private Long notificationId;
 
-	public NotificationCheckRequest(Long notificationId) {
-		this.notificationId = notificationId;
-	}
+  public NotificationCheckRequest(Long notificationId) {
+	this.notificationId = notificationId;
+  }
 
 }

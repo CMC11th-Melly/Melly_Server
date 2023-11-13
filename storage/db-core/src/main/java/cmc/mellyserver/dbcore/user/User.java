@@ -80,6 +80,27 @@ public class User extends JpaBaseEntity {
   @Column(name = "fcm_token")
   private String fcmToken;
 
+  @Builder
+  private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
+	  Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
+	  boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush, String fcmToken) {
+	this.id = id;
+	this.email = email;
+	this.password = password;
+	this.roleType = roleType;
+	this.profileImage = profileImage;
+	this.ageGroup = ageGroup;
+	this.userStatus = userStatus;
+	this.gender = gender;
+	this.socialId = socialId;
+	this.provider = provider;
+	this.nickname = nickname;
+	this.enableAppPush = enableAppPush;
+	this.enableCommentPush = enableCommentPush;
+	this.enableCommentLikePush = enableCommentLikePush;
+	this.fcmToken = fcmToken;
+  }
+
   public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
 	this.nickname = nickname;
 	this.gender = gender;
@@ -129,27 +150,6 @@ public class User extends JpaBaseEntity {
 	this.enableAppPush = true;
 	this.enableCommentPush = true;
 	this.enableCommentLikePush = true;
-  }
-
-  @Builder
-  private User(Long id, String email, String password, RoleType roleType, String profileImage, AgeGroup ageGroup,
-	  Gender gender, UserStatus userStatus, String socialId, Provider provider, String nickname,
-	  boolean enableAppPush, boolean enableCommentLikePush, boolean enableCommentPush, String fcmToken) {
-	this.id = id;
-	this.email = email;
-	this.password = password;
-	this.roleType = roleType;
-	this.profileImage = profileImage;
-	this.ageGroup = ageGroup;
-	this.userStatus = userStatus;
-	this.gender = gender;
-	this.socialId = socialId;
-	this.provider = provider;
-	this.nickname = nickname;
-	this.enableAppPush = enableAppPush;
-	this.enableCommentPush = enableCommentPush;
-	this.enableCommentLikePush = enableCommentLikePush;
-	this.fcmToken = fcmToken;
   }
 
 }

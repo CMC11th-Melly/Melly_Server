@@ -25,40 +25,40 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuthService {
 
-	private final UserReader userReader;
+  private final UserReader userReader;
 
-	private final UserWriter userWriter;
+  private final UserWriter userWriter;
 
-	private final LoginClientFactory loginClientFactory;
+  private final LoginClientFactory loginClientFactory;
 
-	private final TokenService tokenService;
+  private final TokenService tokenService;
 
-	private final FcmTokenRepository fcmTokenRepository;
+  private final FcmTokenRepository fcmTokenRepository;
 
-	@Transactional
-	public TokenResponseDto signup(OAuthSignupRequestDto oAuthSignupRequestDto) {
+  @Transactional
+  public TokenResponseDto signup(OAuthSignupRequestDto oAuthSignupRequestDto) {
 
-		User user = userWriter.save(oAuthSignupRequestDto.toEntity());
-		TokenDto tokenDto = tokenService.createToken(user);
-		fcmTokenRepository.saveToken(user.getId().toString(), oAuthSignupRequestDto.getFcmToken());
-		return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken());
+	User user = userWriter.save(oAuthSignupRequestDto.toEntity());
+	TokenDto tokenDto = tokenService.createToken(user);
+	fcmTokenRepository.saveToken(user.getId().toString(), oAuthSignupRequestDto.getFcmToken());
+	return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken());
+  }
+
+  @Transactional
+  public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
+
+	LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider());
+	LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
+	User user = userReader.findBySocialId(socialUser.uid());
+
+	if (Objects.isNull(user)) {
+	  return OAuthResponseDto.newUser(socialUser.uid(), socialUser.provider());
 	}
 
-	@Transactional
-	public OAuthResponseDto login(OAuthLoginRequestDto oAuthLoginRequestDto) {
-
-		LoginClient loginClient = loginClientFactory.find(oAuthLoginRequestDto.getProvider());
-		LoginClientResult socialUser = loginClient.getUserData(oAuthLoginRequestDto.getAccessToken());
-		User user = userReader.findBySocialId(socialUser.uid());
-
-		if (Objects.isNull(user)) {
-			return OAuthResponseDto.newUser(socialUser.uid(), socialUser.provider());
-		}
-
-		TokenDto tokenDto = tokenService.createToken(user);
-		fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto.getFcmToken());
-		return new OAuthResponseDto(TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken()),
-			null);
-	}
+	TokenDto tokenDto = tokenService.createToken(user);
+	fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto.getFcmToken());
+	return new OAuthResponseDto(TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken()),
+		null);
+  }
 
 }

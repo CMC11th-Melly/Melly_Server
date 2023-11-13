@@ -15,33 +15,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentLikeService {
 
-	private final CommentLikeReader commentLikeReader;
+  private final CommentLikeReader commentLikeReader;
 
-	private final CommentLikeWriter commentLikeWriter;
+  private final CommentLikeWriter commentLikeWriter;
 
-	private final CommentLikeValidator commentLikeValidator;
+  private final CommentLikeValidator commentLikeValidator;
 
-	private final CommentReader commentReader;
+  private final CommentReader commentReader;
 
-	private final UserReader userReader;
+  private final UserReader userReader;
 
-	private final ApplicationEventPublisher publisher;
+  private final ApplicationEventPublisher publisher;
 
-	@Transactional
-	public void saveCommentLike(final Long userId, final Long commentId) {
+  @Transactional
+  public void saveCommentLike(final Long userId, final Long commentId) {
 
-		Comment comment = commentReader.findById(commentId);
-		User writer = userReader.findById(userId);
-		commentLikeValidator.validateDuplicatedLike(commentId, userId);
-		commentLikeWriter.save(writer, comment);
-		publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
-	}
+	Comment comment = commentReader.findById(commentId);
+	User writer = userReader.findById(userId);
+	commentLikeValidator.validateDuplicatedLike(commentId, userId);
+	commentLikeWriter.save(writer, comment);
+	publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
+  }
 
-	@Transactional
-	public void deleteCommentLike(final Long userId, final Long commentId) {
+  @Transactional
+  public void deleteCommentLike(final Long userId, final Long commentId) {
 
-		CommentLike commentLike = commentLikeReader.find(userId, commentId);
-		commentLikeWriter.delete(commentLike);
-	}
+	CommentLike commentLike = commentLikeReader.find(userId, commentId);
+	commentLikeWriter.delete(commentLike);
+  }
 
 }

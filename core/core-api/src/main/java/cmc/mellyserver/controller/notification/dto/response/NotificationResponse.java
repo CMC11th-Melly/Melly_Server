@@ -1,25 +1,26 @@
 package cmc.mellyserver.controller.notification.dto.response;
 
-import cmc.mellyserver.dbcore.notification.enums.NotificationType;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 public class NotificationResponse {
 
-	private Long notificationId;
+  private Long notificationId;
 
-	private NotificationType type;
+  private NotificationType type;
 
-	private String content;
+  private String content;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
-	private LocalDateTime date;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
+  private LocalDateTime date;
 
-	private boolean checked;
+  private boolean checked;
 
 }

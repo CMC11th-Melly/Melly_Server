@@ -1,8 +1,9 @@
-
 <div align="center">
 
 <h3>CMC MakeUS 11TH 떡잎마을방범대 Project <br>
-  멜리 MELLY - 장소 기반 추억 기록장 <a href=https://apps.apple.com/kr/app/%EB%A9%9C%EB%A6%AC-melly-%EC%9E%A5%EC%86%8C-%EA%B8%B0%EB%B0%98-%EC%B6%94%EC%96%B5-%EA%B8%B0%EB%A1%9D%EC%9E%A5/id6444202109>다운로드 (현재 서버 리팩토링 중입니다)</a></h3>
+멜리 MELLY - 장소 기반 추억
+기록장 <a href=https://apps.apple.com/kr/app/%EB%A9%9C%EB%A6%AC-melly-%EC%9E%A5%EC%86%8C-%EA%B8%B0%EB%B0%98-%EC%B6%94%EC%96%B5-%EA%B8%B0%EB%A1%9D%EC%9E%A5/id6444202109>
+다운로드 (현재 서버 리팩토링 중입니다)</a></h3>
 </div>
 <br>
 <br>
@@ -17,13 +18,16 @@
 <br>
 
 ## 🏗️ 서비스 구조도
+
 ![Source (6)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5381eaa9-f9af-48d8-aa45-0b943447fd0d)
 
 
 <br>
 
 ## 📚 멀티 모듈 아키텍처
-프로젝트를 구성하는 각각의 기능들을 멀티 모듈 기반으로 분리함으로써 같은 기능에 포함되는 **라이브러리 의존성간의 응집성을 높이고** 모듈별로 **독립적인 확장**을 해나갈 수 있습니다. 
+
+프로젝트를 구성하는 각각의 기능들을 멀티 모듈 기반으로 분리함으로써 같은 기능에 포함되는 **라이브러리 의존성간의 응집성을 높이고** 모듈별로 **독립적인 확장**을 해나갈 수 있습니다.
+
 ```
 ├── client:client-auth            # OAuth 리소스 서버와 통신하는 Client 모듈 (현재 OpenFeign 의존성 사용)
 ├── core:core-api                 # 모바일 클라이언트와 통신하는 API 모듈    
@@ -34,14 +38,17 @@
 ├── infra:notification            # 알림 서비스 모듈 (현재 FCM 의존성 사용) 
 └── support:logging               # 로깅 모듈          
 ```
+
 <br>
 
 ## 🏛️ Database Schema
+
 ![Untitled](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/959d78e6-596b-4af7-8c12-48d6ce10e776)
 
 ## ⚙️ 주요 기능
+
 - [기능별 유즈케이스](https://github.com/CMC11th-Melly/Melly_Server/wiki/Use-Case)
-<br>
+  <br>
 
 ## 📋 Technical Issue
 

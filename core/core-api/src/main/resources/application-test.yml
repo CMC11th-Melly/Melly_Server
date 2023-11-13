@@ -42,7 +42,7 @@ oauth:
       naver: https://openapi.naver.com/v1/nid/me
       google: https://oauth2.googleapis.com/tokeninfo
       apple: https://appleid.apple.com/auth/keys
-      
+
 cloud:
   aws:
     stack:

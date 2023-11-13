@@ -27,45 +27,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final JwtTokenProvider jwtTokenProvider;
+  private final JwtTokenProvider jwtTokenProvider;
 
-	private final RedisTemplate redisTemplate;
+  private final RedisTemplate redisTemplate;
 
-	private final RestAuthenticationEntryPoint authenticationEntryPoint;
+  private final RestAuthenticationEntryPoint authenticationEntryPoint;
 
-	private final TokenAccessDeniedHandler accessDeniedHandler;
+  private final TokenAccessDeniedHandler accessDeniedHandler;
 
-	private final JwtExceptionFilter jwtExceptionFilter;
+  private final JwtExceptionFilter jwtExceptionFilter;
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-		TokenAuthenticationFilter authenticationFilter = new TokenAuthenticationFilter(jwtTokenProvider, redisTemplate);
+	TokenAuthenticationFilter authenticationFilter = new TokenAuthenticationFilter(jwtTokenProvider, redisTemplate);
 
-		httpSecurity.csrf(CsrfConfigurer::disable)
-			.cors(CorsConfigurer::disable)
-			.httpBasic(HttpBasicConfigurer::disable)
-			.sessionManagement(
-				(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.exceptionHandling(
-				(authenticationManager) -> authenticationManager.authenticationEntryPoint(authenticationEntryPoint)
-					.accessDeniedHandler(accessDeniedHandler))
-			.authorizeHttpRequests(authorize -> authorize.requestMatchers(WhiteList.WHITE_LIST)
-				.permitAll()
-				.requestMatchers(HttpMethod.OPTIONS, "/**")
-				.permitAll()
-				.anyRequest()
-				.authenticated()
-			)
-			.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(jwtExceptionFilter, TokenAuthenticationFilter.class);
+	httpSecurity.csrf(CsrfConfigurer::disable)
+		.cors(CorsConfigurer::disable)
+		.httpBasic(HttpBasicConfigurer::disable)
+		.sessionManagement(
+			(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+		.exceptionHandling(
+			(authenticationManager) -> authenticationManager.authenticationEntryPoint(authenticationEntryPoint)
+				.accessDeniedHandler(accessDeniedHandler))
+		.authorizeHttpRequests(authorize -> authorize.requestMatchers(WhiteList.WHITE_LIST)
+			.permitAll()
+			.requestMatchers(HttpMethod.OPTIONS, "/**")
+			.permitAll()
+			.anyRequest()
+			.authenticated()
+		)
+		.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+		.addFilterBefore(jwtExceptionFilter, TokenAuthenticationFilter.class);
 
-		return httpSecurity.build();
-	}
+	return httpSecurity.build();
+  }
 
-	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder(4);
-	}
+  @Bean
+  public PasswordEncoder getPasswordEncoder() {
+	return new BCryptPasswordEncoder(4);
+  }
 
 }

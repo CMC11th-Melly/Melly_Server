@@ -1,12 +1,13 @@
 package cmc.mellyserver.dbcore.scrap;
 
-import cmc.mellyserver.dbcore.place.Position;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import cmc.mellyserver.dbcore.place.Position;
 
 public interface PlaceScrapRepository extends JpaRepository<PlaceScrap, Long> {
 
-	boolean existsByUserIdAndPlaceId(Long id, Long placeId);
+  boolean existsByUserIdAndPlaceId(Long id, Long placeId);
 
-	void deleteByUserIdAndPlacePosition(Long id, Position position);
+  void deleteByUserIdAndPlacePosition(Long id, Position position);
 
 }

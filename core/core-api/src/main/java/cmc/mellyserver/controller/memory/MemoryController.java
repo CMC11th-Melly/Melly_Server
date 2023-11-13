@@ -38,82 +38,82 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/memories")
 public class MemoryController {
 
-	private final MemoryService memoryService;
+  private final MemoryService memoryService;
 
-	private final GroupService groupService;
+  private final GroupService groupService;
 
-	@GetMapping("/group")
-	public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getGroupListForSaveMemory(
-		@CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId,
-		@PageableDefault(size = 10) Pageable pageable) {
+  @GetMapping("/group")
+  public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getGroupListForSaveMemory(
+	  @CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId,
+	  @PageableDefault(size = 10) Pageable pageable) {
 
-		GroupListLoginUserParticipatedResponse groupListLoginUserParticiated = groupService
-			.findUserParticipatedGroups(loginUser.getId(), lastId, pageable);
-		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
-	}
+	GroupListLoginUserParticipatedResponse groupListLoginUserParticiated = groupService
+		.findUserParticipatedGroups(loginUser.getId(), lastId, pageable);
+	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
+  }
 
-	@GetMapping("/user/places/{placeId}")
-	public ResponseEntity<ApiResponse<MemoryListResponse>> getUserMemory(@CurrentUser LoginUser loginUser,
-		@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
-		@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
+  @GetMapping("/user/places/{placeId}")
+  public ResponseEntity<ApiResponse<MemoryListResponse>> getUserMemory(@CurrentUser LoginUser loginUser,
+	  @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
+	  @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
-		MemoryListResponse loginUserWriteMemoryBelongToPlace = memoryService
-			.getUserMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
-		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, loginUserWriteMemoryBelongToPlace);
-	}
+	MemoryListResponse loginUserWriteMemoryBelongToPlace = memoryService
+		.getUserMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, loginUserWriteMemoryBelongToPlace);
+  }
 
-	@GetMapping("/other/place/{placeId}")
-	public ResponseEntity<ApiResponse<MemoryListResponse>> getOtherMemory(@CurrentUser LoginUser loginUser,
-		@RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
-		@PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
+  @GetMapping("/other/place/{placeId}")
+  public ResponseEntity<ApiResponse<MemoryListResponse>> getOtherMemory(@CurrentUser LoginUser loginUser,
+	  @RequestParam(name = "lastId", required = false) Long lastId, @PageableDefault(size = 10) Pageable pageable,
+	  @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
-		MemoryListResponse otherUserWriteMemoryBelongToPlace = memoryService
-			.getOtherMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
-		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, otherUserWriteMemoryBelongToPlace);
-	}
+	MemoryListResponse otherUserWriteMemoryBelongToPlace = memoryService
+		.getOtherMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, otherUserWriteMemoryBelongToPlace);
+  }
 
-	@GetMapping("/groups/places/{placeId}")
-	public ResponseEntity<ApiResponse<MemoryListResponse>> getMyGroupMemory(@CurrentUser LoginUser loginUser,
-		@RequestParam(name = "lastId", required = false) Long lastId, @PathVariable Long placeId,
-		@PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
+  @GetMapping("/groups/places/{placeId}")
+  public ResponseEntity<ApiResponse<MemoryListResponse>> getMyGroupMemory(@CurrentUser LoginUser loginUser,
+	  @RequestParam(name = "lastId", required = false) Long lastId, @PathVariable Long placeId,
+	  @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) GroupType groupType) {
 
-		MemoryListResponse myGroupMemberWriteMemoryBelongToPlace = memoryService
-			.getGroupMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
-		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, myGroupMemberWriteMemoryBelongToPlace);
-	}
+	MemoryListResponse myGroupMemberWriteMemoryBelongToPlace = memoryService
+		.getGroupMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, myGroupMemberWriteMemoryBelongToPlace);
+  }
 
-	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> save(@CurrentUser LoginUser loginUser,
-		@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
-		@Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
+  @PostMapping
+  public ResponseEntity<ApiResponse<Void>> save(@CurrentUser LoginUser loginUser,
+	  @RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
+	  @Valid @RequestPart(name = "memoryData") MemoryCreateRequest memoryCreateRequest) {
 
-		memoryService
-			.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
-		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-	}
+	memoryService
+		.createMemory(MemoryAssembler.createMemoryRequestDto(loginUser.getId(), images, memoryCreateRequest));
+	return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
+  }
 
-	@PutMapping("/{memoryId}")
-	public ResponseEntity<ApiResponse<Void>> updateMemory(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId,
-		@RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
-		@RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
+  @PutMapping("/{memoryId}")
+  public ResponseEntity<ApiResponse<Void>> updateMemory(@CurrentUser LoginUser loginUser, @PathVariable Long memoryId,
+	  @RequestPart(name = "memoryImages", required = false) List<MultipartFile> images,
+	  @RequestPart(name = "memoryData") MemoryUpdateRequest memoryUpdateRequest) {
 
-		memoryService.updateMemory(
-			MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
-		return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
-	}
+	memoryService.updateMemory(
+		MemoryAssembler.updateMemoryRequestDto(loginUser.getId(), memoryId, memoryUpdateRequest, images));
+	return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
+  }
 
-	@DeleteMapping("/{memoryId}")
-	public ResponseEntity<ApiResponse<Void>> deleteMemory(@PathVariable Long memoryId) {
+  @DeleteMapping("/{memoryId}")
+  public ResponseEntity<ApiResponse<Void>> deleteMemory(@PathVariable Long memoryId) {
 
-		memoryService.removeMemory(memoryId);
-		return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
-	}
+	memoryService.removeMemory(memoryId);
+	return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
+  }
 
-	@GetMapping("/{memoryId}")
-	public ResponseEntity<ApiResponse<MemoryDetailResponse>> getMemory(@PathVariable Long memoryId) {
+  @GetMapping("/{memoryId}")
+  public ResponseEntity<ApiResponse<MemoryDetailResponse>> getMemory(@PathVariable Long memoryId) {
 
-		MemoryDetailResponseDto memoryByMemoryId = memoryService.getMemory(memoryId);
-		return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryDetailResponse.of(memoryByMemoryId));
-	}
+	MemoryDetailResponseDto memoryByMemoryId = memoryService.getMemory(memoryId);
+	return ApiResponse.success(SuccessCode.SELECT_SUCCESS, MemoryDetailResponse.of(memoryByMemoryId));
+  }
 
 }

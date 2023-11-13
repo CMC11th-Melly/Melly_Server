@@ -25,69 +25,69 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentReader {
 
-	private final CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 
-	private final UserReader userReader;
+  private final UserReader userReader;
 
-	private final CommentQueryRepository commentQueryRepository;
+  private final CommentQueryRepository commentQueryRepository;
 
-	private final CommentLikeRepository commentLikeRepository;
+  private final CommentLikeRepository commentLikeRepository;
 
-	public Comment findById(final Long commentId) {
-		return commentRepository.findById(commentId).orElseThrow(() -> {
-			throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
-		});
-	}
+  public Comment findById(final Long commentId) {
+	return commentRepository.findById(commentId).orElseThrow(() -> {
+	  throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+	});
+  }
 
-	public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
-		User user = userReader.findById(userId);
-		List<Comment> comments = commentQueryRepository.getComments(memoryId);
-		int count = calculateTotalCommentCount(comments);
-		List<CommentDto> commentDtos = createNestedStructure(comments, user);
-		return new CommentResponseDto(count, commentDtos);
-	}
+  public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
+	User user = userReader.findById(userId);
+	List<Comment> comments = commentQueryRepository.getComments(memoryId);
+	int count = calculateTotalCommentCount(comments);
+	List<CommentDto> commentDtos = createNestedStructure(comments, user);
+	return new CommentResponseDto(count, commentDtos);
+  }
 
-	private List<CommentDto> createNestedStructure(List<Comment> comments, User user) {
+  private List<CommentDto> createNestedStructure(List<Comment> comments, User user) {
 
-		List<CommentDto> rootComments = new ArrayList<>();
-		Map<Long, CommentDto> totalCommentMap = new HashMap<>();
+	List<CommentDto> rootComments = new ArrayList<>();
+	Map<Long, CommentDto> totalCommentMap = new HashMap<>();
 
-		List<Long> commentIds = extractCurrentUserLikeComment(user);
+	List<Long> commentIds = extractCurrentUserLikeComment(user);
 
-		comments.forEach(comment -> {
-				CommentDto commentDto = CommentDto.of(comment, user);
-				checkCurrentUserLiked(commentIds, commentDto);
-				totalCommentMap.put(commentDto.getId(), commentDto);
+	comments.forEach(comment -> {
+		  CommentDto commentDto = CommentDto.of(comment, user);
+		  checkCurrentUserLiked(commentIds, commentDto);
+		  totalCommentMap.put(commentDto.getId(), commentDto);
 
-				if (isChildComment(comment)) {
-					totalCommentMap.get(comment.getRoot().getId()).getChildren().add(commentDto);
-				} else {
-					rootComments.add(commentDto);
-				}
-			}
-		);
-
-		return rootComments;
-	}
-
-	private void checkCurrentUserLiked(List<Long> commentIds, CommentDto commentDto) {
-		if (commentIds.contains(commentDto.getId())) {
-			commentDto.setCurrentUserLike(true);
+		  if (isChildComment(comment)) {
+			totalCommentMap.get(comment.getRoot().getId()).getChildren().add(commentDto);
+		  } else {
+			rootComments.add(commentDto);
+		  }
 		}
-	}
+	);
 
-	private List<Long> extractCurrentUserLikeComment(User user) {
-		List<CommentLike> currentUserCommentLike = commentLikeRepository.findByUserId(user.getId());
-		return currentUserCommentLike.stream()
-			.map(commentLike -> commentLike.getComment().getId())
-			.toList();
-	}
+	return rootComments;
+  }
 
-	private int calculateTotalCommentCount(List<Comment> comments) {
-		return (int)comments.stream().filter(c -> Objects.isNull(c.getDeletedAt())).count();
+  private void checkCurrentUserLiked(List<Long> commentIds, CommentDto commentDto) {
+	if (commentIds.contains(commentDto.getId())) {
+	  commentDto.setCurrentUserLike(true);
 	}
+  }
 
-	private boolean isChildComment(Comment comment) {
-		return Objects.nonNull(comment.getRoot());
-	}
+  private List<Long> extractCurrentUserLikeComment(User user) {
+	List<CommentLike> currentUserCommentLike = commentLikeRepository.findByUserId(user.getId());
+	return currentUserCommentLike.stream()
+		.map(commentLike -> commentLike.getComment().getId())
+		.toList();
+  }
+
+  private int calculateTotalCommentCount(List<Comment> comments) {
+	return (int)comments.stream().filter(c -> Objects.isNull(c.getDeletedAt())).count();
+  }
+
+  private boolean isChildComment(Comment comment) {
+	return Objects.nonNull(comment.getRoot());
+  }
 }

@@ -14,26 +14,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserReader {
 
-	private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-	public User findById(Long id) {
-		return userRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-	}
+  public User findById(Long id) {
+	return userRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+  }
 
-	public boolean existsByNickname(String nickname) {
-		return userRepository.existsByNickname(nickname);
-	}
+  public boolean existsByNickname(String nickname) {
+	return userRepository.existsByNickname(nickname);
+  }
 
-	public User findBySocialId(String socialId) {
-		return userRepository.findBySocialId(socialId);
-	}
+  public User findBySocialId(String socialId) {
+	return userRepository.findBySocialId(socialId);
+  }
 
-	public Optional<User> findByEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
+  public Optional<User> findByEmail(String email) {
+	return userRepository.findByEmail(email);
+  }
 
-	public boolean existsByEmailAndPassword(String email, String password) {
-		return userRepository.existsByEmailAndPassword(email, password);
-	}
+  public boolean existsByEmailAndPassword(String email, String password) {
+	return userRepository.existsByEmailAndPassword(email, password);
+  }
 
 }

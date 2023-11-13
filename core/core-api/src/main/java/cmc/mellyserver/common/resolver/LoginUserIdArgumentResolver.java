@@ -21,21 +21,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-	private final TokenProvider tokenProvider;
+  private final TokenProvider tokenProvider;
 
-	@Override
-	public boolean supportsParameter(final MethodParameter parameter) {
-		return parameter.hasParameterAnnotation(CurrentUser.class);
-	}
+  @Override
+  public boolean supportsParameter(final MethodParameter parameter) {
+	return parameter.hasParameterAnnotation(CurrentUser.class);
+  }
 
-	@Override
-	public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
-		final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
+  @Override
+  public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
+	  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
 
-		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-		String accessToken = HeaderUtil.getAccessToken(request);
-		Long id = tokenProvider.extractUserId(accessToken);
-		return new LoginUser(id);
-	}
+	HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+	String accessToken = HeaderUtil.getAccessToken(request);
+	Long id = tokenProvider.extractUserId(accessToken);
+	return new LoginUser(id);
+  }
 
 }

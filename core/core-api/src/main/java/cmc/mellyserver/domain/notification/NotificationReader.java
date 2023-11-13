@@ -16,19 +16,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationReader {
 
-	private final NotificationRepository notificationRepository;
+  private final NotificationRepository notificationRepository;
 
-	public Notification findById(Long notificationId) {
-		return notificationRepository.findById(notificationId)
-			.orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION));
-	}
+  public Notification findById(Long notificationId) {
+	return notificationRepository.findById(notificationId)
+		.orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION));
+  }
 
-	public List<NotificationResponse> getNotificationList(Long userId) {
-		List<Notification> notifications = notificationRepository.findAllByUserId(userId);
-		return notifications.stream()
-			.map(noti -> new NotificationResponse(noti.getId(), noti.getNotificationType(), noti.getContent(),
-				noti.getCreatedDate(), noti.isRead()))
-			.collect(Collectors.toList());
-	}
+  public List<NotificationResponse> getNotificationList(Long userId) {
+	List<Notification> notifications = notificationRepository.findAllByUserId(userId);
+	return notifications.stream()
+		.map(noti -> new NotificationResponse(noti.getId(), noti.getNotificationType(), noti.getContent(),
+			noti.getCreatedDate(), noti.isRead()))
+		.collect(Collectors.toList());
+  }
 
 }

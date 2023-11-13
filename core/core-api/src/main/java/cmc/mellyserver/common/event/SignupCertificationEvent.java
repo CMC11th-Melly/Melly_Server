@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SignupCertificationEvent {
 
-	private String email;
+  private String email;
 
-	private String content;
+  private String content;
 
 }

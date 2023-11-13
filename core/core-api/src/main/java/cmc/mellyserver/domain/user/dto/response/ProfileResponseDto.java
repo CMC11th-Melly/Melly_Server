@@ -1,7 +1,8 @@
 package cmc.mellyserver.domain.user.dto.response;
 
-import cmc.mellyserver.dbcore.user.User;
 import java.io.Serializable;
+
+import cmc.mellyserver.dbcore.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,16 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfileResponseDto implements Serializable {
 
-	private Long userId;
+  private Long userId;
 
-	private String nickname;
+  private String nickname;
 
-	private String email;
+  private String email;
 
-	private String profileImage;
+  private String profileImage;
 
-	public static ProfileResponseDto of(User user) {
-		return new ProfileResponseDto(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
-	}
+  public static ProfileResponseDto of(User user) {
+	return new ProfileResponseDto(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImage());
+  }
 
 }

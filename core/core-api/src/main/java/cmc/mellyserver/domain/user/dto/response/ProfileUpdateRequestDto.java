@@ -10,18 +10,18 @@ import lombok.Getter;
 @Getter
 public class ProfileUpdateRequestDto {
 
-	private String nickname;
+  private String nickname;
 
-	private Gender gender;
+  private Gender gender;
 
-	private AgeGroup ageGroup;
+  private AgeGroup ageGroup;
 
-	@Builder
-	public ProfileUpdateRequestDto(String nickname, Gender gender, AgeGroup ageGroup) {
+  @Builder
+  public ProfileUpdateRequestDto(String nickname, Gender gender, AgeGroup ageGroup) {
 
-		this.nickname = nickname;
-		this.gender = gender;
-		this.ageGroup = ageGroup;
-	}
+	this.nickname = nickname;
+	this.gender = gender;
+	this.ageGroup = ageGroup;
+  }
 
 }

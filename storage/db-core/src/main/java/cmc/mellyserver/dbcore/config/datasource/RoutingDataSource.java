@@ -13,17 +13,17 @@ DB Source, Replica 분기 처리 기준은 트랜잭션의 readOnly 실행 여�
 @Slf4j
 public class RoutingDataSource extends AbstractRoutingDataSource {
 
-	@Override
-	protected Object determineCurrentLookupKey() {
+  @Override
+  protected Object determineCurrentLookupKey() {
 
-		boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
-		log.info("transaction readOnly : {}", isReadOnly);
+	boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+	log.info("transaction readOnly : {}", isReadOnly);
 
-		if (isReadOnly) {
-			return REPLICA;
-		}
-
-		return SOURCE;
+	if (isReadOnly) {
+	  return REPLICA;
 	}
+
+	return SOURCE;
+  }
 
 }

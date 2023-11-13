@@ -1,7 +1,11 @@
 package cmc.mellyserver.dbcore.place;
 
 import jakarta.persistence.Embeddable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -10,8 +14,8 @@ import lombok.*;
 @EqualsAndHashCode
 public class Position {
 
-	private Double lat;
+  private Double lat;
 
-	private Double lng;
+  private Double lng;
 
 }

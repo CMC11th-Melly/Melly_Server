@@ -19,66 +19,66 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDto implements Serializable {
 
-	private static final String REMOVE_COMMENT = "삭제된 댓글입니다";
-	private Long id;
+  private static final String REMOVE_COMMENT = "삭제된 댓글입니다";
+  private Long id;
 
-	private String content;
+  private String content;
 
-	private boolean isCurrentUser;
+  private boolean isCurrentUser;
 
-	private boolean isCurrentUserLike;
+  private boolean isCurrentUserLike;
 
-	private int likeCount;
+  private int likeCount;
 
-	private String mentionUserNickname;
+  private String mentionUserNickname;
 
-	private String nickname;
+  private String nickname;
 
-	private String profileImage;
+  private String profileImage;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
-	private LocalDateTime createdDate;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
+  private LocalDateTime createdDate;
 
-	private List<CommentDto> children;
+  private List<CommentDto> children;
 
-	public static CommentDto of(Comment comment, User user) {
-		if (Objects.isNull(comment.getRoot())) {
-			return CommentDto.createRoot(comment, user);
-		}
-		return CommentDto.createChild(comment, user);
+  public static CommentDto of(Comment comment, User user) {
+	if (Objects.isNull(comment.getRoot())) {
+	  return CommentDto.createRoot(comment, user);
+	}
+	return CommentDto.createChild(comment, user);
+  }
+
+  private static boolean isLoginUser(Comment comment, User user) {
+	return comment.getUser().getId().equals(user.getId());
+  }
+
+  public static CommentDto createChild(Comment comment, User user) {
+
+	CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
+		comment.getCommentLikes().size(), comment.getMentionUser().getNickname(), comment.getUser().getNickname(),
+		comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
+
+	if (isLoginUser(comment, user)) {
+	  commentDto.setCurrentUser(true);
 	}
 
-	private static boolean isLoginUser(Comment comment, User user) {
-		return comment.getUser().getId().equals(user.getId());
+	return commentDto;
+  }
+
+  public static CommentDto createRoot(Comment comment, User user) {
+
+	CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
+		comment.getCommentLikes().size(), null, comment.getUser().getNickname(),
+		comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
+
+	if (isLoginUser(comment, user)) {
+	  commentDto.setCurrentUser(true);
 	}
 
-	public static CommentDto createChild(Comment comment, User user) {
+	return commentDto;
+  }
 
-		CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
-			comment.getCommentLikes().size(), comment.getMentionUser().getNickname(), comment.getUser().getNickname(),
-			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
-
-		if (isLoginUser(comment, user)) {
-			commentDto.setCurrentUser(true);
-		}
-
-		return commentDto;
-	}
-
-	public static CommentDto createRoot(Comment comment, User user) {
-
-		CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
-			comment.getCommentLikes().size(), null, comment.getUser().getNickname(),
-			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
-
-		if (isLoginUser(comment, user)) {
-			commentDto.setCurrentUser(true);
-		}
-
-		return commentDto;
-	}
-
-	public void setCurrentUserLike(boolean currentUserLike) {
-		isCurrentUserLike = currentUserLike;
-	}
+  public void setCurrentUserLike(boolean currentUserLike) {
+	isCurrentUserLike = currentUserLike;
+  }
 }

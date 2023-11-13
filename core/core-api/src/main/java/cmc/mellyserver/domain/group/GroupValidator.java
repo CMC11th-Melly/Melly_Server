@@ -11,26 +11,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupValidator {
 
-	private static final int GROUP_MEMBER_MAX_COUNT = 9;
-	private static final int GROUP_MEMBER_EXIT_LIMIT = 2;
+  private static final int GROUP_MEMBER_MAX_COUNT = 9;
+  private static final int GROUP_MEMBER_EXIT_LIMIT = 2;
 
-	private final GroupAndUserReader groupAndUserReader;
+  private final GroupAndUserReader groupAndUserReader;
 
-	public void isDuplicatedJoin(final Long userId, final Long groupId) {
-		if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
-			throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
-		}
+  public void isDuplicatedJoin(final Long userId, final Long groupId) {
+	if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
+	  throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
 	}
+  }
 
-	@DistributedLock(key = "#groupId")
-	public void isMaximumGroupMember(Long groupId) {
-		if (groupAndUserReader.countGroupMembers(groupId) > GROUP_MEMBER_MAX_COUNT) {
-			throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
-		}
+  @DistributedLock(key = "#groupId")
+  public void isMaximumGroupMember(Long groupId) {
+	if (groupAndUserReader.countGroupMembers(groupId) > GROUP_MEMBER_MAX_COUNT) {
+	  throw new BusinessException(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE);
 	}
+  }
 
-	@DistributedLock(key = "#groupId")
-	public boolean isGroupRemovable(Long groupId) {
-		return groupAndUserReader.countGroupMembers(groupId) < GROUP_MEMBER_EXIT_LIMIT;
-	}
+  @DistributedLock(key = "#groupId")
+  public boolean isGroupRemovable(Long groupId) {
+	return groupAndUserReader.countGroupMembers(groupId) < GROUP_MEMBER_EXIT_LIMIT;
+  }
 }

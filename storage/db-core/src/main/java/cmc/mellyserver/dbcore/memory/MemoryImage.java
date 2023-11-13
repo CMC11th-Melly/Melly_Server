@@ -21,39 +21,39 @@ import lombok.NoArgsConstructor;
 @Entity
 public class MemoryImage extends JpaBaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "memory_image_id")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "memory_image_id")
+  private Long id;
 
-	@Column(name = "image_path")
-	private String imagePath;
+  @Column(name = "image_path")
+  private String imagePath;
 
-	@ManyToOne
-	@JoinColumn(name = "memory_id")
-	private Memory memory;
+  @ManyToOne
+  @JoinColumn(name = "memory_id")
+  private Memory memory;
 
-	public MemoryImage(String imagePath) {
-		this.imagePath = imagePath;
-	}
+  public MemoryImage(String imagePath) {
+	this.imagePath = imagePath;
+  }
 
-	public void addMemory(Memory memory) {
-		this.memory = memory;
-	}
+  public void addMemory(Memory memory) {
+	this.memory = memory;
+  }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		MemoryImage that = (MemoryImage)o;
-		return Objects.equals(id, that.id);
-	}
+  @Override
+  public boolean equals(Object o) {
+	if (this == o)
+	  return true;
+	if (o == null || getClass() != o.getClass())
+	  return false;
+	MemoryImage that = (MemoryImage)o;
+	return Objects.equals(id, that.id);
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+  @Override
+  public int hashCode() {
+	return Objects.hash(id);
+  }
 
 }

@@ -19,57 +19,57 @@ import cmc.mellyserver.support.IntegrationTestSupport;
 
 public class UserProfileServiceTest extends IntegrationTestSupport {
 
-	@Autowired
-	private UserProfileService userProfileService;
+  @Autowired
+  private UserProfileService userProfileService;
 
-	@Autowired
-	private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-	@DisplayName("유저 프로필을 조회한다")
-	@Test
-	void 유저_프로필을_조회한다() {
+  @DisplayName("유저 프로필을 조회한다")
+  @Test
+  void 유저_프로필을_조회한다() {
 
-		// Given
-		User 모카 = userRepository.save(모카());
+	// Given
+	User 모카 = userRepository.save(모카());
 
-		// When
-		ProfileResponseDto userProfile = userProfileService.getProfile(모카.getId());
+	// When
+	ProfileResponseDto userProfile = userProfileService.getProfile(모카.getId());
 
-		// Then
-		assertThat(userProfile.getUserId()).isEqualTo(모카.getId());
-		assertThat(userProfile.getNickname()).isEqualTo(모카.getNickname());
-	}
+	// Then
+	assertThat(userProfile.getUserId()).isEqualTo(모카.getId());
+	assertThat(userProfile.getNickname()).isEqualTo(모카.getNickname());
+  }
 
-	@DisplayName("수정하려는 프로필 이미지가 있으면 변경한다.")
-	@Test
-	void 유저_프로필_이미지를_수정한다() throws IOException {
+  @DisplayName("수정하려는 프로필 이미지가 있으면 변경한다.")
+  @Test
+  void 유저_프로필_이미지를_수정한다() throws IOException {
 
-		// given
-		User savedUser = userRepository.save(모카());
+	// given
+	User savedUser = userRepository.save(모카());
 
-		// when
-		userProfileService.updateProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()),
-			false);
+	// when
+	userProfileService.updateProfileImage(savedUser.getId(), new MockMultipartFile(모카_프로필, 모카_프로필.getBytes()),
+		false);
 
-		// then
-		User user = userRepository.findById(savedUser.getId()).get();
-		assertThat(user.getProfileImage()).isEqualTo("수정된프로필.jpg");
-	}
+	// then
+	User user = userRepository.findById(savedUser.getId()).get();
+	assertThat(user.getProfileImage()).isEqualTo("수정된프로필.jpg");
+  }
 
-	@DisplayName("유저 프로필 정보를 수정한다.")
-	@Test
-	void 유저_프로필_정보를_수정한다() {
+  @DisplayName("유저 프로필 정보를 수정한다.")
+  @Test
+  void 유저_프로필_정보를_수정한다() {
 
-		// given
-		User 모카 = userRepository.save(모카());
-		ProfileUpdateRequestDto 모카_프로필_수정_요청 = ProfileUpdateRequestDto.builder().nickname("지원").build();
+	// given
+	User 모카 = userRepository.save(모카());
+	ProfileUpdateRequestDto 모카_프로필_수정_요청 = ProfileUpdateRequestDto.builder().nickname("지원").build();
 
-		// when
-		userProfileService.updateProfile(모카.getId(), 모카_프로필_수정_요청);
+	// when
+	userProfileService.updateProfile(모카.getId(), 모카_프로필_수정_요청);
 
-		// then
-		User updatedUser = userRepository.findById(모카.getId()).get();
-		assertThat(updatedUser.getNickname()).isEqualTo("지원");
-	}
+	// then
+	User updatedUser = userRepository.findById(모카.getId()).get();
+	assertThat(updatedUser.getNickname()).isEqualTo("지원");
+  }
 
 }

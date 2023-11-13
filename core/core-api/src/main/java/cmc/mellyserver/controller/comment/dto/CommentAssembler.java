@@ -5,17 +5,17 @@ import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
 
 public abstract class CommentAssembler {
 
-	public static CommentRequestDto commentRequestDto(Long id, CommentRequest commentRequest) {
-		return CommentRequestDto.builder()
-			.userId(id)
-			.mentionId(commentRequest.getMentionUserId())
-			.rootId(commentRequest.getParentId())
-			.memoryId(commentRequest.getMemoryId())
-			.content(commentRequest.getContent())
-			.build();
-	}
+  private CommentAssembler() {
+  }
 
-	private CommentAssembler() {
-	}
+  public static CommentRequestDto commentRequestDto(Long id, CommentRequest commentRequest) {
+	return CommentRequestDto.builder()
+		.userId(id)
+		.mentionId(commentRequest.getMentionUserId())
+		.rootId(commentRequest.getParentId())
+		.memoryId(commentRequest.getMemoryId())
+		.content(commentRequest.getContent())
+		.build();
+  }
 
 }

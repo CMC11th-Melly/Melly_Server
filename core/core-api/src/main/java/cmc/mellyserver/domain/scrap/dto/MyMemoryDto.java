@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyMemoryDto {
 
-	private Long memoryId;
+  private Long memoryId;
 
-	private GroupType groupType;
+  private GroupType groupType;
 
-	private List<MemoryImageDto> memoryImages;
+  private List<MemoryImageDto> memoryImages;
 
-	private String title;
+  private String title;
 
-	private List<String> keyword;
+  private List<String> keyword;
 
-	private String createdDate;
+  private String createdDate;
 
 }
