@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.memory.integration;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
@@ -19,10 +19,10 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
-import cmc.mellyserver.fixtures.MemoryFixtures;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.MemoryFixtures;
 
 public class MemoryServiceTest extends IntegrationTestSupport {
 

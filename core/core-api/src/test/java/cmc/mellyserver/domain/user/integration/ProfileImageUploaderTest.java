@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.user.integration;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package cmc.mellyserver.fixtures;
+package fixtures;
 
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;

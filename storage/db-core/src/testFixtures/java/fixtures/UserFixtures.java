@@ -1,12 +1,9 @@
-package cmc.mellyserver.fixtures;
+package fixtures;
 
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.dbcore.user.enums.AgeGroup;
-import cmc.mellyserver.dbcore.user.enums.Gender;
 import cmc.mellyserver.dbcore.user.enums.Provider;
 import cmc.mellyserver.dbcore.user.enums.RoleType;
 import cmc.mellyserver.dbcore.user.enums.UserStatus;
-import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
 
 public abstract class UserFixtures {
 
@@ -16,9 +13,6 @@ public abstract class UserFixtures {
 	public static final String 모카_닉네임 = "모카";
 
 	public static final String 모카_프로필 = "/mocha.png";
-
-	public static final ProfileUpdateRequestDto 모카_프로필_수정_요청 = new ProfileUpdateRequestDto("지원", Gender.FEMALE,
-		AgeGroup.TWO);
 
 	/* 머식 */
 	public static final String 머식_이메일 = "mosik@naver.com";

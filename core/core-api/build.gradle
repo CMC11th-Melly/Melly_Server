@@ -74,6 +74,8 @@ dependencies {
     jacocoAggregation project(":infra:mail")
     jacocoAggregation project(":support:logging")
     jacocoAggregation project(":clients:client-auth")
+
+    testImplementation(testFixtures(project(":storage:db-core")))
 }
 
 

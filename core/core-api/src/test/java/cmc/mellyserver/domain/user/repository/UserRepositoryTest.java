@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.user.repository;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;

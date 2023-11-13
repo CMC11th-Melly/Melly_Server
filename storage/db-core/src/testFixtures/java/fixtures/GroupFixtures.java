@@ -1,4 +1,4 @@
-package cmc.mellyserver.fixtures;
+package fixtures;
 
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.group.UserGroup;

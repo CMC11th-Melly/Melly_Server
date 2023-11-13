@@ -1,7 +1,7 @@
 package cmc.mellyserver.domain.scrap.repository;
 
-import static cmc.mellyserver.fixtures.PlaceFixtures.*;
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.PlaceFixtures.*;
+import static fixtures.UserFixtures.*;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

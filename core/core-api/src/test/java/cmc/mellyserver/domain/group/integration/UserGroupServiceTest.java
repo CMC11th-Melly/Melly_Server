@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.group.integration;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 
 import java.util.List;
 
@@ -22,10 +22,10 @@ import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
-import cmc.mellyserver.fixtures.GroupFixtures;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.GroupFixtures;
 
 public class UserGroupServiceTest extends IntegrationTestSupport {
 

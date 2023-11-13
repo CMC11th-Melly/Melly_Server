@@ -2,7 +2,7 @@ package cmc.mellyserver.domain.user.unit;
 
 import static cmc.mellyserver.dbcore.user.enums.AgeGroup.*;
 import static cmc.mellyserver.dbcore.user.enums.Gender.*;
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

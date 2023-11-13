@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.user.integration;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
@@ -14,6 +14,7 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.user.UserProfileService;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
+import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
 
 public class UserProfileServiceTest extends IntegrationTestSupport {
@@ -61,6 +62,7 @@ public class UserProfileServiceTest extends IntegrationTestSupport {
 
 		// given
 		User 모카 = userRepository.save(모카());
+		ProfileUpdateRequestDto 모카_프로필_수정_요청 = ProfileUpdateRequestDto.builder().nickname("지원").build();
 
 		// when
 		userProfileService.updateProfile(모카.getId(), 모카_프로필_수정_요청);

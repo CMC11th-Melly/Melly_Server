@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.place.integration;
 
-import static cmc.mellyserver.fixtures.UserFixtures.*;
+import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -25,11 +25,11 @@ import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto
 import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
-import cmc.mellyserver.fixtures.PlaceFixtures;
-import cmc.mellyserver.fixtures.UserFixtures;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.PlaceFixtures;
+import fixtures.UserFixtures;
 
 public class PlaceServiceTest extends IntegrationTestSupport {
 
@@ -53,7 +53,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 	void 사용자의_메모리가_하나이상_존재하는_장소들을_조회한다() {
 
 		// given
-		User 모카 = userRepository.save(UserFixtures.모카());
+		User 모카 = userRepository.save(모카());
 		User 머식 = userRepository.save(UserFixtures.머식());
 
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
@@ -74,7 +74,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 	void 메모리_제목으로_장소를_조회한다() {
 
 		// given
-		User 모카 = userRepository.save(UserFixtures.모카());
+		User 모카 = userRepository.save(모카());
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 
 		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());

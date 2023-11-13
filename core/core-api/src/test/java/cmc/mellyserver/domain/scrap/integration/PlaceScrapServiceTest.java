@@ -21,11 +21,11 @@ import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
 import cmc.mellyserver.domain.scrap.dto.request.CreatePlaceScrapRequestDto;
 import cmc.mellyserver.domain.scrap.dto.response.ScrapedPlaceListResponse;
-import cmc.mellyserver.fixtures.PlaceFixtures;
-import cmc.mellyserver.fixtures.UserFixtures;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.PlaceFixtures;
+import fixtures.UserFixtures;
 
 public class PlaceScrapServiceTest extends IntegrationTestSupport {
 

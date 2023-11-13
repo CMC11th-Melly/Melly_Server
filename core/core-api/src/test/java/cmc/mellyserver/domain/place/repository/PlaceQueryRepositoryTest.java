@@ -18,9 +18,9 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 import cmc.mellyserver.domain.place.query.PlaceQueryRepository;
-import cmc.mellyserver.fixtures.PlaceFixtures;
-import cmc.mellyserver.fixtures.UserFixtures;
 import cmc.mellyserver.support.RepositoryTestSupport;
+import fixtures.PlaceFixtures;
+import fixtures.UserFixtures;
 
 @Transactional
 public class PlaceQueryRepositoryTest extends RepositoryTestSupport {
