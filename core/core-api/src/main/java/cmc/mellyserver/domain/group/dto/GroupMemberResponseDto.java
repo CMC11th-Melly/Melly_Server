@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.user;
+package cmc.mellyserver.domain.group.dto;
 
 import java.io.Serializable;
 

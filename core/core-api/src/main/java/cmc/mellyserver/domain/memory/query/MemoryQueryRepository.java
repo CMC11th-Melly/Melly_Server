@@ -67,13 +67,13 @@ public class MemoryQueryRepository {
 
 		return query.select(Projections.constructor(MemoryDetailResponseDto.class, place.id,
 
-				place.placeName, // 노원구 상계동
+				place.name, // 노원구 상계동
 				memory.id, // 장소 ID
 				memory.title, // 메모리 제목
 				memory.content, // 메모리 내용¬
 				memory.stars, // 별점
 				memory.visitedDate, // 방문 일자
-				userGroup.id, userGroup.groupType, userGroup.groupName, userGroup.groupIcon))
+				userGroup.id, userGroup.groupType, userGroup.name, userGroup.icon))
 			.from(memory)
 			.innerJoin(place)
 			.on(place.id.eq(memory.placeId))

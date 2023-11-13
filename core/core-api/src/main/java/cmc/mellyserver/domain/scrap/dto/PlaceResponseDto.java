@@ -43,8 +43,8 @@ public class PlaceResponseDto {
 
 	public static PlaceResponseDto of(Place place, boolean isUserScraped, HashMap<String, Long> memoryCount) {
 		return new PlaceResponseDto(place.getId(), place.getPosition(), memoryCount.get(MY_MEMORY),
-			memoryCount.get(OTHER_MEMORY), isUserScraped, place.getPlaceCategory(), place.getPlaceName(),
-			place.getPlaceImage());
+			memoryCount.get(OTHER_MEMORY), isUserScraped, place.getCategory(), place.getName(),
+			place.getImageUrl());
 	}
 
 }

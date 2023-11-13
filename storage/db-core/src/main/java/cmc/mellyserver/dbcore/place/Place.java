@@ -25,24 +25,24 @@ public class Place extends JpaBaseEntity {
 	private Long id;
 
 	@Embedded
-	@Column(name = "place_position")
+	@Column(name = "position")
 	private Position position;
 
-	@Column(name = "place_name")
-	private String placeName;
+	@Column(name = "name")
+	private String name;
 
-	@Column(name = "place_image")
-	private String placeImage;
+	@Column(name = "image_url")
+	private String imageUrl;
 
-	@Column(name = "place_category")
-	private String placeCategory;
+	@Column(name = "category")
+	private String category;
 
 	@Builder
-	public Place(Long id, Position position, String placeImage, String placeCategory, String placeName) {
+	public Place(Long id, Position position, String name, String imageUrl, String category) {
 		this.id = id;
 		this.position = position;
-		this.placeName = placeName;
-		this.placeImage = placeImage;
-		this.placeCategory = placeCategory;
+		this.name = name;
+		this.imageUrl = imageUrl;
+		this.category = category;
 	}
 }

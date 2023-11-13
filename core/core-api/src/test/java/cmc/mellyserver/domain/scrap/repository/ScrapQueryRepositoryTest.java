@@ -39,7 +39,7 @@ public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 		User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
 		User savedUser = userRepository.save(user);
 
-		Place place = Place.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소").build();
+		Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
 		Place savedPlace = placeRepository.save(place);
 
 		PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);
@@ -61,7 +61,7 @@ public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 		User user = User.builder().nickname("테스트 유저").provider(Provider.DEFAULT).build();
 		User savedUser = userRepository.save(user);
 
-		Place place = Place.builder().position(new Position(1.234, 1.234)).placeName("테스트 장소").build();
+		Place place = Place.builder().position(new Position(1.234, 1.234)).name("테스트 장소").build();
 		Place savedPlace = placeRepository.save(place);
 
 		PlaceScrap scrap = PlaceScrap.createScrap(savedUser, savedPlace, ScrapType.FRIEND);

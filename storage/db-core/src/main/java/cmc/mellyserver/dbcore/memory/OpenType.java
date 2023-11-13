@@ -8,9 +8,9 @@ public enum OpenType {
 
 	PRIVATE("비공개");
 
-	private String name;
+	private String description;
 
-	OpenType(String name) {
-		this.name = name;
+	OpenType(String description) {
+		this.description = description;
 	}
 }

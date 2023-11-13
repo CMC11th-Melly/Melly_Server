@@ -25,7 +25,7 @@ public class CreateGroupRequestDto {
 	}
 
 	public UserGroup toEntity() {
-		return UserGroup.builder().groupName(groupName).groupIcon(groupIcon).groupType(groupType).build();
+		return UserGroup.builder().name(groupName).icon(groupIcon).groupType(groupType).build();
 	}
 
 }

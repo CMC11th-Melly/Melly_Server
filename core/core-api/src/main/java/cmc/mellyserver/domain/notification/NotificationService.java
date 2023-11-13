@@ -1,8 +1,6 @@
 package cmc.mellyserver.domain.notification;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +29,7 @@ public class NotificationService {
 	private final UserReader userReader;
 
 	public List<NotificationResponse> getNotificationList(Long userId) {
-
-		List<Notification> notificationList = notificationReader.getNotificationList(userId);
-		return notificationList.stream()
-			.map(t -> new NotificationResponse(t.getId(), t.getNotificationType(), t.getContent(),
-				t.getCreatedDateTime(), false))
-			.collect(Collectors.toList());
+		return notificationReader.getNotificationList(userId);
 	}
 
 	public NotificationOnOffResponseDto getNotificationStatus(Long userId) {
@@ -73,7 +66,7 @@ public class NotificationService {
 		User user = userReader.findById(userId);
 		Memory memory = memoryReader.findById(memoryId);
 		return notificationWriter.save(Notification.createNotification(body, userId, notificationType, false,
-			user.getProfileImage(), user.getNickname(), memory.getId(), LocalDateTime.now()));
+			user.getProfileImage(), user.getNickname(), memory.getId()));
 	}
 
 	@Transactional

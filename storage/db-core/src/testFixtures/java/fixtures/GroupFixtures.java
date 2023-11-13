@@ -15,11 +15,11 @@ public abstract class GroupFixtures {
 
 	public static UserGroup 친구그룹() {
 
-		return UserGroup.builder().groupName(그룹_이름).groupType(그룹_타입).groupIcon(1).build();
+		return UserGroup.builder().name(그룹_이름).groupType(그룹_타입).icon(1).build();
 	}
 
 	public static UserGroup 가족그룹() {
-		return UserGroup.builder().groupName(가족_이름).groupType(가족_타입).groupIcon(1).build();
+		return UserGroup.builder().name(가족_이름).groupType(가족_타입).icon(1).build();
 	}
 
 }

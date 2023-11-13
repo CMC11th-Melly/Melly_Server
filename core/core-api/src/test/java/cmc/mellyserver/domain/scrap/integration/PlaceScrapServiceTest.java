@@ -52,7 +52,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 		// When
 		placeScrapService.createScrap(
 			new CreatePlaceScrapRequestDto(모카.getId(), 스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
-				ScrapType.FRIEND, 스타벅스.getPlaceName(), 스타벅스.getPlaceCategory()));
+				ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
 		// Then
 		ScrapedPlaceListResponse scrapedPlace = placeScrapService.findScrapedPlace(-1L, PageRequest.of(0, 10),
@@ -76,8 +76,8 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
 			// When
 			CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(모카.getId(),
-				스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(), ScrapType.FRIEND, 스타벅스.getPlaceName(),
-				스타벅스.getPlaceCategory());
+				스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(), ScrapType.FRIEND, 스타벅스.getName(),
+				스타벅스.getCategory());
 			placeScrapService.createScrap(createPlaceScrapRequestDto);
 
 			// then
@@ -121,7 +121,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 			// When
 			placeScrapService.createScrap(
 				new CreatePlaceScrapRequestDto(모카.getId(), 스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
-					ScrapType.FRIEND, 스타벅스.getPlaceName(), 스타벅스.getPlaceCategory()));
+					ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
 			// when
 			placeScrapService.removeScrap(모카.getId(), 스타벅스.getPosition());

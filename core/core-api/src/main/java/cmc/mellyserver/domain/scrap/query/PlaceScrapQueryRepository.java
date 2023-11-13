@@ -77,8 +77,8 @@ public class PlaceScrapQueryRepository {
 		ScrapType scrapType) {
 
 		List<ScrapedPlaceResponseDto> results = query
-			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.placeCategory,
-				place.placeName, place.placeImage))
+			.select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.category,
+				place.name, place.imageUrl))
 			.from(placeScrap)
 			.innerJoin(placeScrap.place, place)
 			.innerJoin(placeScrap.user, user)

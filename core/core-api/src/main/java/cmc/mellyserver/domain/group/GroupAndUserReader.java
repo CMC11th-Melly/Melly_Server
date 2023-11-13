@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
-import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Component

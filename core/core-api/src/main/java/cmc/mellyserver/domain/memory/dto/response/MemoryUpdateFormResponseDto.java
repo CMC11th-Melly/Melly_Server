@@ -1,13 +1,13 @@
 package cmc.mellyserver.domain.memory.dto.response;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.domain.group.query.dto.GroupListForSaveMemoryResponseDto;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class MemoryUpdateFormResponseDto {
@@ -27,7 +27,7 @@ public class MemoryUpdateFormResponseDto {
 
 	@Builder
 	public MemoryUpdateFormResponseDto(List<MemoryImageDto> memoryImages, String title, String content,
-			List<GroupListForSaveMemoryResponseDto> userGroups, Long star, List<String> keywords) {
+		List<GroupListForSaveMemoryResponseDto> userGroups, Long star, List<String> keywords) {
 		this.memoryImages = memoryImages;
 		this.title = title;
 		this.content = content;
@@ -38,15 +38,15 @@ public class MemoryUpdateFormResponseDto {
 
 	public static MemoryUpdateFormResponseDto of(Memory memory, List<UserGroup> userGroupLoginUserAssociated) {
 		return new MemoryUpdateFormResponseDto(
-				memory.getMemoryImages()
-					.stream()
-					.map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
-					.collect(Collectors.toList()),
-				memory.getTitle(), memory.getContent(),
-				userGroupLoginUserAssociated.stream()
-					.map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(), ug.getGroupName(), ug.getGroupType()))
-					.collect(Collectors.toList()),
-				memory.getStars(), null);
+			memory.getMemoryImages()
+				.stream()
+				.map(mi -> new MemoryImageDto(mi.getId(), mi.getImagePath()))
+				.collect(Collectors.toList()),
+			memory.getTitle(), memory.getContent(),
+			userGroupLoginUserAssociated.stream()
+				.map(ug -> new GroupListForSaveMemoryResponseDto(ug.getId(), ug.getName(), ug.getGroupType()))
+				.collect(Collectors.toList()),
+			memory.getStars(), null);
 	}
 
 }

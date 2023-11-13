@@ -29,8 +29,8 @@ public class GroupLoginUserParticipatedResponseDto {
 	public static GroupLoginUserParticipatedResponseDto of(GroupAndUser groupAndUser) {
 		return GroupLoginUserParticipatedResponseDto.builder()
 			.groupId(groupAndUser.getGroup().getId())
-			.groupIcon(groupAndUser.getGroup().getGroupIcon())
-			.groupName(groupAndUser.getGroup().getGroupName())
+			.groupIcon(groupAndUser.getGroup().getIcon())
+			.groupName(groupAndUser.getGroup().getName())
 			.groupType(groupAndUser.getGroup().getGroupType())
 			.build();
 	}

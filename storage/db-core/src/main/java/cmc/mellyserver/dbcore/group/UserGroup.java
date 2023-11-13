@@ -28,11 +28,11 @@ public class UserGroup extends JpaBaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "group_name")
-	private String groupName;
+	@Column(name = "name")
+	private String name;
 
 	@Column(name = "group_icon")
-	private int groupIcon;
+	private int icon;
 
 	@Column(name = "invite_link")
 	private String inviteLink;
@@ -48,20 +48,20 @@ public class UserGroup extends JpaBaseEntity {
 	private Long version;
 
 	@Builder
-	public UserGroup(String groupName, String inviteLink, GroupType groupType, int groupIcon) {
-		this.groupName = groupName;
+	public UserGroup(String name, String inviteLink, GroupType groupType, int icon) {
+		this.name = name;
 		this.inviteLink = inviteLink;
 		this.groupType = groupType;
-		this.groupIcon = groupIcon;
+		this.icon = icon;
 	}
 
-	public void remove() {
+	public void delete() {
 		this.deletedAt = LocalDateTime.now();
 	}
 
-	public void update(String groupName, GroupType groupType, Integer groupIcon) {
-		this.groupName = groupName;
+	public void update(String name, GroupType groupType, int icon) {
+		this.name = name;
 		this.groupType = groupType;
-		this.groupIcon = groupIcon;
+		this.icon = icon;
 	}
 }

@@ -24,19 +24,19 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final cmc.mellyserver.dbcore.config.jpa.QJpaBaseEntity _super = new cmc.mellyserver.dbcore.config.jpa.QJpaBaseEntity(this);
 
+    public final StringPath category = createString("category");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath imageUrl = createString("imageUrl");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final StringPath placeCategory = createString("placeCategory");
-
-    public final StringPath placeImage = createString("placeImage");
-
-    public final StringPath placeName = createString("placeName");
+    public final StringPath name = createString("name");
 
     public final QPosition position;
 

@@ -35,7 +35,7 @@ public class Memory extends JpaBaseEntity {
 	private Long id;
 
 	@Column(name = "stars")
-	private Long stars;
+	private long stars;
 
 	@Column(name = "user_id")
 	private Long userId;
@@ -57,10 +57,11 @@ public class Memory extends JpaBaseEntity {
 	@Column(name = "open_type")
 	private OpenType openType;
 
+	@Column(name = "visited_date")
+	private LocalDate visitedDate;
+
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
-
-	private LocalDate visitedDate;
 
 	@OneToMany(mappedBy = "memory", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MemoryImage> memoryImages = new ArrayList<>();

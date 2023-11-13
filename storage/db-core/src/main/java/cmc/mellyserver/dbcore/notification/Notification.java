@@ -1,5 +1,8 @@
 package cmc.mellyserver.dbcore.notification;
 
+import java.time.LocalDateTime;
+
+import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_notification")
-public class Notification {
+public class Notification extends JpaBaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +35,7 @@ public class Notification {
 	NotificationType notificationType;
 
 	@Column(name = "is_read")
-	private Boolean isRead;
+	private boolean isRead;
 
 	@Column(name = "profile_image")
 	private String profileImage;
@@ -44,13 +46,12 @@ public class Notification {
 	@Column(name = "memory_id")
 	private Long memoryId;
 
-	@Column(name = "notification_date_time")
-	private LocalDateTime createdDateTime;
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
 
 	@Builder
-	public Notification(final String content, final Long userId, final NotificationType notificationType,
-			final Boolean isRead, final String profileImage, final String nickname, final Long memoryId,
-			final LocalDateTime createdDateTime) {
+	public Notification(String content, Long userId, NotificationType notificationType, boolean isRead,
+		String profileImage, String nickname, Long memoryId) {
 		this.content = content;
 		this.userId = userId;
 		this.notificationType = notificationType;
@@ -58,23 +59,33 @@ public class Notification {
 		this.profileImage = profileImage;
 		this.nickname = nickname;
 		this.memoryId = memoryId;
-		this.createdDateTime = createdDateTime;
 	}
 
-	public static Notification createNotification(final String content, final Long userId,
-			final NotificationType notificationType, final Boolean isRead, final String profileImage,
-			final String nickname, final Long memoryId, final LocalDateTime createdDateTime) {
+	public static Notification createNotification(String content, Long userId, NotificationType notificationType,
+		Boolean isRead, String profileImage,
+		String nickname, Long memoryId) {
 
-		return new Notification(content, userId, notificationType, isRead, profileImage, nickname, memoryId,
-				createdDateTime);
+		return Notification.builder()
+			.content(content)
+			.userId(userId)
+			.notificationType(notificationType)
+			.isRead(isRead)
+			.profileImage(profileImage)
+			.nickname(nickname)
+			.memoryId(memoryId)
+			.build();
 	}
 
-	public boolean isRead(){
+	public boolean isRead() {
 		return isRead;
 	}
 
 	public void read() {
-		this.isRead = Boolean.TRUE;
+		this.isRead = true;
+	}
+
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 
 }

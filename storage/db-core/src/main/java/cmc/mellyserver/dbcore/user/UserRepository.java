@@ -1,17 +1,18 @@
 package cmc.mellyserver.dbcore.user;
 
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	User findBySocialId(final String socialId);
+	User findBySocialId(String socialId);
 
-	Optional<User> findByEmail(final String email);
+	Optional<User> findByEmail(String email);
 
-	Boolean existsByEmail(final String email);
+	boolean existsByEmail(String email);
 
-	Boolean existsByNickname(final String nickname);
+	boolean existsByNickname(String nickname);
 
-	Boolean existsByEmailAndPassword(final String email, final String password);
+	boolean existsByEmailAndPassword(String email, String password);
 }

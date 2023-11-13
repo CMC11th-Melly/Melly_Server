@@ -5,7 +5,7 @@ import java.util.List;
 
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
+import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -36,7 +36,7 @@ public class GroupDetailResponseDto implements Serializable {
 	}
 
 	public static GroupDetailResponseDto of(UserGroup userGroup, List<GroupMemberResponseDto> groupMembers) {
-		return new GroupDetailResponseDto(userGroup.getId(), userGroup.getGroupIcon(), userGroup.getGroupName(),
+		return new GroupDetailResponseDto(userGroup.getId(), userGroup.getIcon(), userGroup.getName(),
 			userGroup.getGroupType(), userGroup.getInviteLink(), groupMembers);
 	}
 

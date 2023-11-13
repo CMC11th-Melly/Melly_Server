@@ -26,23 +26,22 @@ public class DataSourceConfig {
 		return DataSourceBuilder.create().build();
 	}
 
-/*
 	@Bean
 	@Qualifier(REPLICA)
 	@ConfigurationProperties(prefix = "spring.datasource.replica")
 	public DataSource replicaDataSource() {
 		return DataSourceBuilder.create().build();
 	}
-*/
 
 	@Bean
-	public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource) {
+	public DataSource routingDataSource(@Qualifier(SOURCE) DataSource sourceDataSource,
+		@Qualifier(REPLICA) DataSource replicaDataSource) {
 
 		RoutingDataSource routingDataSource = new RoutingDataSource();
 
 		HashMap<Object, Object> dataSourceMap = new HashMap<>();
 		dataSourceMap.put(SOURCE, sourceDataSource);
-		// dataSourceMap.put(REPLICA, replicaDataSource);
+		dataSourceMap.put(REPLICA, replicaDataSource);
 
 		routingDataSource.setTargetDataSources(dataSourceMap);
 		routingDataSource.setDefaultTargetDataSource(sourceDataSource);

@@ -14,10 +14,10 @@ import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
 import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.group.GroupService;
+import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
@@ -62,7 +62,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
 		GroupMemberResponseDto 머식_응답 = GroupMemberResponseDto.of(머식.getId(), 머식.getProfileImage(), 머식.getNickname(),
 			false);
 
-		Assertions.assertThat(groupDetail.getGroupName()).isEqualTo(친구들.getGroupName());
+		Assertions.assertThat(groupDetail.getGroupName()).isEqualTo(친구들.getName());
 		Assertions.assertThat(groupDetail.getGroupMembers()).hasSize(2);
 		Assertions.assertThat(groupDetail.getGroupMembers())
 			.usingRecursiveComparison()
@@ -130,7 +130,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
 
 		// then
 		UserGroup userGroup = groupRepository.findById(친구들.getId()).get();
-		Assertions.assertThat(userGroup.getGroupName()).isEqualTo(updateGroupRequestDto.getGroupName());
+		Assertions.assertThat(userGroup.getName()).isEqualTo(updateGroupRequestDto.getGroupName());
 	}
 
 	@DisplayName("그룹을 삭제한다")

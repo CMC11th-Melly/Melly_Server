@@ -31,8 +31,8 @@ public class CreatePlaceScrapRequestDto {
 
 	public Place toEntity() {
 		return Place.builder()
-			.placeName(placeName)
-			.placeCategory(placeCategory)
+			.name(placeName)
+			.category(placeCategory)
 			.position(position)
 			.build();
 	}

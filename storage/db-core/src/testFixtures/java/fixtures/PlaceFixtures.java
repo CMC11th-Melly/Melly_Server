@@ -26,20 +26,20 @@ public abstract class PlaceFixtures {
 	public static Place 스타벅스() {
 
 		return Place.builder()
-			.placeName(스타벅스_이름)
-			.placeCategory(스타벅스_카테고리)
+			.name(스타벅스_이름)
+			.category(스타벅스_카테고리)
 			.position(스타벅스_좌표)
-			.placeImage(스타벅스_이미지_URL)
+			.imageUrl(스타벅스_이미지_URL)
 			.build();
 	}
 
 	public static Place 이디야() {
 
 		return Place.builder()
-			.placeName(이디야_이름)
-			.placeCategory(이디야_카테고리)
+			.name(이디야_이름)
+			.category(이디야_카테고리)
 			.position(이디야_좌표)
-			.placeImage(이디야_이미지_URL)
+			.imageUrl(이디야_이미지_URL)
 			.build();
 	}
 

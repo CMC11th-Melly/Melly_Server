@@ -26,11 +26,9 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> groupIcon = createNumber("groupIcon", Integer.class);
-
-    public final StringPath groupName = createString("groupName");
-
     public final EnumPath<GroupType> groupType = createEnum("groupType", GroupType.class);
+
+    public final NumberPath<Integer> icon = createNumber("icon", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -38,6 +36,8 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
+    public final StringPath name = createString("name");
 
     public final NumberPath<Long> version = createNumber("version", Long.class);
 

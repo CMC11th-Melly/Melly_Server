@@ -37,7 +37,7 @@ public class User extends JpaBaseEntity {
 	private String socialId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "provider", nullable = false)
+	@Column(name = "provider")
 	private Provider provider;
 
 	@Column(name = "email")
@@ -46,7 +46,7 @@ public class User extends JpaBaseEntity {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "nickname", nullable = false)
+	@Column(name = "nickname")
 	private String nickname;
 
 	@Column(name = "profile_image")
@@ -92,6 +92,10 @@ public class User extends JpaBaseEntity {
 
 	public void changeProfileImage(String image) {
 		this.profileImage = image;
+	}
+
+	public void removeProfileImage() {
+		this.profileImage = null;
 	}
 
 	public void block() {
@@ -148,23 +152,4 @@ public class User extends JpaBaseEntity {
 		this.fcmToken = fcmToken;
 	}
 
-	// 처음 로그인 시에 얻어올 수 있는 정보는 OAuth에서는 없다.
-	public static User oauthUser(String socialId, Provider provider, String email, String nickname, AgeGroup ageGroup,
-		Gender gender) {
-
-		return User.builder()
-			.socialId(socialId)
-			.provider(provider)
-			.email(email)
-			.nickname(nickname)
-			.ageGroup(ageGroup)
-			.gender(gender)
-			.password(NO_PASSWORD)
-			.roleType(RoleType.USER)
-			.build();
-	}
-
-	public void removeProfileImage() {
-		this.profileImage = null;
-	}
 }

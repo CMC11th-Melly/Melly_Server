@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
 import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
@@ -88,7 +88,7 @@ public class GroupService {
 	public void removeGroup(final Long groupId) {
 
 		UserGroup userGroup = groupReader.findById(groupId);
-		userGroup.remove();
+		userGroup.delete();
 	}
 
 	@CacheEvict(value = "group:group-id", key = "#groupId")
@@ -97,7 +97,7 @@ public class GroupService {
 
 		if (groupValidator.isGroupRemovable(groupId)) {
 			UserGroup userGroup = groupReader.findById(groupId);
-			userGroup.remove();
+			userGroup.delete();
 		}
 		groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
 	}

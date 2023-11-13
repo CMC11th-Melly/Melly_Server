@@ -18,13 +18,13 @@ public class ProfileUpdateRequest {
 	private String nickname;
 
 	@NotEmpty(message = "성별을 입력해야 합니다.")
-	private String gender;
+	private Gender gender;
 
 	@NotEmpty(message = "연령대를 입력해야 합니다.")
-	private String ageGroup;
+	private AgeGroup ageGroup;
 
 	public ProfileUpdateRequestDto toServiceRequest() {
-		return new ProfileUpdateRequestDto(nickname, Gender.from(gender), AgeGroup.from(ageGroup));
+		return new ProfileUpdateRequestDto(nickname, gender, ageGroup);
 	}
 
 }

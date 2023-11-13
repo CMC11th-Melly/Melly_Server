@@ -29,8 +29,8 @@ public class UserGroupQueryRepository {
 
 		List<GroupLoginUserParticipatedResponseDto> results = query
 			.select(
-				Projections.constructor(GroupLoginUserParticipatedResponseDto.class, userGroup.id, userGroup.groupIcon,
-					userGroup.groupName, userGroup.groupType))
+				Projections.constructor(GroupLoginUserParticipatedResponseDto.class, userGroup.id, userGroup.icon,
+					userGroup.name, userGroup.groupType))
 			.from(groupAndUser)
 			.leftJoin(groupAndUser.group, userGroup)
 			.leftJoin(groupAndUser.user, user)

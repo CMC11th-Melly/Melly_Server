@@ -3,7 +3,7 @@ package cmc.mellyserver.controller.user.dto.response;
 import java.util.List;
 
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.dbcore.user.GroupMemberResponseDto;
+import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

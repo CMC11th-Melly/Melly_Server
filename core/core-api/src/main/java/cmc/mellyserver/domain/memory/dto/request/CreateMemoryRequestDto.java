@@ -60,8 +60,8 @@ public class CreateMemoryRequestDto {
 	public Place toPlace() {
 		return Place.builder()
 			.position(position)
-			.placeCategory(placeCategory)
-			.placeName(placeName)
+			.category(placeCategory)
+			.name(placeName)
 			.build();
 	}
 
