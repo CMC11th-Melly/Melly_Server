@@ -35,7 +35,7 @@ public class CommentReader {
 		});
 	}
 
-	public CommentResponseDto findByMemoryId(final Long memoryId, final Long userId) {
+	public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
 		User user = userReader.findById(userId);
 		List<Comment> comment = commentQueryRepository.getComments(memoryId);
 		return convertNestedStructure(comment, user);
@@ -53,6 +53,7 @@ public class CommentReader {
 
 	private void createNestedStructure(List<Comment> comments, User user, List<CommentDto> result,
 		Map<Long, CommentDto> map) {
+
 		comments.forEach(comment -> {
 
 				CommentDto commentDto = CommentDto.of(comment, user);

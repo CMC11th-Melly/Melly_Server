@@ -1,13 +1,14 @@
 package cmc.mellyserver.domain.user;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -17,10 +18,6 @@ public class UserReader {
 
 	public User findById(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-	}
-
-	public boolean existsByEmail(String email) {
-		return userRepository.existsByEmail(email);
 	}
 
 	public boolean existsByNickname(String nickname) {

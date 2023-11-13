@@ -59,7 +59,7 @@ public class CommentDto implements Serializable {
 			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
 
 		if (isLoginUser(comment, user)) {
-			commentDto.setCurrentUserLike(true);
+			commentDto.setCurrentUser(true);
 		}
 
 		return commentDto;
@@ -72,7 +72,7 @@ public class CommentDto implements Serializable {
 			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
 
 		if (isLoginUser(comment, user)) {
-			commentDto.setCurrentUserLike(true);
+			commentDto.setCurrentUser(true);
 		}
 
 		return commentDto;

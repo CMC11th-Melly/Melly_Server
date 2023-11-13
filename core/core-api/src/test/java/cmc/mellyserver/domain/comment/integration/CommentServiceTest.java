@@ -39,7 +39,7 @@ public class CommentServiceTest extends IntegrationTestSupport {
 
 	@Autowired
 	private CommentService commentService;
-	
+
 	@DisplayName("제일 상위의 부모 댓글을 생성할 수 있다")
 	@Test
 	void 제일_상위의_부모_댓글을_생성한다() {
@@ -105,5 +105,57 @@ public class CommentServiceTest extends IntegrationTestSupport {
 		assertThat(comments.getComments().get(0).getContent()).isEqualTo(부모댓글.getContent());
 		assertThat(comments.getComments().get(0).getChildren().get(0).getContent()).isEqualTo(자식댓글1.getContent());
 		assertThat(comments.getComments().get(0).getChildren().get(1).getContent()).isEqualTo(자식댓글2.getContent());
+	}
+
+	@DisplayName("루트 댓글을 삭제하면 하위 댓글도 모두 삭제된다")
+	@Test
+	void 루트_댓글을_삭제하면_하위_댓글도_삭제된다() {
+
+		// given
+		User 모카 = userRepository.save(UserFixtures.모카());
+		User 머식 = userRepository.save(UserFixtures.머식());
+		User 금지 = userRepository.save(UserFixtures.금지());
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
+		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
+		자식댓글1.setMentionUser(모카);
+		자식댓글2.setMentionUser(머식);
+		commentRepository.save(자식댓글1);
+		commentRepository.save(자식댓글2);
+
+		// when
+		commentService.deleteComment(부모댓글.getId());
+		CommentResponseDto comments = commentService.getComments(모카.getId(), 메모리.getId());
+
+		// then
+		assertThat(comments.getCommentCount()).isEqualTo(0);
+	}
+
+	@DisplayName("자식댓글만 삭제한다")
+	@Test
+	void 자식_댓글만_삭제한다() {
+
+		// given
+		User 모카 = userRepository.save(UserFixtures.모카());
+		User 머식 = userRepository.save(UserFixtures.머식());
+		User 금지 = userRepository.save(UserFixtures.금지());
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
+		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
+		자식댓글1.setMentionUser(모카);
+		자식댓글2.setMentionUser(머식);
+		commentRepository.save(자식댓글1);
+		commentRepository.save(자식댓글2);
+
+		// when
+		commentService.deleteComment(자식댓글2.getId());
+		CommentResponseDto comments = commentService.getComments(모카.getId(), 메모리.getId());
+
+		// then
+		assertThat(comments.getCommentCount()).isEqualTo(2);
 	}
 }
