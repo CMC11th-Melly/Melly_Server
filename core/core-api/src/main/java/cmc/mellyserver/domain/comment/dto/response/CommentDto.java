@@ -3,8 +3,8 @@ package cmc.mellyserver.domain.comment.dto.response;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,6 +30,8 @@ public class CommentDto implements Serializable {
 
 	private int likeCount;
 
+	private String mentionUserNickname;
+
 	private String nickname;
 
 	private String profileImage;
@@ -37,30 +39,37 @@ public class CommentDto implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
 	private LocalDateTime createdDate;
 
-	private List<CommentDto> children = new ArrayList<>();
+	private List<CommentDto> children;
 
-	public static CommentDto convertCommentToDto(Comment comment, User user) {
-
-		if (comment.getIsDeleted()) {
-			return CommentDto.removedComment(comment);
+	public static CommentDto of(Comment comment, User user) {
+		if (Objects.isNull(comment.getRoot())) {
+			return CommentDto.createRoot(comment, user);
 		}
-
-		return CommentDto.create(comment, user);
+		return CommentDto.createChild(comment, user);
 	}
 
 	private static boolean isLoginUser(Comment comment, User user) {
 		return comment.getUser().getId().equals(user.getId());
 	}
 
-	public static CommentDto removedComment(Comment comment) {
-		return new CommentDto(comment.getId(), REMOVE_COMMENT, false, false, 0, null, null, null,
-			Collections.emptyList());
+	public static CommentDto createChild(Comment comment, User user) {
+
+		CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
+			comment.getCommentLikes().size(), comment.getMentionUser().getNickname(), comment.getUser().getNickname(),
+			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
+
+		if (isLoginUser(comment, user)) {
+			commentDto.setCurrentUserLike(true);
+		}
+
+		return commentDto;
 	}
 
-	public static CommentDto create(Comment comment, User user) {
+	public static CommentDto createRoot(Comment comment, User user) {
+
 		CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
-			comment.getCommentLikes().size(), comment.getUser().getNickname(), comment.getUser().getProfileImage(),
-			comment.getCreatedDate(), Collections.emptyList());
+			comment.getCommentLikes().size(), null, comment.getUser().getNickname(),
+			comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
 
 		if (isLoginUser(comment, user)) {
 			commentDto.setCurrentUserLike(true);

@@ -1,9 +1,10 @@
 package cmc.mellyserver.controller.comment.dto.request;
 
+import org.springframework.lang.Nullable;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 @Data
 @NoArgsConstructor
@@ -13,10 +14,8 @@ public class CommentRequest {
 
 	private Long memoryId;
 
-	@Nullable
 	private Long parentId;
 
-	@Nullable
 	private Long mentionUserId;
 
 	@Builder

@@ -56,8 +56,8 @@ public class CommentController {
 		return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
 	}
 
-	@GetMapping("/memory/{memoryId}")
-	public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(@CurrentUser LoginUser loginUser,
+	@GetMapping("/memories/{memoryId}")
+	public ResponseEntity<ApiResponse<CommentResponseDto>> getComments(@CurrentUser LoginUser loginUser,
 		@PathVariable Long memoryId) {
 
 		CommentResponseDto comment = commentService.getComments(loginUser.getId(), memoryId);

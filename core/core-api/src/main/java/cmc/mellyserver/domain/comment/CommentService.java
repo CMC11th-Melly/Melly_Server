@@ -30,11 +30,12 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void saveComment(final CommentRequestDto commentRequestDto) {
+	public Comment saveComment(final CommentRequestDto commentRequestDto) {
 		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 		Comment comment = commentWriter.save(commentRequestDto);
 		publisher.publishEvent(
 			new CommentEnrollEvent(memory.getUserId(), comment.getMemoryId(), comment.getUser().getNickname()));
+		return comment;
 	}
 
 	@Transactional

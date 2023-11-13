@@ -1,430 +1,109 @@
 package cmc.mellyserver.domain.comment.integration;
 
+import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cmc.mellyserver.dbcore.comment.comment.Comment;
+import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
+import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.dbcore.place.PlaceRepository;
+import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.dbcore.user.UserRepository;
+import cmc.mellyserver.domain.comment.CommentService;
+import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
+import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
+import fixtures.MemoryFixtures;
+import fixtures.PlaceFixtures;
+import fixtures.UserFixtures;
 
 public class CommentServiceTest extends IntegrationTestSupport {
 
-	//
-	// @DisplayName("제일 상위의 부모 댓글을 생성할 수 있다.")
-	// @Test
-	// void create_comment() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// // when
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // then
-	// assertThat(comment.getContent()).isEqualTo("테스트 댓글");
-	// }
-	//
-	// @DisplayName("자식 댓글을 추가할때 상위 댓글을 DB에서 찾지 못하면 예외가 발생한다.")
-	// @Test
-	// void create_comment_not_found_parent_comment_exception() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(2L)
-	// .build();
-	//
-	// // when then
-	// assertThatThrownBy(() -> commentService.saveComment(commentRequestDto))
-	// .isInstanceOf(GlobalBadRequestException.class)
-	// .hasMessage(ErrorCode.NO_SUCH_COMMENT.getMessage());
-	//
-	// }
-	//
-	// @DisplayName("댓글을 달아야하는 메모리를 찾지 못하면 예외가 발생한다.")
-	// @Test
-	// void create_comment_not_found_memory_exception() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(2L)
-	// .parentId(2L)
-	// .build();
-	//
-	// // when then
-	// assertThatThrownBy(() -> commentService.saveComment(commentRequestDto))
-	// .isInstanceOf(GlobalBadRequestException.class)
-	// .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
-	//
-	// }
-	//
-	// @DisplayName("댓글을 수정할 수 있다.")
-	// @Test
-	// void update_comment() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when
-	// Comment updatedComment = commentService.updateComment(comment.getId(), "수정된 내용");
-	//
-	// // then
-	// assertThat(updatedComment.getContent()).isEqualTo("수정된 내용");
-	// }
-	//
-	// @DisplayName("댓글을 수정할때 해당 댓글이 DB에 없으면 예외를 반환한다.")
-	// @Test
-	// void update_comment_not_exist_comment_exception() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when then
-	// assertThatThrownBy(() -> commentService.updateComment(-1L, "수정된 내용"))
-	// .isInstanceOf(GlobalBadRequestException.class)
-	// .hasMessage(ErrorCode.NO_SUCH_COMMENT.getMessage());
-	// }
-	//
-	// @DisplayName("자식이 없는 댓글은 완전 삭제를 한다.")
-	// @Test
-	// void remove_comment() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when
-	// commentService.deleteComment(comment.getId());
-	//
-	// // then
-	// Optional<Comment> deleted = commentRepository.findById(comment.getId());
-	// assertThat(deleted).isEmpty();
-	// }
-	//
-	// @DisplayName("자식이 있는 부모 댓글은 삭제 처리만 한다.")
-	// @Test
-	// void remove_comment_with_child() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// CommentRequestDto commentRequestDto2 =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(comment.getId())
-	// .build();
-	//
-	// Comment comment2 = commentService.saveComment(commentRequestDto2);
-	//
-	// // when
-	// commentService.deleteComment(comment.getId());
-	//
-	// // then
-	// Comment deletedComment = commentRepository.findById(comment.getId()).get();
-	// assertThat(deletedComment.getIsDeleted()).isEqualTo(DeleteStatus.Y);
-	// }
-	//
-	// @DisplayName("댓글에 좋아요를 취소한다.")
-	// @Test
-	// void cancel_comment_like() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	// commentService.saveCommentLike(user.getId(), comment.getId());
-	// // when
-	// commentService.deleteCommentLike(user.getId(), comment.getId());
-	//
-	// // then
-	// Optional<CommentLike> result =
-	// commentLikeRepository.findCommentLikeByCommentIdAndUserId(
-	// comment.getId(), user.getId());
-	//
-	// assertThat(result).isEmpty();
-	// }
-	//
-	// @DisplayName("댓글의 좋아요를 취소할때 좋아요 정보가 DB에 존재하지 않는다면 예외가 발생한다.")
-	// @Test
-	// void cancel_comment_like_not_exist_commentLike() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when then
-	// assertThatThrownBy(() -> commentService.deleteCommentLike(user.getId(),
-	// comment.getId()))
-	// .isInstanceOf(GlobalBadRequestException.class)
-	// .hasMessage(ErrorCode.NO_SUCH_COMMENT_LIKE.getMessage());
-	// }
-	//
-	// @DisplayName("댓글에 좋아요를 단다.")
-	// @Test
-	// void add_comment_like() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when
-	// CommentLike commentLike = commentService.saveCommentLike(user.getId(),
-	// comment.getId());
-	//
-	// // then
-	// assertThat(commentLike.getComment().getId()).isEqualTo(comment.getId());
-	// assertThat(commentLike.getSocialId()).isEqualTo(user.getId());
-	// }
-	//
-	// @DisplayName("댓글에 좋아요를 달려고 할때 이미 좋아요를 한 적이 있다면 중복 예외가 발생한다.")
-	// @Test
-	// void add_comment_like_duplicated_exception() {
-	//
-	// // given
-	// User user = userRepository.save(UserFactory.createEmailLoginUser());
-	// User mentionedUser =
-	// userRepository.save(User.cmc.mellyserver.mellycore.builder().nickname("멘션된
-	// 유저").ageGroup(AgeGroup.TWO).build());
-	//
-	// CreateMemoryRequestDto createMemoryRequestDto =
-	// CreateMemoryRequestDto.cmc.mellyserver.mellycore.builder()
-	// .id(user.getId()).title("테스트 제목")
-	// .content("테스트 컨텐츠").placeName("테스트 장소")
-	// .placeCategory("카페").lat(1.234).lng(1.234)
-	// .build();
-	//
-	// Memory memory = memoryService.createMemory(createMemoryRequestDto);
-	//
-	// CommentRequestDto commentRequestDto =
-	// CommentRequestDto.cmc.mellyserver.mellycore.builder()
-	// .content("테스트 댓글")
-	// .userId(user.getId())
-	// .mentionUserId(mentionedUser.getId())
-	// .memoryId(memory.getId())
-	// .parentId(null)
-	// .build();
-	//
-	// Comment comment = commentService.saveComment(commentRequestDto);
-	//
-	// // when
-	// commentService.saveCommentLike(user.getId(), comment.getId());
-	//
-	// // then
-	// assertThatThrownBy(() -> commentService.saveCommentLike(user.getId(),
-	// comment.getId()))
-	// .isInstanceOf(GlobalBadRequestException.class)
-	// .hasMessage(ErrorCode.DUPLICATED_COMMENT_LIKE.getMessage());
-	// }
+	@Autowired
+	private UserRepository userRepository;
 
+	@Autowired
+	private MemoryRepository memoryRepository;
+
+	@Autowired
+	private PlaceRepository placeRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private CommentService commentService;
+	
+	@DisplayName("제일 상위의 부모 댓글을 생성할 수 있다")
+	@Test
+	void 제일_상위의_부모_댓글을_생성한다() {
+
+		// given
+		User 모카 = userRepository.save(UserFixtures.모카());
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
+
+		// when
+		Comment comment = commentService.saveComment(CommentRequestDto.builder()
+			.content("테스트 댓글")
+			.memoryId(메모리.getId())
+			.rootId(null)
+			.mentionId(null)
+			.userId(모카.getId())
+			.build());
+
+		// then
+		assertThat(comment.getContent()).isEqualTo("테스트 댓글");
+	}
+
+	@DisplayName("댓글을 수정할 수 있다.")
+	@Test
+	void 댓글을_수정할_수_있다() {
+
+		// given
+		User 모카 = userRepository.save(UserFixtures.모카());
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
+		Comment comment = commentRepository.save(Comment.createRoot("테스트 제목", 모카, 메모리.getId(), null));
+
+		// when
+		Comment updatedComment = commentService.updateComment(comment.getId(), "수정된 내용");
+
+		// then
+		assertThat(updatedComment.getContent()).isEqualTo("수정된 내용");
+	}
+
+	@DisplayName("자식 댓글을 등록하면 부모 댓글과 함께 조회된다")
+	@Test
+	void 자식댓글을_등록하면_부모댓글과_함께_조회된다() {
+
+		// given
+		User 모카 = userRepository.save(UserFixtures.모카());
+		User 머식 = userRepository.save(UserFixtures.머식());
+		User 금지 = userRepository.save(UserFixtures.금지());
+		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "테스트 메모리", OpenType.ALL));
+		Comment 부모댓글 = commentRepository.save(Comment.createRoot("부모 댓글", 모카, 메모리.getId(), null));
+		Comment 자식댓글1 = Comment.createChild("자식댓글_머식", 머식, 메모리.getId(), 부모댓글);
+		Comment 자식댓글2 = Comment.createChild("자식댓글_금지", 금지, 메모리.getId(), 부모댓글);
+		자식댓글1.setMentionUser(모카);
+		자식댓글2.setMentionUser(머식);
+		commentRepository.save(자식댓글1);
+		commentRepository.save(자식댓글2);
+
+		// when
+		CommentResponseDto comments = commentService.getComments(모카.getId(), 메모리.getId());
+
+		// then
+		assertThat(comments.getCommentCount()).isEqualTo(3);
+		assertThat(comments.getComments().get(0).getContent()).isEqualTo(부모댓글.getContent());
+		assertThat(comments.getComments().get(0).getChildren().get(0).getContent()).isEqualTo(자식댓글1.getContent());
+		assertThat(comments.getComments().get(0).getChildren().get(1).getContent()).isEqualTo(자식댓글2.getContent());
+	}
 }

@@ -1,7 +1,5 @@
 package cmc.mellyserver.domain.comment;
 
-import static java.lang.Boolean.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,40 +35,45 @@ public class CommentReader {
 		});
 	}
 
-	public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
+	public CommentResponseDto findByMemoryId(final Long memoryId, final Long userId) {
 		User user = userReader.findById(userId);
-		List<Comment> comment = commentQueryRepository.findComment(userId, memoryId);
+		List<Comment> comment = commentQueryRepository.getComments(memoryId);
 		return convertNestedStructure(comment, user);
 	}
 
 	private CommentResponseDto convertNestedStructure(List<Comment> comments, User user) {
 
-		// CommentDto를 닮을 리스트
+		int commentCount = calculateTotalCommentCount(comments);
 		List<CommentDto> result = new ArrayList<>();
 		Map<Long, CommentDto> map = new HashMap<>();
 
-		// 삭제 되지 않은 리스트 개수
-		int cnt = (int)comments.stream().filter(c -> c.getIsDeleted().equals(FALSE)).count();
-
-		comments.forEach(comment -> {
-
-			CommentDto dto = CommentDto.convertCommentToDto(comment, user);
-
-			// 그 댓글을 map에 넣고
-			map.put(dto.getId(), dto);
-
-			// 만약 부모가 있다면
-			if (Objects.nonNull(comment.getParent())) {
-
-				if (map.getOrDefault(comment.getParent().getId(), null) != null) {
-					map.get(comment.getParent().getId()).getChildren().add(dto);
-				}
-
-			} else {
-				result.add(dto);
-			}
-		});
-		return new CommentResponseDto(cnt, result);
+		createNestedStructure(comments, user, result, map);
+		return new CommentResponseDto(commentCount, result);
 	}
 
+	private void createNestedStructure(List<Comment> comments, User user, List<CommentDto> result,
+		Map<Long, CommentDto> map) {
+		comments.forEach(comment -> {
+
+				CommentDto commentDto = CommentDto.of(comment, user);
+
+				map.put(commentDto.getId(), commentDto);
+
+				if (isChildComment(comment)) {
+					map.get(comment.getRoot().getId()).getChildren().add(commentDto);
+				} else {
+					result.add(commentDto);
+				}
+
+			}
+		);
+	}
+
+	private int calculateTotalCommentCount(List<Comment> comments) {
+		return (int)comments.stream().filter(c -> Objects.isNull(c.getDeletedAt())).count();
+	}
+
+	private boolean isChildComment(Comment comment) {
+		return Objects.nonNull(comment.getRoot());
+	}
 }

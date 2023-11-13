@@ -29,6 +29,11 @@ public class MockFileService implements FileService {
 	}
 
 	@Override
+	public void deleteFileList(List<Long> deleteFileIds) {
+		
+	}
+
+	@Override
 	public Long calculateImageVolume(String username) {
 		return 1L;
 	}

@@ -8,7 +8,8 @@ public abstract class CommentAssembler {
 	public static CommentRequestDto commentRequestDto(Long id, CommentRequest commentRequest) {
 		return CommentRequestDto.builder()
 			.userId(id)
-			.parentId(commentRequest.getParentId())
+			.mentionId(commentRequest.getMentionUserId())
+			.rootId(commentRequest.getParentId())
 			.memoryId(commentRequest.getMemoryId())
 			.content(commentRequest.getContent())
 			.build();

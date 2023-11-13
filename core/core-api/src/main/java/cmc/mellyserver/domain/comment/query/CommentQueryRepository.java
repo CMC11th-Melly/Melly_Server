@@ -1,7 +1,6 @@
 package cmc.mellyserver.domain.comment.query;
 
 import static cmc.mellyserver.dbcore.comment.comment.QComment.*;
-import static cmc.mellyserver.dbcore.user.QUser.*;
 
 import java.util.List;
 
@@ -18,15 +17,15 @@ public class CommentQueryRepository {
 
 	private final JPAQueryFactory query;
 
-	public List<Comment> findComment(Long userId, Long memoryId) {
+	public List<Comment> getComments(Long memoryId) {
 
 		return query.selectFrom(comment)
-			.innerJoin(user)
-			.on(user.id.eq(userId))
-			.fetchJoin()
-			.where(comment.memoryId.eq(memoryId))
+			.where(
+				comment.memoryId.eq(memoryId),
+				comment.deletedAt.isNull()
+			)
 			.orderBy(
-				comment.parent.id.asc().nullsFirst(),
+				comment.root.id.asc().nullsFirst(),
 				comment.createdDate.asc())
 			.fetch();
 

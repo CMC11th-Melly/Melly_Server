@@ -33,16 +33,18 @@ public class QComment extends EntityPathBase<Comment> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
 
-    public final BooleanPath isDeleted = createBoolean("isDeleted");
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Long> memoryId = createNumber("memoryId", Long.class);
 
-    public final QComment parent;
+    public final cmc.mellyserver.dbcore.user.QUser mentionUser;
+
+    public final QComment root;
 
     public final cmc.mellyserver.dbcore.user.QUser user;
 
@@ -64,7 +66,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.parent = inits.isInitialized("parent") ? new QComment(forProperty("parent"), inits.get("parent")) : null;
+        this.mentionUser = inits.isInitialized("mentionUser") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("mentionUser")) : null;
+        this.root = inits.isInitialized("root") ? new QComment(forProperty("root"), inits.get("root")) : null;
         this.user = inits.isInitialized("user") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("user")) : null;
     }
 

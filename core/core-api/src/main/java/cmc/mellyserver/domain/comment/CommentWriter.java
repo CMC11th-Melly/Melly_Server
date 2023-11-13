@@ -1,7 +1,6 @@
 package cmc.mellyserver.domain.comment;
 
-import static java.lang.Boolean.*;
-
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
@@ -29,57 +28,43 @@ public class CommentWriter {
 
 	public Comment save(CommentRequestDto commentRequestDto) {
 
-		Comment parentComment = findParent(commentRequestDto.getParentId());
+		Comment parentComment = findRoot(commentRequestDto.getRootId());
 		return saveComment(parentComment, commentRequestDto);
 	}
 
 	public void remove(Comment comment) {
-		removeCommentAccordingToChildComment(comment);
+		comment.delete();
+		List<Comment> children = comment.getChildren();
+		children.stream().forEach(Comment::delete);
 	}
 
-	private Comment saveComment(Comment parentComment, CommentRequestDto commentRequestDto) {
+	private Comment saveComment(Comment rootComment, CommentRequestDto commentRequestDto) {
 
 		User user = userReader.findById(commentRequestDto.getUserId());
 		Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 
-		if (Objects.isNull(parentComment)) {
+		// 만약 root가 없다면?
+		if (Objects.isNull(rootComment)) {
 			return commentRepository.save(
-				Comment.createComment(commentRequestDto.getContent(), user, memory.getId(), null));
+				Comment.createRoot(commentRequestDto.getContent(), user, memory.getId(), null));
 		}
 
+		// 내가 맨션한 유저 조회
+		User mentionUser = userReader.findById(commentRequestDto.getMentionId());
+
 		Comment comment = commentRepository.save(
-			Comment.createComment(commentRequestDto.getContent(), user, memory.getId(), parentComment));
-		parentComment.getChildren().add(comment);
+			Comment.createChild(commentRequestDto.getContent(), user, memory.getId(), rootComment));
+		comment.setMentionUser(mentionUser);
+		rootComment.getChildren().add(comment);
 		return comment;
 	}
 
-	private Comment findParent(Long parentId) {
+	private Comment findRoot(Long rootId) {
 
-		if (Objects.isNull(parentId)) {
+		if (Objects.isNull(rootId)) {
 			return null;
 		}
 
-		return commentReader.findById(parentId);
-	}
-
-	private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
-
-		Comment parent = comment.getParent();
-		if (parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == TRUE) {
-			return getDeletableAncestorComment(parent);
-		}
-		return comment;
-	}
-
-	private void removeCommentAccordingToChildComment(Comment comment) {
-
-		// 만약 자식이 없다면
-		if (comment.getChildren().isEmpty()) {
-			Comment deletableAncestorComment = getDeletableAncestorComment(comment);
-			deletableAncestorComment.delete();
-			comment.delete();
-		} else {
-			comment.remove();
-		}
+		return commentReader.findById(rootId);
 	}
 }

@@ -1,5 +1,6 @@
 package cmc.mellyserver.dbcore.comment.comment;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,13 +38,17 @@ public class Comment extends JpaBaseEntity {
 	@Column(name = "comment_id")
 	private Long id;
 
-	@Column(name = "content", nullable = false)
+	@Column(name = "content")
 	@Lob
 	private String content;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@OneToOne
+	@JoinColumn(name = "mention_user_id")
+	private User mentionUser;
 
 	@Column(name = "memory_id")
 	private Long memoryId;
@@ -52,54 +57,58 @@ public class Comment extends JpaBaseEntity {
 	private List<CommentLike> commentLikes = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_id")
-	private Comment parent;
+	@JoinColumn(name = "root_id")
+	private Comment root;
 
-	@OneToMany(mappedBy = "parent", orphanRemoval = true)
+	@OneToMany(mappedBy = "root", orphanRemoval = true)
 	private List<Comment> children = new ArrayList<>();
 
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
 
 	public Comment(String content) {
 		this.content = content;
 	}
 
-	public static Comment createComment(String content, User user, Long memoryId, Comment parent) {
+	public static Comment createRoot(String content, User user, Long memoryId, Comment root) {
 
-		return Comment.builder().content(content).user(user).memoryId(memoryId).parent(parent).build();
+		return Comment.builder().content(content).user(user).memoryId(memoryId).root(root).build();
+	}
+
+	public static Comment createChild(String content, User user, Long memoryId, Comment root) {
+		return Comment.builder()
+			.content(content)
+			.user(user)
+			.memoryId(memoryId)
+			.root(root)
+			.build();
 	}
 
 	@Builder
-	public Comment(String content, User user, Long memoryId, Comment parent) {
+	public Comment(String content, User user, User mentionUser, Long memoryId, Comment root) {
 		this.content = content;
 		this.user = user;
 		this.memoryId = memoryId;
-		this.parent = parent;
+		this.mentionUser = mentionUser;
+		setRoot(root);
 	}
 
 	public void delete() {
-		this.isDeleted = Boolean.TRUE;
+		this.deletedAt = LocalDateTime.now();
 	}
 
-	private void setParent(Comment parent) {
-		this.parent = parent;
-		if (parent != null) {
-			parent.getChildren().add(this);
+	private void setRoot(Comment root) {
+		this.root = root;
+		if (root != null) {
+			root.getChildren().add(this);
 		}
 	}
 
-	@PrePersist
-	void init() {
-		this.isDeleted = Boolean.FALSE;
+	public void setMentionUser(User user) {
+		this.mentionUser = user;
 	}
 
 	public void update(String content) {
 		this.content = content;
 	}
-
-	public void remove() {
-		this.content = REMOVE_COMMENT;
-	}
-
 }

@@ -21,6 +21,12 @@ public abstract class UserFixtures {
 
 	public static final String 머식_프로필 = "/mosik.png";
 
+	public static final String 금지_이메일 = "geomji@naver.com";
+
+	public static final String 금지_닉네임 = "금지";
+
+	public static final String 금지_프로필 = "/geomji.png";
+
 	public static User 모카() {
 
 		return User.builder()
@@ -38,6 +44,16 @@ public abstract class UserFixtures {
 			.nickname(머식_닉네임)
 			.email(머식_이메일)
 			.profileImage(머식_프로필)
+			.provider(Provider.KAKAO)
+			.userStatus(UserStatus.ACTIVE)
+			.build();
+	}
+
+	public static User 금지() {
+		return User.builder()
+			.nickname(금지_닉네임)
+			.email(금지_이메일)
+			.profileImage(금지_프로필)
 			.provider(Provider.KAKAO)
 			.userStatus(UserStatus.ACTIVE)
 			.build();
