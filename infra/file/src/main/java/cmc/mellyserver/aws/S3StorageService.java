@@ -69,6 +69,11 @@ class S3StorageService implements FileService {
 		}
 	}
 
+	@Override
+	public void deleteFileList(List<Long> deleteFileIds) {
+
+	}
+
 	public Long calculateImageVolume(String username) {
 
 		ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);

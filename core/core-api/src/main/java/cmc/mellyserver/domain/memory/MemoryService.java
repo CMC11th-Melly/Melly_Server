@@ -91,15 +91,13 @@ public class MemoryService {
 	@CacheEvict(cacheNames = CacheNames.MEMORY, key = "#updateMemoryRequestDto.memoryId")
 	@Transactional
 	public void updateMemory(final UpdateMemoryRequestDto updateMemoryRequestDto) {
-
+		memoryWriter.update(updateMemoryRequestDto);
 	}
 
 	@CacheEvict(cacheNames = CacheNames.MEMORY, key = "#memoryId")
 	@Transactional
 	public void removeMemory(final Long memoryId) {
-
-		Memory memory = memoryReader.findById(memoryId);
-		memory.delete();
+		memoryWriter.remove(memoryId);
 	}
 
 }

@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import jakarta.persistence.CascadeType;
@@ -93,8 +91,8 @@ public class Memory extends JpaBaseEntity {
 		this.placeId = placeId;
 	}
 
-	public void update(String title, String content, List<Long> keywordList, Long groupId, OpenType openType,
-		LocalDate visitedDate, Long star, List<Long> deleteImageList, List<String> multipartNames) {
+	public void update(String title, String content, Long groupId, OpenType openType, LocalDate visitedDate,
+		Long star) {
 
 		this.title = title;
 		this.content = content;
@@ -102,7 +100,6 @@ public class Memory extends JpaBaseEntity {
 		this.openType = openType;
 		this.visitedDate = visitedDate;
 		this.stars = star;
-		updateMemoryImage(deleteImageList, multipartNames);
 	}
 
 	public void setMemoryImages(List<MemoryImage> memoryImages) {
@@ -113,16 +110,10 @@ public class Memory extends JpaBaseEntity {
 		}
 	}
 
-	private void updateMemoryImage(List<Long> deleteImageList, List<String> multipartFileNames) {
+	public void updateMemoryImages(List<Long> deleteImages, List<String> newImages) {
 
-		if (!deleteImageList.isEmpty()) {
-			for (Long deleteId : deleteImageList) {
-				this.memoryImages.removeIf(memoryImage -> memoryImage.getId().equals(deleteId));
-			}
-		}
-
-		if (Objects.nonNull(multipartFileNames) || !multipartFileNames.isEmpty()) {
-			setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
-		}
+		memoryImages.removeIf((image) -> deleteImages.contains(image.getId()));
+		List<MemoryImage> images = newImages.stream().map(MemoryImage::new).toList();
+		memoryImages.addAll(images);
 	}
 }

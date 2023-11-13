@@ -11,7 +11,8 @@ public interface FileService {
 
 	void deleteFile(String fileName) throws IOException;
 
-	Long calculateImageVolume(String username);
+	void deleteFileList(List<Long> deleteFileIds);
 
+	Long calculateImageVolume(String username);
 
 }

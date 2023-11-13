@@ -1,5 +1,6 @@
 package cmc.mellyserver.domain.place.integration;
 
+import static fixtures.PlaceFixtures.*;
 import static fixtures.UserFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,8 +29,6 @@ import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
-import fixtures.PlaceFixtures;
-import fixtures.UserFixtures;
 
 public class PlaceServiceTest extends IntegrationTestSupport {
 
@@ -54,10 +53,10 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 
 		// given
 		User 모카 = userRepository.save(모카());
-		User 머식 = userRepository.save(UserFixtures.머식());
+		User 머식 = userRepository.save(머식());
 
-		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
-		Place 이디야 = placeRepository.save(PlaceFixtures.이디야());
+		Place 스타벅스 = placeRepository.save(스타벅스());
+		Place 이디야 = placeRepository.save(이디야());
 
 		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
 		memoryRepository.save(Memory.builder().userId(머식.getId()).placeId(이디야.getId()).title("이디야 방문!").build());
@@ -75,7 +74,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 
 		// given
 		User 모카 = userRepository.save(모카());
-		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+		Place 스타벅스 = placeRepository.save(스타벅스());
 
 		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
 
@@ -95,7 +94,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		void 장소_정보를_조회한다() {
 
 			// given
-			Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+			Place 스타벅스 = placeRepository.save(스타벅스());
 			User 모카 = userRepository.save(모카());
 
 			// when
@@ -111,7 +110,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		void 사용자가_장소를_스크랩한_경우_스크랩_여부를_true로_반환한다() {
 
 			// given
-			Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+			Place 스타벅스 = placeRepository.save(스타벅스());
 			User 모카 = userRepository.save(모카());
 			placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
 
@@ -147,7 +146,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		void 장소_좌표로_장소_정보를_조회한다() {
 
 			// given
-			Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+			Place 스타벅스 = placeRepository.save(스타벅스());
 			User 모카 = userRepository.save(모카());
 
 			// when
@@ -163,7 +162,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		void 사용자가_장소를_스크랩한_경우_좌표_조회시_스크랩_여부를_true로_반환한다() {
 
 			// given
-			Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
+			Place 스타벅스 = placeRepository.save(스타벅스());
 			User 모카 = userRepository.save(모카());
 			placeScrapRepository.save(PlaceScrap.createScrap(모카, 스타벅스, ScrapType.FRIEND));
 
