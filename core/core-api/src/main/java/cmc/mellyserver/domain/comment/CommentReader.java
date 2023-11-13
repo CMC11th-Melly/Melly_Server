@@ -8,6 +8,8 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
+import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
+import cmc.mellyserver.dbcore.comment.commenlike.CommentLikeRepository;
 import cmc.mellyserver.dbcore.comment.comment.Comment;
 import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
 import cmc.mellyserver.dbcore.user.User;
@@ -28,6 +30,8 @@ public class CommentReader {
 	private final UserReader userReader;
 
 	private final CommentQueryRepository commentQueryRepository;
+
+	private final CommentLikeRepository commentLikeRepository;
 
 	public Comment findById(final Long commentId) {
 		return commentRepository.findById(commentId).orElseThrow(() -> {
@@ -54,10 +58,12 @@ public class CommentReader {
 	private void createNestedStructure(List<Comment> comments, User user, List<CommentDto> result,
 		Map<Long, CommentDto> map) {
 
+		List<Long> commentIds = extractCurrentUserLikeComment(user);
+
 		comments.forEach(comment -> {
 
 				CommentDto commentDto = CommentDto.of(comment, user);
-
+				checkCurrentUserLiked(commentIds, commentDto);
 				map.put(commentDto.getId(), commentDto);
 
 				if (isChildComment(comment)) {
@@ -68,6 +74,19 @@ public class CommentReader {
 
 			}
 		);
+	}
+
+	private void checkCurrentUserLiked(List<Long> commentIds, CommentDto commentDto) {
+		if (commentIds.contains(commentDto.getId())) {
+			commentDto.setCurrentUserLike(true);
+		}
+	}
+
+	private List<Long> extractCurrentUserLikeComment(User user) {
+		List<CommentLike> currentUserCommentLike = commentLikeRepository.findByUserId(user.getId());
+		return currentUserCommentLike.stream()
+			.map(commentLike -> commentLike.getComment().getId())
+			.toList();
 	}
 
 	private int calculateTotalCommentCount(List<Comment> comments) {

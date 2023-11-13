@@ -78,7 +78,7 @@ public class CommentDto implements Serializable {
 		return commentDto;
 	}
 
-	private void setCurrentUserLike(boolean currentUserLike) {
+	public void setCurrentUserLike(boolean currentUserLike) {
 		isCurrentUserLike = currentUserLike;
 	}
 }
