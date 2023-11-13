@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.place.Position;
@@ -29,6 +29,7 @@ import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.MemoryFixtures;
 
 public class PlaceServiceTest extends IntegrationTestSupport {
 
@@ -58,8 +59,8 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		Place 스타벅스 = placeRepository.save(스타벅스());
 		Place 이디야 = placeRepository.save(이디야());
 
-		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
-		memoryRepository.save(Memory.builder().userId(머식.getId()).placeId(이디야.getId()).title("이디야 방문!").build());
+		memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
+		memoryRepository.save(MemoryFixtures.메모리(이디야.getId(), 머식.getId(), null, "이디야 방문!", OpenType.ALL));
 
 		// when
 		List<MarkedPlaceResponseDto> result = placeService.displayMarkedPlace(모카.getId(), null);
@@ -76,7 +77,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
 		User 모카 = userRepository.save(모카());
 		Place 스타벅스 = placeRepository.save(스타벅스());
 
-		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
+		memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
 
 		// when
 		List<FindPlaceByMemoryTitleResponseDto> places = placeService.findByMemoryTitle(모카.getId(), "스타벅");

@@ -13,6 +13,7 @@ public abstract class MemoryFixtures {
 			.placeId(placeId)
 			.userId(userId)
 			.title(title)
+			.stars(1L)
 			.groupId(groupId)
 			.openType(openType)
 			.visitedDate(LocalDate.now())

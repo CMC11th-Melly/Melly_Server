@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.notification.Notification;
 import cmc.mellyserver.dbcore.notification.NotificationRepository;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;
@@ -19,6 +20,7 @@ import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffRespons
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import fixtures.MemoryFixtures;
 
 public class NotificationServiceTest extends IntegrationTestSupport {
 
@@ -55,11 +57,11 @@ public class NotificationServiceTest extends IntegrationTestSupport {
 	void 알림을_생성한다() {
 		// given
 		User 모카 = userRepository.save(모카());
-		Memory memory = memoryRepository.save(Memory.builder().title("메모리").build());
+		Memory 메모리 = memoryRepository.save(MemoryFixtures.메모리(1L, 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
 
 		// when
 		Notification notification = notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL,
-			모카.getId(), memory.getId());
+			모카.getId(), 메모리.getId());
 
 		// then
 		assertThat(notification.isRead()).isFalse();

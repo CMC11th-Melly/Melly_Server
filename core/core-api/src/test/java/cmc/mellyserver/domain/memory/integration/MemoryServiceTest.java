@@ -77,7 +77,12 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 	void 메모리를_저장할때_장소가_DB에_없으면_추가한다() {
 
 		// given
-		CreateMemoryRequestDto 스타벅스 = CreateMemoryRequestDto.builder().lng(1.234).lat(1.234).placeName("스타벅스").build();
+		CreateMemoryRequestDto 스타벅스 = CreateMemoryRequestDto.builder()
+			.lng(1.234)
+			.lat(1.234)
+			.star(1L)
+			.placeName("스타벅스")
+			.build();
 
 		// when
 		memoryService.createMemory(스타벅스);

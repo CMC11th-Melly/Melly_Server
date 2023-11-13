@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;
@@ -19,6 +19,7 @@ import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 import cmc.mellyserver.domain.place.query.PlaceQueryRepository;
 import cmc.mellyserver.support.RepositoryTestSupport;
+import fixtures.MemoryFixtures;
 import fixtures.PlaceFixtures;
 import fixtures.UserFixtures;
 
@@ -48,8 +49,8 @@ public class PlaceQueryRepositoryTest extends RepositoryTestSupport {
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 		Place 이디야 = placeRepository.save(PlaceFixtures.이디야());
 
-		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
-		memoryRepository.save(Memory.builder().userId(머식.getId()).placeId(이디야.getId()).title("이디야 방문!").build());
+		memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
+		memoryRepository.save(MemoryFixtures.메모리(이디야.getId(), 머식.getId(), null, "이디야 방문!", OpenType.ALL));
 
 		// when
 		List<Place> places = placeQueryRepository.getPlaceUserMemoryExist(모카.getId(), null);
@@ -66,7 +67,7 @@ public class PlaceQueryRepositoryTest extends RepositoryTestSupport {
 		User 모카 = userRepository.save(UserFixtures.모카());
 		Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
 
-		memoryRepository.save(Memory.builder().userId(모카.getId()).placeId(스타벅스.getId()).title("스타벅스 방문!").build());
+		memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), null, "스타벅스 방문!", OpenType.ALL));
 
 		// when
 		List<FindPlaceByMemoryTitleResponseDto> places = placeQueryRepository.searchPlaceByContainMemoryName(
