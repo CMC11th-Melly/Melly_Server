@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class CreatePlaceScrapRequestDto {
 
-    private Long id;
-
     private Position position;
 
     private ScrapType scrapType;
@@ -20,9 +18,8 @@ public class CreatePlaceScrapRequestDto {
     private String placeCategory;
 
     @Builder
-    public CreatePlaceScrapRequestDto(Long id, Double lat, Double lng, ScrapType scrapType, String placeName,
+    public CreatePlaceScrapRequestDto(Double lat, Double lng, ScrapType scrapType, String placeName,
         String placeCategory) {
-        this.id = id;
         this.position = new Position(lat, lng);
         this.scrapType = scrapType;
         this.placeName = placeName;

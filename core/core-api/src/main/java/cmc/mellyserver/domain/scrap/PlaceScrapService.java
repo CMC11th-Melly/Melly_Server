@@ -44,7 +44,7 @@ public class PlaceScrapService {
 
         Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
             scrapType);
-        return ScrapedPlaceListResponse.from(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
+        return ScrapedPlaceListResponse.of(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
     }
 
     @Cacheable(cacheNames = CacheNames.SCRAP, key = "#userId")
@@ -53,13 +53,13 @@ public class PlaceScrapService {
         return placeScrapReader.getScrapedPlaceGrouping(userId);
     }
 
-    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#createPlaceScrapRequestDto.id")
+    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @ValidatePlaceExisted
     @Transactional
-    public void createScrap(final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
+    public void createScrap(final Long userId, final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
         Place place = placeReader.findByPosition(createPlaceScrapRequestDto.getPosition());
-        User user = userReader.findById(createPlaceScrapRequestDto.getId());
+        User user = userReader.findById(userId);
         placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
         placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }

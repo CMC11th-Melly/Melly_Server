@@ -1,6 +1,7 @@
 package cmc.mellyserver.controller.scrap.dto.request;
 
 import cmc.mellyserver.dbcore.scrap.ScrapType;
+import cmc.mellyserver.domain.scrap.dto.request.CreatePlaceScrapRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +22,15 @@ public class ScrapRequest {
     private String placeName;
 
     private String placeCategory;
+
+    public CreatePlaceScrapRequestDto toServiceRequest() {
+        return CreatePlaceScrapRequestDto.builder()
+            .lat(lat)
+            .lng(lng)
+            .scrapType(scrapType)
+            .placeName(placeName)
+            .placeCategory(placeCategory)
+            .build();
+    }
 
 }

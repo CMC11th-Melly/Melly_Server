@@ -50,8 +50,8 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
         User 모카 = userRepository.save(UserFixtures.모카());
 
         // When
-        placeScrapService.createScrap(
-            new CreatePlaceScrapRequestDto(모카.getId(), 스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
+        placeScrapService.createScrap(모카.getId(),
+            new CreatePlaceScrapRequestDto(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
                 ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
         // Then
@@ -75,13 +75,13 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
             User 모카 = userRepository.save(UserFixtures.모카());
 
             // When
-            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(모카.getId(),
+            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(
                 스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(), ScrapType.FRIEND, 스타벅스.getName(),
                 스타벅스.getCategory());
-            placeScrapService.createScrap(createPlaceScrapRequestDto);
+            placeScrapService.createScrap(모카.getId(), createPlaceScrapRequestDto);
 
             // then
-            assertThatThrownBy(() -> placeScrapService.createScrap(createPlaceScrapRequestDto))
+            assertThatThrownBy(() -> placeScrapService.createScrap(모카.getId(), createPlaceScrapRequestDto))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage(ErrorCode.DUPLICATE_SCRAP.getMessage());
         }
@@ -93,12 +93,12 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
             // Given
             User 모카 = userRepository.save(UserFixtures.모카());
 
-            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(모카.getId(), 1.555,
+            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(1.555,
                 1.555,
                 ScrapType.FRIEND, "스타벅스", "카페");
 
             // when
-            placeScrapService.createScrap(createPlaceScrapRequestDto);
+            placeScrapService.createScrap(모카.getId(), createPlaceScrapRequestDto);
 
             // then
             Optional<Place> place = placeRepository.findByPosition(createPlaceScrapRequestDto.getPosition());
@@ -119,8 +119,8 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
             User 모카 = userRepository.save(UserFixtures.모카());
 
             // When
-            placeScrapService.createScrap(
-                new CreatePlaceScrapRequestDto(모카.getId(), 스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
+            placeScrapService.createScrap(모카.getId(),
+                new CreatePlaceScrapRequestDto(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
                     ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
             // when

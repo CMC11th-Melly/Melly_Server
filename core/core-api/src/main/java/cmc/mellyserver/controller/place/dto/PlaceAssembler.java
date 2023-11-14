@@ -1,28 +1,12 @@
 package cmc.mellyserver.controller.place.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import cmc.mellyserver.controller.place.dto.response.MarkedPlaceReponse;
 import cmc.mellyserver.controller.place.dto.response.PlaceResponse;
-import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 
 public abstract class PlaceAssembler {
 
     private PlaceAssembler() {
 
-    }
-
-    public static List<MarkedPlaceReponse> markedPlaceReponse(List<MarkedPlaceResponseDto> markedPlaceReponseDtos) {
-        return markedPlaceReponseDtos.stream()
-            .map(each -> MarkedPlaceReponse.builder()
-                .placeId(each.getPlaceId())
-                .position(each.getPosition())
-                .groupType(each.getGroupType())
-                .memoryCount(each.getMemoryCount())
-                .build())
-            .collect(Collectors.toList());
     }
 
     public static PlaceResponse placeResponse(PlaceResponseDto placeResponseDto) {

@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.common.constants.CacheNames;
 import cmc.mellyserver.dbcore.user.User;
+import cmc.mellyserver.domain.user.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
-import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class UserProfileService {
 
     private final UserReader userReader;
+
+    private final UserWriter userWriter;
 
     private final ProfileImageUploader profileImageUploader;
 
@@ -41,9 +43,7 @@ public class UserProfileService {
     @Transactional
     public void updateProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
 
-        User user = userReader.findById(userId);
-        user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(),
-            profileUpdateRequestDto.getAgeGroup());
+        userWriter.update(userId, profileUpdateRequestDto);
     }
 
     @Caching(evict = {

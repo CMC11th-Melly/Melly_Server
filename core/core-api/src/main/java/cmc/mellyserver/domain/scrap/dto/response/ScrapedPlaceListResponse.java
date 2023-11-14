@@ -14,7 +14,7 @@ public class ScrapedPlaceListResponse {
 
     private Boolean next;
 
-    public static ScrapedPlaceListResponse from(List<ScrapedPlaceResponseDto> contents, Boolean next) {
+    public static ScrapedPlaceListResponse of(List<ScrapedPlaceResponseDto> contents, Boolean next) {
         return new ScrapedPlaceListResponse(contents, next);
     }
 

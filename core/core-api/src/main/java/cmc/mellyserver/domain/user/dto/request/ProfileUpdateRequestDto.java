@@ -1,4 +1,4 @@
-package cmc.mellyserver.domain.user.dto.response;
+package cmc.mellyserver.domain.user.dto.request;
 
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;

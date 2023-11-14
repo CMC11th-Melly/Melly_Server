@@ -2,7 +2,7 @@ package cmc.mellyserver.controller.user.dto.request;
 
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
-import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
+import cmc.mellyserver.domain.user.dto.request.ProfileUpdateRequestDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

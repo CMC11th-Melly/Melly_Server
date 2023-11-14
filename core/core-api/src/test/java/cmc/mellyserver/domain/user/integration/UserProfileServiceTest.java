@@ -13,8 +13,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.user.UserProfileService;
+import cmc.mellyserver.domain.user.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
-import cmc.mellyserver.domain.user.dto.response.ProfileUpdateRequestDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
 
 public class UserProfileServiceTest extends IntegrationTestSupport {

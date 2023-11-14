@@ -13,14 +13,14 @@ public class PlaceScrapValidator {
 
     private final PlaceScrapRepository placeScrapRepository;
 
-    public void validateDuplicatedScrap(Long userId, Long placeId) {
+    public void validateDuplicatedScrap(final Long userId, final Long placeId) {
         boolean isDuplicated = placeScrapRepository.existsByUserIdAndPlaceId(userId, placeId);
         if (isDuplicated) {
             throw new BusinessException(ErrorCode.DUPLICATE_SCRAP);
         }
     }
 
-    public void validateExistedScrap(Long userId, Long placeId) {
+    public void validateExistedScrap(final Long userId, final Long placeId) {
 
         boolean isDuplicated = placeScrapRepository.existsByUserIdAndPlaceId(userId, placeId);
         if (!isDuplicated) {

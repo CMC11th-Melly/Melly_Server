@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
+import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
 import cmc.mellyserver.controller.place.dto.PlaceAssembler;
@@ -36,19 +38,19 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping("/place/list")
-    public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaceList(@AuthenticationPrincipal User user,
+    public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaceList(@CurrentUser LoginUser user,
         @RequestParam(value = "groupType") GroupType groupType) {
 
         List<MarkedPlaceResponseDto> placeReponseDtos = placeService
-            .displayMarkedPlace(Long.parseLong(user.getUsername()), groupType);
+            .displayMarkedPlace(user.getId(), groupType);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeReponseDtos);
     }
 
     @GetMapping("/place/{placeId}/search")
-    public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@AuthenticationPrincipal User user,
+    public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@CurrentUser LoginUser user,
         @PathVariable Long placeId) {
 
-        PlaceResponseDto placeResponseDto = placeService.findByPlaceId(Long.parseLong(user.getUsername()), placeId);
+        PlaceResponseDto placeResponseDto = placeService.findByPlaceId(user.getId(), placeId);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
     }
 
