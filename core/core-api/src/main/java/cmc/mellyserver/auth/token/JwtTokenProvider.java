@@ -30,9 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider implements TokenProvider {
 
-    protected final String secret;
-
-    protected final Key secretKey;
+    private final Key secretKey;
 
     private final long accessExpirationTime;
 
@@ -43,7 +41,6 @@ public class JwtTokenProvider implements TokenProvider {
         @Value("${app.auth.access-expiration-time}") long accessExpirationTime,
         @Value("${app.auth.refresh-expiration-time}") long refreshExpirationTime
     ) {
-        this.secret = secret;
         this.accessExpirationTime = accessExpirationTime;
         this.refreshExpirationTime = refreshExpirationTime;
         byte[] keyBytes = Decoders.BASE64.decode(secret);
@@ -100,7 +97,7 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public long getLastExpireTime(String token) {
+    public long getLastExpiredTime(String token) {
 
         Date expirationDate = Jwts.parserBuilder()
             .setSigningKey(secretKey)
@@ -114,7 +111,7 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public Long extractUserId(String accessToken) {
+    public long extractUserId(String accessToken) {
 
         try {
             String memberId = Jwts.parserBuilder()

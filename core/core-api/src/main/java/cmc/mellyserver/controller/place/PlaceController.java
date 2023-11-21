@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
-import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.auth.common.resolver.CurrentUser;
+import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
 import cmc.mellyserver.controller.place.dto.request.PlaceSimpleRequest;

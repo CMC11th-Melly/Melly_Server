@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import cmc.mellyserver.common.event.SignupCertificationEvent;
+import cmc.mellyserver.common.event.CertificationCompletedEvent;
 import cmc.mellyserver.mail.EmailConstants;
 import cmc.mellyserver.mail.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ class SignupCertificationEventHandler {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(SignupCertificationEvent event) {
+    public void handle(CertificationCompletedEvent event) {
 
         emailService.send(EmailConstants.TITLE_CERTIFICATION, event.content(), event.email());
     }

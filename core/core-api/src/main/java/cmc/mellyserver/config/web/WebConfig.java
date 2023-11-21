@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import cmc.mellyserver.common.resolver.LoginUserIdArgumentResolver;
+import cmc.mellyserver.auth.common.resolver.LoginUserIdArgumentResolver;
 import lombok.RequiredArgsConstructor;
 
 @Configuration

@@ -13,9 +13,9 @@ public interface TokenProvider {
 
     Authentication getAuthentication(String accessToken);
 
-    long getLastExpireTime(String accessToken);
+    long getLastExpiredTime(String accessToken);
 
-    Long extractUserId(String accessToken);
+    long extractUserId(String accessToken);
 
     boolean validateToken(String accessToken);
 
