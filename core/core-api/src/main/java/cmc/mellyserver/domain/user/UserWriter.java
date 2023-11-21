@@ -28,7 +28,7 @@ public class UserWriter {
     @Transactional
     public void update(Long userId, ProfileUpdateRequestDto profileUpdateRequestDto) {
         User user = userReader.findById(userId);
-        user.updateProfile(profileUpdateRequestDto.getNickname(), profileUpdateRequestDto.getGender(),
-            profileUpdateRequestDto.getAgeGroup());
+        user.updateProfile(profileUpdateRequestDto.nickname(), profileUpdateRequestDto.gender(),
+            profileUpdateRequestDto.ageGroup());
     }
 }

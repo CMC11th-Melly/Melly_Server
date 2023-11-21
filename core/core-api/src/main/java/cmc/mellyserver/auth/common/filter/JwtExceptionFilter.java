@@ -9,7 +9,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cmc.mellyserver.support.exception.ErrorCode;
-import cmc.mellyserver.support.exception.LogoutOrWithdrawExpcetion;
+import cmc.mellyserver.support.exception.LogoutOrWithdrawException;
 import cmc.mellyserver.support.response.ErrorResponse;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -31,7 +31,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
             setExpiredErrorResponse(request, response, ex);
 
-        } catch (LogoutOrWithdrawExpcetion ex) {
+        } catch (LogoutOrWithdrawException ex) {
             setLogoutOrWithdrawErrorResponse(request, response, ex);
         }
     }

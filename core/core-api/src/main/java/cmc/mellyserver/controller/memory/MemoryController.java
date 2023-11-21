@@ -24,7 +24,7 @@ import cmc.mellyserver.controller.memory.dto.request.MemoryUpdateRequest;
 import cmc.mellyserver.controller.memory.dto.response.MemoryDetailResponse;
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.domain.group.GroupService;
-import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
+import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
 import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
@@ -43,11 +43,11 @@ public class MemoryController {
     private final GroupService groupService;
 
     @GetMapping("/group")
-    public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getGroupListForSaveMemory(
+    public ResponseEntity<ApiResponse<UserJoinedGroupsResponse>> getGroupListForSaveMemory(
         @CurrentUser LoginUser loginUser, @RequestParam(name = "lastId", required = false) Long lastId,
         @PageableDefault(size = 10) Pageable pageable) {
 
-        GroupListLoginUserParticipatedResponse groupListLoginUserParticiated = groupService
+        UserJoinedGroupsResponse groupListLoginUserParticiated = groupService
             .findUserParticipatedGroups(loginUser.getId(), lastId, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
     }

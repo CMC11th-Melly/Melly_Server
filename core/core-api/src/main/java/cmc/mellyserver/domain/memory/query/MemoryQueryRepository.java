@@ -174,8 +174,8 @@ public class MemoryQueryRepository {
             .fetchOne();
 
         HashMap<String, Long> map = new HashMap<>();
-        map.put("belongToUser", memoriesBelongToLoginUser);
-        map.put("notBelongToUser", memoriesNotBelongToLoginUser);
+        map.put("myMemory", memoriesBelongToLoginUser);
+        map.put("otherMemory", memoriesNotBelongToLoginUser);
 
         return map;
     }

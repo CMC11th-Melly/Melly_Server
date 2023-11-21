@@ -102,8 +102,8 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             PlaceResponseDto result = placeService.findByPlaceId(모카.getId(), 스타벅스.getId());
 
             // then
-            assertThat(result.getPlaceId()).isEqualTo(스타벅스.getId());
-            assertThat(result.getIsScraped()).isFalse();
+            assertThat(result.placeId()).isEqualTo(스타벅스.getId());
+            assertThat(result.isScraped()).isFalse();
         }
 
         @DisplayName("사용자가 장소를 스크랩한 경우 스크랩 여부를 true로 반환한다")
@@ -119,8 +119,8 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             PlaceResponseDto result = placeService.findByPlaceId(모카.getId(), 스타벅스.getId());
 
             // then
-            assertThat(result.getPlaceId()).isEqualTo(스타벅스.getId());
-            assertThat(result.getIsScraped()).isTrue();
+            assertThat(result.placeId()).isEqualTo(스타벅스.getId());
+            assertThat(result.isScraped()).isTrue();
         }
 
         @DisplayName("장소가 없다면 예외가 발생한다")
@@ -154,8 +154,8 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             PlaceResponseDto result = placeService.findByPosition(모카.getId(), 스타벅스.getPosition());
 
             // then
-            assertThat(result.getPlaceId()).isEqualTo(스타벅스.getId());
-            assertThat(result.getIsScraped()).isFalse();
+            assertThat(result.placeId()).isEqualTo(스타벅스.getId());
+            assertThat(result.isScraped()).isFalse();
         }
 
         @DisplayName("사용자가 장소를 스크랩한 경우 좌표 조회 시 스크랩 여부를 true로 반환한다")
@@ -171,8 +171,8 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             PlaceResponseDto result = placeService.findByPosition(모카.getId(), 스타벅스.getPosition());
 
             // then
-            assertThat(result.getPlaceId()).isEqualTo(스타벅스.getId());
-            assertThat(result.getIsScraped()).isTrue();
+            assertThat(result.placeId()).isEqualTo(스타벅스.getId());
+            assertThat(result.isScraped()).isTrue();
         }
 
         @DisplayName("장소가 없다면 예외가 발생한다")

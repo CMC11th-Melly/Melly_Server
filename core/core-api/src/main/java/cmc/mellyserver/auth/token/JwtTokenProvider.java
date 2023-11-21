@@ -30,25 +30,19 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider implements TokenProvider {
 
-    protected static final String ROLE = "role";
-
-    protected static final String AUTHORITY_KEY = "auth";
-
-    protected static final String ACCESS_TOKEN = "access_token";
-
-    protected static final String REFRESH_TOKEN = "refresh_token";
-
     protected final String secret;
+
+    protected final Key secretKey;
 
     private final long accessExpirationTime;
 
     private final long refreshExpirationTime;
 
-    protected Key secretKey;
-
-    public JwtTokenProvider(@Value("${app.auth.token-secret}") String secret,
+    public JwtTokenProvider(
+        @Value("${app.auth.token-secret}") String secret,
         @Value("${app.auth.access-expiration-time}") long accessExpirationTime,
-        @Value("${app.auth.refresh-expiration-time}") long refreshExpirationTime) {
+        @Value("${app.auth.refresh-expiration-time}") long refreshExpirationTime
+    ) {
         this.secret = secret;
         this.accessExpirationTime = accessExpirationTime;
         this.refreshExpirationTime = refreshExpirationTime;
@@ -66,9 +60,9 @@ public class JwtTokenProvider implements TokenProvider {
             .signWith(secretKey)
             .setIssuedAt(now)
             .setExpiration(expireDate)
-            .setSubject(ACCESS_TOKEN)
-            .claim(AUTHORITY_KEY, String.valueOf(userId))
-            .claim(ROLE, roleType.getDescription())
+            .setSubject(TokenConstants.ACCESS_TOKEN)
+            .claim(TokenConstants.AUTHORITY_KEY, String.valueOf(userId))
+            .claim(TokenConstants.ROLE, roleType.getDescription())
             .compact();
     }
 
@@ -82,9 +76,9 @@ public class JwtTokenProvider implements TokenProvider {
             .signWith(secretKey)
             .setIssuedAt(now)
             .setExpiration(expireDate)
-            .setSubject(REFRESH_TOKEN)
-            .claim(AUTHORITY_KEY, String.valueOf(userId))
-            .claim(ROLE, roleType.getDescription())
+            .setSubject(TokenConstants.REFRESH_TOKEN)
+            .claim(TokenConstants.AUTHORITY_KEY, String.valueOf(userId))
+            .claim(TokenConstants.ROLE, roleType.getDescription())
             .compact();
 
         return new RefreshTokenDto(token, refreshExpirationTime);
@@ -95,11 +89,12 @@ public class JwtTokenProvider implements TokenProvider {
 
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(ROLE).toString().split(","))
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(
+                claims.get(TokenConstants.ROLE).toString().split(","))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-        User principal = new User(claims.get(AUTHORITY_KEY).toString(), "", authorities);
+        User principal = new User(claims.get(TokenConstants.AUTHORITY_KEY).toString(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
@@ -119,7 +114,7 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public Long extractUserId(final String accessToken) {
+    public Long extractUserId(String accessToken) {
 
         try {
             String memberId = Jwts.parserBuilder()
@@ -127,7 +122,7 @@ public class JwtTokenProvider implements TokenProvider {
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody()
-                .get(AUTHORITY_KEY)
+                .get(TokenConstants.AUTHORITY_KEY)
                 .toString();
 
             return Long.parseLong(memberId);
@@ -144,12 +139,10 @@ public class JwtTokenProvider implements TokenProvider {
 
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
-
         } catch (ExpiredJwtException e) {
             throw new JwtException("엑세스 토큰이 만료되었습니다.");
 
         } catch (UnsupportedJwtException e) {
-
             log.info("지원되지 않는 JWT 토큰입니다.");
 
         } catch (IllegalArgumentException e) {

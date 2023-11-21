@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.event;
+package cmc.mellyserver.common.event.handler;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package cmc.mellyserver.controller.memory.dto.response;
 
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.domain.group.query.dto.UserJoinedGroupsResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class GroupListForSaveMemoryResponse {
     }
 
     public static GroupListForSaveMemoryResponse of(
-        GroupLoginUserParticipatedResponseDto groupLoginUserParticipatedResponseDto) {
+        UserJoinedGroupsResponseDto groupLoginUserParticipatedResponseDto) {
         return GroupListForSaveMemoryResponse.builder()
             .groupId(groupLoginUserParticipatedResponseDto.getGroupId())
             .groupName(groupLoginUserParticipatedResponseDto.getGroupName())

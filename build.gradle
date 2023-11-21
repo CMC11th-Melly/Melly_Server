@@ -2,7 +2,6 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
-    id 'org.sonarqube' version '4.4.1.3373' apply(false)
 }
 
 allprojects {
@@ -20,19 +19,9 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'org.sonarqube'
     apply plugin: 'jacoco'
     apply plugin: 'jacoco-report-aggregation'
-
-
-    sonar {
-        properties {
-            property "sonar.projectKey", "CMC11th-Melly_Melly_Server"
-            property "sonar.organization", "melly"
-            property "sonar.host.url", "https://sonarcloud.io"
-            property "sonar.coverage.jacoco.xmlReportPaths", "/home/runner/work/Melly_Server/Melly_Server/core/core-api/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
-        }
-    }
+    
 
     bootJar.enabled = false // core-api 모듈 이외에는 모두 boot 되지 않는 모듈
     jar.enabled = true // jar는 필요함

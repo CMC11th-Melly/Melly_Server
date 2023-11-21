@@ -2,8 +2,8 @@ package cmc.mellyserver.notification;
 
 public interface NotificationService {
 
-    void sendCommentCreatedMessage(final Long memoryId, final String nickname);
+    void sendCommentCreatedMessage(Long memoryId, String nickname);
 
-    void sendCommentLikeCreatedMessage(final Long userId, final Long memoryId, final String nickname);
+    void sendCommentLikeCreatedMessage(Long userId, Long memoryId, String nickname);
 
 }

@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.constants;
+package cmc.mellyserver.auth.config;
 
 public abstract class RedisConstants {
 

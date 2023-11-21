@@ -1,8 +1,9 @@
 package cmc.mellyserver.auth;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
@@ -19,11 +20,11 @@ public class LoginClientFactory {
     /*
     한번 생성된 Client 객체를 런타임 내에 메모리상에 캐싱합니다
      */
-    private final Map<Provider, LoginClient> factoryCache = new HashMap<>();
+    private final Map<Provider, LoginClient> factoryCache = new ConcurrentHashMap<>();
 
     public LoginClient find(Provider provider) {
         LoginClient loginClient = factoryCache.get(provider);
-        if (loginClient != null) {
+        if (Objects.nonNull(loginClient)) {
             return loginClient;
         }
 

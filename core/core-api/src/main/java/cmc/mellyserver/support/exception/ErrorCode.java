@@ -103,7 +103,7 @@ public enum ErrorCode {
 
     private final String message;
 
-    ErrorCode(final int status, final String code, final String message) {
+    ErrorCode(int status, String code, String message) {
         this.status = status;
         this.code = code;
         this.message = message;

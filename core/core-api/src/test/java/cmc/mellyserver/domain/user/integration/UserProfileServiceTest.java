@@ -36,8 +36,8 @@ public class UserProfileServiceTest extends IntegrationTestSupport {
         ProfileResponseDto userProfile = userProfileService.getProfile(모카.getId());
 
         // Then
-        assertThat(userProfile.getUserId()).isEqualTo(모카.getId());
-        assertThat(userProfile.getNickname()).isEqualTo(모카.getNickname());
+        assertThat(userProfile.userId()).isEqualTo(모카.getId());
+        assertThat(userProfile.nickname()).isEqualTo(모카.getNickname());
     }
 
     @DisplayName("수정하려는 프로필 이미지가 있으면 변경한다.")

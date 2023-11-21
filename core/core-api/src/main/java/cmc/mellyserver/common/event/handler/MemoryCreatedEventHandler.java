@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.event;
+package cmc.mellyserver.common.event.handler;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import cmc.mellyserver.common.event.MemoryCreatedEvent;
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.dbcore.user.User;

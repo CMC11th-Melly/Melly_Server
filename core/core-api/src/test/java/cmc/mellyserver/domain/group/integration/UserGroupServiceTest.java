@@ -20,7 +20,7 @@ import cmc.mellyserver.domain.group.GroupService;
 import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
-import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
+import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
 import cmc.mellyserver.support.exception.BusinessException;
@@ -54,7 +54,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
         groupService.joinGroup(머식.getId(), 친구들.getId());
 
         // when
-        GroupDetailResponseDto groupDetail = groupService.getGroupDetail(친구들.getId(), 모카.getId());
+        GroupDetailResponseDto groupDetail = groupService.getGroup(모카.getId(), 친구들.getId());
 
         // then
         GroupMemberResponseDto 모카_응답 = GroupMemberResponseDto.of(모카.getId(), 모카.getProfileImage(), 모카.getNickname(),
@@ -82,7 +82,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
         groupService.joinGroup(모카.getId(), 가족.getId());
 
         // when
-        GroupListLoginUserParticipatedResponse userParticipatedGroups = groupService.findUserParticipatedGroups(
+        UserJoinedGroupsResponse userParticipatedGroups = groupService.findUserParticipatedGroups(
             모카.getId(), -1L,
             PageRequest.of(0, 10));
 

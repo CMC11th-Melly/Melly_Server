@@ -20,7 +20,6 @@ public @interface DistributedLock {
     long waitTime() default 3L;
 
     // 락 사용 시간
-    // 락을 3초 사용한 이후에는 반납해야 한다.
     long leaseTime() default 2L;
 
 }

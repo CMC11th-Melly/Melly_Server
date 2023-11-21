@@ -15,7 +15,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import cmc.mellyserver.domain.group.query.dto.GroupLoginUserParticipatedResponseDto;
+import cmc.mellyserver.domain.group.query.dto.UserJoinedGroupsResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -24,12 +24,12 @@ public class UserGroupQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public Slice<GroupLoginUserParticipatedResponseDto> getGroupListLoginUserParticipate(Long userId, Long lastId,
+    public Slice<UserJoinedGroupsResponseDto> getGroupListLoginUserParticipate(Long userId, Long lastId,
         Pageable pageable) {
 
-        List<GroupLoginUserParticipatedResponseDto> results = query
+        List<UserJoinedGroupsResponseDto> results = query
             .select(
-                Projections.constructor(GroupLoginUserParticipatedResponseDto.class,
+                Projections.constructor(UserJoinedGroupsResponseDto.class,
                     userGroup.id,
                     userGroup.icon,
                     userGroup.name,

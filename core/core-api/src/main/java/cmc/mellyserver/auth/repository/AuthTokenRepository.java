@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
+import cmc.mellyserver.auth.config.RedisConstants;
 import cmc.mellyserver.auth.token.TokenProvider;
-import cmc.mellyserver.common.constants.RedisConstants;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -22,7 +22,7 @@ public class AuthTokenRepository {
 
     public void saveRefreshToken(final RefreshToken refreshToken, final Long refreshTokenExpire) {
         redisTemplate.opsForValue()
-            .set(RedisConstants.REFRESH_TOKEN_PREFIX + refreshToken.getUserId(), refreshToken.getRefreshToken(),
+            .set(RedisConstants.REFRESH_TOKEN_PREFIX + refreshToken.userId(), refreshToken.refreshToken(),
                 refreshTokenExpire, TimeUnit.MILLISECONDS);
     }
 

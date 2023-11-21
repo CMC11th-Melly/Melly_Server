@@ -34,7 +34,7 @@ public class GroupController {
     public ResponseEntity<ApiResponse<GroupLoginUserParticipatedResponse>> getGroupDetail(
         @CurrentUser LoginUser loginUser, @PathVariable Long groupId) {
 
-        GroupDetailResponseDto groupDetail = groupService.getGroupDetail(groupId, loginUser.getId());
+        GroupDetailResponseDto groupDetail = groupService.getGroup(groupId, loginUser.getId());
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, GroupAssembler.getUserGroupResponse(groupDetail));
     }
 

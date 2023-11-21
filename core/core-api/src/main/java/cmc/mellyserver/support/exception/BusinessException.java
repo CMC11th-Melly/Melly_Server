@@ -2,7 +2,7 @@ package cmc.mellyserver.support.exception;
 
 public class BusinessException extends RuntimeException {
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());

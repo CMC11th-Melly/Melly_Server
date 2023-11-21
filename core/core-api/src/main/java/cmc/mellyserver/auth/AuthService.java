@@ -20,9 +20,7 @@ import cmc.mellyserver.domain.user.UserWriter;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -44,7 +42,6 @@ public class AuthService {
 
         checkDuplicatedEmail(authSignupRequestDto.getEmail());
         User user = userWriter.save(authSignupRequestDto.toEntity());
-        System.out.println(user.getPassword());
         TokenDto tokenDto = tokenService.createToken(user);
 
         fcmTokenRepository.saveToken(user.getId().toString(), user.getFcmToken());
@@ -78,7 +75,7 @@ public class AuthService {
 
         checkAbnormalUserAccess(token, userId, refreshToken);
 
-        User user = userReader.findById(refreshToken.getUserId());
+        User user = userReader.findById(refreshToken.userId());
         TokenDto tokenDto = tokenService.createToken(user);
 
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken());
@@ -152,7 +149,7 @@ public class AuthService {
 
     private void checkAbnormalUserAccess(final String token, final Long userId, final RefreshToken refreshToken) {
 
-        if (!refreshToken.getRefreshToken().equals(token)) {
+        if (!refreshToken.refreshToken().equals(token)) {
             tokenService.removeRefreshToken(userId);
             throw new BusinessException(ErrorCode.ABNORMAL_ACCESS);
         }

@@ -15,7 +15,6 @@ import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
 import cmc.mellyserver.auth.controller.dto.common.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
-import cmc.mellyserver.controller.place.dto.PlaceAssembler;
 import cmc.mellyserver.controller.place.dto.request.PlaceSimpleRequest;
 import cmc.mellyserver.controller.place.dto.response.PlaceResponse;
 import cmc.mellyserver.dbcore.group.GroupType;
@@ -50,16 +49,16 @@ public class PlaceController {
         @PathVariable Long placeId) {
 
         PlaceResponseDto placeResponseDto = placeService.findByPlaceId(user.getId(), placeId);
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceResponse.of(placeResponseDto));
     }
 
     @GetMapping("/places")
     public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user,
         PlaceSimpleRequest placeSimpleRequest) {
 
-        PlaceResponseDto placeByPosition = placeService.findByPosition(Long.parseLong(user.getUsername()),
+        PlaceResponseDto placeResponseDto = placeService.findByPosition(Long.parseLong(user.getUsername()),
             new Position(placeSimpleRequest.getLat(), placeSimpleRequest.getLng()));
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeByPosition));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceResponse.of(placeResponseDto));
     }
 
     @GetMapping("/search")

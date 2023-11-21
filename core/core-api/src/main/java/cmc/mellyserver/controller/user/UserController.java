@@ -24,7 +24,7 @@ import cmc.mellyserver.controller.user.dto.response.ProfileResponse;
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.scrap.ScrapType;
 import cmc.mellyserver.domain.group.GroupService;
-import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
+import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
@@ -85,11 +85,11 @@ public class UserController {
     }
 
     @GetMapping("/my-groups")
-    public ResponseEntity<ApiResponse<GroupListLoginUserParticipatedResponse>> getUserGroup(
+    public ResponseEntity<ApiResponse<UserJoinedGroupsResponse>> getUserGroup(
         @CurrentUser LoginUser loginUser, @RequestParam Long lastId,
         @PageableDefault(size = 10) Pageable pageable) {
 
-        GroupListLoginUserParticipatedResponse groupListLoginUserParticiated = groupService
+        UserJoinedGroupsResponse groupListLoginUserParticiated = groupService
             .findUserParticipatedGroups(loginUser.getId(), lastId, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupListLoginUserParticiated);
     }

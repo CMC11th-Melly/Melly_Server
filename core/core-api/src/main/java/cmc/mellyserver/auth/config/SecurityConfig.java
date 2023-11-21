@@ -16,9 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import cmc.mellyserver.auth.common.filter.JwtExceptionFilter;
-import cmc.mellyserver.auth.common.filter.RestAuthenticationEntryPoint;
-import cmc.mellyserver.auth.common.filter.TokenAccessDeniedHandler;
 import cmc.mellyserver.auth.common.filter.TokenAuthenticationFilter;
+import cmc.mellyserver.auth.common.handler.RestAuthenticationEntryPoint;
+import cmc.mellyserver.auth.common.handler.TokenAccessDeniedHandler;
 import cmc.mellyserver.auth.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 

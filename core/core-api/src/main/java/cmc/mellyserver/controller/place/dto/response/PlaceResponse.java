@@ -1,6 +1,7 @@
 package cmc.mellyserver.controller.place.dto.response;
 
 import cmc.mellyserver.dbcore.place.Position;
+import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -34,6 +35,19 @@ public class PlaceResponse {
         PlaceCategory = placeCategory;
         this.placeName = placeName;
         this.placeImage = placeImage;
+    }
+
+    public static PlaceResponse of(PlaceResponseDto placeResponseDto) {
+        return PlaceResponse.builder()
+            .placeId(placeResponseDto.placeId())
+            .position(placeResponseDto.position())
+            .myMemoryCount(placeResponseDto.myMemoryCount())
+            .otherMemoryCount(placeResponseDto.otherMemoryCount())
+            .isScraped(placeResponseDto.isScraped())
+            .placeCategory(placeResponseDto.placeCategory())
+            .placeName(placeResponseDto.placeName())
+            .placeImage(placeResponseDto.placeImage())
+            .build();
     }
 
 }

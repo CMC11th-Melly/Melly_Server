@@ -2,11 +2,13 @@ package cmc.mellyserver.auth.certification;
 
 import java.util.Random;
 
-public class RandomNumberGenerator {
+public abstract class RandomNumberGenerator {
 
-    public static final String makeRandomNumber() {
+    private static final int RANDOM_BOUND = 900_000;
+
+    public static String makeRandomNumber() {
         Random random = new Random();
-        return String.valueOf(random.nextInt(900000));
+        return String.valueOf(random.nextInt(RANDOM_BOUND));
     }
 
 }

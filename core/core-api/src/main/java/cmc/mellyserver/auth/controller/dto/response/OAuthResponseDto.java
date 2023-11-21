@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class OAuthResponseDto<T> {
+public class OAuthResponseDto {
 
     public TokenResponseDto tokenInfo;
 
-    public T data;
+    public OAuthSignupResponseDto data;
 
     public static OAuthResponseDto newUser(String socialId, String provider) {
         return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialId, provider));

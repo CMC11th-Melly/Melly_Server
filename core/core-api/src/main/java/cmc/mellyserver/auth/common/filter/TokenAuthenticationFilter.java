@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import cmc.mellyserver.auth.token.TokenProvider;
 import cmc.mellyserver.common.util.HeaderUtil;
-import cmc.mellyserver.support.exception.LogoutOrWithdrawExpcetion;
+import cmc.mellyserver.support.exception.LogoutOrWithdrawException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,7 +51,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
         if (!Objects.isNull(valueOperations.get(jwt))) {
-            throw new LogoutOrWithdrawExpcetion("이미 로그아웃하거나 탈퇴한 유저 입니다.");
+            throw new LogoutOrWithdrawException("이미 로그아웃하거나 탈퇴한 유저 입니다.");
         }
     }
 

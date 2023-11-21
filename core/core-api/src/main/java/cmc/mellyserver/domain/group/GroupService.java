@@ -3,7 +3,6 @@ package cmc.mellyserver.domain.group;
 import java.util.List;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,11 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
 import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
-import cmc.mellyserver.domain.group.dto.response.GroupListLoginUserParticipatedResponse;
+import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.group.query.dto.GroupDetailResponseDto;
 import cmc.mellyserver.domain.user.UserReader;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,14 +38,14 @@ public class GroupService {
     private final GroupValidator groupValidator;
 
     @Cacheable(cacheNames = CacheNames.GROUP, key = "#groupId")
-    public GroupDetailResponseDto getGroupDetail(final Long groupId, final Long userId) {
+    public GroupDetailResponseDto getGroup(final Long userId, final Long groupId) {
 
         UserGroup userGroup = groupReader.findById(groupId);
-        List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(groupId, userId);
+        List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(userId, groupId);
         return GroupDetailResponseDto.of(userGroup, groupMembers);
     }
 
-    public GroupListLoginUserParticipatedResponse findUserParticipatedGroups(final Long userId, final Long lastId,
+    public UserJoinedGroupsResponse findUserParticipatedGroups(final Long userId, final Long lastId,
         final Pageable pageable) {
 
         return groupReader.groupListLoginUserParticipate(userId, lastId, pageable);
@@ -74,7 +71,7 @@ public class GroupService {
         groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
     }
 
-    @CachePut(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
+    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
     @Transactional
     public void updateGroup(UpdateGroupRequestDto updateGroupRequestDto) {
 

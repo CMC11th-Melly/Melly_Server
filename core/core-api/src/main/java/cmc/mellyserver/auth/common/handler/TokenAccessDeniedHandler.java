@@ -1,4 +1,4 @@
-package cmc.mellyserver.auth.common.filter;
+package cmc.mellyserver.auth.common.handler;
 
 import java.io.IOException;
 

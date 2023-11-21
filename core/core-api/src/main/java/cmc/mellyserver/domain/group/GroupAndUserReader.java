@@ -18,7 +18,7 @@ public class GroupAndUserReader {
 
     private final GroupAndUserRepository groupAndUserRepository;
 
-    public List<GroupMemberResponseDto> getGroupMembers(Long groupId, Long userId) {
+    public List<GroupMemberResponseDto> getGroupMembers(Long userId, Long groupId) {
         List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
         return users.stream()
             .map(user -> GroupMemberResponseDto.of(user.getId(), user.getProfileImage(), user.getNickname(),
@@ -31,7 +31,7 @@ public class GroupAndUserReader {
         return groupAndUserRepository.countUserParticipatedInGroup(groupId);
     }
 
-    public Optional<GroupAndUser> findByUserIdAndGroupId(final Long userId, final Long groupId) {
+    public Optional<GroupAndUser> findByUserIdAndGroupId(Long userId, Long groupId) {
         return groupAndUserRepository.findByUserIdAndGroupId(userId, groupId);
     }
 

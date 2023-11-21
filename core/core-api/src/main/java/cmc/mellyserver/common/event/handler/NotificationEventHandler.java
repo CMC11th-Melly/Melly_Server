@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.event;
+package cmc.mellyserver.common.event.handler;
 
 import static cmc.mellyserver.notification.constants.NotificationConstants.*;
 

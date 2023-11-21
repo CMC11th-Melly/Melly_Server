@@ -1,6 +1,6 @@
 package cmc.mellyserver.common.constants;
 
-public class CacheNames {
+public abstract class CacheNames {
 
     public static final String USER = "user";
 
