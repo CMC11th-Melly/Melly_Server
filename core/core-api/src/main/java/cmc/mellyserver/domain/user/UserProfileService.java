@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +26,7 @@ public class UserProfileService {
     private final ProfileImageUploader profileImageUploader;
 
     @Cacheable(cacheNames = CacheNames.USER_VOLUME, key = "#userId")
-    public int calculateImageTotalVolume(final Long userId) {
+    public long calculateImageTotalVolume(final Long userId) {
 
         User user = userReader.findById(userId);
         return profileImageUploader.calculateImageVolume(user.getEmail());
@@ -46,10 +45,7 @@ public class UserProfileService {
         userWriter.update(userId, profileUpdateRequestDto);
     }
 
-    @Caching(evict = {
-        @CacheEvict(cacheNames = CacheNames.USER_VOLUME, key = "#userId"),
-        @CacheEvict(cacheNames = CacheNames.USER, key = "#userId")
-    })
+    @CacheEvict(cacheNames = CacheNames.USER_VOLUME, key = "#userId")
     @Transactional
     public void updateProfileImage(final Long userId, MultipartFile newProfileImage, boolean isDeleted) throws
         IOException {

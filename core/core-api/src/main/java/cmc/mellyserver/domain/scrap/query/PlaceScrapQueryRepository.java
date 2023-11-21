@@ -5,6 +5,7 @@ import static cmc.mellyserver.dbcore.scrap.QPlaceScrap.*;
 import static cmc.mellyserver.dbcore.user.QUser.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,62 +28,71 @@ public class PlaceScrapQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public Boolean checkCurrentLoginUserScrapedPlaceByPosition(Long id, Position position) {
+    public boolean checkUserScrapedPlaceByPosition(Long userId, Position position) {
 
         Integer result = query.selectOne()
             .from(placeScrap)
-            .innerJoin(place)
-            .on(place.id.eq(placeScrap.place.id))
-            .fetchJoin()
-            .innerJoin(user)
-            .on(placeScrap.user.id.eq(user.id))
-            .fetchJoin()
-            .where(place.position.eq(position), placeScrap.user.id.eq(id))
+            .innerJoin(placeScrap.place, place)
+            .innerJoin(placeScrap.user, user)
+            .where(
+                place.position.eq(position),
+                user.id.eq(userId)
+            )
             .fetchOne();
 
-        return result != null;
+        return Objects.nonNull(result);
     }
 
-    public Boolean checkCurrentLoginUserScrapedPlaceByPlaceId(Long id, Long placeId) {
+    public boolean checkUserScrapedPlaceByPlaceId(Long userId, Long placeId) {
 
         Integer result = query.selectOne()
             .from(placeScrap)
-            .innerJoin(place)
-            .on(place.id.eq(placeScrap.place.id))
-            .fetchJoin()
-            .innerJoin(user)
-            .on(placeScrap.user.id.eq(user.id))
-            .fetchJoin()
-            .where(place.id.eq(placeId), placeScrap.user.id.eq(id))
+            .innerJoin(placeScrap.place, place)
+            .innerJoin(placeScrap.user, user)
+            .where(
+                place.id.eq(placeId),
+                user.id.eq(userId)
+            )
             .fetchOne();
 
-        return result != null;
+        return Objects.nonNull(result);
     }
 
-    public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long id) {
+    public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {
 
         return query
-            .select(Projections.fields(PlaceScrapCountResponseDto.class, placeScrap.scrapType,
-                placeScrap.count().as("scrapCount")))
+            .select(Projections.fields(PlaceScrapCountResponseDto.class,
+                placeScrap.scrapType,
+                placeScrap.count().as("scrapCount")
+            ))
             .from(placeScrap)
-            .innerJoin(user)
-            .on(placeScrap.user.id.eq(user.id))
-            .fetchJoin()
-            .where(placeScrap.user.id.eq(id))
+            .innerJoin(placeScrap.user, user)
+            .where(
+                user.id.eq(userId)
+            )
             .groupBy(placeScrap.scrapType)
             .fetch();
     }
 
-    public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
+    public Slice<ScrapedPlaceResponseDto> getUserScrapedPlaces(Long lastId, Pageable pageable, Long userId,
         ScrapType scrapType) {
 
         List<ScrapedPlaceResponseDto> results = query
-            .select(Projections.fields(ScrapedPlaceResponseDto.class, place.id, place.position, place.category,
-                place.name, place.imageUrl))
+            .select(Projections.fields(ScrapedPlaceResponseDto.class,
+                place.id,
+                place.position,
+                place.category,
+                place.name,
+                place.imageUrl
+            ))
             .from(placeScrap)
             .innerJoin(placeScrap.place, place)
             .innerJoin(placeScrap.user, user)
-            .where(ltPlaceId(lastId), placeScrap.user.id.eq(userId), placeScrap.scrapType.eq(scrapType))
+            .where(
+                ltPlaceId(lastId),
+                placeScrap.user.id.eq(userId),
+                placeScrap.scrapType.eq(scrapType)
+            )
             .orderBy(place.id.desc())
             .limit(pageable.getPageSize() + 1)
             .fetch();

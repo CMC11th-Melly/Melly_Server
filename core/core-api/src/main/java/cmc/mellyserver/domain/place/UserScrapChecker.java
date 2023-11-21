@@ -13,10 +13,10 @@ public class UserScrapChecker {
     private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
     public boolean check(Long userId, Long placeId) {
-        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPlaceId(placeId, userId);
+        return placeScrapQueryRepository.checkUserScrapedPlaceByPlaceId(userId, placeId);
     }
 
     public boolean check(Long userId, Position position) {
-        return placeScrapQueryRepository.checkCurrentLoginUserScrapedPlaceByPosition(userId, position);
+        return placeScrapQueryRepository.checkUserScrapedPlaceByPosition(userId, position);
     }
 }

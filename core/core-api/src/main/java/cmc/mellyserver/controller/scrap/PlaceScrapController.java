@@ -36,8 +36,7 @@ public class PlaceScrapController {
     public ResponseEntity<ApiResponse<Void>> removeScrap(@CurrentUser LoginUser user,
         @RequestBody ScrapCancelRequest scrapCancelRequest) {
 
-        scrapService.removeScrap(user.getId(),
-            new Position(scrapCancelRequest.getLat(), scrapCancelRequest.getLng()));
+        scrapService.removeScrap(user.getId(), new Position(scrapCancelRequest.getLat(), scrapCancelRequest.getLng()));
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 

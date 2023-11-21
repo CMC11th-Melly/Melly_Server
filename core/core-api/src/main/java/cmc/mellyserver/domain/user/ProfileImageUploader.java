@@ -28,8 +28,8 @@ public class ProfileImageUploader {
         }
     }
 
-    public int calculateImageVolume(String email) {
-        return fileService.calculateImageVolume(email).intValue();
+    public long calculateImageVolume(String email) {
+        return fileService.calculateImageVolume(email);
     }
 
     private void storeProfileImage(User user, MultipartFile profileImage) throws IOException {

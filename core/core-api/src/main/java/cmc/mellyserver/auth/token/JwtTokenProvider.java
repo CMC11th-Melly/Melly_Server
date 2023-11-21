@@ -57,7 +57,6 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-
     public String createAccessToken(Long userId, RoleType roleType) {
 
         Date now = new Date();
@@ -69,7 +68,7 @@ public class JwtTokenProvider implements TokenProvider {
             .setExpiration(expireDate)
             .setSubject(ACCESS_TOKEN)
             .claim(AUTHORITY_KEY, String.valueOf(userId))
-            .claim(ROLE, roleType.getCode())
+            .claim(ROLE, roleType.getDescription())
             .compact();
     }
 
@@ -85,7 +84,7 @@ public class JwtTokenProvider implements TokenProvider {
             .setExpiration(expireDate)
             .setSubject(REFRESH_TOKEN)
             .claim(AUTHORITY_KEY, String.valueOf(userId))
-            .claim(ROLE, roleType.getCode())
+            .claim(ROLE, roleType.getDescription())
             .compact();
 
         return new RefreshTokenDto(token, refreshExpirationTime);
@@ -106,7 +105,7 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public Long getLastExpireTime(String token) {
+    public long getLastExpireTime(String token) {
 
         Date expirationDate = Jwts.parserBuilder()
             .setSigningKey(secretKey)

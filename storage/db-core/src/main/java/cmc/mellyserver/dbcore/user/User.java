@@ -101,7 +101,7 @@ public class User extends JpaBaseEntity {
         this.fcmToken = fcmToken;
     }
 
-    public void updateProfile(final String nickname, final Gender gender, final AgeGroup ageGroup) {
+    public void updateProfile(String nickname, Gender gender, AgeGroup ageGroup) {
         this.nickname = nickname;
         this.gender = gender;
         this.ageGroup = ageGroup;

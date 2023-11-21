@@ -7,16 +7,16 @@ import cmc.mellyserver.dbcore.user.enums.RoleType;
 
 public interface TokenProvider {
 
-    String createAccessToken(final Long userId, final RoleType roleType);
+    String createAccessToken(Long userId, RoleType roleType);
 
-    RefreshTokenDto createRefreshToken(final Long userId, final RoleType roleType);
+    RefreshTokenDto createRefreshToken(Long userId, RoleType roleType);
 
-    Authentication getAuthentication(final String accessToken);
+    Authentication getAuthentication(String accessToken);
 
-    Long getLastExpireTime(final String accessToken);
+    long getLastExpireTime(String accessToken);
 
-    Long extractUserId(final String accessToken);
+    Long extractUserId(String accessToken);
 
-    boolean validateToken(final String accessToken);
+    boolean validateToken(String accessToken);
 
 }

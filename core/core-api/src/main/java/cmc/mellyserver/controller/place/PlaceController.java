@@ -32,29 +32,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/places")
 public class PlaceController {
 
     private final PlaceService placeService;
 
-    @GetMapping("/place/list")
-    public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaceList(@CurrentUser LoginUser user,
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaces(@CurrentUser LoginUser user,
         @RequestParam(value = "groupType") GroupType groupType) {
 
-        List<MarkedPlaceResponseDto> placeReponseDtos = placeService
-            .displayMarkedPlace(user.getId(), groupType);
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeReponseDtos);
+        List<MarkedPlaceResponseDto> placeResponseDtos = placeService.displayMarkedPlace(user.getId(), groupType);
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeResponseDtos);
     }
 
-    @GetMapping("/place/{placeId}/search")
-    public ResponseEntity<ApiResponse<PlaceResponse>> getPlaceSearchByMemory(@CurrentUser LoginUser user,
+    @GetMapping("/{placeId}/search")
+    public ResponseEntity<ApiResponse<PlaceResponse>> searchPlaceByPlaceId(@CurrentUser LoginUser user,
         @PathVariable Long placeId) {
 
         PlaceResponseDto placeResponseDto = placeService.findByPlaceId(user.getId(), placeId);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceAssembler.placeResponse(placeResponseDto));
     }
 
-    @GetMapping("/place")
+    @GetMapping("/places")
     public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user,
         PlaceSimpleRequest placeSimpleRequest) {
 

@@ -57,8 +57,6 @@ public class AuthService {
      로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
       - 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
       - 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
-      - 3. FCM Token을 Redis에 생성하는 부분을 이벤트로 분리. 분산 환경의 Redis를 사용하기에 네트워크 I/O 시간이 추가됩니다. I/O 시간 단축을 위해서 FCM 관련 로직 이벤트 분리
-      - 4. @TransactionEventListener를 적용해서 데이터 일관성 보장
      */
     @Transactional
     public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
@@ -141,14 +139,12 @@ public class AuthService {
     }
 
     private User checkEmail(final String email) {
-
         return userReader.findByEmail(email).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.INVALID_EMAIL);
         });
     }
 
     private void checkPassword(final String password, final String originPassword) {
-        System.out.println(password + " " + originPassword);
         if (!passwordEncoder.matches(password, originPassword)) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }

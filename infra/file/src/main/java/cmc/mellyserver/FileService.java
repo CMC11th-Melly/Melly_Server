@@ -13,6 +13,6 @@ public interface FileService {
 
     void deleteFileList(List<Long> deleteFileIds);
 
-    Long calculateImageVolume(String username);
+    long calculateImageVolume(String username);
 
 }

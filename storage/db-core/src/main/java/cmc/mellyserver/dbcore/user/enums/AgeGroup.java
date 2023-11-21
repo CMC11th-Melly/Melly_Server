@@ -12,6 +12,10 @@ public enum AgeGroup {
 
     private int ageGroup;
 
+    public int getAgeGroup() {
+        return ageGroup;
+    }
+
     AgeGroup(int age) {
         this.ageGroup = age;
     }

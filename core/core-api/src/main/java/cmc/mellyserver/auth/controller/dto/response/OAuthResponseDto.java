@@ -16,4 +16,7 @@ public class OAuthResponseDto<T> {
         return new OAuthResponseDto(null, new OAuthSignupResponseDto(socialId, provider));
     }
 
+    public static OAuthResponseDto of(String accessToken, String refreshToken) {
+        return new OAuthResponseDto(TokenResponseDto.of(accessToken, refreshToken), null);
+    }
 }

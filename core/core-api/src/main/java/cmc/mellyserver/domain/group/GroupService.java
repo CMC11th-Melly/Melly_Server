@@ -43,9 +43,8 @@ public class GroupService {
     @Cacheable(cacheNames = CacheNames.GROUP, key = "#groupId")
     public GroupDetailResponseDto getGroupDetail(final Long groupId, final Long userId) {
 
-        UserGroup userGroup = groupReader.findById(groupId); // 그룹을 찾는다
-        List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(groupId,
-            userId);// 그룹에 속한 멤버들을 찾는다
+        UserGroup userGroup = groupReader.findById(groupId);
+        List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(groupId, userId);
         return GroupDetailResponseDto.of(userGroup, groupMembers);
     }
 
@@ -56,7 +55,7 @@ public class GroupService {
     }
 
     @Transactional
-    public Long saveGroup(final CreateGroupRequestDto createGroupRequestDto) {
+    public Long saveGroup(CreateGroupRequestDto createGroupRequestDto) {
 
         User user = userReader.findById(createGroupRequestDto.getCreatorId());
         UserGroup savedGroup = groupWriter.save(createGroupRequestDto.toEntity());
@@ -77,7 +76,7 @@ public class GroupService {
 
     @CachePut(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
     @Transactional
-    public void updateGroup(final UpdateGroupRequestDto updateGroupRequestDto) {
+    public void updateGroup(UpdateGroupRequestDto updateGroupRequestDto) {
 
         UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),

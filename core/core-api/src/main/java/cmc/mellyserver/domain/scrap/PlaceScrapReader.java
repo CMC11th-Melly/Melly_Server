@@ -18,9 +18,9 @@ public class PlaceScrapReader {
 
     private final PlaceScrapQueryRepository placeScrapQueryRepository;
 
-    public Slice<ScrapedPlaceResponseDto> getUserScrapedPlace(Long lastId, Pageable pageable, Long userId,
+    public Slice<ScrapedPlaceResponseDto> getUserScrapedPlaces(Long lastId, Pageable pageable, Long userId,
         ScrapType scrapType) {
-        return placeScrapQueryRepository.getUserScrapedPlace(lastId, pageable, userId, scrapType);
+        return placeScrapQueryRepository.getUserScrapedPlaces(lastId, pageable, userId, scrapType);
     }
 
     public List<PlaceScrapCountResponseDto> getScrapedPlaceGrouping(Long userId) {

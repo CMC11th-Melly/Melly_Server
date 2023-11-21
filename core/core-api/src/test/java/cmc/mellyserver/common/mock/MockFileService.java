@@ -34,7 +34,7 @@ public class MockFileService implements FileService {
     }
 
     @Override
-    public Long calculateImageVolume(String username) {
+    public long calculateImageVolume(String username) {
         return 1L;
     }
 

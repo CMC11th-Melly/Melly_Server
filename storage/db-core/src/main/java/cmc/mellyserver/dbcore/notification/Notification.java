@@ -21,26 +21,30 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_notification")
 public class Notification extends JpaBaseEntity {
 
-    @Column(name = "notification_type")
-    NotificationType notificationType;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "memory_id")
+    private Long memoryId;
+
     @Column(name = "content")
     private String content;
+
     @Column(name = "is_read")
     private boolean isRead;
+
+    @Column(name = "notification_type")
+    private NotificationType notificationType;
 
     @Column(name = "profile_image")
     private String profileImage;
 
     @Column(name = "nickname")
     private String nickname;
-
-    @Column(name = "memory_id")
-    private Long memoryId;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

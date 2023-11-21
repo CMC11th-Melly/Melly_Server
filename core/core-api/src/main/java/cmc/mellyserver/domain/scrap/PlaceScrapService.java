@@ -42,7 +42,7 @@ public class PlaceScrapService {
     public ScrapedPlaceListResponse findScrapedPlace(final Long lastId, final Pageable pageable, final Long userId,
         final ScrapType scrapType) {
 
-        Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlace(lastId, pageable, userId,
+        Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlaces(lastId, pageable, userId,
             scrapType);
         return ScrapedPlaceListResponse.of(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
     }

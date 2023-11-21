@@ -36,9 +36,9 @@ import io.github.resilience4j.core.registry.EntryReplacedEvent;
 import io.github.resilience4j.core.registry.RegistryEventConsumer;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @EnableCaching
 @Configuration
-@Slf4j
 public class CacheConfig {
 
     private static final String CACHE_CURCUIT_BREAKER = "cache_curcuit_breaker";
@@ -52,6 +52,10 @@ public class CacheConfig {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(port);
+
+        /*
+        Redis 서버가 다운됐을 시, 쿼리를 보낸 뒤 1초동안 응답이 없으면 Timeout 에러가 발생하도록 구현했습니다
+         */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
             .commandTimeout(Duration.ofSeconds(1))
             .build();

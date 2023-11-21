@@ -13,4 +13,8 @@ public enum OpenType {
     OpenType(String description) {
         this.description = description;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

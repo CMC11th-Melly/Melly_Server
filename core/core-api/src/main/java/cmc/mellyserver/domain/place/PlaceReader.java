@@ -42,8 +42,8 @@ public class PlaceReader {
             .collect(Collectors.toList());
     }
 
-    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryName) {
-        return placeQueryRepository.searchPlaceByContainMemoryName(id, memoryName);
+    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long userId, String memoryName) {
+        return placeQueryRepository.searchPlaceByContainMemoryName(userId, memoryName);
     }
 
 }

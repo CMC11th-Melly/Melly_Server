@@ -10,10 +10,14 @@ public enum UserStatus {
 
     DELETE("탈퇴");
 
-    private String type;
+    public String getDescription() {
+        return description;
+    }
 
-    UserStatus(String type) {
-        this.type = type;
+    private String description;
+
+    UserStatus(String description) {
+        this.description = description;
     }
 
 }

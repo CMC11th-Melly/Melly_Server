@@ -26,19 +26,19 @@ public class PlaceService {
 
     private final UserScrapChecker userScrapChecker;
 
-    public List<MarkedPlaceResponseDto> displayMarkedPlace(Long id, GroupType groupType) {
-        return placeReader.placeUserMemoryExist(id, groupType);
+    public List<MarkedPlaceResponseDto> displayMarkedPlace(final Long userId, final GroupType groupType) {
+        return placeReader.placeUserMemoryExist(userId, groupType);
     }
 
-    public PlaceResponseDto findByPlaceId(Long userId, Long placeId) {
+    public PlaceResponseDto findByPlaceId(final Long userId, final Long placeId) {
         Place place = placeReader.findById(placeId);
         HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
-        boolean isUserScraped = userScrapChecker.check(placeId, userId);
+        boolean isUserScraped = userScrapChecker.check(userId, placeId);
 
         return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
     }
 
-    public PlaceResponseDto findByPosition(Long userId, Position position) {
+    public PlaceResponseDto findByPosition(final Long userId, final Position position) {
         Place place = placeReader.findByPosition(position);
         HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
         boolean isUserScraped = userScrapChecker.check(userId, position);
@@ -46,8 +46,8 @@ public class PlaceService {
         return PlaceResponseDto.of(place, isUserScraped, memoryCounts);
     }
 
-    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(Long id, String memoryTitle) {
-        return placeReader.findByMemoryTitle(id, memoryTitle);
+    public List<FindPlaceByMemoryTitleResponseDto> findByMemoryTitle(final Long userId, final String memoryTitle) {
+        return placeReader.findByMemoryTitle(userId, memoryTitle);
     }
 
 }

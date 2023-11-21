@@ -57,8 +57,7 @@ public class OAuthService {
 
         TokenDto tokenDto = tokenService.createToken(user);
         fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto.getFcmToken());
-        return new OAuthResponseDto(TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken()),
-            null);
+        return OAuthResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().getToken());
     }
 
 }

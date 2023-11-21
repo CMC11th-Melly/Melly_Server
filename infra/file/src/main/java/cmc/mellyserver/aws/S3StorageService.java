@@ -72,10 +72,10 @@ class S3StorageService implements FileService {
 
     }
 
-    public Long calculateImageVolume(String username) {
+    public long calculateImageVolume(String username) {
 
-        ObjectListing mellyimage = amazonS3Client.listObjects(bucket, username);
-        List<S3ObjectSummary> objectSummaries = mellyimage.getObjectSummaries();
+        ObjectListing mellyImage = amazonS3Client.listObjects(bucket, username);
+        List<S3ObjectSummary> objectSummaries = mellyImage.getObjectSummaries();
 
         return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
 

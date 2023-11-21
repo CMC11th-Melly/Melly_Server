@@ -47,7 +47,7 @@ public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 
         // when
         Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
-            .checkCurrentLoginUserScrapedPlaceByPosition(savedUser.getId(), savedPlace.getPosition());
+            .checkUserScrapedPlaceByPosition(savedUser.getId(), savedPlace.getPosition());
 
         // then
         Assertions.assertThat(isLoginUserScrapedPlace).isTrue();
@@ -69,7 +69,7 @@ public class ScrapQueryRepositoryTest extends RepositoryTestSupport {
 
         // when
         Boolean isLoginUserScrapedPlace = placeScrapQueryRepository
-            .checkCurrentLoginUserScrapedPlaceByPlaceId(savedUser.getId(), savedPlace.getId());
+            .checkUserScrapedPlaceByPlaceId(savedUser.getId(), savedPlace.getId());
 
         // then
         Assertions.assertThat(isLoginUserScrapedPlace).isTrue();

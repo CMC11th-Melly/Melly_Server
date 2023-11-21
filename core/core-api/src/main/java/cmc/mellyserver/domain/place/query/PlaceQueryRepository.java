@@ -22,23 +22,35 @@ public class PlaceQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public List<Place> getPlaceUserMemoryExist(Long id, GroupType groupType) {
+    public List<Place> getPlaceUserMemoryExist(Long userId, GroupType groupType) {
 
         return query.select(place)
             .from(place)
-            .where(JPAExpressions.selectFrom(memory).where(memory.placeId.eq(place.id), memory.userId.eq(id)).exists())
+            .where(
+                JPAExpressions
+                    .select(memory)
+                    .from(memory)
+                    .where(
+                        memory.placeId.eq(place.id),
+                        memory.userId.eq(userId)).exists()
+            )
             .fetch();
-
     }
 
     public List<FindPlaceByMemoryTitleResponseDto> searchPlaceByContainMemoryName(Long userId, String memoryName) {
 
         return query
-            .select(Projections.constructor(FindPlaceByMemoryTitleResponseDto.class, memory.placeId, memory.title))
+            .select(Projections.constructor(FindPlaceByMemoryTitleResponseDto.class,
+                    memory.placeId,
+                    memory.title
+                )
+            )
             .from(memory)
-            .where(memory.userId.eq(userId), memory.title.contains(memoryName))
+            .where(
+                memory.userId.eq(userId),
+                memory.title.contains(memoryName)
+            )
             .distinct()
             .fetch();
     }
-
 }
