@@ -10,29 +10,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.auth.AuthService;
-import cmc.mellyserver.auth.OAuthService;
-import cmc.mellyserver.auth.certification.CertificationService;
-import cmc.mellyserver.auth.certification.EmailCertificationRequest;
-import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
-import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.auth.certificate.CertificationService;
+import cmc.mellyserver.auth.common.resolver.CurrentUser;
+import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.auth.controller.dto.request.AuthLoginRequest;
-import cmc.mellyserver.auth.controller.dto.request.CommonSignupRequest;
+import cmc.mellyserver.auth.controller.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.auth.controller.dto.request.OAuthLoginRequest;
 import cmc.mellyserver.auth.controller.dto.request.OAuthSignupRequest;
 import cmc.mellyserver.auth.controller.dto.request.ReIssueAccessTokenRequest;
-import cmc.mellyserver.auth.controller.dto.response.OAuthResponseDto;
-import cmc.mellyserver.auth.dto.request.ChangePasswordRequest;
+import cmc.mellyserver.auth.controller.dto.request.SignupRequest;
+import cmc.mellyserver.auth.dto.request.EmailCertificationRequest;
+import cmc.mellyserver.auth.dto.response.OAuthResponseDto;
 import cmc.mellyserver.auth.dto.response.TokenResponseDto;
+import cmc.mellyserver.auth.service.AuthService;
+import cmc.mellyserver.auth.service.OAuthService;
 import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.support.response.ApiResponse;
 import cmc.mellyserver.support.response.SuccessCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -63,7 +61,7 @@ public class AuthController {
 
     // 이메일 회원 가입
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid CommonSignupRequest commonSignupRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid SignupRequest commonSignupRequest) {
 
         TokenResponseDto signupToken = authService.signup(commonSignupRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, signupToken);
@@ -81,7 +79,7 @@ public class AuthController {
     @PostMapping("/email-certification/sends")
     public ResponseEntity<ApiResponse<Void>> sendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
 
-        certificationService.sendCertification(requestDto.getEmail());
+        certificationService.sendCertification(requestDto.email());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
@@ -90,7 +88,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Void>> resendEmailCertification(
         @RequestBody EmailCertificationRequest requestDto) {
 
-        certificationService.sendCertification(requestDto.getEmail());
+        certificationService.sendCertification(requestDto.email());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
@@ -153,7 +151,7 @@ public class AuthController {
         @RequestBody ReIssueAccessTokenRequest reIssueAccessTokenRequest) {
 
         TokenResponseDto tokenResponseDto = authService
-            .reIssueAccessTokenAndRefreshToken(reIssueAccessTokenRequest.getRefreshToken());
+            .reIssueAccessTokenAndRefreshToken(reIssueAccessTokenRequest.refreshToken());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, tokenResponseDto);
     }
 

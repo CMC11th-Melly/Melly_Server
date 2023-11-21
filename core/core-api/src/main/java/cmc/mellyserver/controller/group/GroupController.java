@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
-import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.auth.common.resolver.CurrentUser;
+import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.controller.group.dto.GroupAssembler;
 import cmc.mellyserver.controller.group.dto.request.GroupCreateRequest;
 import cmc.mellyserver.controller.group.dto.request.GroupUpdateRequest;

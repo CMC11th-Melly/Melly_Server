@@ -6,7 +6,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 
-import cmc.mellyserver.dbredis.repository.FcmTokenRepository;
+import cmc.mellyserver.dbredis.FcmTokenRepository;
 import cmc.mellyserver.notification.NotificationService;
 import cmc.mellyserver.notification.constants.NotificationConstants;
 import lombok.RequiredArgsConstructor;

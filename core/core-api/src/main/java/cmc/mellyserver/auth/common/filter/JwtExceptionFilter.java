@@ -3,6 +3,7 @@ package cmc.mellyserver.auth.common.filter;
 import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,40 +25,34 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
         throws ServletException, IOException {
         try {
-
             chain.doFilter(request, response);
-
         } catch (JwtException ex) {
-
-            setExpiredErrorResponse(request, response, ex);
-
+            setExpiredErrorResponse(response);
         } catch (LogoutOrWithdrawException ex) {
-            setLogoutOrWithdrawErrorResponse(request, response, ex);
+            setLogoutOrWithdrawErrorResponse(response);
         }
     }
 
-    public void setExpiredErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex)
-        throws IOException {
+    private void setExpiredErrorResponse(HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json; charset=UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
 
         ErrorResponse error = ErrorResponse.of(ErrorCode.EXPIRED_TOKEN);
 
-        final ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
 
     }
 
-    public void setLogoutOrWithdrawErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable ex)
-        throws IOException {
+    private void setLogoutOrWithdrawErrorResponse(HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json; charset=UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
 
         ErrorResponse error = ErrorResponse.of(ErrorCode.LOGOUT_WITHDRAW_USER);
 
-        final ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), error);
     }
 

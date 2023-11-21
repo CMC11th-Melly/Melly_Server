@@ -2,33 +2,27 @@ package cmc.mellyserver.auth.controller.dto.request;
 
 import org.hibernate.validator.constraints.Length;
 
+import cmc.mellyserver.auth.dto.request.OAuthSignupRequestDto;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import cmc.mellyserver.dbcore.user.enums.Provider;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OAuthSignupRequest {
+public record OAuthSignupRequest(
+    String email,
 
-    // Oauth를 통해 넘겨받은 정보
-    private String email;
+    String socialId,
 
-    private String socialId;
+    Provider provider,
 
-    private Provider provider;
-
-    // 입력 정보
     @Length(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하로 작성해주세요.")
-    private String nickname; // 닉네임
+    String nickname,
 
-    private Gender gender; // 성별
+    Gender gender,
 
-    private AgeGroup ageGroup; // 연령대
+    AgeGroup ageGroup,
 
-    private String fcmToken;
+    String fcmToken
+) {
 
     public OAuthSignupRequestDto toDto() {
         return new OAuthSignupRequestDto(email, socialId, provider, nickname, gender, ageGroup, fcmToken);

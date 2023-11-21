@@ -46,12 +46,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void checkLogoutOrWithdrawUser(String jwt) {
+    private void checkLogoutOrWithdrawUser(String accessToken) {
 
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
-        if (!Objects.isNull(valueOperations.get(jwt))) {
-            throw new LogoutOrWithdrawException("이미 로그아웃하거나 탈퇴한 유저 입니다.");
+        if (Objects.nonNull(valueOperations.get(accessToken))) {
+            throw new LogoutOrWithdrawException("already Logout or withdraw user");
         }
     }
 

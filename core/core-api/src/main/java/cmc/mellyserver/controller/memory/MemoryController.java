@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import cmc.mellyserver.auth.controller.dto.common.CurrentUser;
-import cmc.mellyserver.auth.controller.dto.common.LoginUser;
+import cmc.mellyserver.auth.common.resolver.CurrentUser;
+import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.request.MemoryCreateRequest;
 import cmc.mellyserver.controller.memory.dto.request.MemoryUpdateRequest;

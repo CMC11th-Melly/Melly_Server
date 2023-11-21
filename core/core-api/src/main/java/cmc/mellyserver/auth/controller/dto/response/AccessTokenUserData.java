@@ -4,32 +4,31 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import cmc.mellyserver.dbcore.user.enums.Provider;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@Builder
-@NoArgsConstructor
-public class AccessTokenUserData {
+public record AccessTokenUserData(
 
-    private Long id;
+    Long id,
 
-    private String uid;
+    String uid,
 
-    private Provider provider;
+    Provider provider,
 
-    private String email;
+    String email,
 
-    private String nickname;
+    String nickname,
 
-    private String profileImage;
+    String profileImage,
 
-    private Gender gender;
+    Gender gender,
 
-    private AgeGroup ageGroup;
+    AgeGroup ageGroup
+
+) {
+
+    @Builder
+    public AccessTokenUserData {
+    }
 
     public static AccessTokenUserData from(User user) {
         return AccessTokenUserData.builder()
