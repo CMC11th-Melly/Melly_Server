@@ -12,6 +12,8 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+
 }
 
 
@@ -21,17 +23,16 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
     apply plugin: 'jacoco-report-aggregation'
-    
+
 
     bootJar.enabled = false // core-api 모듈 이외에는 모두 boot 되지 않는 모듈
-    jar.enabled = true // jar는 필요함
+    jar.enabled = true
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.3"
         }
     }
-
     jacoco {
         toolVersion = '0.8.8'
     }

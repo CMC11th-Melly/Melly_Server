@@ -42,12 +42,7 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-
-    /*
-    현재 Melly 프로젝트의 clients:client-auth 모듈에서 OpenFeign을 위한 Circuit Breaker를 위해 Resilience4j 라이브러리를 implementation으로 사용하고 있습니다.
-    core-api 모듈에서 client-auth 모듈을 의존하고 있기에 core-api의 compile classpath에 resilence4j가 들어오지는 않지만 runtime에는 사용이 가능합니다.
-    따라서 core-api 모듈에서는 중복으로 implementation을 하지 않고 compileOnly로 compile classpath에만 의존성을 추가했습니다.
-     */
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.2"
     implementation "io.github.resilience4j:resilience4j-all"
 
     // Test

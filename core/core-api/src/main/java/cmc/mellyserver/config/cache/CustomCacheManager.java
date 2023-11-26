@@ -4,15 +4,11 @@ import java.util.Collection;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class CustomCacheManager implements CacheManager {
 
     private final CacheManager delegate;
-
     private final CircuitBreaker circuitBreaker;
 
     public CustomCacheManager(CacheManager delegate, CircuitBreaker circuitBreaker) {
@@ -22,7 +18,6 @@ public class CustomCacheManager implements CacheManager {
 
     @Override
     public Cache getCache(String name) {
-
         return new CustomCache(delegate.getCache(name), circuitBreaker);
     }
 

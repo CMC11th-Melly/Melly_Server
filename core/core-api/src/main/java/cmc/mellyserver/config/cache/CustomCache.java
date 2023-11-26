@@ -1,13 +1,12 @@
 package cmc.mellyserver.config.cache;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.springframework.cache.Cache;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.dao.QueryTimeoutException;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.decorators.Decorators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,17 +34,13 @@ public class CustomCache implements Cache {
 
     @Override
     public ValueWrapper get(Object key) {
-
         Supplier<ValueWrapper> flightsSupplier = () -> (globalCache.get(key));
-
-        return Decorators
-            .ofSupplier(flightsSupplier)
-            .withCircuitBreaker(circuitBreaker)
-            .withFallback((e) -> fallback())
-            .decorate().get();
-
+        return circuitBreaker.run(flightsSupplier, (throwable -> fallback()));
     }
 
+    /*
+    Cache가 ValueWrapper로 null을 반환하면 캐싱된 데이터가 없다고 판단 후, 실제 로직을 통해 DB 쿼리를 진행합니다.
+     */
     private ValueWrapper fallback() {
         log.error("global cache server down, fallback method start");
         return null;
@@ -63,28 +58,21 @@ public class CustomCache implements Cache {
 
     @Override
     public void put(Object key, Object value) {
-        Consumer consumer = (k) -> globalCache.put(key, value);
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+
+        try {
+            globalCache.put(key, value);
+        } catch (QueryTimeoutException e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
     public void evict(Object key) {
-        Consumer consumer = (k) -> globalCache.evict(key);
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+        globalCache.evict(key);
     }
 
     @Override
     public void clear() {
-        Consumer consumer = (k) -> globalCache.clear();
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+        globalCache.clear();
     }
 }
