@@ -19,7 +19,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
         if (isReadOnly) {
-            return REPLICA;
+            return SOURCE;
         }
 
         return SOURCE;

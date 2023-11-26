@@ -2,7 +2,7 @@ package cmc.mellyserver.domain.group;
 
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.common.aop.lock.annotation.DistributedLock;
+import cmc.mellyserver.common.aspect.lock.DistributedLock;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

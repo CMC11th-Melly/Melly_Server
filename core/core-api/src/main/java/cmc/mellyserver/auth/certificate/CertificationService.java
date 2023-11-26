@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.certificate;
 
-import cmc.mellyserver.auth.dto.request.EmailCertificationRequest;
+import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
 
 public interface CertificationService {
 

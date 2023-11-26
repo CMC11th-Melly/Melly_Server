@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.common.constants.CacheNames;
+import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.dbcore.user.User;

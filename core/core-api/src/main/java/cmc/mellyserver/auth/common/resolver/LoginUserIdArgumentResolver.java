@@ -7,8 +7,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import cmc.mellyserver.auth.common.util.HeaderUtil;
 import cmc.mellyserver.auth.token.TokenProvider;
-import cmc.mellyserver.common.util.HeaderUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 

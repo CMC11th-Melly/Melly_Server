@@ -14,11 +14,9 @@ public class ProfileResponse {
 
     private String profileImage;
 
-    private long imageVolume;
-
-    public static ProfileResponse of(ProfileResponseDto profileResponseDto, long imageVolume) {
+    public static ProfileResponse of(ProfileResponseDto profileResponseDto) {
         return new ProfileResponse(profileResponseDto.userId(), profileResponseDto.nickname(),
-            profileResponseDto.profileImage(), imageVolume);
+            profileResponseDto.profileImage());
     }
 
 }

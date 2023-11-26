@@ -133,7 +133,6 @@ public class GlobalExceptionHandler {
     // 잡히지 않은 에러들을 일괄 처리
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error("intenalServerError", ex);
         ErrorResponse response = ErrorResponse.of(ErrorCode.SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }

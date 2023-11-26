@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.controller.dto.request;
 
-import cmc.mellyserver.auth.dto.request.AuthLoginRequestDto;
+import cmc.mellyserver.auth.service.dto.request.AuthLoginRequestDto;
 import jakarta.validation.constraints.Email;
 
 public record AuthLoginRequest(

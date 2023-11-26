@@ -14,7 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import cmc.mellyserver.auth.dto.response.RefreshTokenDto;
+import cmc.mellyserver.auth.service.dto.response.RefreshTokenDto;
 import cmc.mellyserver.dbcore.user.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

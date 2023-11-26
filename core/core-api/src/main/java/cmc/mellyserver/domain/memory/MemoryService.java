@@ -7,14 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
-import cmc.mellyserver.common.constants.CacheNames;
-import cmc.mellyserver.common.event.MemoryCreatedEvent;
+import cmc.mellyserver.common.aspect.place.CheckPlaceExist;
+import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.memory.Memory;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
+import cmc.mellyserver.domain.memory.event.MemoryCreatedEvent;
 import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 
@@ -80,7 +80,7 @@ public class MemoryService {
         return memoryReader.findGroupMemoriesById(lastId, pageable, groupId, userId, groupType);
     }
 
-    @ValidatePlaceExisted
+    @CheckPlaceExist
     @Transactional
     public void createMemory(final CreateMemoryRequestDto createMemoryRequestDto) {
 

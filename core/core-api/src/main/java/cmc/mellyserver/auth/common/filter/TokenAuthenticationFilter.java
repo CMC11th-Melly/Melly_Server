@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import cmc.mellyserver.auth.common.util.HeaderUtil;
 import cmc.mellyserver.auth.token.TokenProvider;
-import cmc.mellyserver.common.util.HeaderUtil;
 import cmc.mellyserver.support.exception.LogoutOrWithdrawException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

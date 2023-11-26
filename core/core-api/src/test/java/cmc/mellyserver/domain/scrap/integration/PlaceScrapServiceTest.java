@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
+import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
 import cmc.mellyserver.dbcore.scrap.PlaceScrapRepository;
 import cmc.mellyserver.dbcore.scrap.ScrapType;
@@ -51,7 +52,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
         // When
         placeScrapService.createScrap(모카.getId(),
-            new CreatePlaceScrapRequestDto(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
+            new CreatePlaceScrapRequestDto(new Position(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng()),
                 ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
         // Then
@@ -76,7 +77,8 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
             // When
             CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(
-                스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(), ScrapType.FRIEND, 스타벅스.getName(),
+                new Position(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng()), ScrapType.FRIEND,
+                스타벅스.getName(),
                 스타벅스.getCategory());
             placeScrapService.createScrap(모카.getId(), createPlaceScrapRequestDto);
 
@@ -93,8 +95,8 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
             // Given
             User 모카 = userRepository.save(UserFixtures.모카());
 
-            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(1.555,
-                1.555,
+            CreatePlaceScrapRequestDto createPlaceScrapRequestDto = new CreatePlaceScrapRequestDto(new Position(1.555,
+                1.555),
                 ScrapType.FRIEND, "스타벅스", "카페");
 
             // when
@@ -120,7 +122,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
             // When
             placeScrapService.createScrap(모카.getId(),
-                new CreatePlaceScrapRequestDto(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng(),
+                new CreatePlaceScrapRequestDto(new Position(스타벅스.getPosition().getLat(), 스타벅스.getPosition().getLng()),
                     ScrapType.FRIEND, 스타벅스.getName(), 스타벅스.getCategory()));
 
             // when

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.auth.controller.dto.request.ChangePasswordRequest;
-import cmc.mellyserver.auth.dto.request.AuthLoginRequestDto;
-import cmc.mellyserver.auth.dto.request.AuthSignupRequestDto;
-import cmc.mellyserver.auth.dto.response.TokenResponseDto;
+import cmc.mellyserver.auth.service.dto.request.AuthLoginRequestDto;
+import cmc.mellyserver.auth.service.dto.request.AuthSignupRequestDto;
+import cmc.mellyserver.auth.service.dto.response.TokenResponseDto;
 import cmc.mellyserver.auth.token.RefreshToken;
 import cmc.mellyserver.auth.token.TokenDto;
 import cmc.mellyserver.auth.token.TokenService;

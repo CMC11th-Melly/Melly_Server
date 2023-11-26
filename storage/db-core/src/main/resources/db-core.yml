@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       properties:
         hibernate:
           show_sql: true
@@ -15,7 +15,7 @@ spring:
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver
     replica:
-      jdbc-url: jdbc:mysql://192.168.0.8:3307/melly_db
+      jdbc-url: jdbc:mysql://172.30.1.44:3307/melly_db
       username: root
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver

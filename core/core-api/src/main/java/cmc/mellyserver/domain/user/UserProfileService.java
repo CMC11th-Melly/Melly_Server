@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import cmc.mellyserver.common.constants.CacheNames;
+import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.user.dto.request.ProfileUpdateRequestDto;
 import cmc.mellyserver.domain.user.dto.response.ProfileResponseDto;
@@ -25,13 +25,6 @@ public class UserProfileService {
 
     private final ProfileImageUploader profileImageUploader;
 
-    @Cacheable(cacheNames = CacheNames.USER_VOLUME, key = "#userId")
-    public long calculateImageTotalVolume(final Long userId) {
-
-        User user = userReader.findById(userId);
-        return profileImageUploader.calculateImageVolume(user.getEmail());
-    }
-
     @Cacheable(cacheNames = CacheNames.USER, key = "#userId")
     public ProfileResponseDto getProfile(final Long userId) {
 
@@ -45,7 +38,7 @@ public class UserProfileService {
         userWriter.update(userId, profileUpdateRequestDto);
     }
 
-    @CacheEvict(cacheNames = CacheNames.USER_VOLUME, key = "#userId")
+    @CacheEvict(cacheNames = CacheNames.USER, key = "#userId")
     @Transactional
     public void updateProfileImage(final Long userId, MultipartFile newProfileImage, boolean isDeleted) throws
         IOException {

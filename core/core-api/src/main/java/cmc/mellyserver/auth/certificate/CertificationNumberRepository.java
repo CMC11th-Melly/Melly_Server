@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.certificate;
 
-import static cmc.mellyserver.mail.EmailConstants.*;
+import static cmc.mellyserver.auth.certificate.CertificateConstants.*;
 
 import java.time.Duration;
 
@@ -15,9 +15,7 @@ class CertificationNumberRepository {
 
     private final StringRedisTemplate redisTemplate;
 
-    /*
-    인증번호 유효기간 : 3분
-     */
+    // 인증번호 유효기간 : 3분
     public void save(String email, String certificationNumber) {
 
         redisTemplate.opsForValue()

@@ -28,10 +28,6 @@ public class ProfileImageUploader {
         }
     }
 
-    public long calculateImageVolume(String email) {
-        return fileService.calculateImageVolume(email);
-    }
-
     private void storeProfileImage(User user, MultipartFile profileImage) throws IOException {
         fileService.deleteFile(user.getProfileImage());
         String profileImageUrl = fileService.saveFile(user.getId(), extractImageInfo(profileImage));

@@ -9,8 +9,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
-import cmc.mellyserver.common.constants.CacheNames;
+import cmc.mellyserver.common.aspect.place.CheckPlaceExist;
+import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.dbcore.scrap.PlaceScrap;
@@ -54,7 +54,7 @@ public class PlaceScrapService {
     }
 
     @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
-    @ValidatePlaceExisted
+    @CheckPlaceExist
     @Transactional
     public void createScrap(final Long userId, final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
