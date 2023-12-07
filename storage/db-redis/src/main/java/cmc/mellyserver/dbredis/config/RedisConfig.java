@@ -43,10 +43,6 @@ public class RedisConfig {
         return container;
     }
 
-    /*
-    RedisTemplate의 key는 String 타입을 사용합니다.
-    Value는 어떤 타입이든 들어올 수 있기 때문에 GenericJackson2JsonRedisSerializer를 사용합니다.
-     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
 

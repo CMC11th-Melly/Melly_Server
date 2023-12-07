@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class DistributedLockAop {
+public class DistributedLockAspect {
 
     private final RedissonClient redissonClient;
 
@@ -34,7 +34,6 @@ public class DistributedLockAop {
 		@Cacheable 어노테이션에서 key값을 설정하는 방식과 유사하도록 구현
 		 */
         String key = LockKeyParser.parse(signature.getParameterNames(), joinPoint.getArgs(), lock.key());
-
         RLock rLock = redissonClient.getLock(key);
 
         try {
@@ -46,7 +45,11 @@ public class DistributedLockAop {
                 throw new BusinessException(ErrorCode.SERVER_ERROR);
             }
 
-            // 락을 획득했다면 실제 메소드 실행
+            /*
+            락을 획득한 후 기존 메서드를 실행할때, 락을 사용하는 기능은 기존 트랜잭션에서 분리하기위해 REQUIRED_NEW를 사용했습니다.
+            분산락이 적용된 기능을 완료한 뒤, 커밋하고 나면 그때 락을 해제하는 작업을 합니다.
+            만약 기존의 트랜잭션을 그대로 이어받아 사용한다면 다른 클라이언트에 의해 갱신 손실이 발생할 수 있습니다.
+             */
             return joinPoint.proceed();
 
         } catch (InterruptedException e) {
@@ -55,5 +58,4 @@ public class DistributedLockAop {
             rLock.unlock();
         }
     }
-
 }

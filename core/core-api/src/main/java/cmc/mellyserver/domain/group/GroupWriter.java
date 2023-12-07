@@ -12,7 +12,8 @@ public class GroupWriter {
 
     private final GroupRepository groupRepository;
 
-    public UserGroup save(UserGroup userGroup) {
+    public UserGroup save(Long ownerId, UserGroup userGroup) {
+        userGroup.setOwnerId(ownerId);
         return groupRepository.save(userGroup);
     }
 

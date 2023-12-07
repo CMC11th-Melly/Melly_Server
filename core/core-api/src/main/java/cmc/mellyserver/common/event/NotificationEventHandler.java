@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;

@@ -1,17 +1,18 @@
 package cmc.mellyserver.domain.comment;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.dbcore.comment.comment.Comment;
 import cmc.mellyserver.dbcore.comment.comment.CommentRepository;
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
 import cmc.mellyserver.domain.memory.MemoryReader;
 import cmc.mellyserver.domain.user.UserReader;
+import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -32,11 +33,10 @@ public class CommentWriter {
         return saveComment(parentComment, commentRequestDto);
     }
 
-    public void remove(Long commentId) {
+    public void remove(Long userId, Long commentId) {
         Comment comment = commentReader.findById(commentId);
-        comment.delete();
-        List<Comment> children = comment.getChildren();
-        children.forEach(Comment::delete);
+        checkAuthority(userId, comment);
+        commentRepository.delete(comment);
     }
 
     public void update(Long commentId, String content) {
@@ -44,21 +44,19 @@ public class CommentWriter {
         comment.update(content);
     }
 
-    private Comment saveComment(Comment rootComment, CommentRequestDto commentRequestDto) {
+    private Comment saveComment(Comment root, CommentRequestDto commentRequestDto) {
 
         User user = userReader.findById(commentRequestDto.getUserId());
         Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
 
-        if (Objects.isNull(rootComment)) {
-            return commentRepository.save(
-                Comment.createRoot(commentRequestDto.getContent(), user, memory.getId(), null));
+        if (Objects.isNull(root)) {
+            return commentRepository.save(Comment.createRoot(commentRequestDto.getContent(), user, memory.getId()));
         }
 
         User mentionUser = userReader.findById(commentRequestDto.getMentionId());
-
         Comment comment = commentRepository.save(
-            Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), rootComment));
-        rootComment.getChildren().add(comment);
+            Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), root));
+        root.getChildren().add(comment);
         return comment;
     }
 
@@ -69,5 +67,11 @@ public class CommentWriter {
         }
 
         return commentReader.findById(rootId);
+    }
+
+    private void checkAuthority(Long userId, Comment comment) {
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new BusinessException(ErrorCode.NOT_VALID_ERROR);
+        }
     }
 }

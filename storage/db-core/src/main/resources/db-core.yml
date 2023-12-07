@@ -1,24 +1,16 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       properties:
         hibernate:
           show_sql: true
         format_sql: true
 
-  # Datasource
   datasource:
     source:
       jdbc-url: jdbc:mysql://localhost:3306/melly_db
       username: root
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver
-    replica:
-      jdbc-url: jdbc:mysql://172.30.1.44:3307/melly_db
-      username: root
-      password: 1234
-      driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 10
+

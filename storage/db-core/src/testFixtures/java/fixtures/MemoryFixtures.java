@@ -2,8 +2,8 @@ package fixtures;
 
 import java.time.LocalDate;
 
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 
 public abstract class MemoryFixtures {
 

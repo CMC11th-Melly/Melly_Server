@@ -19,8 +19,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDto implements Serializable {
 
-    private static final String REMOVE_COMMENT = "삭제된 댓글입니다";
     private Long id;
+
+    private String nickname;
+
+    private String profileImage;
 
     private String content;
 
@@ -30,13 +33,9 @@ public class CommentDto implements Serializable {
 
     private int likeCount;
 
-    private String mentionUserNickname;
+    private String mentionUser;
 
-    private String nickname;
-
-    private String profileImage;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
     private List<CommentDto> children;
@@ -54,9 +53,17 @@ public class CommentDto implements Serializable {
 
     public static CommentDto createChild(Comment comment, User user) {
 
-        CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
-            comment.getCommentLikes().size(), comment.getMentionUser().getNickname(), comment.getUser().getNickname(),
-            comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
+        CommentDto commentDto = new CommentDto(comment.getId(),
+            user.getNickname(),
+            user.getProfileImage(),
+            comment.getContent(),
+            false,
+            false,
+            0,
+            comment.getMentionUser().getNickname(),
+            comment.getCreatedDate(),
+            new ArrayList<>()
+        );
 
         if (isLoginUser(comment, user)) {
             commentDto.setCurrentUser(true);
@@ -67,9 +74,17 @@ public class CommentDto implements Serializable {
 
     public static CommentDto createRoot(Comment comment, User user) {
 
-        CommentDto commentDto = new CommentDto(comment.getId(), comment.getContent(), false, false,
-            comment.getCommentLikes().size(), null, comment.getUser().getNickname(),
-            comment.getUser().getProfileImage(), comment.getCreatedDate(), new ArrayList<>());
+        CommentDto commentDto = new CommentDto(comment.getId(),
+            user.getNickname(),
+            user.getProfileImage(),
+            comment.getContent(),
+            false,
+            false,
+            0,
+            null,
+            comment.getCreatedDate(),
+            new ArrayList<>()
+        );
 
         if (isLoginUser(comment, user)) {
             commentDto.setCurrentUser(true);
@@ -78,7 +93,7 @@ public class CommentDto implements Serializable {
         return commentDto;
     }
 
-    public void setCurrentUserLike(boolean currentUserLike) {
-        isCurrentUserLike = currentUserLike;
+    public void setIsUserLike(boolean isUserLike) {
+        isCurrentUserLike = isUserLike;
     }
 }

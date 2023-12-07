@@ -41,11 +41,6 @@ public class CacheConfig {
     @Value("${spring.redis.cache.port}")
     private int port;
 
-    /*
-    Redis를 운영 환경에서 사용할때는 Sentinel이나 Cluster 모드를 사용해서 고가용성을 보장할 것이고,
-    RedisConfiguration으로 RedisSentinelConfiguration이나 RedisClusterConfiguration을 사용할 것입니다.
-    현재 프로젝트에서는 가용성 보장을 위한 Replication을 하지는 못했기에 싱글 노드 기반의 RedisStandaloneConfiguration을 사용했습니다.
-     */
     @Bean(name = "redisCacheConnectionFactory")
     RedisConnectionFactory redisCacheConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -53,14 +48,14 @@ public class CacheConfig {
         redisStandaloneConfiguration.setPort(port);
 
         /*
-        Redis 서버가 다운됐을 시, Redis에 요청을 보낸 뒤 200ms동안 응답이 없으면 Timeout이 발생하도록 구현했습니다.
-        현재 프로젝트 내 Redis 캐시의 응답 시간이 보통 100ms 아래로 나오는 것을 참고했을때 200ms로 command timeout을 설정한다면,
-        Redis 서버가 죽지 않은 상황에서 일시적인 지연으로 인해 Timeout이 발생하고, DB 쿼리가 발생하는 상황을 방지할 수 있다고 생각했습니다.
+        Redis 서버로 요청을 보낸 뒤 2초간 응답이 없으면 QueryTimeout을 발생시키도록 구현했습니다.
+        Linux 서버는 TCP 커넥션을 맺을때 SYN 패킷을 보낸 뒤 InitialRTO 값인 1초간 응답 패킷이 없으면 SYN 패킷을 재전송합니다.
+        따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
          */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(200L))
+            .commandTimeout(Duration.ofSeconds(1))
             .build();
-
+        
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
 
@@ -105,10 +100,10 @@ public class CacheConfig {
 
         /* Cache TTL 설정 */
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
-        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofHours(1)));
+        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
             .withInitialCacheConfigurations(redisCacheConfigMap)

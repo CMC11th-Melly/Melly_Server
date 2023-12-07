@@ -10,9 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.FileDto;
 import cmc.mellyserver.FileService;
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.MemoryImage;
-import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.MemoryImage;
+import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
@@ -37,6 +37,7 @@ public class MemoryWriter {
         Memory memory = createMemoryRequestDto.toMemory();
         addPlace(createMemoryRequestDto.getPosition(), memory);
         addMemoryImages(createMemoryRequestDto, memory);
+        addKeywords(createMemoryRequestDto.getKeywordIds(), memory);
         return memoryRepository.save(memory);
     }
 
@@ -77,13 +78,13 @@ public class MemoryWriter {
         memory.delete();
     }
 
-    private void addPlace(final Position position, final Memory memory) {
+    private void addPlace(Position position, Memory memory) {
 
         Place place = placeReader.findByPosition(position);
         memory.setPlaceId(place.getId());
     }
 
-    private void addMemoryImages(final CreateMemoryRequestDto createMemoryRequestDto, final Memory memory) {
+    private void addMemoryImages(CreateMemoryRequestDto createMemoryRequestDto, Memory memory) {
 
         List<FileDto> fileList = extractFileList(createMemoryRequestDto.getMultipartFiles());
 
@@ -107,6 +108,10 @@ public class MemoryWriter {
                 throw new RuntimeException(e);
             }
         }).toList();
+    }
+
+    private void addKeywords(List<Long> keywordIds, Memory memory) {
+        memory.addKeywordIds(keywordIds);
     }
 
 }

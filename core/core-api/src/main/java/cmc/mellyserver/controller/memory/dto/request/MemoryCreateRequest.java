@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemoryCreateRequest {
 
-    private Double lat;
+    private double lat;
 
-    private Double lng;
+    private double lng;
 
     private String placeName;
 
@@ -31,30 +31,31 @@ public class MemoryCreateRequest {
     private String title;
 
     @NotNull
-    @Length(max = 650, message = "본문은 650자 이하로 작성해주세요.") // ok
+    @Length(max = 650, message = "본문은 650자 이하로 작성해주세요.")
     private String content;
-
-    private List<String> keyword;
-
-    private Long groupId;
 
     private OpenType openType;
 
     @JsonFormat(pattern = "yyyyMMdd")
     private LocalDate visitedDate;
 
-    private Long star;
+    private long star;
+
+    private List<Long> keywordIds;
+
+    private Long groupId;
 
     @Builder
     public MemoryCreateRequest(Double lat, Double lng, String placeName, String placeCategory, String title,
-        String content, List<String> keyword, Long groupId, OpenType openType, LocalDate visitedDate, Long star) {
+        List<Long> keywordIds,
+        String content, Long groupId, OpenType openType, LocalDate visitedDate, Long star) {
         this.lat = lat;
         this.lng = lng;
         this.placeName = placeName;
         this.placeCategory = placeCategory;
         this.title = title;
+        this.keywordIds = keywordIds;
         this.content = content;
-        this.keyword = keyword;
         this.groupId = groupId;
         this.openType = openType;
         this.visitedDate = visitedDate;

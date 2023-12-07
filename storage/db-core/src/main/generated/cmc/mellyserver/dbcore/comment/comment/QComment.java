@@ -26,19 +26,21 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final ListPath<Comment, QComment> children = this.<Comment, QComment>createList("children", Comment.class, QComment.class, PathInits.DIRECT2);
 
-    public final ListPath<cmc.mellyserver.dbcore.comment.commenlike.CommentLike, cmc.mellyserver.dbcore.comment.commenlike.QCommentLike> commentLikes = this.<cmc.mellyserver.dbcore.comment.commenlike.CommentLike, cmc.mellyserver.dbcore.comment.commenlike.QCommentLike>createList("commentLikes", cmc.mellyserver.dbcore.comment.commenlike.CommentLike.class, cmc.mellyserver.dbcore.comment.commenlike.QCommentLike.class, PathInits.DIRECT2);
+    public final EnumPath<CommentStatus> commentStatus = createEnum("commentStatus", CommentStatus.class);
 
     public final StringPath content = createString("content");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
     public final NumberPath<Long> memoryId = createNumber("memoryId", Long.class);
 
@@ -47,6 +49,8 @@ public class QComment extends EntityPathBase<Comment> {
     public final QComment root;
 
     public final cmc.mellyserver.dbcore.user.QUser user;
+
+    public final NumberPath<Long> version = createNumber("version", Long.class);
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);

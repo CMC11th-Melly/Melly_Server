@@ -1,38 +1,56 @@
 package cmc.mellyserver.domain.memory.query.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import cmc.mellyserver.dbcore.group.GroupType;
+import cmc.mellyserver.dbcore.group.UserGroup;
+import cmc.mellyserver.dbcore.memory.keyword.Keyword;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.place.Place;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-public class MemoryResponseDto {
+public record MemoryResponseDto(
 
-    private Long memoryId;
+    Long placeId,
+    String placeName,
 
-    private String title;
+    Long memoryId,
+    String title,
+    String content,
+    List<MemoryImageDto> memoryImages,
+    List<String> keywords,
+    LocalDate visitedDate,
+    long stars,
 
-    private LocalDate visitedDate;
-
-    private GroupType groupType;
-
+    Long groupId,
+    GroupType groupType,
+    String groupName,
+    int groupIcon
+) implements Serializable {
     @Builder
-    public MemoryResponseDto(Long memoryId, String title, GroupType groupType, LocalDate visitedDate) {
-        this.memoryId = memoryId;
-        this.title = title;
-        this.groupType = groupType;
-        this.visitedDate = visitedDate;
+    public MemoryResponseDto {
     }
 
-    public MemoryResponseDto(Long memoryId, String title, LocalDate visitedDate, GroupType groupType) {
-
-        this.memoryId = memoryId;
-        this.title = title;
-        this.visitedDate = visitedDate;
-        this.groupType = groupType;
+    public static MemoryResponseDto of(Place place, Memory memory, List<Keyword> keywords, UserGroup userGroup) {
+        return MemoryResponseDto.builder()
+            .placeId(place.getId())
+            .placeName(place.getName())
+            .memoryId(memory.getId())
+            .title(memory.getTitle())
+            .content(memory.getContent())
+            .memoryImages(memory.getMemoryImages()
+                .stream()
+                .map(image -> new MemoryImageDto(image.getId(), image.getImagePath()))
+                .toList())
+            .keywords(keywords.stream().map(Keyword::getContent).toList())
+            .visitedDate(memory.getVisitedDate())
+            .stars(memory.getStars())
+            .groupId(userGroup.getId())
+            .groupType(userGroup.getGroupType())
+            .groupName(userGroup.getName())
+            .groupIcon(userGroup.getIcon())
+            .build();
     }
-
 }

@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.memory;
+package cmc.mellyserver.dbcore.memory.memory;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QMemory extends EntityPathBase<Memory> {
 
-    private static final long serialVersionUID = 2028643452L;
+    private static final long serialVersionUID = -124930317L;
 
     public static final QMemory memory = new QMemory("memory");
 
@@ -32,6 +32,8 @@ public class QMemory extends EntityPathBase<Memory> {
     public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final SetPath<Long, NumberPath<Long>> keywordIds = this.<Long, NumberPath<Long>>createSet("keywordIds", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;

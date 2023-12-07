@@ -42,20 +42,20 @@ public abstract class MemoryAssembler {
     }
 
     public static CreateMemoryRequestDto createMemoryRequestDto(Long id, List<MultipartFile> images,
-        MemoryCreateRequest placeInfoRequest) {
+        MemoryCreateRequest memoryCreateRequest) {
         return CreateMemoryRequestDto.builder()
             .userId(id)
-            .lat(placeInfoRequest.getLat())
-            .lng(placeInfoRequest.getLng())
-            .title(placeInfoRequest.getTitle())
-            .placeName(placeInfoRequest.getPlaceName())
-            .placeName(placeInfoRequest.getPlaceCategory())
-            .content(placeInfoRequest.getContent())
-            .star(placeInfoRequest.getStar())
-            .groupId(placeInfoRequest.getGroupId())
-            .openType(placeInfoRequest.getOpenType())
-            .keyword(placeInfoRequest.getKeyword())
-            .visitedDate(placeInfoRequest.getVisitedDate())
+            .lat(memoryCreateRequest.getLat())
+            .lng(memoryCreateRequest.getLng())
+            .title(memoryCreateRequest.getTitle())
+            .placeName(memoryCreateRequest.getPlaceName())
+            .placeName(memoryCreateRequest.getPlaceCategory())
+            .content(memoryCreateRequest.getContent())
+            .star(memoryCreateRequest.getStar())
+            .keywordIds(memoryCreateRequest.getKeywordIds())
+            .groupId(memoryCreateRequest.getGroupId())
+            .openType(memoryCreateRequest.getOpenType())
+            .visitedDate(memoryCreateRequest.getVisitedDate())
             .multipartFiles(images)
             .build();
     }

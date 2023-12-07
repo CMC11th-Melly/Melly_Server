@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.Position;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class CreateMemoryRequestDto {
 
     OpenType openType;
 
-    List<String> keyword;
+    List<Long> keywordIds;
 
     LocalDate visitedDate;
 
@@ -41,7 +41,7 @@ public class CreateMemoryRequestDto {
 
     @Builder
     public CreateMemoryRequestDto(Long userId, Double lat, Double lng, String title, String placeName,
-        String placeCategory, String content, Long star, Long groupId, OpenType openType, List<String> keyword,
+        String placeCategory, String content, Long star, Long groupId, OpenType openType, List<Long> keywordIds,
         LocalDate visitedDate, List<MultipartFile> multipartFiles) {
         this.userId = userId;
         this.position = new Position(lat, lng);
@@ -52,7 +52,7 @@ public class CreateMemoryRequestDto {
         this.star = star;
         this.groupId = groupId;
         this.openType = openType;
-        this.keyword = keyword;
+        this.keywordIds = keywordIds;
         this.visitedDate = visitedDate;
         this.multipartFiles = multipartFiles;
     }

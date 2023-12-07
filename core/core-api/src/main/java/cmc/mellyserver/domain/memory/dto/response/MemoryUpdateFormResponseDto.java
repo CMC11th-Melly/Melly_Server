@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.domain.group.query.dto.GroupListForSaveMemoryResponseDto;
 import lombok.Builder;
 import lombok.Data;

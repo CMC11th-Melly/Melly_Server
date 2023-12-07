@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.dbcore.notification.Notification;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import cmc.mellyserver.dbcore.user.User;

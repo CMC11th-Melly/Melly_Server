@@ -24,14 +24,12 @@ public class CircuitBreakerConfig {
         return new RegistryEventConsumer<CircuitBreaker>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+
                 CircuitBreaker.EventPublisher eventPublisher = entryAddedEvent.getAddedEntry().getEventPublisher();
-
-                eventPublisher.onCallNotPermitted(event -> log.error("onCallNotPermitted {}", event));
-
+                eventPublisher.onCallNotPermitted(event -> log.info("onCallNotPermitted {}", event));
                 eventPublisher.onError(event -> log.error("onError {}", event));
-
                 eventPublisher.onStateTransition(event -> {
-                    log.error("onStateTransition {}", event);
+                    log.info("onStateTransition {}", event.getStateTransition());
                     publishCircuitOpenTopic(event, redisPublisher);
                 });
             }
@@ -58,7 +56,9 @@ public class CircuitBreakerConfig {
     해당 조건이 없으면 계속 OPEN 이벤트가 발생해서 무한 루프가 발생합니다.
      */
     private boolean openStateSpreadEnabled(CircuitBreakerOnStateTransitionEvent event) {
-        return (!event.getStateTransition().getFromState().equals(OPEN_STATE))
-            && event.getStateTransition().getToState().name().equals(OPEN_STATE);
+        return !event.getStateTransition().getFromState().name().equals(OPEN_STATE) && event.getStateTransition()
+            .getToState()
+            .name()
+            .equals(OPEN_STATE);
     }
 }

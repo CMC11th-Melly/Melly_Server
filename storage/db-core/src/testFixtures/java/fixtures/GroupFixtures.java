@@ -13,13 +13,12 @@ public abstract class GroupFixtures {
 
     private static final GroupType 가족_타입 = GroupType.FAMILY;
 
-    public static UserGroup 친구그룹() {
+    public static UserGroup 친구그룹(Long ownerId) {
 
-        return UserGroup.builder().name(그룹_이름).groupType(그룹_타입).icon(1).build();
+        return UserGroup.builder().name(그룹_이름).groupType(그룹_타입).icon(1).ownerId(ownerId).build();
     }
 
-    public static UserGroup 가족그룹() {
-        return UserGroup.builder().name(가족_이름).groupType(가족_타입).icon(1).build();
+    public static UserGroup 가족그룹(Long ownerId) {
+        return UserGroup.builder().name(가족_이름).groupType(가족_타입).icon(1).ownerId(ownerId).build();
     }
-
 }

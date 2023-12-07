@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
+import cmc.mellyserver.domain.memory.query.dto.MemoryImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class GetMemoryForPlaceResponse {
 
     private Long memoryId;
 
-    private List<ImageDto> memoryImages;
+    private List<MemoryImageDto> memoryImages;
 
     private String title;
 

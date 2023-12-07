@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.dbcore.comment.comment.Comment;
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
 import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;
@@ -43,7 +43,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
-        commentWriter.remove(commentId);
+    public void deleteComment(final Long userId, final Long commentId) {
+        commentWriter.remove(userId, commentId);
     }
 }

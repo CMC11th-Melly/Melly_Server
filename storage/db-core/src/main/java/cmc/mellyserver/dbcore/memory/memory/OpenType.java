@@ -1,4 +1,4 @@
-package cmc.mellyserver.dbcore.memory;
+package cmc.mellyserver.dbcore.memory.memory;
 
 public enum OpenType {
 

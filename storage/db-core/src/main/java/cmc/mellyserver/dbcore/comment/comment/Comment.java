@@ -1,15 +1,16 @@
 package cmc.mellyserver.dbcore.comment.comment;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
+import org.hibernate.annotations.ColumnDefault;
+
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,9 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,15 +34,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_comment")
 public class Comment extends JpaBaseEntity {
 
-    private static final String REMOVE_COMMENT = "삭제된 댓글입니다.";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(name = "content")
     @Lob
+    @Column(name = "content")
     private String content;
 
     @ManyToOne
@@ -53,9 +54,6 @@ public class Comment extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long memoryId;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<CommentLike> commentLikes = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "root_id")
     private Comment root;
@@ -63,8 +61,19 @@ public class Comment extends JpaBaseEntity {
     @OneToMany(mappedBy = "root", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    @ColumnDefault("0")
+    @Column(name = "like_count")
+    private int likeCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comment_status")
+    private CommentStatus commentStatus;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
+    @Version
+    private Long version;
 
     public Comment(String content) {
         this.content = content;
@@ -79,9 +88,9 @@ public class Comment extends JpaBaseEntity {
         setRoot(root);
     }
 
-    public static Comment createRoot(String content, User user, Long memoryId, Comment root) {
+    public static Comment createRoot(String content, User user, Long memoryId) {
 
-        return Comment.builder().content(content).user(user).memoryId(memoryId).root(root).build();
+        return Comment.builder().content(content).user(user).memoryId(memoryId).build();
     }
 
     public static Comment createChild(String content, User user, User mentionUser, Long memoryId, Comment root) {
@@ -94,8 +103,16 @@ public class Comment extends JpaBaseEntity {
             .build();
     }
 
+    public void addLike() {
+        this.likeCount += 1;
+    }
+
+    public void unLike() {
+        this.likeCount -= 1;
+    }
+
     public void delete() {
-        this.deletedAt = LocalDateTime.now();
+        this.isDeleted = true;
     }
 
     private void setRoot(Comment root) {
@@ -107,5 +124,11 @@ public class Comment extends JpaBaseEntity {
 
     public void update(String content) {
         this.content = content;
+    }
+
+    @PrePersist
+    public void init() {
+        this.isDeleted = false;
+        this.commentStatus = CommentStatus.ACTIVE;
     }
 }

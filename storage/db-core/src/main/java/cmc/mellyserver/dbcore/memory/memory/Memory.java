@@ -1,13 +1,18 @@
-package cmc.mellyserver.dbcore.memory;
+package cmc.mellyserver.dbcore.memory.memory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,6 +20,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -34,9 +40,6 @@ public class Memory extends JpaBaseEntity {
     @Column(name = "memory_id")
     private Long id;
 
-    @Column(name = "stars")
-    private long stars;
-
     @Column(name = "user_id")
     private Long userId;
 
@@ -45,6 +48,9 @@ public class Memory extends JpaBaseEntity {
 
     @Column(name = "group_id")
     private Long groupId;
+
+    @Column(name = "stars")
+    private long stars;
 
     @Column(name = "title")
     private String title;
@@ -65,6 +71,11 @@ public class Memory extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "memory", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemoryImage> memoryImages = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "memory_keyword",
+        joinColumns = @JoinColumn(name = "memory_id"))
+    private Set<Long> keywordIds = new HashSet<>();
 
     @Builder
     public Memory(Long stars, Long groupId, Long userId, Long placeId, String title, String content, OpenType openType,
@@ -93,22 +104,19 @@ public class Memory extends JpaBaseEntity {
     }
 
     public void update(String title, String content, Long groupId, OpenType openType, LocalDate visitedDate,
-        Long star) {
+        long stars) {
 
         this.title = title;
         this.content = content;
         this.groupId = groupId;
         this.openType = openType;
         this.visitedDate = visitedDate;
-        this.stars = star;
+        this.stars = stars;
     }
 
     public void setMemoryImages(List<MemoryImage> memoryImages) {
-
         this.memoryImages = memoryImages;
-        for (MemoryImage memoryImage : memoryImages) {
-            memoryImage.addMemory(this);
-        }
+        memoryImages.forEach(image -> image.addMemory(this));
     }
 
     public void updateMemoryImages(List<Long> deleteImages, List<String> newImages) {
@@ -116,5 +124,11 @@ public class Memory extends JpaBaseEntity {
         memoryImages.removeIf((image) -> deleteImages.contains(image.getId()));
         List<MemoryImage> images = newImages.stream().map(MemoryImage::new).toList();
         memoryImages.addAll(images);
+    }
+
+    public void addKeywordIds(List<Long> ids) {
+        if (Objects.nonNull(ids)) {
+            keywordIds.addAll(ids);
+        }
     }
 }

@@ -6,71 +6,49 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
-import cmc.mellyserver.domain.memory.query.dto.KeywordDto;
+import cmc.mellyserver.domain.memory.query.dto.MemoryImageDto;
 import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
 import lombok.Builder;
-import lombok.Data;
 
-@Data
-public class MemoryResponse {
+public record MemoryResponse(
+    Long placeId,
+    String placeName,
 
-    // ==== place =====
-    private Long placeId;
-
-    private String placeName;
-
-    // ==== memory ====
-
-    private Long memoryId;
-
-    private String title;
-
-    private String content;
-
-    private List<ImageDto> memoryImages;
-
-    private List<KeywordDto> keyword;
+    Long memoryId,
+    String title,
+    String content,
+    List<MemoryImageDto> memoryImages,
+    List<String> keywords,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate visitedDate;
+    LocalDate visitedDate,
+    long stars,
 
-    private Long stars;
-
-    // ==== group ====
-
-    private Long groupId;
-
-    private GroupType groupType;
-
-    private String groupName;
-
-    private int groupIcon;
+    Long groupId,
+    GroupType groupType,
+    String groupName,
+    int groupIcon
+) {
 
     @Builder
-    public MemoryResponse(Long placeId, String placeName, Long memoryId, List<ImageDto> imageDtos, String title,
-        String content, GroupType groupType, String groupName, Long stars, List<KeywordDto> keyword,
-        LocalDate visitedDate) {
-        this.placeId = placeId;
-        this.placeName = placeName;
-        this.memoryId = memoryId;
-        this.memoryImages = imageDtos;
-        this.title = title;
-        this.content = content;
-        this.groupType = groupType;
-        this.groupName = groupName;
-        this.stars = stars;
-        this.keyword = keyword;
-        this.visitedDate = visitedDate;
+    public MemoryResponse {
     }
 
     public static MemoryResponse of(MemoryResponseDto memoryResponseDto) {
         return MemoryResponse.builder()
-            .memoryId(memoryResponseDto.getMemoryId())
-            .title(memoryResponseDto.getTitle())
-            .groupType(memoryResponseDto.getGroupType())
-            .visitedDate(memoryResponseDto.getVisitedDate())
+            .placeId(memoryResponseDto.placeId())
+            .placeName(memoryResponseDto.placeName())
+            .memoryId(memoryResponseDto.memoryId())
+            .title(memoryResponseDto.title())
+            .content(memoryResponseDto.content())
+            .memoryImages(memoryResponseDto.memoryImages())
+            .visitedDate(memoryResponseDto.visitedDate())
+            .stars(memoryResponseDto.stars())
+            .keywords(memoryResponseDto.keywords())
+            .groupId(memoryResponseDto.groupId())
+            .groupType(memoryResponseDto.groupType())
+            .groupName(memoryResponseDto.groupName())
+            .groupIcon(memoryResponseDto.groupIcon())
             .build();
     }
-
 }
