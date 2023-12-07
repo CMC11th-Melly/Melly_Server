@@ -63,7 +63,7 @@ jobs:
 
       # 추가
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name melly-codedeploy
+        run: aws deploy create-deployment --application-name melly
           --deployment-config-name CodeDeployDefault.HalfAtATime
-          --deployment-group-name spring-deploy-group
+          --deployment-group-name melly-group
           --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
