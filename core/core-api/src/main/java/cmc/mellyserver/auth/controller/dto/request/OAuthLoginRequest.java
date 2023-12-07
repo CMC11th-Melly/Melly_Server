@@ -1,6 +1,6 @@
 package cmc.mellyserver.auth.controller.dto.request;
 
-import cmc.mellyserver.auth.dto.request.OAuthLoginRequestDto;
+import cmc.mellyserver.auth.service.dto.request.OAuthLoginRequestDto;
 import cmc.mellyserver.dbcore.user.enums.Provider;
 import lombok.Builder;
 

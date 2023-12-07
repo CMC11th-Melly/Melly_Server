@@ -21,8 +21,7 @@ public class CommentQueryRepository {
 
         return query.selectFrom(comment)
             .where(
-                comment.memoryId.eq(memoryId),
-                comment.deletedAt.isNull()
+                comment.memoryId.eq(memoryId)
             )
             .orderBy(
                 comment.root.id.asc().nullsFirst(),

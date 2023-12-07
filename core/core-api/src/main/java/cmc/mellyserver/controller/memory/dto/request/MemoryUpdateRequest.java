@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;

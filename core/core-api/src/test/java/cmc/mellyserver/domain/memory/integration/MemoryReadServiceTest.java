@@ -17,9 +17,9 @@ import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
 import cmc.mellyserver.dbcore.group.GroupRepository;
 import cmc.mellyserver.dbcore.group.UserGroup;
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.MemoryRepository;
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;
@@ -191,7 +191,7 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         User 모카 = userRepository.save(모카());
         User 머식 = userRepository.save(머식());
         Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
-        UserGroup 친구들 = groupRepository.save(GroupFixtures.친구그룹());
+        UserGroup 친구들 = groupRepository.save(GroupFixtures.친구그룹(모카.getId()));
         groupAndUserRepository.save(GroupAndUser.of(모카, 친구들));
         groupAndUserRepository.save(GroupAndUser.of(머식, 친구들));
 

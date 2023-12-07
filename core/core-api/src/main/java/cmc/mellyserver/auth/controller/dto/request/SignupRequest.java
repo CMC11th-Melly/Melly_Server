@@ -2,7 +2,7 @@ package cmc.mellyserver.auth.controller.dto.request;
 
 import org.hibernate.validator.constraints.Length;
 
-import cmc.mellyserver.auth.dto.request.AuthSignupRequestDto;
+import cmc.mellyserver.auth.service.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.dbcore.user.enums.AgeGroup;
 import cmc.mellyserver.dbcore.user.enums.Gender;
 import jakarta.validation.constraints.Email;

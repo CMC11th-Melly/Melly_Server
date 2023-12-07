@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.dbcore.memory.MemoryRepository;
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import cmc.mellyserver.dbcore.place.Place;
 import cmc.mellyserver.dbcore.place.PlaceRepository;
 import cmc.mellyserver.dbcore.user.User;

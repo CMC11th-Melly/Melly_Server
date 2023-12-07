@@ -39,7 +39,7 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final StringPath name = createString("name");
 
-    public final NumberPath<Long> version = createNumber("version", Long.class);
+    public final NumberPath<Long> ownerId = createNumber("ownerId", Long.class);
 
     public QUserGroup(String variable) {
         super(UserGroup.class, forVariable(variable));

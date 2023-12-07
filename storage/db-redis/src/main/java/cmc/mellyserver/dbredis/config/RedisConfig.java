@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -32,9 +33,16 @@ public class RedisConfig {
     }
 
     /*
-    RedisTemplate의 key는 String 타입을 사용합니다.
-    Value는 어떤 타입이든 들어올 수 있기 때문에 GenericJackson2JsonRedisSerializer를 사용합니다.
+    Redis의 pub/sub 기능을 사용하기 위한 MessageListener를 설정합니다.
+    Cache 서버에 대한 Circuit Breaker 상태를 다른 서버로 전파하기 위해 사용되므로, Cache 서버와 분리된 Token 서버의 Connection을 사용합니다.
      */
+    @Bean
+    public RedisMessageListenerContainer RedisMessageListener() {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory());
+        return container;
+    }
+
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
 

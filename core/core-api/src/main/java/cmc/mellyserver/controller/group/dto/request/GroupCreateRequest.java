@@ -1,6 +1,7 @@
 package cmc.mellyserver.controller.group.dto.request;
 
 import cmc.mellyserver.dbcore.group.GroupType;
+import cmc.mellyserver.domain.group.dto.request.CreateGroupRequestDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -26,6 +27,14 @@ public class GroupCreateRequest {
         this.groupName = groupName;
         this.groupType = groupType;
         this.groupIcon = groupIcon;
+    }
+
+    public CreateGroupRequestDto toServiceDto() {
+        return CreateGroupRequestDto.builder()
+            .groupName(groupName)
+            .groupType(groupType)
+            .groupIcon(groupIcon)
+            .build();
     }
 
 }

@@ -54,8 +54,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<ProfileResponse>> getUserProfile(@CurrentUser LoginUser loginUser) {
 
         ProfileResponseDto profileResponseDto = userProfileService.getProfile(loginUser.getId());
-        long volume = userProfileService.calculateImageTotalVolume(loginUser.getId());
-        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto, volume));
+        return ApiResponse.success(SuccessCode.SELECT_SUCCESS, ProfileResponse.of(profileResponseDto));
     }
 
     @PatchMapping("/my-profile")

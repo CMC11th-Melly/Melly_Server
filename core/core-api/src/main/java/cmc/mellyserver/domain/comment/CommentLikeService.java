@@ -41,7 +41,8 @@ public class CommentLikeService {
     public void deleteCommentLike(final Long userId, final Long commentId) {
 
         CommentLike commentLike = commentLikeReader.find(userId, commentId);
-        commentLikeWriter.delete(commentLike);
+        Comment comment = commentReader.findById(commentId);
+        commentLikeWriter.delete(commentLike, comment);
     }
 
 }

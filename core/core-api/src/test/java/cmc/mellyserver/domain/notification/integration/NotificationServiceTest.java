@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.MemoryRepository;
-import cmc.mellyserver.dbcore.memory.OpenType;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.memory.memory.OpenType;
 import cmc.mellyserver.dbcore.notification.Notification;
 import cmc.mellyserver.dbcore.notification.NotificationRepository;
 import cmc.mellyserver.dbcore.notification.enums.NotificationType;

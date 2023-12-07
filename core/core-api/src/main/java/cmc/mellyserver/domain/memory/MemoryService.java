@@ -1,21 +1,20 @@
 package cmc.mellyserver.domain.memory;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.common.aop.place.ValidatePlaceExisted;
-import cmc.mellyserver.common.constants.CacheNames;
-import cmc.mellyserver.common.event.MemoryCreatedEvent;
+import cmc.mellyserver.common.aspect.place.CheckPlaceExist;
+import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.dbcore.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
-import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
+import cmc.mellyserver.domain.memory.event.MemoryCreatedEvent;
+import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,13 +26,13 @@ public class MemoryService {
 
     private final MemoryWriter memoryWriter;
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     /*
     메모리 상세 정보 조회
      */
-    @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
-    public MemoryDetailResponseDto getMemory(final Long memoryId) {
+    //@Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
+    public MemoryResponseDto getMemory(final Long memoryId) {
         return memoryReader.getMemory(memoryId);
     }
 
@@ -80,12 +79,12 @@ public class MemoryService {
         return memoryReader.findGroupMemoriesById(lastId, pageable, groupId, userId, groupType);
     }
 
-    @ValidatePlaceExisted
+    @CheckPlaceExist
     @Transactional
-    public void createMemory(final CreateMemoryRequestDto createMemoryRequestDto) {
+    public void createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
 
         Memory memory = memoryWriter.save(createMemoryRequestDto);
-        applicationEventPublisher.publishEvent(new MemoryCreatedEvent(memory.getId()));
+        eventPublisher.publishEvent(new MemoryCreatedEvent(memory.getId()));
     }
 
     @CacheEvict(cacheNames = CacheNames.MEMORY, key = "#updateMemoryRequestDto.memoryId")

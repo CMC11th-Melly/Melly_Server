@@ -1,6 +1,6 @@
 package cmc.mellyserver.domain.place.query;
 
-import static cmc.mellyserver.dbcore.memory.QMemory.*;
+import static cmc.mellyserver.dbcore.memory.memory.QMemory.*;
 import static cmc.mellyserver.dbcore.place.QPlace.*;
 
 import java.util.List;

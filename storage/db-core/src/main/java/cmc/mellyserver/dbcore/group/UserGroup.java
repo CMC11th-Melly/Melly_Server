@@ -1,6 +1,7 @@
 package cmc.mellyserver.dbcore.group;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import jakarta.persistence.Column;
@@ -11,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,18 +41,19 @@ public class UserGroup extends JpaBaseEntity {
     @Column(name = "group_type")
     private GroupType groupType;
 
+    @Column(name = "owner_id")
+    private Long ownerId;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Version
-    private Long version;
-
     @Builder
-    public UserGroup(String name, String inviteLink, GroupType groupType, int icon) {
+    public UserGroup(String name, String inviteLink, GroupType groupType, int icon, Long ownerId) {
         this.name = name;
         this.inviteLink = inviteLink;
         this.groupType = groupType;
         this.icon = icon;
+        this.ownerId = ownerId;
     }
 
     public void delete() {
@@ -63,5 +64,13 @@ public class UserGroup extends JpaBaseEntity {
         this.name = name;
         this.groupType = groupType;
         this.icon = icon;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean checkAuthority(Long userId) {
+        return Objects.equals(userId, ownerId);
     }
 }

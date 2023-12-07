@@ -4,8 +4,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import cmc.mellyserver.auth.dto.request.EmailCertificationRequest;
-import cmc.mellyserver.common.event.CertificationCompletedEvent;
+import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
 import lombok.RequiredArgsConstructor;
 
 @Profile({"local", "prod"})

@@ -1,10 +1,12 @@
 package cmc.mellyserver.domain.comment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -50,44 +52,42 @@ public class CommentReader {
     private List<CommentDto> createNestedStructure(List<Comment> comments, User user) {
 
         List<CommentDto> rootComments = new ArrayList<>();
-        Map<Long, CommentDto> totalCommentMap = new HashMap<>();
-
-        List<Long> commentIds = extractCurrentUserLikeComment(user);
+        Map<Long, CommentDto> totalComments = new ConcurrentHashMap<>();
+        Set<Long> commentIds = extractCommentIdsUserLike(user);
 
         comments.forEach(comment -> {
                 CommentDto commentDto = CommentDto.of(comment, user);
-                checkCurrentUserLiked(commentIds, commentDto);
-                totalCommentMap.put(commentDto.getId(), commentDto);
+                isUserLike(commentIds, commentDto);
+                totalComments.put(commentDto.getId(), commentDto);
 
-                if (isChildComment(comment)) {
-                    totalCommentMap.get(comment.getRoot().getId()).getChildren().add(commentDto);
-                } else {
+                if (isRoot(comment)) {
                     rootComments.add(commentDto);
+                } else {
+                    totalComments.get(comment.getRoot().getId()).getChildren().add(commentDto);
                 }
             }
         );
-
         return rootComments;
     }
 
-    private void checkCurrentUserLiked(List<Long> commentIds, CommentDto commentDto) {
+    private void isUserLike(Set<Long> commentIds, CommentDto commentDto) {
         if (commentIds.contains(commentDto.getId())) {
             commentDto.setCurrentUserLike(true);
         }
     }
 
-    private List<Long> extractCurrentUserLikeComment(User user) {
+    private Set<Long> extractCommentIdsUserLike(User user) {
         List<CommentLike> currentUserCommentLike = commentLikeRepository.findByUserId(user.getId());
         return currentUserCommentLike.stream()
             .map(commentLike -> commentLike.getComment().getId())
-            .toList();
+            .collect(Collectors.toSet());
     }
 
     private int calculateTotalCommentCount(List<Comment> comments) {
-        return (int)comments.stream().filter(c -> Objects.isNull(c.getDeletedAt())).count();
+        return (int)comments.stream().filter(c -> Objects.isNull(c.isDeleted())).count();
     }
 
-    private boolean isChildComment(Comment comment) {
-        return Objects.nonNull(comment.getRoot());
+    private boolean isRoot(Comment comment) {
+        return Objects.isNull(comment.getRoot());
     }
 }

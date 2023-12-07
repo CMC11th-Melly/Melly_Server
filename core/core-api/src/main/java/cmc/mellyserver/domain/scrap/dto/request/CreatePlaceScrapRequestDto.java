@@ -18,9 +18,9 @@ public class CreatePlaceScrapRequestDto {
     private String placeCategory;
 
     @Builder
-    public CreatePlaceScrapRequestDto(Double lat, Double lng, ScrapType scrapType, String placeName,
+    public CreatePlaceScrapRequestDto(Position position, ScrapType scrapType, String placeName,
         String placeCategory) {
-        this.position = new Position(lat, lng);
+        this.position = position;
         this.scrapType = scrapType;
         this.placeName = placeName;
         this.placeCategory = placeCategory;

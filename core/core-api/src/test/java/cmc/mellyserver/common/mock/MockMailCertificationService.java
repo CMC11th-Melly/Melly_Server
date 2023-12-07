@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.auth.certificate.CertificationService;
-import cmc.mellyserver.auth.dto.request.EmailCertificationRequest;
+import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

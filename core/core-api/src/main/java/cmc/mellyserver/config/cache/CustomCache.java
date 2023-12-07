@@ -1,13 +1,11 @@
 package cmc.mellyserver.config.cache;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import org.springframework.cache.Cache;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.dao.QueryTimeoutException;
 
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.decorators.Decorators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,7 +18,6 @@ public class CustomCache implements Cache {
     public CustomCache(Cache globalCache, CircuitBreaker circuitBreaker) {
         this.globalCache = globalCache;
         this.circuitBreaker = circuitBreaker;
-
     }
 
     @Override
@@ -33,21 +30,22 @@ public class CustomCache implements Cache {
         return globalCache.getNativeCache();
     }
 
+    /*
+    1. 로컬 캐시를 조회
+    2. 로컬 캐시에 데이터 없으면 글로벌 캐시 조회 하고, 로컬 캐시 업데이트
+    3. 만약 글로벌 캐시에도 없으면
+     */
     @Override
     public ValueWrapper get(Object key) {
-
-        Supplier<ValueWrapper> flightsSupplier = () -> (globalCache.get(key));
-
-        return Decorators
-            .ofSupplier(flightsSupplier)
-            .withCircuitBreaker(circuitBreaker)
-            .withFallback((e) -> fallback())
-            .decorate().get();
-
+        //return globalCache.get(key);
+        return circuitBreaker.run(() -> (globalCache.get(key)), (throwable -> fallback()));
     }
 
+    /*
+    Cache가 ValueWrapper로 null을 반환하면 캐싱된 데이터가 없다고 판단 후, 실제 로직을 통해 DB 쿼리를 진행합니다.
+     */
     private ValueWrapper fallback() {
-        log.error("global cache server down, fallback method start");
+        log.error("글로벌 캐시 다운, Fallback 메서드 실행");
         return null;
     }
 
@@ -63,28 +61,28 @@ public class CustomCache implements Cache {
 
     @Override
     public void put(Object key, Object value) {
-        Consumer consumer = (k) -> globalCache.put(key, value);
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+
+        try {
+            globalCache.put(key, value);
+        } catch (QueryTimeoutException e) {
+
+        }
     }
 
     @Override
     public void evict(Object key) {
-        Consumer consumer = (k) -> globalCache.evict(key);
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+        try {
+            globalCache.evict(key);
+        } catch (QueryTimeoutException e) {
+        }
     }
 
     @Override
     public void clear() {
-        Consumer consumer = (k) -> globalCache.clear();
-        Decorators
-            .ofConsumer(consumer)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
+        try {
+            globalCache.clear();
+        } catch (QueryTimeoutException e) {
+
+        }
     }
 }

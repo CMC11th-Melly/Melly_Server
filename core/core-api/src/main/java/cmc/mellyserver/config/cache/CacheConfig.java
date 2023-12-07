@@ -1,16 +1,19 @@
 package cmc.mellyserver.config.cache;
 
+import static cmc.mellyserver.config.circuitbreaker.CircuitBreakerConstants.*;
+
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.QueryTimeoutException;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -19,21 +22,13 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import cmc.mellyserver.common.constants.CacheNames;
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.core.registry.EntryAddedEvent;
-import io.github.resilience4j.core.registry.EntryRemovedEvent;
-import io.github.resilience4j.core.registry.EntryReplacedEvent;
-import io.github.resilience4j.core.registry.RegistryEventConsumer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class CacheConfig {
 
-    private static final String CACHE_CURCUIT_BREAKER = "cache_curcuit_breaker";
     @Value("${spring.redis.cache.host}")
     private String host;
     @Value("${spring.redis.cache.port}")
@@ -54,18 +48,19 @@ public class CacheConfig {
         redisStandaloneConfiguration.setPort(port);
 
         /*
-        Redis 서버가 다운됐을 시, 쿼리를 보낸 뒤 1초동안 응답이 없으면 Timeout 에러가 발생하도록 구현했습니다
+        Redis 서버로 요청을 보낸 뒤 2초간 응답이 없으면 QueryTimeout을 발생시키도록 구현했습니다.
+        Linux 서버는 TCP 커넥션을 맺을때 SYN 패킷을 보낸 뒤 InitialRTO 값인 1초간 응답 패킷이 없으면 SYN 패킷을 재전송합니다.
+        따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
          */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
             .commandTimeout(Duration.ofSeconds(1))
             .build();
-
+        
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
 
     /*
     설정 종류
-     - SerializationFeature.INDENT_OUTPUT : 콘솔에 출력할때 포맷팅해서 나옵니다.
      - JavaTimeModule : 해당 모듈을 등록해줘야 Java 8의 date/time을 사용해서 string으로 직렬화 가능합니다.
      - SerializationFeature.WRITE_DATES_AS_TIMESTAMP : 해당 속성을 true로 설정하면 Long 타입으로 직렬화됩니다. 현재 Disable로 설정해서 String으로 직렬화되도록 설정했습니다.
      - DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES : 역직렬화시 클래스 변수에 매핑되지 않는 값이 있을때 예외를 발생시킬지 체크, 현재는 예외가 발생하지 않도록 false로 설정했습니다.
@@ -73,7 +68,7 @@ public class CacheConfig {
     @Bean
     public ObjectMapper objectMapper() {
 
-        return new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
+        return new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -85,7 +80,6 @@ public class CacheConfig {
      - cache value는 여러 타입이 들어올 수 있기에 GenericJackon2JsonRedisSerializer를 사용했습니다.
      - User 데이터는 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
      - Memory 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
-     - Memory 리스트인 FEED는 수정이 잦을 것으로 예상되어 1분으로 TTL을 설정했습니다.
      - Group 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
 
     Circuit breaker를 통한 HA 보장
@@ -94,68 +88,31 @@ public class CacheConfig {
     막음으로써 Fail Fast를 통한 Redis Server Recovery를 유도했습니다.
      */
     @Bean
-    public CacheManager redisCacheManager(
-        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory connectionFactory) {
+    public CacheManager customCacheManager(
+        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory connectionFactory,
+        CircuitBreakerFactory circuitBreakerFactory) {
 
+        /* Serializer 설정 */
         RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
                 new GenericJackson2JsonRedisSerializer(objectMapper())));
 
-        Map<String, RedisCacheConfiguration> redisCacheConfigMap = new HashMap<>();
-        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.USER_VOLUME, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.FEED, defaultConfig.entryTtl(Duration.ofMinutes(1)));
-        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofHours(1)));
+        /* Cache TTL 설정 */
+        Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
+        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
             .withInitialCacheConfigurations(redisCacheConfigMap)
             .build();
 
-        CircuitBreakerRegistry circuitBreakerRegistry = configCircuitBreaker();
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create(CACHE_CIRCUIT);
 
-        return new CustomCacheManager(redisCacheManager, circuitBreakerRegistry.circuitBreaker(CACHE_CURCUIT_BREAKER));
-    }
-
-    private CircuitBreakerRegistry configCircuitBreaker() {
-
-        CircuitBreakerConfig config = CircuitBreakerConfig
-            .custom()
-            .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
-            .slidingWindowSize(5)
-            .failureRateThreshold(80)
-            .waitDurationInOpenState(Duration.ofSeconds(20))
-            .permittedNumberOfCallsInHalfOpenState(4)
-            .automaticTransitionFromOpenToHalfOpenEnabled(true)
-            .recordExceptions(CallNotPermittedException.class, QueryTimeoutException.class)
-            .build();
-
-        CircuitBreakerRegistry circuitBreakerRegistry = CircuitBreakerRegistry.custom().withCircuitBreakerConfig(config)
-            .addRegistryEventConsumer(new RegistryEventConsumer<CircuitBreaker>() {
-
-                @Override
-                public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
-
-                    CircuitBreaker.EventPublisher eventPublisher = entryAddedEvent.getAddedEntry().getEventPublisher();
-
-                    eventPublisher.onStateTransition(event -> log.info("onStateTransition {}", event));
-                    eventPublisher.onError(event -> log.error("onError {}", event));
-                    eventPublisher.onSuccess(event -> log.info("onSuccess {}", event));
-                    eventPublisher.onCallNotPermitted(event -> log.info("onCallNotPermitted {}", event));
-                }
-
-                @Override
-                public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
-
-                }
-
-                @Override
-                public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-
-                }
-            }).build();
-        return circuitBreakerRegistry;
+        /* Circuit Breaker 설정 */
+        return new CustomCacheManager(redisCacheManager, circuitBreaker);
     }
 
 }

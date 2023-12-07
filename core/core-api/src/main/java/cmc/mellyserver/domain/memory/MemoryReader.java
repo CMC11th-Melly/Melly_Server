@@ -8,13 +8,18 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.dbcore.group.GroupType;
-import cmc.mellyserver.dbcore.memory.Memory;
-import cmc.mellyserver.dbcore.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.group.UserGroup;
+import cmc.mellyserver.dbcore.memory.keyword.Keyword;
+import cmc.mellyserver.dbcore.memory.memory.Memory;
+import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
+import cmc.mellyserver.dbcore.place.Place;
+import cmc.mellyserver.domain.group.GroupReader;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
+import cmc.mellyserver.domain.memory.keyword.KeywordReader;
 import cmc.mellyserver.domain.memory.query.MemoryQueryRepository;
-import cmc.mellyserver.domain.memory.query.dto.ImageDto;
-import cmc.mellyserver.domain.memory.query.dto.MemoryDetailResponseDto;
+import cmc.mellyserver.domain.memory.query.dto.MemoryListResponseDto;
 import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
+import cmc.mellyserver.domain.place.PlaceReader;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +29,12 @@ import lombok.RequiredArgsConstructor;
 public class MemoryReader {
 
     private final MemoryRepository memoryRepository;
+
+    private final KeywordReader keywordReader;
+
+    private final PlaceReader placeReader;
+
+    private final GroupReader groupReader;
 
     private final MemoryQueryRepository memoryQueryRepository;
 
@@ -35,44 +46,53 @@ public class MemoryReader {
         return memoryQueryRepository.countMemoriesBelongToPlace(userId, placeId);
     }
 
-    public MemoryDetailResponseDto getMemory(final Long memoryId) {
-        MemoryDetailResponseDto memoryDetail = memoryQueryRepository.findMemoryDetail(memoryId);
-        List<ImageDto> memoryImage = memoryQueryRepository.findMemoryImage(memoryDetail.getMemoryId());
-        memoryDetail.setMemoryImages(memoryImage);
-        memoryDetail.setKeyword(null);
-        return memoryDetail;
+    public MemoryResponseDto getMemory(final Long memoryId) {
+
+        Memory memory = memoryRepository.findById(memoryId)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
+        List<Keyword> keywords = keywordReader.getKeywords(memory.getKeywordIds());
+        Place place = placeReader.findById(memory.getPlaceId());
+
+        if (memory.getGroupId().equals(-1L)) {
+            return MemoryResponseDto.of(place, memory, keywords, UserGroup.builder().build());
+        }
+
+        UserGroup group = groupReader.findById(memory.getGroupId());
+        return MemoryResponseDto.of(place, memory, keywords, group);
     }
 
     public MemoryListResponse getUserMemories(final Long lastId, final Pageable pageable, final Long userId,
         final Long placeId, final GroupType groupType) {
-        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.findUserMemories(lastId, pageable, userId,
+        Slice<MemoryListResponseDto> memoryResponseDtos = memoryQueryRepository.findUserMemories(lastId, pageable,
+            userId,
             placeId, groupType);
         return transferToList(memoryResponseDtos);
     }
 
     public MemoryListResponse findOtherMemories(final Long lastId, final Pageable pageable, final Long userId,
         final Long placeId, final GroupType groupType) {
-        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.findOtherMemories(lastId, pageable, userId,
+        Slice<MemoryListResponseDto> memoryResponseDtos = memoryQueryRepository.findOtherMemories(lastId, pageable,
+            userId,
             placeId, groupType);
         return transferToList(memoryResponseDtos);
     }
 
     public MemoryListResponse findGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId,
         final Long userId, final GroupType groupType) {
-        Slice<MemoryResponseDto> memoryResponseDtos = memoryQueryRepository.findGroupMemoriesById(lastId, pageable,
+        Slice<MemoryListResponseDto> memoryResponseDtos = memoryQueryRepository.findGroupMemoriesById(lastId, pageable,
             groupId, userId, groupType);
         return transferToList(memoryResponseDtos);
     }
 
     public MemoryListResponse findGroupMemories(final Long lastId, final Pageable pageable, final Long userId,
         final Long placeId, final GroupType groupType) {
-        Slice<MemoryResponseDto> groupMemories = memoryQueryRepository.findGroupMemories(lastId, pageable, userId,
+        Slice<MemoryListResponseDto> groupMemories = memoryQueryRepository.findGroupMemories(lastId, pageable, userId,
             placeId, groupType);
         return transferToList(groupMemories);
     }
 
-    private MemoryListResponse transferToList(Slice<MemoryResponseDto> memoryResponseDtos) {
-        List<MemoryResponseDto> contents = memoryResponseDtos.getContent();
+    private MemoryListResponse transferToList(Slice<MemoryListResponseDto> memoryResponseDtos) {
+        List<MemoryListResponseDto> contents = memoryResponseDtos.getContent();
         boolean next = memoryResponseDtos.hasNext();
         return MemoryListResponse.from(contents, next);
     }

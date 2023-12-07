@@ -4,8 +4,8 @@ import static fixtures.PlaceFixtures.*;
 import static fixtures.UserFixtures.*;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cmc.mellyserver.dbcore.place.Place;
@@ -20,13 +20,13 @@ import cmc.mellyserver.support.RepositoryTestSupport;
 public class ScrapRepositoryTest extends RepositoryTestSupport {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private PlaceRepository placeRepository;
 
     @Autowired
     private PlaceScrapRepository placeScrapRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @DisplayName("스크랩을 한 유저의 ID와 장소 ID로 해당 스크랩을 찾을 수 있다")
     @Test

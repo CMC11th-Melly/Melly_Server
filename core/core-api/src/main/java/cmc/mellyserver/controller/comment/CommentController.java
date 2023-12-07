@@ -65,9 +65,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse<Void>> removeComment(@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse<Void>> removeComment(@CurrentUser LoginUser loginUser,
+        @PathVariable Long commentId) {
 
-        commentService.deleteComment(commentId);
+        commentService.deleteComment(loginUser.getId(), commentId);
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 

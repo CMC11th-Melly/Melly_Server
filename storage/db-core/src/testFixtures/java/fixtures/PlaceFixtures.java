@@ -42,5 +42,4 @@ public abstract class PlaceFixtures {
             .imageUrl(이디야_이미지_URL)
             .build();
     }
-
 }

@@ -15,8 +15,8 @@ spring.cloud.openfeign:
         loggerLevel: full # openFeign 관련 모든 로그 출력
 
   httpclient:
-    max-connections: 2000 # 전체 커넥션 수
-    max-connections-per-route: 500 # Route당 할당되는 최대 커넥션 수
+    max-connections: 400 # 전체 커넥션 수
+    max-connections-per-route: 100 # Route당 할당되는 최대 커넥션 수
 
   circuitbreaker:
     enabled: true

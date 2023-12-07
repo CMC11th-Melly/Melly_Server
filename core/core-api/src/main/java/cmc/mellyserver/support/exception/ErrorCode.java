@@ -81,7 +81,7 @@ public enum ErrorCode {
 
     /* Group */
     NO_SUCH_GROUP(NOT_FOUND.value(), "GROUP-001", "그룹이 존재하지 않습니다."),
-    NO_AUTHORITY_TO_REMOVE(HttpStatus.FORBIDDEN.value(), "GROUP-002", "그룹을 삭제할 권한이 없습니다"),
+    NO_AUTHORITY_TO_REMOVE(CONFLICT.value(), "GROUP-002", "그룹을 삭제할 권한이 없습니다"),
     DUPLICATED_GROUP(CONFLICT.value(), "GROUP-003", "이미 수락한 그룹입니다"),
     EXIT_GROUP_NOT_POSSIBLE(CONFLICT.value(), "GROUP-004", "그룹의 인원이 2명 이상일때 그룹에서 나갈 수 있습니다."),
     PARTICIPATE_GROUP_NOT_POSSIBLE(CONFLICT.value(), "GROUP-005", "그룹의 인원은 최대 10명 입니다."),
