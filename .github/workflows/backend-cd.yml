@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Melly Backend CD
 
 on:
   push:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: checkout code
         uses: actions/checkout@master
         with:
-          token: ${{  secrets.ACTION_TOKEN  }}
+          token: ${{ secrets.ACTION_TOKEN }}
           submodules: true
 
       - name: Update submodules
@@ -39,11 +39,8 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :core:core-api:build
+        run: ./gradlew :core:core-api:build # Boot에 필요한 모듈만 빌드
 
-      # 배포에 필요한 여러 설정 파일과 프로젝트 빌드 파일을 zip 파일로 모아준다.
       - name: Make zip file
         run: |
           mkdir deploy
@@ -67,9 +64,8 @@ jobs:
             --region ap-northeast-2 \
             ./spring-build.zip s3://melly-s3
 
-      # 추가
       - name: Code Deploy
         run: aws deploy create-deployment --application-name melly
-          --deployment-config-name CodeDeployDefault.HalfAtATime
+          --deployment-config-name CodeDeployDefault.HalfAtATime # 로드밸런서의 타겟 그룹 인스턴스에 대해 하나씩 순차 배포
           --deployment-group-name melly-group
           --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
