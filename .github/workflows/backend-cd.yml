@@ -41,7 +41,7 @@ jobs:
       - name: Build with Gradle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :core-api:build
+        run: ./gradlew :core:core-api:build
 
       # 배포에 필요한 여러 설정 파일과 프로젝트 빌드 파일을 zip 파일로 모아준다.
       - name: Make zip file
