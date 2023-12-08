@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk17
+FROM openjdk:17-oracle
 
 COPY ./core/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar app.jar
 
