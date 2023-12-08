@@ -17,6 +17,6 @@ if [ -z "$EXIST_BLUE" ]; then
 else
   sudo docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml down
   sudo docker image prune -af
-  sleep(20)
+  sleep 20
   sudo docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml up -d --build
 fi
