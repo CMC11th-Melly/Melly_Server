@@ -1,7 +1,6 @@
-#blue
 version: '3'
+
 services:
-  # 서비스의 이름
   backend:
     # 현재 디렉토리에서의 Dockerfile을 사용하여 Docker 이미지를 빌드
     build: .

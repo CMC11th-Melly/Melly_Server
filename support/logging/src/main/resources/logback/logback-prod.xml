@@ -13,7 +13,7 @@
 
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <!-- Local 환경에서는 DEBUG 레벨을 사용합니다 -->
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
