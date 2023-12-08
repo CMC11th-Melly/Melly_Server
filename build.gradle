@@ -12,8 +12,6 @@ allprojects {
     repositories {
         mavenCentral()
     }
-
-
 }
 
 
@@ -60,14 +58,14 @@ subprojects {
             )
         }
 
-        finalizedBy 'jacocoTestCoverageVerification' // jacocoTestReport를 실행 후 jacocoTestCoverageVerification 실행
+        finalizedBy 'jacocoTestCoverageVerification'
     }
 
     jacocoTestCoverageVerification {
 
         def Qdomains = []
 
-        for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+        for (qPattern in '*.QA'..'*.QZ') {
             Qdomains.add(qPattern + '*')
         }
 
@@ -107,10 +105,10 @@ subprojects {
         // lombok
         implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
-        testAnnotationProcessor 'org.projectlombok:lombok'
-        testCompileOnly 'org.projectlombok:lombok'
 
         // test
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
@@ -119,7 +117,7 @@ subprojects {
 
     test {
         useJUnitPlatform()
-        finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport를 실행
+        finalizedBy 'jacocoTestReport'
     }
 }
 
