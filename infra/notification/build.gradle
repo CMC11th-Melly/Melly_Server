@@ -1,6 +1,4 @@
 dependencies {
-
     implementation 'com.google.firebase:firebase-admin:9.1.1'
-
     implementation(project(':storage:db-redis'))
 }

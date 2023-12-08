@@ -13,10 +13,8 @@ import org.springframework.stereotype.Component;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import cmc.mellyserver.FileDto;
 import cmc.mellyserver.FileService;
@@ -72,14 +70,6 @@ class S3StorageService implements FileService {
 
     }
 
-    public long calculateImageVolume(String username) {
-
-        ObjectListing mellyImage = amazonS3Client.listObjects(bucket, username);
-        List<S3ObjectSummary> objectSummaries = mellyImage.getObjectSummaries();
-
-        return objectSummaries.stream().mapToLong(S3ObjectSummary::getSize).sum();
-
-    }
 
     private String createFileName(Long userId, String fileName) {
 

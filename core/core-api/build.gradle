@@ -24,7 +24,6 @@ dependencies {
     implementation 'io.rest-assured:spring-mock-mvc'
 
     // JWT
-    // 해당 라이브러리 또한 client-auth에서 implementation으로 사용 중이기에 compileOnly로 변경했습니다.
     compileOnly 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
@@ -42,14 +41,12 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+    // Circuit Breaker
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.2"
     implementation "io.github.resilience4j:resilience4j-all"
 
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
-
-    implementation 'org.ehcache:ehcache:3.10.8'
-    implementation 'javax.cache:cache-api:1.1.1'
 
     // Rest Docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
@@ -98,12 +95,10 @@ asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}") // build/docs/asciidoc 경로에 만들어지는 결과물을 static/docs로 복사합니다.
     into 'src/main/resources/static/docs'
-
 }
 
 build {

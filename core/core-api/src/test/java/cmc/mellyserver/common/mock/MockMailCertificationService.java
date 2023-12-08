@@ -14,12 +14,12 @@ public class MockMailCertificationService implements CertificationService {
 
     @Override
     public void sendCertification(String email) {
-
+        log.info("send Certification Mail");
     }
 
     @Override
     public void verify(EmailCertificationRequest requestDto) {
-
+        log.info("verify user");
     }
 
 }

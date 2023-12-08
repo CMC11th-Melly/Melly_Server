@@ -19,14 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class FirebaseConfig {
 
+    private static final String FIREBASE_KEY_FILE = "firebase-key.json";
+
     @PostConstruct
-    public void initializeFCM() throws IOException {
-
+    public void initializeFCM() {
         try {
-            Resource resource = new ClassPathResource("firebase-key.json");
-            FileInputStream fis = new FileInputStream(resource.getFile());
+            Resource resource = new ClassPathResource(FIREBASE_KEY_FILE);
+            FileInputStream stream = new FileInputStream(resource.getFile());
 
-            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(fis))
+            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(stream))
                 .build();
 
             if (FirebaseApp.getApps().isEmpty()) {

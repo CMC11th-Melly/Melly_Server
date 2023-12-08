@@ -28,6 +28,10 @@ out/
 
 ### Path ###
 /core/core-api/src/main/resources/application-prod.yml
+/core/core-api/src/main/resources/client-auth-prod.yml
+/core/core-api/src/main/resources/db-core-prod.yml
+/core/core-api/src/main/resources/db-redis-prod.yml
+/core/core-api/src/main/resources/mail-prod.yml
 /core/core-api/src/main/resources/firebase/
 /core/core-api/src/main/resources/static/
 /core/core-api/src/main/resources/templates/

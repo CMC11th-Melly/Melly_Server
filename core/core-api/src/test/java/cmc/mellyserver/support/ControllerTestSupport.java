@@ -29,12 +29,20 @@ import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.PlaceScrapService;
 import cmc.mellyserver.domain.user.UserProfileService;
 
-@AutoConfigureRestDocs // RestDocs 설정을 활성화 합니다.
-@WebMvcTest(controllers = { // 사용하려는 Controller를 모두 등록해줍니다.
-    UserController.class, PlaceScrapController.class, PlaceController.class, MemoryController.class,
-    GroupController.class, NotificationController.class, CommentController.class},
-    excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
-@ActiveProfiles("test") // test profile로 실행되도록 만듭니다.
+@AutoConfigureRestDocs
+@WebMvcTest(controllers = {
+    UserController.class,
+    PlaceScrapController.class,
+    PlaceController.class,
+    MemoryController.class,
+    GroupController.class,
+    NotificationController.class,
+    CommentController.class
+},
+    excludeFilters = {@ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = SecurityConfig.class)})
+@ActiveProfiles("test")
 public abstract class ControllerTestSupport {
 
     @Autowired

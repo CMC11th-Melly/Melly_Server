@@ -8,11 +8,9 @@ Client 기능만을 위한 모듈을 분리함으로써 외부 통신을 위한 
  */
 dependencies {
 
+    // OpenFeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation 'io.github.openfeign:feign-hc5' // Open Feign의 클라이언트로 Apache HttpClient5를 사용합니다
-
-    // Fault Tolerance
-
+    implementation 'io.github.openfeign:feign-hc5'
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
@@ -21,7 +19,5 @@ dependencies {
 
     // JSON
     implementation 'com.fasterxml.jackson.core:jackson-databind'
-
-    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
 }
 
