@@ -39,7 +39,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew :core:core-api:build # Boot에 필요한 모듈만 빌드
+        run: ./gradlew :core:core-api:build
 
       - name: Make zip file
         run: |
@@ -64,8 +64,9 @@ jobs:
             --region ap-northeast-2 \
             ./spring-build.zip s3://melly-s3
 
+      # 추가
       - name: Code Deploy
         run: aws deploy create-deployment --application-name melly
-          --deployment-config-name CodeDeployDefault.HalfAtATime # 로드밸런서의 타겟 그룹 인스턴스에 대해 하나씩 순차 배포
+          --deployment-config-name CodeDeployDefault.HalfAtATime
           --deployment-group-name melly-group
           --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
