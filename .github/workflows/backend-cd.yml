@@ -64,9 +64,22 @@ jobs:
             --region ap-northeast-2 \
             ./spring-build.zip s3://melly-s3
 
-      # 추가
+
       - name: Code Deploy
         run: aws deploy create-deployment --application-name melly
           --deployment-config-name CodeDeployDefault.HalfAtATime
           --deployment-group-name melly-group
           --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
+
+
+      - name: Send Slack Message
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: melly_deploy_bot
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+          mention: here
+          if_mention: failure, cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
