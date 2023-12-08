@@ -48,7 +48,6 @@ jobs:
         run: |
           mkdir deploy
           cp ./docker/docker-compose.blue.yml ./deploy/
-          cp ./docker/docker-compose.green.yml ./deploy/
           cp ./appspec.yml ./deploy/
           cp ./scripts/deploy.sh ./deploy/
           cp ./Dockerfile ./deploy/
