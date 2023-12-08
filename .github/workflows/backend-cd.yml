@@ -47,7 +47,7 @@ jobs:
       - name: Make zip file
         run: |
           mkdir deploy
-          cp ./docker/docker-compose.blue.yml ./deploy/
+          cp ./docker/docker-compose.yml ./deploy/
           cp ./appspec.yml ./deploy/
           cp ./scripts/deploy.sh ./deploy/
           cp ./Dockerfile ./deploy/
