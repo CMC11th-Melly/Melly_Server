@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScrapRequest {
+public class ScrapCreateRequest {
 
-    private Double lat;
+    private double lat;
 
-    private Double lng;
+    private double lng;
 
     private ScrapType scrapType;
 

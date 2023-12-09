@@ -78,8 +78,8 @@ public class UserController {
         @RequestParam Long lastId, @PageableDefault(size = 10) Pageable pageable,
         @RequestParam(required = false) GroupType groupType) {
 
-        MemoryListResponse memoryListResponse = memoryService.getUserMemories(lastId, pageable,
-            loginUser.getId(), null, groupType);
+        MemoryListResponse memoryListResponse = memoryService.getUserMemories(lastId, pageable, loginUser.getId(), null,
+            groupType);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
     }
 
@@ -120,5 +120,4 @@ public class UserController {
             scrapType);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, scrapedPlace);
     }
-
 }

@@ -15,7 +15,7 @@ import cmc.mellyserver.auth.common.resolver.CurrentUser;
 import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.controller.memory.dto.MemoryAssembler;
 import cmc.mellyserver.controller.memory.dto.response.FindPlaceInfoByMemoryNameResponse;
-import cmc.mellyserver.controller.place.dto.request.PlaceSimpleRequest;
+import cmc.mellyserver.controller.place.dto.request.PlacePositionRequest;
 import cmc.mellyserver.controller.place.dto.response.PlaceResponse;
 import cmc.mellyserver.dbcore.group.GroupType;
 import cmc.mellyserver.dbcore.place.Position;
@@ -38,7 +38,7 @@ public class PlaceController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<MarkedPlaceResponseDto>>> getPlaces(@CurrentUser LoginUser user,
-        @RequestParam(value = "groupType") GroupType groupType) {
+        @RequestParam(required = false) GroupType groupType) {
 
         List<MarkedPlaceResponseDto> placeResponseDtos = placeService.displayMarkedPlace(user.getId(), groupType);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, placeResponseDtos);
@@ -54,10 +54,10 @@ public class PlaceController {
 
     @GetMapping("/places")
     public ResponseEntity<ApiResponse<PlaceResponse>> getDetailPlace(@AuthenticationPrincipal User user,
-        PlaceSimpleRequest placeSimpleRequest) {
+        PlacePositionRequest placePositionRequest) {
 
         PlaceResponseDto placeResponseDto = placeService.findByPosition(Long.parseLong(user.getUsername()),
-            new Position(placeSimpleRequest.getLat(), placeSimpleRequest.getLng()));
+            new Position(placePositionRequest.lat(), placePositionRequest.lng()));
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, PlaceResponse.of(placeResponseDto));
     }
 

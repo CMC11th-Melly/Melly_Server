@@ -39,10 +39,6 @@ public class AsyncConfig implements AsyncConfigurer {
         return executor;
     }
 
-    /*
-    비동기 메서드 호출 시 발생하는 예외는 MVC의 @ControllerAdvice에서 처리하지 못합니다.
-    따라서 별도의 AsyncExceptionHandler를 통해 비동기 예외를 처리해야 합니다.
-     */
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return new AsyncExceptionHandler();
