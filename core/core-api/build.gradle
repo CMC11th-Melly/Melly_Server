@@ -28,6 +28,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
+    implementation 'io.micrometer:micrometer-registry-cloudwatch2:1.12.0'
+
 
     /*
     QueryDSL은 뷰에 특화된 쿼리를 만들어 낼 수 있습니다.

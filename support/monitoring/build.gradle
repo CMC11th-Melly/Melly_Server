@@ -1,4 +1,4 @@
 dependencies {
-    implementation 'io.micrometer:micrometer-registry-cloudwatch2:1.12.0'
+    
 }
 tasks.register("prepareKotlinBuildScriptModel") {}
