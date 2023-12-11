@@ -8,4 +8,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OptimisticLock {
+
+    long retryCount() default 3L;
+
+    long waitTime() default 500L;
 }

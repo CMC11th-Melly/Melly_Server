@@ -203,11 +203,11 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         }
 
         // when
-        MemoryListResponse result = memoryService.getGroupMemoriesInPlace(-1L,
-            PageRequest.of(0, 10), 모카.getId(), 스타벅스.getId(), null);
+        MemoryListResponse result = memoryService.getGroupMemoriesInPlace(-1L, PageRequest.of(0, 10), 모카.getId(),
+            스타벅스.getId());
 
         // then
-        assertThat(result.getContents()).hasSize(3);
+        assertThat(result.getContents()).hasSize(8);
         assertThat(result.getNext()).isEqualTo(false);
     }
 }

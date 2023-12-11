@@ -94,12 +94,11 @@ public class UserController {
     }
 
     @GetMapping("/my-groups/{groupId}/memories")
-    public ResponseEntity<ApiResponse<MemoryListResponse>> getMemoryBelongToMyGroup(@CurrentUser LoginUser loginUser,
+    public ResponseEntity<ApiResponse<MemoryListResponse>> getMemoryBelongToMyGroup(
         @RequestParam Long lastId, @PageableDefault(size = 10) Pageable pageable,
-        @PathVariable Long groupId, @RequestParam(required = false) GroupType groupType) {
+        @PathVariable Long groupId) {
 
-        MemoryListResponse memoryListResponse = memoryService.getGroupMemoriesById(lastId, pageable, groupId,
-            loginUser.getId(), groupType);
+        MemoryListResponse memoryListResponse = memoryService.getGroupMemoriesById(lastId, pageable, groupId);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, memoryListResponse);
     }
 

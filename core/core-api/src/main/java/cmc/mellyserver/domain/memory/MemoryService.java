@@ -1,7 +1,6 @@
 package cmc.mellyserver.domain.memory;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class MemoryService {
     /*
     메모리 상세 정보 조회
      */
-    @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
+    // @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
     public MemoryResponseDto getMemory(final Long memoryId) {
         return memoryReader.getMemory(memoryId);
     }
@@ -59,9 +58,9 @@ public class MemoryService {
     특정 장소에 우리 그룹 사람들이 작성한 메모리 조회
      */
     public MemoryListResponse getGroupMemoriesInPlace(final Long lastId, final Pageable pageable,
-        final Long userId, final Long placeId, final GroupType groupType) {
+        final Long userId, final Long placeId) {
 
-        return memoryReader.findGroupMemories(lastId, pageable, userId, placeId, groupType);
+        return memoryReader.findGroupMemories(lastId, pageable, userId, placeId);
     }
 
     /*
@@ -75,9 +74,8 @@ public class MemoryService {
     /*
     내 그룹이 작성한 메모리 조회
      */
-    public MemoryListResponse getGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId,
-        final Long userId, final GroupType groupType) {
-        return memoryReader.findGroupMemoriesById(lastId, pageable, groupId, userId, groupType);
+    public MemoryListResponse getGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId) {
+        return memoryReader.findGroupMemoriesById(lastId, pageable, groupId);
     }
 
     @CheckPlaceExist

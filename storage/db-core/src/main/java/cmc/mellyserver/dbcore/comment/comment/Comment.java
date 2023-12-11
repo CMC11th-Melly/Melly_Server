@@ -3,8 +3,6 @@ package cmc.mellyserver.dbcore.comment.comment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
 import cmc.mellyserver.dbcore.user.User;
 import jakarta.persistence.Column;
@@ -60,8 +58,7 @@ public class Comment extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "root", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
-
-    @ColumnDefault("0")
+    
     @Column(name = "like_count")
     private int likeCount;
 

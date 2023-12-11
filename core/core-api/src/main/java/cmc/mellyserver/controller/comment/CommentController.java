@@ -15,7 +15,6 @@ import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.controller.comment.dto.CommentAssembler;
 import cmc.mellyserver.controller.comment.dto.request.CommentRequest;
 import cmc.mellyserver.controller.comment.dto.request.CommentUpdateRequest;
-import cmc.mellyserver.controller.comment.dto.request.LikeRequest;
 import cmc.mellyserver.domain.comment.CommentLikeService;
 import cmc.mellyserver.domain.comment.CommentService;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
@@ -40,11 +39,11 @@ public class CommentController {
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 
-    @PostMapping("/like")
+    @PostMapping("/{commentId}/like")
     public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
-        @RequestBody LikeRequest likeRequest) {
+        @PathVariable Long commentId) {
 
-        commentLikeService.saveCommentLike(loginUser.getId(), likeRequest.getCommentId());
+        commentLikeService.saveCommentLike(loginUser.getId(), commentId);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 

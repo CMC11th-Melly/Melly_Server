@@ -41,6 +41,10 @@ public class CommentReader {
         });
     }
 
+    public Comment findByIdWithLock(final Long commentId) {
+        return commentRepository.findByOptimisticLock(commentId);
+    }
+
     public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {
         User user = userReader.findById(userId);
         List<Comment> comments = commentQueryRepository.getComments(memoryId);

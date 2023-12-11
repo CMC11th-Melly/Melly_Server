@@ -57,8 +57,9 @@ dependencies {
     implementation project(":infra:notification")
     implementation project(":infra:file")
     implementation project(":infra:mail")
-    implementation project(":support:logging")
     implementation project(":clients:client-auth")
+    implementation project(":support:logging")
+    implementation project(":support:monitoring")
 
     jacocoAggregation project(":storage:db-core")
     jacocoAggregation project(":storage:db-redis")

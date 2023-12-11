@@ -77,17 +77,16 @@ public class MemoryReader {
         return transferToList(memoryResponseDtos);
     }
 
-    public MemoryListResponse findGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId,
-        final Long userId, final GroupType groupType) {
+    public MemoryListResponse findGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId) {
         Slice<MemoryListResponseDto> memoryResponseDtos = memoryQueryRepository.findGroupMemoriesById(lastId, pageable,
-            groupId, userId, groupType);
+            groupId);
         return transferToList(memoryResponseDtos);
     }
 
     public MemoryListResponse findGroupMemories(final Long lastId, final Pageable pageable, final Long userId,
-        final Long placeId, final GroupType groupType) {
+        final Long placeId) {
         Slice<MemoryListResponseDto> groupMemories = memoryQueryRepository.findGroupMemories(lastId, pageable, userId,
-            placeId, groupType);
+            placeId);
         return transferToList(groupMemories);
     }
 

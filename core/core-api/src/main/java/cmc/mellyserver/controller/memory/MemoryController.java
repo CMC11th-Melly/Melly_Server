@@ -83,10 +83,9 @@ public class MemoryController {
         @CurrentUser LoginUser loginUser,
         @RequestParam(name = "lastId") Long lastId,
         @PathVariable Long placeId,
-        @PageableDefault(size = 10) Pageable pageable,
-        @RequestParam(required = false) GroupType groupType) {
+        @PageableDefault(size = 10) Pageable pageable) {
         MemoryListResponse myGroupMemberWriteMemoryBelongToPlace = memoryService
-            .getGroupMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId, groupType);
+            .getGroupMemoriesInPlace(lastId, pageable, loginUser.getId(), placeId);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, myGroupMemberWriteMemoryBelongToPlace);
     }
 

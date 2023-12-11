@@ -59,7 +59,7 @@ public class CommentDto implements Serializable {
             comment.getContent(),
             false,
             false,
-            0,
+            comment.getLikeCount(),
             comment.getMentionUser().getNickname(),
             comment.getCreatedDate(),
             new ArrayList<>()
@@ -80,7 +80,7 @@ public class CommentDto implements Serializable {
             comment.getContent(),
             false,
             false,
-            0,
+            comment.getLikeCount(),
             null,
             comment.getCreatedDate(),
             new ArrayList<>()
@@ -91,9 +91,5 @@ public class CommentDto implements Serializable {
         }
 
         return commentDto;
-    }
-
-    public void setIsUserLike(boolean isUserLike) {
-        isCurrentUserLike = isUserLike;
     }
 }
