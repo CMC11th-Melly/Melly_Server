@@ -1,6 +1,7 @@
 package cmc.mellyserver.domain.memory;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class MemoryService {
     /*
     메모리 상세 정보 조회
      */
-    // @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
+    @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
     public MemoryResponseDto getMemory(final Long memoryId) {
         return memoryReader.getMemory(memoryId);
     }
