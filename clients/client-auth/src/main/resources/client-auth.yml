@@ -10,8 +10,8 @@ spring.cloud.openfeign:
   client:
     config:
       default:
-        connectTimeout: 1000 # 3-way handshake 과정에서 발생하는 타임아웃 설정
-        readTimeout: 2000 # 커넥션 연결 후, 실제 데이터 송/수신할때 발생하는 타임아웃 설정
+        connectTimeout: 3000 # SYN InitialRTO 1초와 SYN/ACK InitialRTO 1초를 고려해서 3초로 설정
+        readTimeout: 2000 # 외부 인증 서비스 고려해서 넉넉히 2초로 설정
         loggerLevel: full # openFeign 관련 모든 로그 출력
 
   httpclient:
@@ -25,20 +25,15 @@ resilience4j.circuitbreaker:
   configs:
     default:
       slidingWindowType: COUNT_BASED
-      minimumNumberOfCalls: 3 # Circuit Open 여부를 판단하기 위해 실행해야 하는 최소 요청 횟수
-      slidingWindowSize: 5 # Circuit Open 여부를 체크하는 윈도우 크기
-      waitDurationInOpenState: 5s # Circuit이 Open 상태에 머무는 시간
-
-      failureRateThreshold: 80 # 슬라이딩 윈도우 내에서 몇 %이상되면 Circuit을 Open할지 결정하는 비율
-
-      slowCallDurationThreshold: 2000 # 몇초동안 요청이 지속되면 슬로우 콜로 판별되는지 기준
-      slowCallRateThreshold: 80 # 슬라이딩 윈도우 내 요청 중 몇 %이상 슬로우 콜이 발생하면 Circuit을 Open할지 결정하는 비율
-
-      permittedNumberOfCallsInHalfOpenState: 5 # Half Open 상태에서 상태 변화를 위해 테스트 해보는 요청 횟수
-      automaticTransitionFromOpenToHalfOpenEnabled: true # Half Open으로 자동으로 변경시킬지 여부
-
-      eventConsumerBufferSize: 10 # Actuator에서 CircuitBreaker 상태를 보여줄때 이벤트를 몇개까지 버퍼에 쌓을지 결정
-
+      minimumNumberOfCalls: 3
+      slidingWindowSize: 5
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 80
+      slowCallDurationThreshold: 2000
+      slowCallRateThreshold: 80
+      permittedNumberOfCallsInHalfOpenState: 5
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      eventConsumerBufferSize: 10
   instances:
-    default: # Circuit Breaker 인스턴스 이름
-      baseConfig: default # 어떤 설정을 사용할지 결정. default라면 상단의 default config를 그대로 사용함
+    default:
+      baseConfig: default

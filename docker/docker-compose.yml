@@ -2,7 +2,6 @@ version: '3'
 
 services:
   backend:
-    # 현재 디렉토리에서의 Dockerfile을 사용하여 Docker 이미지를 빌드
     build: .
     ports:
       - "80:8080"

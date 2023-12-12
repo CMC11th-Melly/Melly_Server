@@ -20,9 +20,6 @@ public class RedisConfig {
     @Value("${spring.redis.token.port}")
     private int port;
 
-    /*
-    Redis를 Cluster mode가 아닌 single node 모드로 사용하기에 RedisStandaloneConfiguration을 사용했습니다.
-     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
 

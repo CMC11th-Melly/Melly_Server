@@ -106,6 +106,9 @@ subprojects {
         implementation 'org.projectlombok:lombok:1.18.20'
         annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
+        // JPA
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
         // test
         testAnnotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'

@@ -41,25 +41,22 @@ public class MemoryService {
      */
     public MemoryListResponse getUserMemoriesInPlace(final Long lastId, final Pageable pageable, final Long userId,
         final Long placeId, final GroupType groupType) {
-
         return memoryReader.getUserMemories(lastId, pageable, userId, placeId, groupType);
     }
 
     /*
     특정 장소에 나 이외의 사람이 작성한 메모리 조회
      */
-    public MemoryListResponse getOtherMemoriesInPlace(final Long lastId, final Pageable pageable,
-        final Long userId, final Long placeId, final GroupType groupType) {
-
+    public MemoryListResponse getOtherMemoriesInPlace(final Long lastId, final Pageable pageable, final Long userId,
+        final Long placeId, final GroupType groupType) {
         return memoryReader.findOtherMemories(lastId, pageable, userId, placeId, groupType);
     }
 
     /*
     특정 장소에 우리 그룹 사람들이 작성한 메모리 조회
      */
-    public MemoryListResponse getGroupMemoriesInPlace(final Long lastId, final Pageable pageable,
-        final Long userId, final Long placeId) {
-
+    public MemoryListResponse getGroupMemoriesInPlace(final Long lastId, final Pageable pageable, final Long userId,
+        final Long placeId) {
         return memoryReader.findGroupMemories(lastId, pageable, userId, placeId);
     }
 
@@ -81,7 +78,6 @@ public class MemoryService {
     @CheckPlaceExist
     @Transactional
     public void createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
-
         Memory memory = memoryWriter.save(createMemoryRequestDto);
         eventPublisher.publishEvent(new MemoryCreatedEvent(memory.getId()));
     }

@@ -53,9 +53,9 @@ public class CacheConfig {
         따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
          */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofSeconds(1))
+            .commandTimeout(Duration.ofMillis(300))
             .build();
-        
+
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
 
