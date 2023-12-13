@@ -112,8 +112,6 @@ public class MemoryQueryRepository {
         List<Memory> result = query
             .select(memory)
             .from(memory)
-            .leftJoin(place).on(place.id.eq(memory.placeId)).fetchJoin()
-            .leftJoin(userGroup).on(userGroup.id.eq(memory.groupId)).fetchJoin()
             .leftJoin(memoryImage).on(memoryImage.memory.id.eq(memory.id))
             .where(
                 ltMemoryId(lastId), // 커서 페이징
