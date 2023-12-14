@@ -31,7 +31,7 @@ public class PlaceService {
     }
 
     public PlaceResponseDto findByPlaceId(final Long userId, final Long placeId) {
-        Place place = placeReader.findById(placeId);
+        Place place = placeReader.read(placeId);
         HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, placeId);
         boolean isUserScraped = userScrapChecker.check(userId, placeId);
 
@@ -39,7 +39,7 @@ public class PlaceService {
     }
 
     public PlaceResponseDto findByPosition(final Long userId, final Position position) {
-        Place place = placeReader.findByPosition(position);
+        Place place = placeReader.read(position);
         HashMap<String, Long> memoryCounts = memoryReader.countMemoryInPlace(userId, place.getId());
         boolean isUserScraped = userScrapChecker.check(userId, position);
 

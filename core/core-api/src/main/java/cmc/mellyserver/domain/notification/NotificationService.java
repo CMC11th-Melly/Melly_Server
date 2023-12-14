@@ -64,7 +64,7 @@ public class NotificationService {
     public Notification createNotification(String body, NotificationType notificationType, Long userId, Long memoryId) {
 
         User user = userReader.findById(userId);
-        Memory memory = memoryReader.findById(memoryId);
+        Memory memory = memoryReader.read(memoryId);
         return notificationWriter.save(Notification.createNotification(body, userId, notificationType, false,
             user.getProfileImage(), user.getNickname(), memory.getId()));
     }

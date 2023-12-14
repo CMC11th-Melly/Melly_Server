@@ -23,8 +23,12 @@ public class GroupReader {
 
     private final UserGroupQueryRepository userGroupQueryRepository;
 
-    public UserGroup findById(Long groupId) {
+    public UserGroup read(Long groupId) {
         return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
+    }
+
+    public UserGroup readOrDefaultEmpty(Long groupId) {
+        return groupRepository.findById(groupId).orElse(UserGroup.builder().build());
     }
 
     public UserJoinedGroupsResponse groupListLoginUserParticipate(Long userId, Long lastId,

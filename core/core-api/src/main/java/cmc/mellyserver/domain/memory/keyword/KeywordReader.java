@@ -15,7 +15,7 @@ public class KeywordReader {
 
     private final KeywordRepository keywordRepository;
 
-    public List<Keyword> getKeywords(Set<Long> keywordIds) {
+    public List<Keyword> read(Set<Long> keywordIds) {
         return keywordRepository.findAllByIdIn(keywordIds);
     }
 }

@@ -101,7 +101,7 @@ public class CacheConfig {
         /* Cache TTL 설정 */
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
         redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofMinutes(5)));
-        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.DETAIL_MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(1)));
         redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
         redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
 

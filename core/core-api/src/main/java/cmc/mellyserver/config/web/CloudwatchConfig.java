@@ -53,7 +53,6 @@ public class CloudwatchConfig {
 
         MeterRegistry meterRegistry = new CloudWatchMeterRegistry(cloudWatchConfig, Clock.SYSTEM,
             cloudWatchAsyncClient());
-
         return meterRegistry;
     }
 

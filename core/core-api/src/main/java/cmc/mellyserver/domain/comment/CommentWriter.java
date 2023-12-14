@@ -47,7 +47,7 @@ public class CommentWriter {
     private Comment saveComment(Comment root, CommentRequestDto commentRequestDto) {
 
         User user = userReader.findById(commentRequestDto.getUserId());
-        Memory memory = memoryReader.findById(commentRequestDto.getMemoryId());
+        Memory memory = memoryReader.read(commentRequestDto.getMemoryId());
 
         if (Objects.isNull(root)) {
             return commentRepository.save(Comment.createRoot(commentRequestDto.getContent(), user, memory.getId()));

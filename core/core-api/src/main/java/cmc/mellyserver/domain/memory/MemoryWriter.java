@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.FileDto;
 import cmc.mellyserver.FileService;
+import cmc.mellyserver.common.aspect.place.CheckPlaceExist;
 import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.dbcore.memory.memory.MemoryImage;
 import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
@@ -32,6 +33,7 @@ public class MemoryWriter {
 
     private final FileService fileService;
 
+    @CheckPlaceExist
     public Memory save(CreateMemoryRequestDto createMemoryRequestDto) {
 
         Memory memory = createMemoryRequestDto.toMemory();
@@ -43,7 +45,7 @@ public class MemoryWriter {
 
     public void update(UpdateMemoryRequestDto updateDto) {
 
-        Memory memory = memoryReader.findById(updateDto.getMemoryId());
+        Memory memory = memoryReader.read(updateDto.getMemoryId());
         memory.update(updateDto.getTitle(), updateDto.getContent(), updateDto.getGroupId(), updateDto.getOpenType(),
             updateDto.getVisitedDate(), updateDto.getStar());
         List<String> imageUrls = updateImages(updateDto.getDeleteImageList(), updateDto.getImages(),
@@ -74,13 +76,13 @@ public class MemoryWriter {
     }
 
     public void remove(final Long memoryId) {
-        Memory memory = memoryReader.findById(memoryId);
+        Memory memory = memoryReader.read(memoryId);
         memory.delete();
     }
 
     private void addPlace(Position position, Memory memory) {
 
-        Place place = placeReader.findByPosition(position);
+        Place place = placeReader.read(position);
         memory.setPlaceId(place.getId());
     }
 

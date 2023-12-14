@@ -58,7 +58,7 @@ public class PlaceScrapService {
     @Transactional
     public void createScrap(final Long userId, final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
-        Place place = placeReader.findByPosition(createPlaceScrapRequestDto.getPosition());
+        Place place = placeReader.read(createPlaceScrapRequestDto.getPosition());
         User user = userReader.findById(userId);
         placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
         placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
@@ -68,7 +68,7 @@ public class PlaceScrapService {
     @Transactional
     public void removeScrap(final Long userId, final Position position) {
 
-        Place place = placeReader.findByPosition(position);
+        Place place = placeReader.read(position);
         placeScrapValidator.validateExistedScrap(userId, place.getId());
         placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
     }

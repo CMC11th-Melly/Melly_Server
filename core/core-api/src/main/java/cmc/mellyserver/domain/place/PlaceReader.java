@@ -24,13 +24,13 @@ public class PlaceReader {
 
     private final PlaceQueryRepository placeQueryRepository;
 
-    public Place findById(Long placeId) {
+    public Place read(Long placeId) {
         return placeRepository.findById(placeId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
         });
     }
 
-    public Place findByPosition(Position position) {
+    public Place read(Position position) {
         return placeRepository.findByPosition(position)
             .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
     }

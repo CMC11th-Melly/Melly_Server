@@ -35,7 +35,7 @@ public class NotificationEventHandler {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendCommentPush(CommentEnrollEvent event) {
 
-        Memory memory = memoryReader.findById(event.getMemoryId());
+        Memory memory = memoryReader.read(event.getMemoryId());
         User memoryWriter = userReader.findById(memory.getId());
         pushService.sendCommentCreatedMessage(memory.getId(), memoryWriter.getNickname());
         notificationService.createNotification(COMMENT_LIKE_NOTI_CONTENT, NotificationType.COMMENT_ENROLL,

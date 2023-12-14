@@ -43,7 +43,7 @@ public class GroupService {
     @Cacheable(cacheNames = CacheNames.GROUP, key = "#groupId")
     public GroupResponseDto getGroup(final Long userId, final Long groupId) {
 
-        UserGroup userGroup = groupReader.findById(groupId);
+        UserGroup userGroup = groupReader.read(groupId);
         List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(userId, groupId);
         return GroupResponseDto.of(userGroup, groupMembers);
     }
@@ -64,10 +64,10 @@ public class GroupService {
 
     @DistributedLock(key = "#groupId")
     @Transactional
-    public void joinGroup(final Long userId, final Long groupId) throws InterruptedException {
+    public void joinGroup(final Long userId, final Long groupId) {
 
         User user = userReader.findById(userId);
-        UserGroup userGroup = groupReader.findById(groupId);
+        UserGroup userGroup = groupReader.read(groupId);
         groupValidator.isMaximumGroupMember(groupId);
         groupValidator.isDuplicatedJoin(user.getId(), userGroup.getId());
         groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
@@ -77,7 +77,7 @@ public class GroupService {
     @Transactional
     public void updateGroup(UpdateGroupRequestDto updateGroupRequestDto) {
 
-        UserGroup userGroup = groupReader.findById(updateGroupRequestDto.getGroupId());
+        UserGroup userGroup = groupReader.read(updateGroupRequestDto.getGroupId());
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),
             updateGroupRequestDto.getGroupIcon());
     }
@@ -86,7 +86,7 @@ public class GroupService {
     @Transactional
     public void removeGroup(final Long userId, final Long groupId) {
 
-        UserGroup userGroup = groupReader.findById(groupId);
+        UserGroup userGroup = groupReader.read(groupId);
         checkRemoveAuthority(userId, userGroup);
         userGroup.delete();
     }
@@ -97,7 +97,7 @@ public class GroupService {
 
         groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
         if (groupValidator.isGroupRemovable(groupId)) {
-            UserGroup userGroup = groupReader.findById(groupId);
+            UserGroup userGroup = groupReader.read(groupId);
             userGroup.delete();
         }
     }
