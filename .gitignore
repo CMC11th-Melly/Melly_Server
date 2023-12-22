@@ -32,12 +32,20 @@ out/
 /core/core-api/src/main/resources/db-core-prod.yml
 /core/core-api/src/main/resources/db-redis-prod.yml
 /core/core-api/src/main/resources/mail-prod.yml
-/core/core-api/src/main/resources/firebase/
+
 /core/core-api/src/main/resources/static/
 /core/core-api/src/main/resources/templates/
-/core/core-api/src/main/resources/application-local.yml
 /core/core-api/src/main/resources/firebase-key.json
-/batch/src/main/resources/application-local.yml
+
+/core/core-api/src/main/resources/application-local.yml
+/infra/file/src/main/resources/file-local.yml
+/infra/mail/src/main/resources/mail-local.yml
+/infra/notification/src/main/resources/notification-local.yml
+/storage/db-core/src/main/resources/db-core-local.yml
+/storage/db-redis/src/main/resources/db-redis-local.yml
+
+
+
 
 
 

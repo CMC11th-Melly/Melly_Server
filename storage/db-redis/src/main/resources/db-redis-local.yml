@@ -1,0 +1,9 @@
+spring:
+  redis:
+    token:
+      host: 172.16.65.64
+      port: 6380
+    cache:
+      host: 172.16.65.64
+      port: 6381
+

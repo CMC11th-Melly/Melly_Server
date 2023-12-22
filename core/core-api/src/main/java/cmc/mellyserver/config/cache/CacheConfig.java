@@ -41,11 +41,23 @@ public class CacheConfig {
     @Value("${spring.redis.cache.port}")
     private int port;
 
+    //   @Value("${spring.redis.cache.nodes}")
+    //  private List<String> clusterNodes;
+
     @Bean(name = "redisCacheConnectionFactory")
     RedisConnectionFactory redisCacheConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        // RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(clusterNodes);
+
+        //   ClusterTopologyRefreshOptions topologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
+        //      .enablePeriodicRefresh(Duration.ofSeconds(10)) // default 60s
+        //     .enableAllAdaptiveRefreshTriggers()
+        //      .build();
+
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(port);
+
+
 
         /*
         Redis 서버로 요청을 보낸 뒤 2초간 응답이 없으면 QueryTimeout을 발생시키도록 구현했습니다.
@@ -53,7 +65,8 @@ public class CacheConfig {
         따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
          */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(300))
+            .commandTimeout(Duration.ofMillis(200))
+            //   .clientOptions(ClusterClientOptions.builder().topologyRefreshOptions(topologyRefreshOptions).build())
             .build();
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);

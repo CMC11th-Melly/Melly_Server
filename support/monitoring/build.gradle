@@ -1,4 +1,3 @@
 dependencies {
-    
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
 }
-tasks.register("prepareKotlinBuildScriptModel") {}

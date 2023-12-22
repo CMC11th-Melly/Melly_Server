@@ -28,8 +28,6 @@ public class CommentLikeService {
 
     private final ApplicationEventPublisher publisher;
 
-    private static int count = 0;
-
     @OptimisticLock
     @Transactional
     public void saveCommentLike(final Long userId, final Long commentId) {
@@ -37,14 +35,6 @@ public class CommentLikeService {
         Comment comment = commentReader.findByIdWithLock(commentId);
         User writer = userReader.findById(userId);
         commentLikeValidator.validateDuplicatedLike(commentId, userId);
-        if (count == 0) {
-            count += 1;
-            try {
-                Thread.sleep(30000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
         commentLikeWriter.save(writer, comment);
         publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
     }

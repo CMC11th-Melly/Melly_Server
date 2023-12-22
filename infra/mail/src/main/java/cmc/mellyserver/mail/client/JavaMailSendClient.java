@@ -16,10 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 class JavaMailSendClient implements EmailSendClient {
 
-    private final JavaMailSender mailSender;
-
     @Value("${email.sender}")
     private String sender;
+
+    private final JavaMailSender mailSender;
 
     @Override
     public void sendMail(String subject, String content, String... receivers) {

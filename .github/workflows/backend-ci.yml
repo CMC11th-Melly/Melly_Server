@@ -1,4 +1,4 @@
-name: Melly Backend CI
+name: Backend CI
 
 on:
   pull_request:

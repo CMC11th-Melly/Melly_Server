@@ -26,6 +26,7 @@ public class CircuitBreakerConfig {
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
 
                 CircuitBreaker.EventPublisher eventPublisher = entryAddedEvent.getAddedEntry().getEventPublisher();
+                eventPublisher.onSuccess(event -> log.info("onSuccess {}", event));
                 eventPublisher.onCallNotPermitted(event -> log.info("onCallNotPermitted {}", event));
                 eventPublisher.onError(event -> log.error("onError {}", event));
                 eventPublisher.onStateTransition(event -> {

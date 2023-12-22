@@ -2,7 +2,7 @@
 name: Fix template
 about: Fix template
 title: ''
-labels: backend, bug
+labels: fix
 assignees: ''
 
 ---

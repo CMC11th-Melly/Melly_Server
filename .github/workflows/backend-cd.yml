@@ -1,4 +1,4 @@
-name: Melly Backend CD
+name: Backend CD
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
           cp ./appspec.yml ./deploy/
           cp ./scripts/deploy.sh ./deploy/
           cp ./docker/Dockerfile ./deploy/
-          cp ./core/core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar ./deploy/
+          cp ./core/core-api/build/libs/*.jar ./deploy/
           zip -r -qq -j ./spring-build.zip ./deploy
 
       - name: Configure AWS credentials
@@ -64,13 +64,11 @@ jobs:
             --region ap-northeast-2 \
             ./spring-build.zip s3://melly-s3
 
-
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name melly
-          --deployment-config-name CodeDeployDefault.HalfAtATime
-          --deployment-group-name melly-group
-          --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
-
+        run: aws deploy create-deployment --application-name melly-prod-deploy # code deploy 어플리케이션
+          --deployment-config-name CodeDeployDefault.HalfAtATime # 2개의 서버 중 한번에 하나씩 배포
+          --deployment-group-name melly-prod-deploy-group # 배포 그룹 설정
+          --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip # 코드 저장용 S3 버킷
 
       - name: Send Slack Message
         uses: 8398a7/action-slack@v3

@@ -44,9 +44,7 @@ public class MemoryService {
 
     /*
     메모리 상세 정보 조회
-    Place, Group 정보는 Memory와 완전 분리된 도메인이다. 따라서 Place와 Group의 변화를 감지해서 Memory를 변경하는건 불가능하다고 예상
-    상품 상세 화면처럼 서로 연관된 데이터이고, ID를 들고 있는 경우에는 이벤트라도 발행해서 Invalidation을 진행할 수 있을 것이다. 하지만 지금
-    상황에서는 그렇지도 않기에 적절히 짧은 TTL로 조절하는게 최선이라 생각한다.
+    TODO : 각 reader들이 MSA 상에서 client 통신을 통해 데이터를 조회하고, 복잡한 전시 서비스라 생각하고 캐시를 설계해보자
      */
     @Cacheable(cacheNames = CacheNames.DETAIL_MEMORY, key = "#memoryId")
     public MemoryResponseDto getMemory(final Long memoryId) {

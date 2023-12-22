@@ -37,8 +37,7 @@ public class CustomCache implements Cache {
      */
     @Override
     public ValueWrapper get(Object key) {
-        //return globalCache.get(key);
-        return circuitBreaker.run(() -> (globalCache.get(key)), (throwable -> fallback()));
+        return circuitBreaker.run(() -> globalCache.get(key), ((throwable) -> fallback()));
     }
 
     /*

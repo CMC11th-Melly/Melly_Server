@@ -7,7 +7,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.support.exception.BusinessException;
@@ -34,13 +33,15 @@ public class OptimisticLockAspect {
 
         for (int i = 0; i < retryCount; i++) {
             try {
+                log.info("Optimistic Lock try to acquire");
                 return joinPoint.proceed();
-            } catch (OptimisticLockingFailureException e) {
-                log.error(e.getMessage());
+            } catch (RuntimeException e) {
+                log.info("Optimistic Lock acquire fail, need to retry");
                 Thread.sleep(waitTime);
             }
         }
 
+        log.error("optimistic lock acquire eventually fail");
         throw new BusinessException(ErrorCode.SERVER_ERROR);
     }
 

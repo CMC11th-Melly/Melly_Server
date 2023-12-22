@@ -1,12 +1,23 @@
-management.endpoints.web.exposure.include: '*'
-management.endpoint.health.show-details: always
-management.metrics.export.cloudwatch.namespace: mellyApp
-management.metrics.export.cloudwatch.batchSize: 10
-management.health.diskspace.enabled: false
-management.health.circuitbreakers.enabled: true
-management.health.redis.enabled: false
 management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: never
   metrics:
+    export:
+      cloudwatch:
+        namespace: mellyApp
+        batch-size: 10
+  health:
+    diskspace:
+      enabled: false
+    circuitbreakers:
+      enabled: true
+    redis:
+      enabled: false
     distribution:
       percentiles-histogram:
         resilence4j:

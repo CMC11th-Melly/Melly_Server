@@ -1,0 +1,14 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jemin03120111
+    password: rnokxnacxykhbhfy
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+
+email:
+  sender: jemin3161@naver.com

@@ -2,7 +2,7 @@
 name: Refactor Template
 about: Refactor Template
 title: ''
-labels: backend, refactor
+labels: refactor
 assignees: ''
 
 ---

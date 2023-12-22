@@ -16,7 +16,7 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v4.9
 
-      - name: 버전 정보 추출(from Branch Name)
+      - name: 브랜치 Prefix에서 버전 정보 추출
         run: echo "TAG=$(echo '${{ steps.branch-name.outputs.current_branch }}' | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')" >> $GITHUB_ENV
 
       - name: Release & Tag 생성
