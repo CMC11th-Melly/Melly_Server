@@ -66,9 +66,9 @@ jobs:
 
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name melly-prod-deploy
+        run: aws deploy create-deployment --application-name melly-deploy
           --deployment-config-name CodeDeployDefault.HalfAtATime
-          --deployment-group-name melly-prod-deploy-group
+          --deployment-group-name melly-deploy-group
           --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
 
       - name: Send Slack Message
