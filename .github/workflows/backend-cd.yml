@@ -64,11 +64,12 @@ jobs:
             --region ap-northeast-2 \
             ./spring-build.zip s3://melly-s3
 
+
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name melly-prod-deploy # code deploy 어플리케이션
-          --deployment-config-name CodeDeployDefault.HalfAtATime # 2개의 서버 중 한번에 하나씩 배포
-          --deployment-group-name melly-prod-deploy-group # 배포 그룹 설정
-          --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip # 코드 저장용 S3 버킷
+        run: aws deploy create-deployment --application-name melly-prod-deploy
+          --deployment-config-name CodeDeployDefault.HalfAtATime
+          --deployment-group-name melly-prod-deploy-group
+          --s3-location bucket=melly-s3,bundleType=zip,key=spring-build.zip
 
       - name: Send Slack Message
         uses: 8398a7/action-slack@v3

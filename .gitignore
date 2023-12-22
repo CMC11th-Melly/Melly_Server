@@ -32,6 +32,7 @@ out/
 /core/core-api/src/main/resources/db-core-prod.yml
 /core/core-api/src/main/resources/db-redis-prod.yml
 /core/core-api/src/main/resources/mail-prod.yml
+/core/core-api/src/main/resources/monitoring-prod.yml
 
 /core/core-api/src/main/resources/static/
 /core/core-api/src/main/resources/templates/
