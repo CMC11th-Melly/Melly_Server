@@ -4,12 +4,6 @@ FROM openjdk:17-oracle
 COPY ./*.jar app.jar
 
 # Jar 파일을 실행한다
-ENTRYPOINT ["java",
-            "-Xms1024m", "-Xmx1024m", "-XX:NewRatio=3", "-verbosegc", "-server", "-XX:+HeapDumpOnOutOfMemoryError",
-            "-javaagent:./pinpoint-agent-2.5.3/pinpoint-bootstrap-2.5.3.jar",
-            "-Dpinpoint.agentId=melly01",
-            "-Dpinpoint.applicationName=melly",
-            "-Dpinpoint.config=./pinpoint-agent-2.5.3/pinpoint-root.config",
-            "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
 
 
