@@ -21,8 +21,11 @@ public class DistributedLockAspect {
 
     private final RedissonClient redissonClient;
 
+    /*
+    Lock을 획득하고 타겟 메서드를 실행한 뒤 UnLock 과정을 해줘야 하기에 @Around를 사용
+     */
     @Around("@annotation(cmc.mellyserver.common.aspect.lock.DistributedLock)")
-    public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object lock(ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();

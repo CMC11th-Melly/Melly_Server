@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OptimisticLock {
 
-    long retryCount() default 5L;
+    int retryCount() default 5;
 
     long waitTime() default 1L;
 }

@@ -26,9 +26,7 @@ import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
 import cmc.mellyserver.support.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/places")

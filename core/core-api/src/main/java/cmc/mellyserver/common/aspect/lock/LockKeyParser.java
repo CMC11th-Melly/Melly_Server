@@ -1,13 +1,13 @@
 package cmc.mellyserver.common.aspect.lock;
 
+import static cmc.mellyserver.common.aspect.lock.LockMessage.*;
+
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 public abstract class LockKeyParser {
-
-    private static final String REDISSON_LOCK_PREFIX = "LOCK:";
 
     public static String parse(String[] parameterNames, Object[] args, String key) {
 
@@ -28,7 +28,7 @@ public abstract class LockKeyParser {
 		 */
         Expression expression = parser.parseExpression(key);
         String keyValue = expression.getValue(context, String.class);
-        return REDISSON_LOCK_PREFIX + keyValue;
+        return DISTRIBUTED_LOCK_PREFIX + keyValue;
     }
 
 }
