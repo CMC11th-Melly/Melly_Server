@@ -1,5 +1,6 @@
 package cmc.mellyserver.domain.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -19,6 +20,10 @@ public class UserReader {
     public User findById(Long id) {
 
         return userRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public List<User> findByIds(List<Long> userIds) {
+        return userRepository.findAllByIdIn(userIds);
     }
 
     public boolean existsByNickname(String nickname) {

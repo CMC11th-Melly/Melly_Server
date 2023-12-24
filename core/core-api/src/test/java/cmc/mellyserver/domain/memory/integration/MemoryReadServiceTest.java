@@ -192,8 +192,8 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         User 머식 = userRepository.save(머식());
         Place 스타벅스 = placeRepository.save(PlaceFixtures.스타벅스());
         UserGroup 친구들 = groupRepository.save(GroupFixtures.친구그룹(모카.getId()));
-        groupAndUserRepository.save(GroupAndUser.of(모카, 친구들));
-        groupAndUserRepository.save(GroupAndUser.of(머식, 친구들));
+        groupAndUserRepository.save(GroupAndUser.of(모카.getId(), 친구들));
+        groupAndUserRepository.save(GroupAndUser.of(머식.getId(), 친구들));
 
         for (int i = 0; i < 5; i++) {
             memoryRepository.save(MemoryFixtures.메모리(스타벅스.getId(), 모카.getId(), 친구들.getId(), "성수 재밌었다", OpenType.ALL));

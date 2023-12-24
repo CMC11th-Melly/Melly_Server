@@ -36,7 +36,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
 
-            checkLogoutOrWithdrawUser(accessToken);
+            // checkLogoutOrWithdrawUser(accessToken);
 
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
 

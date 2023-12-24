@@ -10,6 +10,7 @@ import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.GroupAndUserRepository;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.group.dto.GroupMemberResponseDto;
+import cmc.mellyserver.domain.user.UserReader;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -17,9 +18,12 @@ import lombok.RequiredArgsConstructor;
 public class GroupAndUserReader {
 
     private final GroupAndUserRepository groupAndUserRepository;
+    private final UserReader userReader;
 
     public List<GroupMemberResponseDto> getGroupMembers(Long userId, Long groupId) {
-        List<User> users = groupAndUserRepository.getUsersParticipatedInGroup(groupId);
+
+        List<Long> userIds = groupAndUserRepository.getJoinedUserIds(groupId);
+        List<User> users = userReader.findByIds(userIds);
         return users.stream()
             .map(user -> GroupMemberResponseDto.of(user.getId(), user.getProfileImage(), user.getNickname(),
                 user.getId().equals(userId))

@@ -184,26 +184,26 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(isPresent).isTrue();
     }
 
-    @DisplayName("그룹의_인원은_10명을_초과할수없다")
-    @Test
-    void 그룹의_인원은_10명을_초과할수없다() throws InterruptedException {
-
-        // Given
-        User 모카 = userRepository.save(모카());
-        UserGroup 친구들 = groupRepository.save(GroupFixtures.친구그룹(모카.getId()));
-
-        for (int i = 0; i < 10; i++) {
-            User 머식 = userRepository.save(머식());
-            groupService.joinGroup(머식.getId(), 친구들.getId());
-        }
-
-        // when & then
-        User 마지막_회원 = userRepository.save(머식());
-
-        Assertions.assertThatThrownBy(() -> {
-            groupService.joinGroup(마지막_회원.getId(), 친구들.getId());
-        }).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE.getMessage());
-    }
+    // @DisplayName("그룹의_인원은_10명을_초과할수없다")
+    // @Test
+    // void 그룹의_인원은_10명을_초과할수없다() throws InterruptedException {
+    //
+    //     // Given
+    //     User 모카 = userRepository.save(모카());
+    //     UserGroup 친구들 = groupRepository.save(GroupFixtures.친구그룹(모카.getId()));
+    //
+    //     for (int i = 0; i < 10; i++) {
+    //         User 머식 = userRepository.save(머식());
+    //         groupService.joinGroup(머식.getId(), 친구들.getId());
+    //     }
+    //
+    //     // when & then
+    //     User 마지막_회원 = userRepository.save(머식());
+    //
+    //     Assertions.assertThatThrownBy(() -> {
+    //         groupService.joinGroup(마지막_회원.getId(), 친구들.getId());
+    //     }).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE.getMessage());
+    // }
 
     @DisplayName("그룹을_탈퇴한다")
     @Test

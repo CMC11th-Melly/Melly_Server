@@ -1,7 +1,6 @@
 package cmc.mellyserver.dbcore.comment.commenlike;
 
 import cmc.mellyserver.dbcore.comment.comment.Comment;
-import cmc.mellyserver.dbcore.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,9 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tb_comment_like")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike {
 
     @Id
@@ -26,27 +25,25 @@ public class CommentLike {
     @Column(name = "comment_like_id")
     private Long id;
 
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public static CommentLike createCommentLike(User user, Comment comment) {
+    public static CommentLike create(Long userId, Comment comment) {
         CommentLike commentLike = new CommentLike();
-        commentLike.setComment(comment);
-        commentLike.setUser(user);
+        commentLike.addComment(comment);
+        commentLike.addUserId(userId);
         return commentLike;
     }
 
-    public void setComment(Comment comment) {
+    public void addComment(Comment comment) {
         this.comment = comment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void addUserId(Long userId) {
+        this.userId = userId;
     }
 
 }

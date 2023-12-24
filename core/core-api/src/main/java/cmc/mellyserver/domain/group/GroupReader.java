@@ -27,6 +27,10 @@ public class GroupReader {
         return groupRepository.findById(groupId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_GROUP));
     }
 
+    public UserGroup readWithLock(Long groupId) {
+        return groupRepository.findByOptimisticLock(groupId);
+    }
+
     public UserGroup readOrDefaultEmpty(Long groupId) {
         return groupRepository.findById(groupId).orElse(UserGroup.builder().build());
     }

@@ -1,5 +1,7 @@
 package cmc.mellyserver.common.aspect.lock;
 
+import static cmc.mellyserver.common.aspect.lock.LockMessage.*;
+
 import java.lang.reflect.Method;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,13 +10,19 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.WriteRedisConnectionException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Aspect
+@Order(Ordered.LOWEST_PRECEDENCE - 1)
 @Component
 @RequiredArgsConstructor
 public class DistributedLockAspect {
@@ -27,9 +35,10 @@ public class DistributedLockAspect {
     @Around("@annotation(cmc.mellyserver.common.aspect.lock.DistributedLock)")
     public Object lock(ProceedingJoinPoint joinPoint) throws Throwable {
 
+        log.info(DISTRIBUTED_LOCK_AOP_ENTRY);
+
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
-
         DistributedLock lock = method.getAnnotation(DistributedLock.class);
 
 		/*
@@ -45,7 +54,7 @@ public class DistributedLockAspect {
 
             // 락을 타임아웃 내에 획득하지 못했다면 예외 발생
             if (!available) {
-                throw new BusinessException(ErrorCode.SERVER_ERROR);
+                throw new BusinessException(ErrorCode.DISTRIBUTED_LOCK_ACQUIRED_FAIL);
             }
 
             /*
@@ -55,10 +64,15 @@ public class DistributedLockAspect {
              */
             return joinPoint.proceed();
 
+        } catch (WriteRedisConnectionException e) {
+            log.error(REDISSON_CONNECTION_FAIL);
+            throw new BusinessException(ErrorCode.SERVER_ERROR);
         } catch (InterruptedException e) {
             throw new BusinessException(ErrorCode.SERVER_ERROR);
         } finally {
-            rLock.unlock();
+            if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                rLock.unlock();
+            }
         }
     }
 }

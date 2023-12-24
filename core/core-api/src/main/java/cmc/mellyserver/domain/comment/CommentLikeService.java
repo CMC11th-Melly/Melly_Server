@@ -1,15 +1,12 @@
 package cmc.mellyserver.domain.comment;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cmc.mellyserver.common.aspect.lock.DistributedLock;
 import cmc.mellyserver.common.aspect.lock.OptimisticLock;
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
 import cmc.mellyserver.dbcore.comment.comment.Comment;
-import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.domain.comment.event.CommentLikeEvent;
-import cmc.mellyserver.domain.user.UserReader;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,28 +21,26 @@ public class CommentLikeService {
 
     private final CommentReader commentReader;
 
-    private final UserReader userReader;
-
-    private final ApplicationEventPublisher publisher;
-
-    @OptimisticLock
+    @DistributedLock(key = "#commentId") // 대부분은 분산락으로 처리
+    @OptimisticLock(retryCount = 3, waitTime = 1000L) // 만약의 경우를 대비해서 낙관적락도 걸기
     @Transactional
     public void saveCommentLike(final Long userId, final Long commentId) {
 
-        Comment comment = commentReader.findByIdWithLock(commentId);
-        User writer = userReader.findById(userId);
-        commentLikeValidator.validateDuplicatedLike(commentId, userId);
-        commentLikeWriter.save(writer, comment);
-        publisher.publishEvent(new CommentLikeEvent(userId, comment.getMemoryId(), comment.getUser().getNickname()));
+        Comment comment = commentReader.findByIdWithLock(commentId); // 댓글 조회 (비관적 락)
+        commentLikeValidator.validateDuplicatedLike(commentId, userId); // commentLike 테이블 조회 -> 자신이 좋아요를 눌렀는지 기록 필요
+        comment.addLike();
+        commentLikeWriter.save(userId, comment);
     }
 
-    @OptimisticLock
+    @DistributedLock(key = "#commentId") // 대부분은 분산락으로 처리
+    @OptimisticLock(retryCount = 3, waitTime = 1000L) // 만약의 경우를 대비해서 낙관적락도 걸기
     @Transactional
     public void deleteCommentLike(final Long userId, final Long commentId) {
 
-        CommentLike commentLike = commentLikeReader.find(userId, commentId);
         Comment comment = commentReader.findByIdWithLock(commentId);
-        commentLikeWriter.delete(commentLike, comment);
+        comment.unLike();
+        CommentLike commentLike = commentLikeReader.find(userId, commentId);
+        commentLikeWriter.delete(commentLike);
     }
 
 }

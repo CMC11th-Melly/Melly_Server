@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cmc.mellyserver.common.aspect.lock.DistributedLock;
+import cmc.mellyserver.common.aspect.lock.OptimisticLock;
 import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
 import cmc.mellyserver.dbcore.group.UserGroup;
@@ -22,8 +23,10 @@ import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupService {
@@ -59,18 +62,19 @@ public class GroupService {
 
         User user = userReader.findById(userId);
         UserGroup savedGroup = groupWriter.save(user.getId(), createGroupRequestDto.toEntity());
-        return groupAndUserWriter.save(GroupAndUser.of(user, savedGroup)).getId();
+        return groupAndUserWriter.save(GroupAndUser.of(user.getId(), savedGroup)).getId();
     }
 
-    @DistributedLock(key = "#groupId")
+    @DistributedLock(key = "#groupId") // 대부분은 분산락으로 처리
+    @OptimisticLock(retryCount = 3, waitTime = 1000L) // 만약의 경우를 대비해서 낙관적락도 걸기
+    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void joinGroup(final Long userId, final Long groupId) {
 
-        User user = userReader.findById(userId);
-        UserGroup userGroup = groupReader.read(groupId);
+        UserGroup userGroup = groupReader.readWithLock(groupId);
         groupValidator.isMaximumGroupMember(groupId);
-        groupValidator.isDuplicatedJoin(user.getId(), userGroup.getId());
-        groupAndUserWriter.save(GroupAndUser.of(user, userGroup));
+        groupValidator.isDuplicatedJoin(userId, userGroup.getId());
+        groupAndUserWriter.save(GroupAndUser.of(userId, userGroup));
     }
 
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
@@ -94,12 +98,7 @@ public class GroupService {
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void exitGroup(final Long userId, final Long groupId) {
-
         groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
-        if (groupValidator.isGroupRemovable(groupId)) {
-            UserGroup userGroup = groupReader.read(groupId);
-            userGroup.delete();
-        }
     }
 
     private void checkRemoveAuthority(Long userId, UserGroup userGroup) {

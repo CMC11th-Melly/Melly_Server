@@ -1,17 +1,23 @@
 package cmc.mellyserver.dbcore.group;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import cmc.mellyserver.dbcore.config.jpa.JpaBaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,8 +50,14 @@ public class UserGroup extends JpaBaseEntity {
     @Column(name = "owner_id")
     private Long ownerId;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "group", fetch = FetchType.LAZY)
+    private List<GroupAndUser> groupAndUsers = new ArrayList<>();
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @Version
+    private Long version;
 
     @Builder
     public UserGroup(String name, String inviteLink, GroupType groupType, int icon, Long ownerId) {
@@ -54,6 +66,10 @@ public class UserGroup extends JpaBaseEntity {
         this.groupType = groupType;
         this.icon = icon;
         this.ownerId = ownerId;
+    }
+
+    public void addUser(GroupAndUser groupAndUser) {
+        this.groupAndUsers.add(groupAndUser);
     }
 
     public void delete() {

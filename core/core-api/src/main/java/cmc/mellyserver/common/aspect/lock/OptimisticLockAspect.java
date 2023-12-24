@@ -29,13 +29,16 @@ AOP는 Order의 숫자가 작을수록 우선순위가 높습니다. @Transactio
 @Slf4j
 @Aspect
 @Component
-@Order(Ordered.LOWEST_PRECEDENCE - 1) // @Transaction보다 먼저 AOP가 호출
+@Order(Ordered.LOWEST_PRECEDENCE - 2) // @Transaction보다 먼저 AOP가 호출
 @RequiredArgsConstructor
 public class OptimisticLockAspect {
 
     @Around("@annotation(cmc.mellyserver.common.aspect.lock.OptimisticLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
+        log.info(OPTIMISTIC_LOCK_AOP_ENTRY); // 낙관적 락 진입 확인
+
+        // @OptimisticLock 어노테이션 값 획득
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
         OptimisticLock lock = method.getAnnotation(OptimisticLock.class);
@@ -44,9 +47,10 @@ public class OptimisticLockAspect {
         long waitTime = lock.waitTime();
 
         for (int i = 0; i < retryCount; i++) {
+
             try {
-                log.info(OPTIMISTIC_LOCK_ACQUIRE_SUCCESS);
                 return joinPoint.proceed();
+
             } catch (OptimisticLockingFailureException ex) {
                 log.info(OPTIMISTIC_LOCK_RETRY);
                 Thread.sleep(waitTime);

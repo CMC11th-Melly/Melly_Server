@@ -34,7 +34,7 @@ public class QGroupAndUser extends EntityPathBase<GroupAndUser> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final cmc.mellyserver.dbcore.user.QUser user;
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QGroupAndUser(String variable) {
         this(GroupAndUser.class, forVariable(variable), INITS);
@@ -55,7 +55,6 @@ public class QGroupAndUser extends EntityPathBase<GroupAndUser> {
     public QGroupAndUser(Class<? extends GroupAndUser> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.group = inits.isInitialized("group") ? new QUserGroup(forProperty("group")) : null;
-        this.user = inits.isInitialized("user") ? new cmc.mellyserver.dbcore.user.QUser(forProperty("user")) : null;
     }
 
 }

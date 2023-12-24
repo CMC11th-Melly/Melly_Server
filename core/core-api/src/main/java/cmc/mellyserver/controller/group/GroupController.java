@@ -55,7 +55,7 @@ public class GroupController {
 
     @PostMapping("/{groupId}/join")
     public ResponseEntity<ApiResponse<Void>> joinGroup(@CurrentUser LoginUser loginUser,
-        @PathVariable(name = "groupId") Long groupId) throws InterruptedException {
+        @PathVariable(name = "groupId") Long groupId) {
 
         groupService.joinGroup(loginUser.getId(), groupId);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);

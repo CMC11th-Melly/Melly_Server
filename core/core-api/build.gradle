@@ -36,7 +36,7 @@ dependencies {
     // Circuit Breaker
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.2"
     implementation "io.github.resilience4j:resilience4j-all"
-
+    //  implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1"
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
 

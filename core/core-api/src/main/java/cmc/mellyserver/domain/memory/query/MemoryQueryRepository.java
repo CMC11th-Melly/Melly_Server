@@ -182,12 +182,12 @@ public class MemoryQueryRepository {
 
     private BooleanExpression inSameGroup(Long userId) {
         return memory.userId.in(
-            JPAExpressions.select(groupAndUser.user.id)
+            JPAExpressions.select(groupAndUser.userId)
                 .from(groupAndUser)
                 .where(groupAndUser.group.id.in(
                     JPAExpressions.select(groupAndUser.group.id)
                         .from(groupAndUser)
-                        .where(groupAndUser.user.id.eq(userId))
+                        .where(groupAndUser.userId.eq(userId))
                         .distinct()
                 )).distinct()
         );

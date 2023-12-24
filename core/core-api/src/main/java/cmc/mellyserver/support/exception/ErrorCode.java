@@ -50,6 +50,8 @@ public enum ErrorCode {
     // @RequestBody 및 @RequestParam, @PathVariable 값이 유효하지 않음
     NOT_VALID_HEADER_ERROR(NOT_FOUND.value(), "COMMON-014", "Header에 데이터가 존재하지 않는 경우 "),
 
+    // 분산락 획득에 실패한 경우
+    DISTRIBUTED_LOCK_ACQUIRED_FAIL(INTERNAL_SERVER_ERROR.value(), "COMMON-015", "분산락 획득에 실패했습니다"),
     /*
      * Business Error
      */

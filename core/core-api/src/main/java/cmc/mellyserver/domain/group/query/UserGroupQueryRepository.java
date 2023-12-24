@@ -2,7 +2,6 @@ package cmc.mellyserver.domain.group.query;
 
 import static cmc.mellyserver.dbcore.group.QGroupAndUser.*;
 import static cmc.mellyserver.dbcore.group.QUserGroup.*;
-import static cmc.mellyserver.dbcore.user.QUser.*;
 
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class UserGroupQueryRepository {
             )
             .from(groupAndUser)
             .leftJoin(groupAndUser.group, userGroup)
-            .leftJoin(groupAndUser.user, user)
             .where(
                 ltGroupId(lastId),
                 eqUser(userId)
@@ -70,7 +68,7 @@ public class UserGroupQueryRepository {
         if (userId == null) {
             return null;
         }
-        return groupAndUser.user.id.eq(userId);
+        return groupAndUser.userId.eq(userId);
     }
 
 }

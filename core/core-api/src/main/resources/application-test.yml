@@ -56,3 +56,5 @@ cloud:
       access-key:
       secret-key:
 
+testing:
+  value: 2

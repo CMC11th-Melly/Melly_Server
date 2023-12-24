@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -26,6 +27,8 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
 
     public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
 
+    public final ListPath<GroupAndUser, QGroupAndUser> groupAndUsers = this.<GroupAndUser, QGroupAndUser>createList("groupAndUsers", GroupAndUser.class, QGroupAndUser.class, PathInits.DIRECT2);
+
     public final EnumPath<GroupType> groupType = createEnum("groupType", GroupType.class);
 
     public final NumberPath<Integer> icon = createNumber("icon", Integer.class);
@@ -40,6 +43,8 @@ public class QUserGroup extends EntityPathBase<UserGroup> {
     public final StringPath name = createString("name");
 
     public final NumberPath<Long> ownerId = createNumber("ownerId", Long.class);
+
+    public final NumberPath<Long> version = createNumber("version", Long.class);
 
     public QUserGroup(String variable) {
         super(UserGroup.class, forVariable(variable));
