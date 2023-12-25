@@ -20,9 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tb_place_scrap")
 @Entity
+@Table(name = "tb_place_scrap")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceScrap extends JpaBaseEntity {
 
     @Id

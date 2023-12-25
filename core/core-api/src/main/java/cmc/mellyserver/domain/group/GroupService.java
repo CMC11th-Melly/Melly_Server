@@ -65,8 +65,8 @@ public class GroupService {
         return groupAndUserWriter.save(GroupAndUser.of(user.getId(), savedGroup)).getId();
     }
 
-    @DistributedLock(key = "#groupId") // 대부분은 분산락으로 처리
-    @OptimisticLock(retryCount = 3, waitTime = 1000L) // 만약의 경우를 대비해서 낙관적락도 걸기
+    @DistributedLock(key = "#groupId")
+    @OptimisticLock(retryCount = 3, waitTime = 1000L) // 분산락을 획득한 트랜잭션이 커밋 전에 락을 풀어버리는 상황에 대비
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void joinGroup(final Long userId, final Long groupId) {
@@ -95,6 +95,7 @@ public class GroupService {
         userGroup.delete();
     }
 
+    @DistributedLock(key = "#groupId")
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void exitGroup(final Long userId, final Long groupId) {
