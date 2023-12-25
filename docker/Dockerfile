@@ -4,6 +4,6 @@ FROM openjdk:17-oracle
 COPY ./*.jar app.jar
 
 # Jar 파일을 실행한다
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-javaagent:./pinpoint-agent-2.5.3/pinpoint-bootstrap-2.5.3.jar", "-Dpinpoint.applicationName=melly", "-Dpinpoint.config=./pinpoint-agent-2.5.3/pinpoint-root.config", "-Dspring.profiles.active=prod", "app.jar"]
 
 
