@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - "8080:8080"
+      - "9090:9090"
     container_name: melly-prod
     environment:
       - JVM_OPTS=-Xms1g -Xmx1g -XX:NewRatio=3 -verbosegc -server -XX:+HeapDumpOnOutOfMemoryError
