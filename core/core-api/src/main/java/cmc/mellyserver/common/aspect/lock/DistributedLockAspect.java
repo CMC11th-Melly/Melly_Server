@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Aspect
-@Order(Ordered.LOWEST_PRECEDENCE - 1)
+@Order(Ordered.LOWEST_PRECEDENCE - 1) // 숫자가 작을수록 우선순위가 높다.
 @Component
 @RequiredArgsConstructor
 public class DistributedLockAspect {

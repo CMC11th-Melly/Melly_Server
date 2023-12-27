@@ -65,7 +65,7 @@ public class CacheConfig {
         따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
          */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(200))
+            .commandTimeout(Duration.ofMillis(150))
             //   .clientOptions(ClusterClientOptions.builder().topologyRefreshOptions(topologyRefreshOptions).build())
             .build();
 
@@ -88,12 +88,11 @@ public class CacheConfig {
     }
 
     /*
-    설정 종류
-     - cache key는 String으로 직렬화 진행합니다.
-     - cache value는 여러 타입이 들어올 수 있기에 GenericJackon2JsonRedisSerializer를 사용했습니다.
-     - User 데이터는 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
-     - Memory 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
-     - Group 데이터도 수정이 적을 것으로 예상되어 1시간으로 TTL을 설정했습니다.
+    캐시 TTL 시간 설정 기준
+     - USER 프로필 캐시는 조회에 비해 변경 가능성이 적고 TTL로 1일을 설정했습니다.
+     - SCRAP 캐시는 변경 가능성이 높지만 개인화된 데이터이고 TTL로 1일을 설정했습니다.
+     - MEMORY 상세 페이지 캐시는 메모리 이외에도 그룹 정보, 장소 정보들이 혼합되기 때문에 TTL을 10분으로 짧게 설정했습니다.
+     - GROUP 상세 페이지 캐시는 그룹 이외에도 유저 정보가 혼합되기 때문에 TTL을 10분으로 짧게 설정했습니다.
 
     Circuit breaker를 통한 HA 보장
     레디스로 분산 캐시를 구현 시 레디스 서버가 다운될 수 있습니다. 이때 Spring Cache는 자동으로 DB 조회를 하는 것이 아니라 예외가 발생합니다.
@@ -113,10 +112,10 @@ public class CacheConfig {
 
         /* Cache TTL 설정 */
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
-        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofMinutes(10)));
-        redisCacheConfigMap.put(CacheNames.DETAIL_MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(1)));
-        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
-        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofMinutes(10)));
+        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofDays(1L)));
+        redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofDays(1L)));
+        redisCacheConfigMap.put(CacheNames.DETAIL_MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(30)));
+        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(10)));
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
             .withInitialCacheConfigurations(redisCacheConfigMap)

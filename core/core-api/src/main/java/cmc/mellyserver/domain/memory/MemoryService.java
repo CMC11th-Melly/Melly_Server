@@ -3,7 +3,6 @@ package cmc.mellyserver.domain.memory;
 import java.util.List;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class MemoryService {
     메모리 상세 정보 조회
     TODO : 각 reader들이 MSA 상에서 client 통신을 통해 데이터를 조회하고, 복잡한 전시 서비스라 생각하고 캐시를 설계해보자
      */
-    @Cacheable(cacheNames = CacheNames.DETAIL_MEMORY, key = "#memoryId")
+    // @Cacheable(cacheNames = CacheNames.DETAIL_MEMORY, key = "#memoryId")
     public MemoryResponseDto getMemory(final Long memoryId) {
 
         Memory memory = memoryReader.read(memoryId);
