@@ -3,6 +3,7 @@ package cmc.mellyserver.common.aspect.lock;
 import static cmc.mellyserver.common.aspect.lock.LockMessage.*;
 
 import java.lang.reflect.Method;
+import java.sql.SQLTransactionRollbackException;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +53,7 @@ public class OptimisticLockAspect {
             try {
                 return joinPoint.proceed();
 
-            } catch (OptimisticLockingFailureException ex) {
+            } catch (OptimisticLockingFailureException | OptimisticLockException | SQLTransactionRollbackException ex) {
                 log.info(OPTIMISTIC_LOCK_RETRY);
                 Thread.sleep(waitTime);
             }
