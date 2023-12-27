@@ -1,13 +1,13 @@
 spring:
   data:
     redis:
-      host: 192.168.0.8
+      host: 183.104.40.170
       port: 6380
   redis:
     token:
-      host: 192.168.0.8
+      host: 183.104.40.170
       port: 6380
     cache:
-      host: 192.168.0.8
+      host: 183.104.40.170
       port: 6381
 
