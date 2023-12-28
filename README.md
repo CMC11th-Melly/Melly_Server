@@ -19,7 +19,8 @@
 
 ## 🏗️ 서비스 구조도
 
-![Source (6)](https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/5381eaa9-f9af-48d8-aa45-0b943447fd0d)
+<img width="1044" alt="스크린샷 2023-12-27 오후 7 06 21" src="https://github.com/CMC11th-Melly/Melly_Server/assets/82302520/4585616f-77bf-4044-aa68-47fbe3f208c7">
+
 
 
 <br>
