@@ -39,8 +39,7 @@ public class RedisConfig {
         Config config = new Config();
         config.useSingleServer()
             .setAddress(REDISSON_HOST_PREFIX + host + ":" + port)
-            .setRetryAttempts(2)
-            .setRetryInterval(500);
+            .setConnectTimeout(3000);
 
         return Redisson.create(config);
     }

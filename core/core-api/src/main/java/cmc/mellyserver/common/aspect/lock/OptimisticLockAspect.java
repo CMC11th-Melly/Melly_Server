@@ -30,7 +30,7 @@ AOP는 Order의 숫자가 작을수록 우선순위가 높습니다. @Transactio
 @Slf4j
 @Aspect
 @Component
-@Order(Ordered.LOWEST_PRECEDENCE - 2) // @Transaction보다 먼저 AOP가 호출
+@Order(Ordered.LOWEST_PRECEDENCE - 2)
 @RequiredArgsConstructor
 public class OptimisticLockAspect {
 

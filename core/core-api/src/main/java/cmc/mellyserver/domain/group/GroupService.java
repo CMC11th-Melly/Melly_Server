@@ -68,12 +68,13 @@ public class GroupService {
     @OptimisticLock
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
-    public void joinGroup(final Long userId, final Long groupId) {
+    public int joinGroup(final Long userId, final Long groupId) {
 
         UserGroup userGroup = groupReader.readWithLock(groupId);
         groupValidator.isMaximumGroupMember(groupId);
         groupValidator.isDuplicatedJoin(userId, userGroup.getId());
         groupAndUserWriter.save(GroupAndUser.of(userId, userGroup));
+        return 1;
     }
 
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
