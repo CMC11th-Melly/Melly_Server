@@ -57,8 +57,7 @@ public class GroupController {
     public ResponseEntity<ApiResponse<Void>> joinGroup(@CurrentUser LoginUser loginUser,
         @PathVariable(name = "groupId") Long groupId) {
 
-        int i = groupService.joinGroup(loginUser.getId(), groupId);
-        System.out.println(i);
+        groupService.joinGroup(loginUser.getId(), groupId);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 

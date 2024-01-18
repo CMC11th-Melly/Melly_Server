@@ -41,7 +41,7 @@ public class CommentController {
 
     @PostMapping("/{commentId}/like")
     public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
-        @PathVariable Long commentId) throws InterruptedException {
+        @PathVariable Long commentId) {
 
         commentLikeService.saveCommentLike(loginUser.getId(), commentId);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);

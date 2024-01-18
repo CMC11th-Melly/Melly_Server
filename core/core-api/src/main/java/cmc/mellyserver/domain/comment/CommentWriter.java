@@ -38,7 +38,7 @@ public class CommentWriter {
         checkAuthority(userId, comment);
         commentRepository.delete(comment);
     }
-
+    
     public void update(Long commentId, String content) {
         Comment comment = commentReader.findById(commentId);
         comment.update(content);

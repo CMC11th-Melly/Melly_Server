@@ -42,7 +42,7 @@ public class CommentReader {
     }
 
     public Comment findByIdWithLock(final Long commentId) {
-        return commentRepository.findByOptimisticLock(commentId);
+        return commentRepository.findByPessimisticLock(commentId);
     }
 
     public CommentResponseDto findByMemoryId(final Long userId, final Long memoryId) {

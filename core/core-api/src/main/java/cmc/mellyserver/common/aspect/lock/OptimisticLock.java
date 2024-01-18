@@ -12,6 +12,4 @@ public @interface OptimisticLock {
     int retryCount() default 5;
 
     long waitTime() default 500L;
-
-    boolean retry() default true;
 }

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.common.aspect.lock.DistributedLock;
 import cmc.mellyserver.common.aspect.lock.OptimisticLock;
 import cmc.mellyserver.config.cache.CacheNames;
 import cmc.mellyserver.dbcore.group.GroupAndUser;
@@ -23,10 +22,8 @@ import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupService {
@@ -65,16 +62,15 @@ public class GroupService {
         return groupAndUserWriter.save(GroupAndUser.of(user.getId(), savedGroup)).getId();
     }
 
-    @OptimisticLock
+    @OptimisticLock(retryCount = 3, waitTime = 300L)
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
-    public int joinGroup(final Long userId, final Long groupId) {
+    public void joinGroup(final Long userId, final Long groupId) {
 
         UserGroup userGroup = groupReader.readWithLock(groupId);
         groupValidator.isMaximumGroupMember(groupId);
         groupValidator.isDuplicatedJoin(userId, userGroup.getId());
         groupAndUserWriter.save(GroupAndUser.of(userId, userGroup));
-        return 1;
     }
 
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
@@ -95,7 +91,6 @@ public class GroupService {
         userGroup.delete();
     }
 
-    @DistributedLock(key = "#groupId")
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
     public void exitGroup(final Long userId, final Long groupId) {

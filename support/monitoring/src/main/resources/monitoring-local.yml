@@ -1,10 +1,9 @@
-management.endpoints.web.exposure.include: '*'
+management.endpoints.web.exposure.include: '*' # 전체 엔드포인트를 다 노출하도록 만든다
 
 management.endpoint.health.show-details: always
 management.endpoint.prometheus.enabled: true
 management.health.diskspace.enabled: false
 management.health.circuitbreakers.enabled: true
 management.health.redis.enabled: false
-
 management.metrics.distribution.percentiles-histogram.resilence4j.circuitbreaker.calls: true
 
