@@ -1,6 +1,6 @@
 package cmc.mellyserver.notification;
 
-public interface NotificationService {
+public interface AlarmService {
 
     void sendCommentCreatedMessage(Long memoryId, String nickname);
 
