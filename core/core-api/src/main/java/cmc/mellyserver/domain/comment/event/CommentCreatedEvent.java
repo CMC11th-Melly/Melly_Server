@@ -5,10 +5,10 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class CommentEnrollEvent {
+public class CommentCreatedEvent {
 
     private Long memoryId;
 
-    private Long commentWriterId;
+    private Long writerId;
 
 }

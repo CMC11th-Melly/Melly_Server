@@ -16,5 +16,4 @@ public class FileDto {
     private String contentType;
 
     private InputStream inputStream;
-
 }

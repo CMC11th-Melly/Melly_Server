@@ -4,7 +4,7 @@ import static cmc.mellyserver.auth.certificate.CertificateConstants.*;
 
 import java.time.Duration;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CertificationNumberRepository {
 
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     // 인증번호 유효기간 : 3분
     public void save(String email, String certificationNumber) {

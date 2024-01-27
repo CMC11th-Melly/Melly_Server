@@ -29,25 +29,9 @@ public class CommentWriter {
 
     public Comment save(CommentRequestDto commentRequestDto) {
 
-        Comment parentComment = findRoot(commentRequestDto.getRootId());
-        return saveComment(parentComment, commentRequestDto);
-    }
-
-    public void remove(Long userId, Long commentId) {
-        Comment comment = commentReader.findById(commentId);
-        checkAuthority(userId, comment);
-        commentRepository.delete(comment);
-    }
-    
-    public void update(Long commentId, String content) {
-        Comment comment = commentReader.findById(commentId);
-        comment.update(content);
-    }
-
-    private Comment saveComment(Comment root, CommentRequestDto commentRequestDto) {
-
         User user = userReader.findById(commentRequestDto.getUserId());
         Memory memory = memoryReader.read(commentRequestDto.getMemoryId());
+        Comment root = findRoot(commentRequestDto.getRootId());
 
         if (Objects.isNull(root)) {
             return commentRepository.save(Comment.createRoot(commentRequestDto.getContent(), user, memory.getId()));
@@ -58,6 +42,17 @@ public class CommentWriter {
             Comment.createChild(commentRequestDto.getContent(), user, mentionUser, memory.getId(), root));
         root.getChildren().add(comment);
         return comment;
+    }
+
+    public void remove(Long userId, Long commentId) {
+        Comment comment = commentReader.findById(commentId);
+        checkAuthority(userId, comment);
+        commentRepository.delete(comment);
+    }
+
+    public void update(Long commentId, String content) {
+        Comment comment = commentReader.findById(commentId);
+        comment.update(content);
     }
 
     private Comment findRoot(Long rootId) {

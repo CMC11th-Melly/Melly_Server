@@ -5,16 +5,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cmc.mellyserver.auth.common.event.SignupEvent;
 import cmc.mellyserver.auth.controller.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.auth.service.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.auth.service.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.auth.service.dto.response.TokenResponseDto;
+import cmc.mellyserver.auth.token.FcmTokenRepository;
 import cmc.mellyserver.auth.token.RefreshToken;
 import cmc.mellyserver.auth.token.TokenDto;
 import cmc.mellyserver.auth.token.TokenService;
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.dbredis.FcmTokenRepository;
-import cmc.mellyserver.domain.comment.event.SignupEvent;
 import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.domain.user.UserWriter;
 import cmc.mellyserver.support.exception.BusinessException;

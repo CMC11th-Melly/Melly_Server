@@ -15,7 +15,6 @@ public class CircuitBreakerEventPublisher {
     private final RedisTemplate redisTemplate;
 
     public void publish(ChannelTopic topic, String message) {
-        log.info("Publish, message is {}", message);
         redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 }

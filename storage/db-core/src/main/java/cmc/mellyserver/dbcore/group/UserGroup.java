@@ -68,10 +68,6 @@ public class UserGroup extends JpaBaseEntity {
         this.ownerId = ownerId;
     }
 
-    public void addUser(GroupAndUser groupAndUser) {
-        this.groupAndUsers.add(groupAndUser);
-    }
-
     public void delete() {
         this.deletedAt = LocalDateTime.now();
     }

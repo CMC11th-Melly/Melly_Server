@@ -1,6 +1,6 @@
-package cmc.mellyserver.dbredis;
+package cmc.mellyserver.auth.token;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
@@ -9,18 +9,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FcmTokenRepository {
 
-    private final StringRedisTemplate tokenRedisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public void saveToken(String key, String fcmToken) {
-        tokenRedisTemplate.opsForValue().set(key, fcmToken);
+        redisTemplate.opsForValue().set(key, fcmToken);
     }
 
     public String getToken(String key) {
-        return tokenRedisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
     public void deleteToken(String key) {
-        tokenRedisTemplate.delete(key);
+        redisTemplate.delete(key);
     }
 
 }

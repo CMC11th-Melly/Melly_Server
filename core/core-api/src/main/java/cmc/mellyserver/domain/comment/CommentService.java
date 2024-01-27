@@ -8,7 +8,7 @@ import cmc.mellyserver.dbcore.comment.comment.Comment;
 import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
-import cmc.mellyserver.domain.comment.event.CommentEnrollEvent;
+import cmc.mellyserver.domain.comment.event.CommentCreatedEvent;
 import cmc.mellyserver.domain.memory.MemoryReader;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class CommentService {
     public Comment saveComment(final CommentRequestDto commentRequestDto) {
         Memory memory = memoryReader.read(commentRequestDto.getMemoryId());
         Comment comment = commentWriter.save(commentRequestDto);
-        publisher.publishEvent(new CommentEnrollEvent(memory.getUserId(), comment.getUser().getId()));
+        publisher.publishEvent(new CommentCreatedEvent(memory.getUserId(), comment.getUser().getId()));
         return comment;
     }
 

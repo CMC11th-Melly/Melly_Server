@@ -17,12 +17,13 @@ import jakarta.servlet.ServletResponse;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class MDCLoggingFilter implements Filter {
+
     private static final String MDC_KEY = "request_id";
 
     @Override
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse,
         final FilterChain filterChain) throws ServletException, IOException {
-        final UUID uuid = UUID.randomUUID();
+        UUID uuid = UUID.randomUUID();
         MDC.put(MDC_KEY, uuid.toString());
         filterChain.doFilter(servletRequest, servletResponse);
         MDC.clear();

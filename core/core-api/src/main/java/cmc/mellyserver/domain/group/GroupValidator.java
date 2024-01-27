@@ -2,6 +2,7 @@ package cmc.mellyserver.domain.group;
 
 import org.springframework.stereotype.Component;
 
+import cmc.mellyserver.dbcore.group.UserGroup;
 import cmc.mellyserver.support.exception.BusinessException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,10 @@ import lombok.RequiredArgsConstructor;
 public class GroupValidator {
 
     private static final int GROUP_MEMBER_MAX_COUNT = 9;
-    private static final int GROUP_MEMBER_EXIT_LIMIT = 2;
 
     private final GroupAndUserReader groupAndUserReader;
 
-    public void isDuplicatedJoin(final Long userId, final Long groupId) {
+    public void isDuplicatedJoin(Long userId, Long groupId) {
         if (groupAndUserReader.findByUserIdAndGroupId(userId, groupId).isPresent()) {
             throw new BusinessException(ErrorCode.DUPLICATED_GROUP);
         }
@@ -27,7 +27,9 @@ public class GroupValidator {
         }
     }
 
-    public boolean isGroupRemovable(Long groupId) {
-        return groupAndUserReader.countGroupMembers(groupId) < GROUP_MEMBER_EXIT_LIMIT;
+    public void checkRemoveAuthority(Long userId, UserGroup userGroup) {
+        if (!userGroup.checkAuthority(userId)) {
+            throw new BusinessException(ErrorCode.NO_AUTHORITY_TO_REMOVE);
+        }
     }
 }

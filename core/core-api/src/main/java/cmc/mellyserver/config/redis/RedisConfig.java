@@ -1,4 +1,4 @@
-package cmc.mellyserver.config.cache;
+package cmc.mellyserver.config.redis;
 
 import static cmc.mellyserver.config.circuitbreaker.CircuitBreakerConstants.*;
 
@@ -20,6 +20,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -29,45 +31,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import lombok.extern.slf4j.Slf4j;
+import cmc.mellyserver.config.cache.CacheNames;
+import cmc.mellyserver.config.cache.CustomCacheManager;
 
-@Slf4j
 @EnableCaching
 @Configuration
-public class CacheConfig {
+public class RedisConfig {
+
+    @Value("${spring.redis.token.host}")
+    private String tokenHost;
+
+    @Value("${spring.redis.token.port}")
+    private int tokenPort;
 
     @Value("${spring.redis.cache.host}")
-    private String host;
-    @Value("${spring.redis.cache.port}")
-    private int port;
+    private String cacheHost;
 
-    //   @Value("${spring.redis.cache.nodes}")
-    //  private List<String> clusterNodes;
+    @Value("${spring.redis.cache.port}")
+    private int cachePort;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(tokenHost);
+        redisStandaloneConfiguration.setPort(tokenPort);
+
+        LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
+            .commandTimeout(Duration.ofMillis(200)).build();
+
+        return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
+    }
 
     @Bean(name = "redisCacheConnectionFactory")
     RedisConnectionFactory redisCacheConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        // RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(clusterNodes);
+        redisStandaloneConfiguration.setHostName(cacheHost);
+        redisStandaloneConfiguration.setPort(cachePort);
 
-        //   ClusterTopologyRefreshOptions topologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
-        //      .enablePeriodicRefresh(Duration.ofSeconds(10)) // default 60s
-        //     .enableAllAdaptiveRefreshTriggers()
-        //      .build();
-
-        redisStandaloneConfiguration.setHostName(host);
-        redisStandaloneConfiguration.setPort(port);
-
-
-
-        /*
-        Redis 서버로 요청을 보낸 뒤 2초간 응답이 없으면 QueryTimeout을 발생시키도록 구현했습니다.
-        Linux 서버는 TCP 커넥션을 맺을때 SYN 패킷을 보낸 뒤 InitialRTO 값인 1초간 응답 패킷이 없으면 SYN 패킷을 재전송합니다.
-        따라서 한번의 재시도 요청을 고려하여 2초라는 타임아웃을 설정했습니다.
-         */
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(150))
-            //   .clientOptions(ClusterClientOptions.builder().topologyRefreshOptions(topologyRefreshOptions).build())
-            .build();
+            .commandTimeout(Duration.ofMillis(200)).build();
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
@@ -85,6 +87,23 @@ public class CacheConfig {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate() {
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer RedisMessageListener() {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory());
+        return container;
     }
 
     /*
@@ -122,9 +141,6 @@ public class CacheConfig {
             .build();
 
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create(CACHE_CIRCUIT);
-
-        /* Circuit Breaker 설정 */
         return new CustomCacheManager(redisCacheManager, circuitBreaker);
     }
-
 }

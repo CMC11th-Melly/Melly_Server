@@ -1,10 +1,14 @@
 package cmc.mellyserver.domain.memory;
 
+import static cmc.mellyserver.support.exception.ErrorCode.*;
+
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.place.PlaceReader;
+import cmc.mellyserver.support.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -33,14 +38,18 @@ public class MemoryWriter {
 
     private final FileService fileService;
 
+    private final ThreadPoolTaskExecutor imageUploadTaskExecutor;
+
     @CheckPlaceExist
-    public Memory save(CreateMemoryRequestDto createMemoryRequestDto) {
+    public Long save(CreateMemoryRequestDto createMemoryRequestDto) {
 
         Memory memory = createMemoryRequestDto.toMemory();
         addPlace(createMemoryRequestDto.getPosition(), memory);
-        addMemoryImages(createMemoryRequestDto, memory);
         addKeywords(createMemoryRequestDto.getKeywordIds(), memory);
-        return memoryRepository.save(memory);
+        Memory savedMemory = memoryRepository.save(memory);
+        imageUploadTaskExecutor.execute(() -> addMemoryImages(memory.getId(), createMemoryRequestDto.getUserId(),
+            createMemoryRequestDto.getMultipartFiles()));
+        return savedMemory.getId();
     }
 
     public void update(UpdateMemoryRequestDto updateDto) {
@@ -86,20 +95,23 @@ public class MemoryWriter {
         memory.setPlaceId(place.getId());
     }
 
-    private void addMemoryImages(CreateMemoryRequestDto createMemoryRequestDto, Memory memory) {
+    private void addMemoryImages(Long userId, Long memoryId, List<MultipartFile> images) {
 
-        List<FileDto> fileList = extractFileList(createMemoryRequestDto.getMultipartFiles());
+        List<FileDto> fileList = extractImageData(images);
 
-        if (Objects.nonNull(fileList)) {
-            List<String> multipartFileNames = fileService.saveFileList(createMemoryRequestDto.getUserId(), fileList);
-            memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
+        if (fileList.isEmpty()) {
+            return;
         }
+
+        List<String> multipartFileNames = fileService.saveFileList(userId, fileList);
+        Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(NO_SUCH_MEMORY));
+        memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
     }
 
-    private List<FileDto> extractFileList(List<MultipartFile> multipartFiles) {
+    private List<FileDto> extractImageData(List<MultipartFile> multipartFiles) {
 
         if (Objects.isNull(multipartFiles)) {
-            return null;
+            return Collections.emptyList();
         }
 
         return multipartFiles.stream().map(file -> {

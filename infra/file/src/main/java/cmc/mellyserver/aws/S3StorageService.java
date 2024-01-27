@@ -70,8 +70,9 @@ class S3StorageService implements FileService {
 
     }
 
-
     private String createFileName(Long userId, String fileName) {
+
+        String profile = System.getProperty("spring.profiles.active");
 
         return "dev/" + userId + "/" + UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }

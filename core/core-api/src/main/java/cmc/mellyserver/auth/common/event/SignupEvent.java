@@ -1,4 +1,4 @@
-package cmc.mellyserver.domain.comment.event;
+package cmc.mellyserver.auth.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

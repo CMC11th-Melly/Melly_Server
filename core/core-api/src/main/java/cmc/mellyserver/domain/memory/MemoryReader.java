@@ -30,23 +30,22 @@ public class MemoryReader {
         return memoryQueryRepository.countMemoriesBelongToPlace(userId, placeId);
     }
 
-    public MemoryListResponse getUserMemories(final Long lastId, final Pageable pageable, final Long userId,
-        final Long placeId, final GroupType groupType) {
+    public MemoryListResponse getUserMemories(Long lastId, Long userId, Long placeId, GroupType groupType,
+        Pageable pageable) {
         return memoryQueryRepository.findUserMemories(lastId, pageable, userId, placeId, groupType);
     }
 
-    public MemoryListResponse findOtherMemories(final Long lastId, final Pageable pageable, final Long userId,
-        final Long placeId, final GroupType groupType) {
+    public MemoryListResponse findOtherMemories(Long lastId, Long userId, Long placeId, GroupType groupType,
+        Pageable pageable) {
         return memoryQueryRepository.findOtherMemories(lastId, pageable, userId, placeId, groupType);
 
     }
 
-    public MemoryListResponse findGroupMemoriesById(final Long lastId, final Pageable pageable, final Long groupId) {
+    public MemoryListResponse findGroupMemoriesById(Long lastId, Long groupId, Pageable pageable) {
         return memoryQueryRepository.findGroupMemoriesById(lastId, pageable, groupId);
     }
 
-    public MemoryListResponse findGroupMemories(final Long lastId, final Pageable pageable, final Long userId,
-        final Long placeId) {
+    public MemoryListResponse findGroupMemories(Long lastId, Long userId, Long placeId, Pageable pageable) {
         return memoryQueryRepository.findGroupMemories(lastId, pageable, userId, placeId);
     }
 }

@@ -1,4 +1,4 @@
-package cmc.mellyserver.common.event;
+package cmc.mellyserver.common.event.handler;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -6,8 +6,8 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import cmc.mellyserver.auth.common.constant.AuthConstants;
+import cmc.mellyserver.auth.common.event.SignupEvent;
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.domain.comment.event.SignupEvent;
 import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.mail.EmailService;
 import lombok.RequiredArgsConstructor;

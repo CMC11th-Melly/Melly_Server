@@ -19,8 +19,6 @@ import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.group.query.dto.GroupResponseDto;
 import cmc.mellyserver.domain.user.UserReader;
-import cmc.mellyserver.support.exception.BusinessException;
-import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -41,16 +39,14 @@ public class GroupService {
     private final GroupValidator groupValidator;
 
     @Cacheable(cacheNames = CacheNames.GROUP, key = "#groupId")
-    public GroupResponseDto getGroup(final Long userId, final Long groupId) {
+    public GroupResponseDto getGroup(Long userId, Long groupId) {
 
         UserGroup userGroup = groupReader.read(groupId);
         List<GroupMemberResponseDto> groupMembers = groupAndUserReader.getGroupMembers(userId, groupId);
         return GroupResponseDto.of(userGroup, groupMembers);
     }
 
-    public UserJoinedGroupsResponse findUserParticipatedGroups(final Long userId, final Long lastId,
-        final Pageable pageable) {
-
+    public UserJoinedGroupsResponse findUserParticipatedGroups(Long userId, Long lastId, Pageable pageable) {
         return groupReader.groupListLoginUserParticipate(userId, lastId, pageable);
     }
 
@@ -62,10 +58,10 @@ public class GroupService {
         return groupAndUserWriter.save(GroupAndUser.of(user.getId(), savedGroup)).getId();
     }
 
-    @OptimisticLock(retryCount = 3, waitTime = 300L)
+    @OptimisticLock
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
-    public void joinGroup(final Long userId, final Long groupId) {
+    public void joinGroup(Long userId, Long groupId) {
 
         UserGroup userGroup = groupReader.readWithLock(groupId);
         groupValidator.isMaximumGroupMember(groupId);
@@ -84,22 +80,17 @@ public class GroupService {
 
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
-    public void removeGroup(final Long userId, final Long groupId) {
+    public void removeGroup(Long userId, Long groupId) {
 
         UserGroup userGroup = groupReader.read(groupId);
-        checkRemoveAuthority(userId, userGroup);
+        groupValidator.checkRemoveAuthority(userId, userGroup);
         userGroup.delete();
     }
 
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
     @Transactional
-    public void exitGroup(final Long userId, final Long groupId) {
+    public void exitGroup(Long userId, Long groupId) {
         groupAndUserWriter.deleteByUserIdAndGroupId(userId, groupId);
     }
 
-    private void checkRemoveAuthority(Long userId, UserGroup userGroup) {
-        if (!userGroup.checkAuthority(userId)) {
-            throw new BusinessException(ErrorCode.NO_AUTHORITY_TO_REMOVE);
-        }
-    }
 }

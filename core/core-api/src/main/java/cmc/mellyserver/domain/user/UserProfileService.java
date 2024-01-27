@@ -27,14 +27,12 @@ public class UserProfileService {
 
     @Cacheable(cacheNames = CacheNames.USER, key = "#userId")
     public ProfileResponseDto getProfile(final Long userId) {
-
         return ProfileResponseDto.of(userReader.findById(userId));
     }
 
     @CacheEvict(cacheNames = CacheNames.USER, key = "#userId")
     @Transactional
     public void updateProfile(final Long userId, final ProfileUpdateRequestDto profileUpdateRequestDto) {
-
         userWriter.update(userId, profileUpdateRequestDto);
     }
 

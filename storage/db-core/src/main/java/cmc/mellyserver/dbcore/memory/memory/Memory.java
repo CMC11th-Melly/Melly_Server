@@ -73,8 +73,7 @@ public class Memory extends JpaBaseEntity {
     private List<MemoryImage> memoryImages = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "memory_keyword",
-        joinColumns = @JoinColumn(name = "memory_id"))
+    @CollectionTable(name = "memory_keyword", joinColumns = @JoinColumn(name = "memory_id"))
     private Set<Long> keywordIds = new HashSet<>();
 
     @Builder
@@ -105,7 +104,6 @@ public class Memory extends JpaBaseEntity {
 
     public void update(String title, String content, Long groupId, OpenType openType, LocalDate visitedDate,
         long stars) {
-
         this.title = title;
         this.content = content;
         this.groupId = groupId;
@@ -120,7 +118,6 @@ public class Memory extends JpaBaseEntity {
     }
 
     public void updateMemoryImages(List<Long> deleteImages, List<String> newImages) {
-
         memoryImages.removeIf((image) -> deleteImages.contains(image.getId()));
         List<MemoryImage> images = newImages.stream().map(MemoryImage::new).toList();
         memoryImages.addAll(images);

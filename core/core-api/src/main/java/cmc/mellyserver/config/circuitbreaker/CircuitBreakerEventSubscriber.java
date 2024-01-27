@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class CircuitBreakerEventSubscriber implements MessageListener {
 
@@ -39,7 +37,6 @@ public class CircuitBreakerEventSubscriber implements MessageListener {
 
         CircuitBreakerRegistry circuitBreakerRegistry = circuitBreakerFactory.getCircuitBreakerRegistry();
         String circuitBreakerName = (String)redisTemplate.getValueSerializer().deserialize(message.getBody());
-        log.info("Subscribe, message is {}", circuitBreakerName);
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
         circuitBreaker.transitionToOpenState();
     }

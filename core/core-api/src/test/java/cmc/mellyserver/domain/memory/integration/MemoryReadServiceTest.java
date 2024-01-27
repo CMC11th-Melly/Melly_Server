@@ -67,9 +67,9 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         }
 
         // when
-        MemoryListResponse result = memoryService.getUserMemories(-1L, PageRequest.of(0, pageSize), 모카.getId(),
+        MemoryListResponse result = memoryService.getUserMemories(-1L, 모카.getId(),
             null,
-            null);
+            null, PageRequest.of(0, pageSize));
 
         // then
         assertThat(result.getContents()).hasSize(pageSize);
@@ -91,9 +91,9 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         Collections.reverse(all);
 
         // when
-        MemoryListResponse result = memoryService.getUserMemories(all.get(0).getId() - 2, PageRequest.of(0, 1),
+        MemoryListResponse result = memoryService.getUserMemories(all.get(0).getId() - 2,
             모카.getId(), null,
-            null);
+            null, PageRequest.of(0, 1));
 
         // then
         assertThat(result.getContents()).hasSize(1);
@@ -117,9 +117,9 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 
         // when
         MemoryListResponse result = memoryService.getUserMemoriesInPlace(all.get(0).getId() - 2,
-            PageRequest.of(0, 1),
+
             모카.getId(),
-            스타벅스.getId(), null);
+            스타벅스.getId(), null, PageRequest.of(0, 1));
 
         // then
         assertThat(result.getContents()).hasSize(1);
@@ -144,9 +144,9 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 
         // when
         MemoryListResponse result = memoryService.getOtherMemoriesInPlace(-1L,
-            PageRequest.of(0, 10),
+
             모카.getId(),
-            스타벅스.getId(), null);
+            스타벅스.getId(), null, PageRequest.of(0, 10));
 
         // then
         assertThat(result.getContents()).hasSize(5);
@@ -174,9 +174,9 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
 
         // when
         MemoryListResponse result = memoryService.getOtherMemoriesInPlace(all.get(0).getId() - 2,
-            PageRequest.of(0, 5),
+
             모카.getId(),
-            스타벅스.getId(), null);
+            스타벅스.getId(), null, PageRequest.of(0, 5));
 
         // then
         assertThat(result.getContents()).hasSize(2);
@@ -203,8 +203,8 @@ public class MemoryReadServiceTest extends IntegrationTestSupport {
         }
 
         // when
-        MemoryListResponse result = memoryService.getGroupMemoriesInPlace(-1L, PageRequest.of(0, 10), 모카.getId(),
-            스타벅스.getId());
+        MemoryListResponse result = memoryService.getGroupMemoriesInPlace(-1L, 모카.getId(),
+            스타벅스.getId(), PageRequest.of(0, 10));
 
         // then
         assertThat(result.getContents()).hasSize(8);

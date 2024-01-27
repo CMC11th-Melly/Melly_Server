@@ -1,9 +1,0 @@
-spring:
-  redis:
-    token:
-      host: 172.30.11.108
-      port: 6380
-    cache:
-      host: 172.30.11.108
-      port: 6381
-

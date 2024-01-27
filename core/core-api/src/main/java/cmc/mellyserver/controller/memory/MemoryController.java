@@ -56,8 +56,8 @@ public class MemoryController {
         @RequestParam(name = "lastId") Long lastId, @PageableDefault(size = 10) Pageable pageable,
         @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
-        MemoryListResponse loginUserWriteMemoryBelongToPlace = memoryService.getUserMemoriesInPlace(lastId, pageable,
-            loginUser.getId(), placeId, groupType);
+        MemoryListResponse loginUserWriteMemoryBelongToPlace = memoryService.getUserMemoriesInPlace(lastId,
+            loginUser.getId(), placeId, groupType, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, loginUserWriteMemoryBelongToPlace);
     }
 
@@ -66,8 +66,8 @@ public class MemoryController {
         @RequestParam(name = "lastId") Long lastId, @PageableDefault(size = 10) Pageable pageable,
         @PathVariable Long placeId, @RequestParam(required = false) GroupType groupType) {
 
-        MemoryListResponse otherUserWriteMemoryBelongToPlace = memoryService.getOtherMemoriesInPlace(lastId, pageable,
-            loginUser.getId(), placeId, groupType);
+        MemoryListResponse otherUserWriteMemoryBelongToPlace = memoryService.getOtherMemoriesInPlace(lastId,
+            loginUser.getId(), placeId, groupType, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, otherUserWriteMemoryBelongToPlace);
     }
 
@@ -76,8 +76,8 @@ public class MemoryController {
         @RequestParam(name = "lastId") Long lastId, @PathVariable Long placeId,
         @PageableDefault(size = 10) Pageable pageable) {
 
-        MemoryListResponse groupMemoriesInPlace = memoryService.getGroupMemoriesInPlace(lastId, pageable,
-            loginUser.getId(), placeId);
+        MemoryListResponse groupMemoriesInPlace = memoryService.getGroupMemoriesInPlace(lastId,
+            loginUser.getId(), placeId, pageable);
         return ApiResponse.success(SuccessCode.SELECT_SUCCESS, groupMemoriesInPlace);
     }
 
