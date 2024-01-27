@@ -10,7 +10,6 @@ import cmc.mellyserver.auth.controller.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.auth.service.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.auth.service.dto.request.AuthSignupRequestDto;
 import cmc.mellyserver.auth.service.dto.response.TokenResponseDto;
-import cmc.mellyserver.auth.token.FcmTokenRepository;
 import cmc.mellyserver.auth.token.RefreshToken;
 import cmc.mellyserver.auth.token.TokenDto;
 import cmc.mellyserver.auth.token.TokenService;
@@ -33,7 +32,7 @@ public class AuthService {
 
     private final TokenService tokenService;
 
-    private final FcmTokenRepository fcmTokenRepository;
+    private final NotificationTokenDao notificationTokenDao;
 
     private final ApplicationEventPublisher publisher;
 
@@ -44,7 +43,7 @@ public class AuthService {
         User user = userWriter.save(authSignupRequestDto.toEntity());
         TokenDto tokenDto = tokenService.createToken(user);
 
-        fcmTokenRepository.saveToken(user.getId().toString(), user.getFcmToken());
+        notificationTokenDao.save(user.getId().toString(), user.getFcmToken());
         publisher.publishEvent(new SignupEvent(user.getId()));
 
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
@@ -62,7 +61,7 @@ public class AuthService {
         checkPassword(authLoginRequestDto.password(), user.getPassword());
 
         TokenDto tokenDto = tokenService.createToken(user);
-        fcmTokenRepository.saveToken(user.getId().toString(), authLoginRequestDto.fcmToken());
+        notificationTokenDao.save(user.getId().toString(), authLoginRequestDto.fcmToken());
 
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
@@ -85,7 +84,7 @@ public class AuthService {
 
         tokenService.makeAccessTokenDisabled(accessToken);
         tokenService.removeRefreshToken(userId);
-        fcmTokenRepository.deleteToken(userId.toString());
+        notificationTokenDao.remove(userId.toString());
     }
 
     public void withdraw(final Long userId, final String accessToken) {
@@ -95,7 +94,7 @@ public class AuthService {
 
         tokenService.makeAccessTokenDisabled(accessToken);
         tokenService.removeRefreshToken(userId);
-        fcmTokenRepository.deleteToken(userId.toString());
+        notificationTokenDao.remove(userId.toString());
     }
 
     public void checkDuplicatedNickname(final String nickname) {

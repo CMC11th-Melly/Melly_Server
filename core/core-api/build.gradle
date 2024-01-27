@@ -34,7 +34,7 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // Circuit Breaker
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.2"
@@ -48,6 +48,7 @@ dependencies {
 
     // Multi Module
     implementation project(":storage:db-core")
+    implementation project(":storage:db-redis")
     implementation project(":infra:notification")
     implementation project(":infra:file")
     implementation project(":infra:mail")

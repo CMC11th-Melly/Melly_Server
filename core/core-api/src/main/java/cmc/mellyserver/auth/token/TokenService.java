@@ -14,29 +14,29 @@ public class TokenService {
 
     private final TokenProvider tokenProvider;
 
-    private final AuthTokenRepository tokenRepository;
+    private final AuthTokenDao authTokenDao;
 
     public TokenDto createToken(User user) {
         String accessToken = tokenProvider.createAccessToken(user.getId(), user.getRoleType());
         RefreshTokenDto refreshToken = tokenProvider.createRefreshToken(user.getId(), user.getRoleType());
-        tokenRepository.saveRefreshToken(new RefreshToken(refreshToken.token(), user.getId()),
+        authTokenDao.saveRefreshToken(new RefreshToken(refreshToken.token(), user.getId()),
             refreshToken.expiredAt());
         return new TokenDto(accessToken, refreshToken);
     }
 
     public RefreshToken findRefreshToken(Long userId) {
-        return tokenRepository.findRefreshToken(userId).orElseThrow(() -> {
+        return authTokenDao.findRefreshToken(userId).orElseThrow(() -> {
             throw new BusinessException(ErrorCode.RELOGIN_REQUIRED);
         });
     }
 
     public void makeAccessTokenDisabled(String accessToken) {
         long lastExpireTime = tokenProvider.getLastExpiredTime(accessToken);
-        tokenRepository.makeAccessTokenDisabled(accessToken, lastExpireTime);
+        authTokenDao.makeAccessTokenDisabled(accessToken, lastExpireTime);
     }
 
     public void removeRefreshToken(Long userId) {
-        tokenRepository.removeRefreshToken(userId);
+        authTokenDao.removeRefreshToken(userId);
     }
 
     public long extractUserId(String accessToken) {

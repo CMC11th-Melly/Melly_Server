@@ -9,7 +9,6 @@ import cmc.mellyserver.auth.service.dto.request.OAuthLoginRequestDto;
 import cmc.mellyserver.auth.service.dto.request.OAuthSignupRequestDto;
 import cmc.mellyserver.auth.service.dto.response.OAuthResponseDto;
 import cmc.mellyserver.auth.service.dto.response.TokenResponseDto;
-import cmc.mellyserver.auth.token.FcmTokenRepository;
 import cmc.mellyserver.auth.token.TokenDto;
 import cmc.mellyserver.auth.token.TokenService;
 import cmc.mellyserver.clientauth.LoginClient;
@@ -31,14 +30,14 @@ public class OAuthService {
 
     private final TokenService tokenService;
 
-    private final FcmTokenRepository fcmTokenRepository;
+    private final NotificationTokenDao notificationTokenDao;
 
     @Transactional
     public TokenResponseDto signup(OAuthSignupRequestDto oAuthSignupRequestDto) {
 
         User user = userWriter.save(oAuthSignupRequestDto.toEntity());
         TokenDto tokenDto = tokenService.createToken(user);
-        fcmTokenRepository.saveToken(user.getId().toString(), oAuthSignupRequestDto.fcmToken());
+        notificationTokenDao.save(user.getId().toString(), oAuthSignupRequestDto.fcmToken());
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
 
@@ -54,7 +53,7 @@ public class OAuthService {
         }
 
         TokenDto tokenDto = tokenService.createToken(user);
-        fcmTokenRepository.saveToken(user.getId().toString(), oAuthLoginRequestDto.fcmToken());
+        notificationTokenDao.save(user.getId().toString(), oAuthLoginRequestDto.fcmToken());
         return OAuthResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
 

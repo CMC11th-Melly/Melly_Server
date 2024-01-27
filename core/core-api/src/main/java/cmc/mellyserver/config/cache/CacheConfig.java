@@ -1,4 +1,4 @@
-package cmc.mellyserver.config.redis;
+package cmc.mellyserver.config.cache;
 
 import static cmc.mellyserver.config.circuitbreaker.CircuitBreakerConstants.*;
 
@@ -20,8 +20,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -31,36 +29,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import cmc.mellyserver.config.cache.CacheNames;
-import cmc.mellyserver.config.cache.CustomCacheManager;
-
 @EnableCaching
 @Configuration
-public class RedisConfig {
-
-    @Value("${spring.redis.token.host}")
-    private String tokenHost;
-
-    @Value("${spring.redis.token.port}")
-    private int tokenPort;
+public class CacheConfig {
 
     @Value("${spring.redis.cache.host}")
     private String cacheHost;
 
     @Value("${spring.redis.cache.port}")
     private int cachePort;
-
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(tokenHost);
-        redisStandaloneConfiguration.setPort(tokenPort);
-
-        LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(200)).build();
-
-        return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
-    }
 
     @Bean(name = "redisCacheConnectionFactory")
     RedisConnectionFactory redisCacheConnectionFactory() {
@@ -87,23 +64,6 @@ public class RedisConfig {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        return redisTemplate;
-    }
-
-    @Bean
-    public RedisMessageListenerContainer RedisMessageListener() {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisConnectionFactory());
-        return container;
     }
 
     /*
