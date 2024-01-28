@@ -6,5 +6,5 @@ public abstract class CertificateConstants {
 
     public static final String PREFIX_CERTIFICATION = "email certification:";
 
-    public static final int LIMIT_TIME_CERTIFICATION_NUMBER = 60 * 3;
+    public static final long LIMIT_TIME_CERTIFICATION_NUMBER = 1000 * 60 * 3;
 }

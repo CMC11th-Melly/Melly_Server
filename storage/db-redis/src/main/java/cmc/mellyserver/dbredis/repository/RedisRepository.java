@@ -25,6 +25,10 @@ public class RedisRepository {
         return redisTemplate.opsForValue().get(key);
     }
 
+    public boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
     public void delete(String key) {
         redisTemplate.delete(key);
     }

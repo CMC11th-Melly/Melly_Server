@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
+import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Profile({"local", "prod"})
@@ -12,37 +14,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class EmailCertificationService implements CertificationService {
 
-    private final CertificationNumberRepository certificationNumberRepository;
+    private final CertificationNumberDao certificationNumberDao;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    /**
-     * 인증 이메일 전송 기능
-     */
     public void sendCertification(String email) {
 
         String certificationNumber = RandomNumberGenerator.makeRandomNumber();
-        certificationNumberRepository.save(email, certificationNumber);
+        certificationNumberDao.save(email, certificationNumber);
         applicationEventPublisher.publishEvent(new CertificationCompletedEvent(email, certificationNumber));
-
     }
 
-    // 인증번호 일치 여부 확인
     public void verify(EmailCertificationRequest requestDto) {
 
         if (isVerify(requestDto)) {
-            throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
+            throw new BusinessException(ErrorCode.NOT_VALID_ERROR);
         }
 
-        // 인증 후 DB에서 인증번호 삭제
-        certificationNumberRepository.remove(requestDto.email());
+        certificationNumberDao.delete(requestDto.email());
     }
 
-    // 인증번호 일치 여부 확인 내부 로직
     private boolean isVerify(EmailCertificationRequest requestDto) {
-        return !(certificationNumberRepository.hasKey(requestDto.email())
-            && certificationNumberRepository.get(requestDto.email())
+        return !(certificationNumberDao.hasKey(requestDto.email())
+            && certificationNumberDao.get(requestDto.email())
             .equals(requestDto.certificationNumber()));
     }
-
 }
