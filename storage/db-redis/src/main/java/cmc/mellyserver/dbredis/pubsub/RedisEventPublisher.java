@@ -1,14 +1,14 @@
-package cmc.mellyserver.config.circuitbreaker;
+package cmc.mellyserver.dbredis.pubsub;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class CircuitBreakerEventPublisher {
+public class RedisEventPublisher {
 
     private final RedisTemplate redisTemplate;
 

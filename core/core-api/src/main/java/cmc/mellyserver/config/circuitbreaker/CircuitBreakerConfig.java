@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.listener.ChannelTopic;
 
+import cmc.mellyserver.dbredis.pubsub.RedisEventPublisher;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.event.CircuitBreakerOnStateTransitionEvent;
 import io.github.resilience4j.core.registry.EntryAddedEvent;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CircuitBreakerConfig {
 
     @Bean
-    public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer(CircuitBreakerEventPublisher redisPublisher) {
+    public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer(RedisEventPublisher redisPublisher) {
 
         return new RegistryEventConsumer<CircuitBreaker>() {
             @Override
@@ -45,7 +46,7 @@ public class CircuitBreakerConfig {
     }
 
     private void publishCircuitOpenTopic(CircuitBreakerOnStateTransitionEvent event,
-        CircuitBreakerEventPublisher redisPublisher) {
+        RedisEventPublisher redisPublisher) {
         if (openStateSpreadEnabled(event)) {
             redisPublisher.publish(new ChannelTopic(CIRCUIT_OPEN), event.getCircuitBreakerName());
         }
