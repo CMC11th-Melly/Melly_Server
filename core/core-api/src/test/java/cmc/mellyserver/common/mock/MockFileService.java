@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MockFileService implements FileService {
 
     @Override
-    public List<String> saveFileList(Long userId, List<FileDto> multipartFiles) {
+    public List<String> saveFiles(Long userId, List<FileDto> multipartFiles) {
         return null;
     }
 
@@ -29,7 +29,6 @@ public class MockFileService implements FileService {
     }
 
     @Override
-
-    public void deleteFileList(List<Long> deleteFileIds) {
+    public void deleteFiles(List<Long> deleteFileIds) {
     }
 }

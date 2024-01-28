@@ -39,24 +39,21 @@ public class PlaceScrapService {
 
     private final PlaceScrapValidator placeScrapValidator;
 
-    public ScrapedPlaceListResponse findScrapedPlace(final Long lastId, final Pageable pageable, final Long userId,
-        final ScrapType scrapType) {
-
-        Slice<ScrapedPlaceResponseDto> scrapedPlaces = placeScrapReader.getUserScrapedPlaces(lastId, pageable, userId,
+    public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
+        Slice<ScrapedPlaceResponseDto> places = placeScrapReader.getUserScrapedPlaces(lastId, pageable, userId,
             scrapType);
-        return ScrapedPlaceListResponse.of(scrapedPlaces.getContent(), scrapedPlaces.hasNext());
+        return ScrapedPlaceListResponse.of(places.getContent(), places.hasNext());
     }
 
     @Cacheable(cacheNames = CacheNames.SCRAP, key = "#userId")
-    public List<PlaceScrapCountResponseDto> countByPlaceScrapType(final Long userId) {
-
+    public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
         return placeScrapReader.getScrapedPlaceGrouping(userId);
     }
 
-    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @CheckPlaceExist
+    @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @Transactional
-    public void createScrap(final Long userId, final CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
+    public void createScrap(Long userId, CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
 
         Place place = placeReader.read(createPlaceScrapRequestDto.getPosition());
         User user = userReader.findById(userId);
@@ -66,7 +63,7 @@ public class PlaceScrapService {
 
     @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @Transactional
-    public void removeScrap(final Long userId, final Position position) {
+    public void removeScrap(Long userId, Position position) {
 
         Place place = placeReader.read(position);
         placeScrapValidator.validateExistedScrap(userId, place.getId());

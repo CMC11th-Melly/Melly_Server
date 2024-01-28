@@ -22,7 +22,15 @@ public record OAuthSignupRequestDto(
 ) {
 
     public User toEntity() {
-        return null;
+        return User.builder()
+            .email(email)
+            .socialId(socialId)
+            .provider(provider)
+            .nickname(nickname)
+            .gender(gender)
+            .ageGroup(ageGroup)
+            .fcmToken(fcmToken)
+            .build();
     }
 
 }

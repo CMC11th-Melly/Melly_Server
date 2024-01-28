@@ -47,13 +47,6 @@ public class NotificationService {
     }
 
     @Transactional
-    public void changeCommentLikePushStatus(Long userId, boolean status) {
-
-        User user = userReader.findById(userId);
-        user.changeCommentLikePushStatus(status);
-    }
-
-    @Transactional
     public void changeCommentPushStatus(Long userId, boolean status) {
 
         User user = userReader.findById(userId);
