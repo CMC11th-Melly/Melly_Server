@@ -4,6 +4,7 @@ import static cmc.mellyserver.auth.token.TokenConstants.*;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Component;
 
@@ -18,11 +19,11 @@ public class AuthTokenDao {
 
     public void saveRefreshToken(RefreshToken refreshToken, Long refreshTokenExpiredTime) {
         repository.save(REFRESH_TOKEN_PREFIX + refreshToken.userId(), refreshToken.refreshToken(),
-            refreshTokenExpiredTime);
+            refreshTokenExpiredTime, TimeUnit.MILLISECONDS);
     }
 
     public void makeAccessTokenDisabled(String accessToken, long lastExpiredTime) {
-        repository.save(accessToken, ACCESS_TOKEN_BLACKLIST, lastExpiredTime);
+        repository.save(accessToken, ACCESS_TOKEN_BLACKLIST, lastExpiredTime, TimeUnit.MILLISECONDS);
     }
 
     public Optional<RefreshToken> findRefreshToken(Long userId) {
