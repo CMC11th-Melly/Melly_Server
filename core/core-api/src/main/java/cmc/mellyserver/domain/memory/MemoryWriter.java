@@ -63,12 +63,12 @@ public class MemoryWriter {
     }
 
     private List<String> updateImages(List<Long> deleteImages, List<MultipartFile> newImages, Long userId) {
-        fileService.deleteFileList(deleteImages);
+        fileService.deleteFiles(deleteImages);
         return saveImages(userId, newImages);
     }
 
     private List<String> saveImages(Long userId, List<MultipartFile> newImages) {
-        return fileService.saveFileList(userId, extractFileDtos(newImages));
+        return fileService.saveFiles(userId, extractFileDtos(newImages));
     }
 
     private List<FileDto> extractFileDtos(List<MultipartFile> newImages) {
@@ -103,7 +103,7 @@ public class MemoryWriter {
             return;
         }
 
-        List<String> multipartFileNames = fileService.saveFileList(userId, fileList);
+        List<String> multipartFileNames = fileService.saveFiles(userId, fileList);
         Memory memory = memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(NO_SUCH_MEMORY));
         memory.setMemoryImages(multipartFileNames.stream().map(MemoryImage::new).collect(Collectors.toList()));
     }

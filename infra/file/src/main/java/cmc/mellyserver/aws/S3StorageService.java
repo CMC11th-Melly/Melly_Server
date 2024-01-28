@@ -31,7 +31,7 @@ class S3StorageService implements FileService {
     @Value("${cloud.aws.s3.cloud-front-url}")
     private String CLOUD_FRONT_URL;
 
-    public List<String> saveFileList(Long userId, List<FileDto> files) {
+    public List<String> saveFiles(Long userId, List<FileDto> files) {
 
         List<String> fileNameList = new ArrayList<>();
 
@@ -66,7 +66,7 @@ class S3StorageService implements FileService {
     }
 
     @Override
-    public void deleteFileList(List<Long> deleteFileIds) {
+    public void deleteFiles(List<Long> deleteFileIds) {
 
     }
 

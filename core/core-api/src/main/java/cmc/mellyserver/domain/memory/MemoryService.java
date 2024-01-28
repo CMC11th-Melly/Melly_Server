@@ -45,7 +45,7 @@ public class MemoryService {
     /*
     메모리 상세 정보 조회
      */
-    @Cacheable(cacheNames = CacheNames.DETAIL_MEMORY, key = "#memoryId")
+    @Cacheable(cacheNames = CacheNames.MEMORY, key = "#memoryId")
     public MemoryResponseDto getMemory(final Long memoryId) {
 
         Memory memory = memoryReader.read(memoryId);
@@ -99,13 +99,13 @@ public class MemoryService {
         eventPublisher.publishEvent(new MemoryCreatedEvent(memoryId));
     }
 
-    @CacheEvict(cacheNames = CacheNames.DETAIL_MEMORY, key = "#updateMemoryRequestDto.memoryId")
+    @CacheEvict(cacheNames = CacheNames.MEMORY, key = "#updateMemoryRequestDto.memoryId")
     @Transactional
     public void updateMemory(UpdateMemoryRequestDto updateMemoryRequestDto) {
         memoryWriter.update(updateMemoryRequestDto);
     }
 
-    @CacheEvict(cacheNames = CacheNames.DETAIL_MEMORY, key = "#memoryId")
+    @CacheEvict(cacheNames = CacheNames.MEMORY, key = "#memoryId")
     @Transactional
     public void removeMemory(Long memoryId) {
         memoryWriter.remove(memoryId);
