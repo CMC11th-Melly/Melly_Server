@@ -64,7 +64,7 @@ public class CustomCache implements Cache {
         try {
             globalCache.put(key, value);
         } catch (QueryTimeoutException e) {
-
+            log.error("글로벌 캐시 다운, 캐시 갱신 실패");
         }
     }
 
@@ -73,6 +73,7 @@ public class CustomCache implements Cache {
         try {
             globalCache.evict(key);
         } catch (QueryTimeoutException e) {
+            log.error("글로벌 캐시 다운, 캐시 삭제 실패");
         }
     }
 
@@ -81,7 +82,7 @@ public class CustomCache implements Cache {
         try {
             globalCache.clear();
         } catch (QueryTimeoutException e) {
-
+            log.error("글로벌 캐시 다운, 캐시 초기화 실패");
         }
     }
 }
