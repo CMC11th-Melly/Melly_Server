@@ -1,5 +1,6 @@
 package cmc.mellyserver.common.event.handler;
 
+import static cmc.mellyserver.dbcore.notification.enums.NotificationType.*;
 import static cmc.mellyserver.notification.constants.AlarmConstants.*;
 
 import org.springframework.scheduling.annotation.Async;
@@ -8,7 +9,6 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import cmc.mellyserver.dbcore.memory.memory.Memory;
-import cmc.mellyserver.dbcore.notification.enums.NotificationType;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.comment.event.CommentCreatedEvent;
 import cmc.mellyserver.domain.memory.MemoryReader;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationEventHandler {
 
-    private final AlarmSender pushService;
+    private final AlarmSender alarmSender;
 
     private final NotificationService notificationService;
 
@@ -36,8 +36,8 @@ public class NotificationEventHandler {
         Memory memory = memoryReader.read(event.getMemoryId());
         User memoryOwner = userReader.findById(memory.getId());
         User commentWriter = userReader.findById(event.getWriterId());
-        pushService.sendCommentCreatedMessage(commentWriter.getNickname(), memoryOwner.getId());
-        notificationService.createNotification(COMMENT_CREATED_TITLE, NotificationType.COMMENT_ENROLL,
-            memory.getUserId(), event.getMemoryId());
+        alarmSender.sendCommentCreatedAlarm(commentWriter.getNickname(), memoryOwner.getId());
+        notificationService.createNotification(COMMENT_CREATED_TITLE, COMMENT_ENROLL, memory.getUserId(),
+            event.getMemoryId());
     }
 }

@@ -21,7 +21,7 @@ class FCMSender implements AlarmSender {
     private final RedisRepository repository;
 
     @Override
-    public void sendCommentCreatedMessage(String nickname, Long userId) {
+    public void sendCommentCreatedAlarm(String nickname, Long userId) {
 
         String token = repository.get(userId.toString());
 
