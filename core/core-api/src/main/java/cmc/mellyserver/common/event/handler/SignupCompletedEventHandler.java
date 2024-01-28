@@ -1,5 +1,7 @@
 package cmc.mellyserver.common.event.handler;
 
+import static cmc.mellyserver.config.async.ExecutorConstants.*;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -20,10 +22,9 @@ public class SignupCompletedEventHandler {
 
     private final EmailService emailService;
 
-    @Async
+    @Async(SEND_EMAIL_BEAN_NAME)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void signupEvent(SignupEvent event) {
-
         User user = userReader.findById(event.getUserId());
         emailService.send(AuthConstants.SIGNUP_CELEBRATION_MAIL, user.getNickname(), user.getEmail());
     }

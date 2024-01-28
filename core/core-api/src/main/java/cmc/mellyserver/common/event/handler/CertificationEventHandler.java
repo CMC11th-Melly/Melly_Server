@@ -1,5 +1,7 @@
 package cmc.mellyserver.common.event.handler;
 
+import static cmc.mellyserver.config.async.ExecutorConstants.*;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -12,15 +14,13 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class SignupCertificationEventHandler {
+class CertificationEventHandler {
 
     private final EmailService emailService;
 
-    @Async
+    @Async(SEND_EMAIL_BEAN_NAME)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handle(CertificationCompletedEvent event) {
-
         emailService.send(CertificateConstants.TITLE_CERTIFICATION, event.content(), event.email());
     }
-
 }

@@ -1,5 +1,6 @@
 package cmc.mellyserver.common.event.handler;
 
+import static cmc.mellyserver.config.async.ExecutorConstants.*;
 import static cmc.mellyserver.dbcore.notification.enums.NotificationType.*;
 import static cmc.mellyserver.notification.constants.AlarmConstants.*;
 
@@ -21,23 +22,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationEventHandler {
 
-    private final AlarmSender alarmSender;
-
-    private final NotificationService notificationService;
-
     private final MemoryReader memoryReader;
 
     private final UserReader userReader;
 
-    @Async("notificationTaskExecutor")
+    private final AlarmSender alarmSender;
+
+    private final NotificationService notificationService;
+
+    @Async(NOTIFICATION_BEAN_NAME)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendCommentCreatedPush(CommentCreatedEvent event) {
-
         Memory memory = memoryReader.read(event.getMemoryId());
-        User memoryOwner = userReader.findById(memory.getId());
         User commentWriter = userReader.findById(event.getWriterId());
-        alarmSender.sendCommentCreatedAlarm(commentWriter.getNickname(), memoryOwner.getId());
         notificationService.createNotification(COMMENT_CREATED_TITLE, COMMENT_ENROLL, memory.getUserId(),
             event.getMemoryId());
+        alarmSender.sendCommentCreatedAlarm(commentWriter.getNickname(), memory.getUserId());
     }
 }
