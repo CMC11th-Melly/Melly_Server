@@ -17,8 +17,8 @@ public class RedisRepository {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public void save(String key, String value, Long expiredTime) {
-        redisTemplate.opsForValue().set(key, value, expiredTime, TimeUnit.MILLISECONDS);
+    public void save(String key, String value, Long expiredTime, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, expiredTime, timeUnit);
     }
 
     public String get(String key) {

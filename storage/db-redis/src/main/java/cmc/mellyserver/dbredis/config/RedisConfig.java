@@ -17,6 +17,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+    private static final Duration COMMAND_TIMEOUT = Duration.ofMillis(200);
+
     @Value("${spring.redis.token.host}")
     private String tokenHost;
 
@@ -30,7 +32,7 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPort(tokenPort);
 
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(Duration.ofMillis(200)).build();
+            .commandTimeout(COMMAND_TIMEOUT).build();
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
