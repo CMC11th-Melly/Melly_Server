@@ -79,8 +79,8 @@ public class CacheConfig {
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
         redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofHours(1)));
         redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofHours(1)));
-        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(10)));
-        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(10)));
+        redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(5)));
+        redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
 
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(redisCacheConnectionFactory())
             .withInitialCacheConfigurations(redisCacheConfigMap).build();
