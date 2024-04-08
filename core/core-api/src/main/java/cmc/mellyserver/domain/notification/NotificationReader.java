@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import cmc.mellyserver.controller.notification.dto.response.NotificationResponse;
 import cmc.mellyserver.dbcore.notification.Notification;
 import cmc.mellyserver.dbcore.notification.NotificationRepository;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ public class NotificationReader {
 
     public Notification findById(Long notificationId) {
         return notificationRepository.findById(notificationId)
-            .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_NOTIFICATION));
+            .orElseThrow(() -> new CommonException(ErrorCode.NO_SUCH_NOTIFICATION));
     }
 
     public List<NotificationResponse> getNotificationList(Long userId) {

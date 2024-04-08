@@ -1,5 +1,7 @@
 package cmc.mellyserver.auth.service;
 
+import java.util.Objects;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import cmc.mellyserver.auth.token.TokenService;
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.user.UserReader;
 import cmc.mellyserver.domain.user.UserWriter;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -49,11 +51,6 @@ public class AuthService {
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
 
-    /*
-     로그인 요청이 몰리는 상황에서 TPS를 올릴 수 있는 방법들을 고민했습니다.
-      - 1. email 컬럼에 대한 인덱스를 생성해서 DB 랜덤 I/O 시간 단축
-      - 2. password 비교하는 과정에서 encoder의 암호화 강도가 높아서 CPU 사용량과 처리시간 증가, EC2의 CPU 스펙에 맞춰서 암호화 강도 조절
-     */
     @Transactional
     public TokenResponseDto login(AuthLoginRequestDto authLoginRequestDto) {
 
@@ -66,7 +63,6 @@ public class AuthService {
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
 
-    // Refresh Token Rotation (RTR) 전략 적용
     public TokenResponseDto reIssueAccessTokenAndRefreshToken(final String token) {
 
         Long userId = tokenService.extractUserId(token);
@@ -100,22 +96,26 @@ public class AuthService {
     public void checkDuplicatedNickname(final String nickname) {
 
         if (userReader.existsByNickname(nickname)) {
-            throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+            throw new CommonException(ErrorCode.DUPLICATE_NICKNAME);
         }
     }
 
     public void checkDuplicatedEmail(final String email) {
 
-        if (userReader.findByEmail(email).isPresent()) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        if (Objects.nonNull(userReader.findByEmail(email))) {
+            throw new CommonException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
 
     @Transactional
     public void updateForgetPassword(ChangePasswordRequest requestDto) {
 
-        User user = userReader.findByEmail(requestDto.email())
-            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        User user = userReader.findByEmail(requestDto.email());
+
+        if (Objects.isNull(user)) {
+            throw new CommonException(ErrorCode.USER_NOT_FOUND);
+        }
+
         user.changePassword(requestDto.passwordAfter());
     }
 
@@ -128,21 +128,25 @@ public class AuthService {
         String passwordAfter = passwordEncoder.encode(requestDto.passwordAfter());
 
         if (!userReader.existsByEmailAndPassword(user.getEmail(), passwordBefore)) {
-            throw new BusinessException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
+            throw new CommonException(ErrorCode.BEFORE_PASSWORD_NOT_EXIST);
         }
 
         user.changePassword(passwordAfter);
     }
 
     private User checkEmail(final String email) {
-        return userReader.findByEmail(email).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.INVALID_EMAIL);
-        });
+        User byEmail = userReader.findByEmail(email);
+
+        if (Objects.isNull(byEmail)) {
+            throw new CommonException(ErrorCode.INVALID_EMAIL);
+        }
+
+        return byEmail;
     }
 
     private void checkPassword(final String password, final String originPassword) {
         if (!passwordEncoder.matches(password, originPassword)) {
-            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+            throw new CommonException(ErrorCode.INVALID_PASSWORD);
         }
     }
 
@@ -150,7 +154,7 @@ public class AuthService {
 
         if (!refreshToken.refreshToken().equals(token)) {
             tokenService.removeRefreshToken(userId);
-            throw new BusinessException(ErrorCode.ABNORMAL_ACCESS);
+            throw new CommonException(ErrorCode.ABNORMAL_ACCESS);
         }
     }
 

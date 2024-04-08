@@ -3,7 +3,7 @@ package cmc.mellyserver;
 import java.io.IOException;
 import java.util.List;
 
-public interface FileService {
+public interface FileUploader {
 
     List<String> saveFiles(Long userId, List<FileDto> multipartFiles);
 

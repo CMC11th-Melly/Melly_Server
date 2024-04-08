@@ -10,7 +10,7 @@ import cmc.mellyserver.dbcore.memory.memory.Memory;
 import cmc.mellyserver.dbcore.memory.memory.MemoryRepository;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
 import cmc.mellyserver.domain.memory.query.MemoryQueryRepository;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ public class MemoryReader {
     private final MemoryQueryRepository memoryQueryRepository;
 
     public Memory read(Long memoryId) {
-        return memoryRepository.findById(memoryId).orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_MEMORY));
+        return memoryRepository.findById(memoryId).orElseThrow(() -> new CommonException(ErrorCode.NO_SUCH_MEMORY));
     }
 
     public HashMap<String, Long> countMemoryInPlace(Long userId, Long placeId) {

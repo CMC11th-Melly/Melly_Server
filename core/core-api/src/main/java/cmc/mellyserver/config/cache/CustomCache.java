@@ -30,19 +30,11 @@ public class CustomCache implements Cache {
         return globalCache.getNativeCache();
     }
 
-    /*
-    1. 로컬 캐시를 조회
-    2. 로컬 캐시에 데이터 없으면 글로벌 캐시 조회 하고, 로컬 캐시 업데이트
-    3. 만약 글로벌 캐시에도 없으면
-     */
     @Override
     public ValueWrapper get(Object key) {
         return circuitBreaker.run(() -> globalCache.get(key), ((throwable) -> fallback()));
     }
 
-    /*
-    Cache가 ValueWrapper로 null을 반환하면 캐싱된 데이터가 없다고 판단 후, 실제 로직을 통해 DB 쿼리를 진행합니다.
-     */
     private ValueWrapper fallback() {
         log.error("글로벌 캐시 다운, Fallback 메서드 실행");
         return null;

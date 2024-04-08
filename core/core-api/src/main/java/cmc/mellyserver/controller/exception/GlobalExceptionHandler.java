@@ -18,7 +18,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import cmc.mellyserver.support.response.ErrorResponse;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
@@ -57,9 +57,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 
-    // 비즈니스 예외 일괄 처리
-    @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+    @ExceptionHandler(CommonException.class)
+    protected ResponseEntity<ErrorResponse> handleBusinessException(CommonException e) {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
@@ -69,13 +68,6 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
         log.error("handleIOException", ex);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.IO_ERROR, ex.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
-        log.error("handleNullPointerException", e);
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.NULL_POINT_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 

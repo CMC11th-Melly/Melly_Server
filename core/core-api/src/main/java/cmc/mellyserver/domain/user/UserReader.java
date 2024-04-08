@@ -1,13 +1,12 @@
 package cmc.mellyserver.domain.user;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +18,7 @@ public class UserReader {
 
     public User findById(Long id) {
 
-        return userRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
     }
 
     public List<User> findByIds(List<Long> userIds) {
@@ -34,7 +33,7 @@ public class UserReader {
         return userRepository.findBySocialId(socialId);
     }
 
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 

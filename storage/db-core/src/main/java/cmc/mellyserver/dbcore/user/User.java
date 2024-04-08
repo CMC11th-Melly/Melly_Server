@@ -135,10 +135,6 @@ public class User extends JpaBaseEntity {
         this.enableAppPush = enableAppPush;
     }
 
-    public void changeCommentLikePushStatus(boolean enableCommentLikePush) {
-        this.enableCommentLikePush = enableCommentLikePush;
-    }
-
     public void changeCommentPushStatus(boolean enableCommentPush) {
         this.enableCommentPush = enableCommentPush;
     }

@@ -20,7 +20,7 @@ public class CommentLikeService {
     private final CommentReader commentReader;
 
     @Transactional
-    public void saveCommentLike(final Long userId, final Long commentId) {
+    public void save(final Long userId, final Long commentId) {
 
         Comment comment = commentReader.findByIdWithLock(commentId);
         commentLikeValidator.validateDuplicatedLike(commentId, userId);
@@ -29,7 +29,7 @@ public class CommentLikeService {
     }
 
     @Transactional
-    public void deleteCommentLike(final Long userId, final Long commentId) {
+    public void delete(final Long userId, final Long commentId) {
 
         Comment comment = commentReader.findByIdWithLock(commentId);
         comment.unLike();

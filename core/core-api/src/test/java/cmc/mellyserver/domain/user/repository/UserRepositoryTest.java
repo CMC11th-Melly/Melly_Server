@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.support.RepositoryTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 
 public class UserRepositoryTest extends RepositoryTestSupport {
@@ -37,7 +37,7 @@ public class UserRepositoryTest extends RepositoryTestSupport {
 
         // when & then
         assertThatThrownBy(() -> {
-            userRepository.findById(0L).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        }).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
+            userRepository.findById(0L).orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+        }).isInstanceOf(CommonException.class).hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
     }
 }

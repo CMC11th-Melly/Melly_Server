@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLike;
 import cmc.mellyserver.dbcore.comment.commenlike.CommentLikeRepository;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class CommentLikeReader {
 
     public CommentLike find(final Long userId, final Long commentId) {
         return commentLikeRepository.findByUserIdAndCommentId(userId, commentId)
-            .orElseThrow(() -> new BusinessException(
+            .orElseThrow(() -> new CommonException(
                 ErrorCode.NOT_EXIST_SCRAP));
     }
 }

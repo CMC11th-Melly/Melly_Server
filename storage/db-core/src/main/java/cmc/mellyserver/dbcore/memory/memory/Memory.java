@@ -112,8 +112,8 @@ public class Memory extends JpaBaseEntity {
         this.stars = stars;
     }
 
-    public void setMemoryImages(List<MemoryImage> memoryImages) {
-        this.memoryImages = memoryImages;
+    public void addImages(List<MemoryImage> images) {
+        this.memoryImages = images;
         memoryImages.forEach(image -> image.addMemory(this));
     }
 

@@ -27,7 +27,7 @@ import cmc.mellyserver.domain.place.PlaceService;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
 import cmc.mellyserver.domain.scrap.dto.PlaceResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.MemoryFixtures;
 
@@ -133,7 +133,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             // when & then
             assertThatThrownBy(() ->
                 placeService.findByPlaceId(모카.getId(), -1L)
-            ).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.NO_SUCH_PLACE.getMessage());
+            ).isInstanceOf(CommonException.class).hasMessage(ErrorCode.NO_SUCH_PLACE.getMessage());
         }
 
     }
@@ -185,7 +185,7 @@ public class PlaceServiceTest extends IntegrationTestSupport {
             // when & then
             assertThatThrownBy(() ->
                 placeService.findByPosition(모카.getId(), new Position(1.000, 1.000))
-            ).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.NO_SUCH_PLACE.getMessage());
+            ).isInstanceOf(CommonException.class).hasMessage(ErrorCode.NO_SUCH_PLACE.getMessage());
         }
     }
 

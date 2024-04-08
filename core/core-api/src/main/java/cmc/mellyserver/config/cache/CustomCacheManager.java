@@ -12,8 +12,7 @@ public class CustomCacheManager implements CacheManager {
     private final RedisCacheManager globalCacheManager;
     private final CircuitBreaker circuitBreaker;
 
-    public CustomCacheManager(RedisCacheManager globalCacheManager,
-        CircuitBreaker circuitBreaker) {
+    public CustomCacheManager(RedisCacheManager globalCacheManager, CircuitBreaker circuitBreaker) {
         this.globalCacheManager = globalCacheManager;
         this.circuitBreaker = circuitBreaker;
     }

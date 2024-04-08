@@ -58,7 +58,7 @@ public class Comment extends JpaBaseEntity {
 
     @OneToMany(mappedBy = "root", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
-    
+
     @Column(name = "like_count")
     private int likeCount;
 
@@ -105,6 +105,9 @@ public class Comment extends JpaBaseEntity {
     }
 
     public void unLike() {
+        if (likeCount == 0) {
+            throw new IllegalArgumentException("좋아요를 취소할 수 없습니다");
+        }
         this.likeCount -= 1;
     }
 

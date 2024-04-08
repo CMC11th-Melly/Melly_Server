@@ -11,7 +11,7 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.domain.comment.dto.request.CommentRequestDto;
 import cmc.mellyserver.domain.memory.MemoryReader;
 import cmc.mellyserver.domain.user.UserReader;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -66,7 +66,7 @@ public class CommentWriter {
 
     private void checkAuthority(Long userId, Comment comment) {
         if (!comment.getUser().getId().equals(userId)) {
-            throw new BusinessException(ErrorCode.NOT_VALID_ERROR);
+            throw new CommonException(ErrorCode.NOT_VALID_ERROR);
         }
     }
 }

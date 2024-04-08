@@ -18,7 +18,7 @@ import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.notification.NotificationService;
 import cmc.mellyserver.domain.notification.dto.response.NotificationOnOffResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.MemoryFixtures;
 
@@ -79,7 +79,7 @@ public class NotificationServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> {
             notificationService.createNotification("메세지 본문", NotificationType.COMMENT_ENROLL, 모카.getId(), -1L);
         })
-            .isInstanceOf(BusinessException.class)
+            .isInstanceOf(CommonException.class)
             .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
     }
 

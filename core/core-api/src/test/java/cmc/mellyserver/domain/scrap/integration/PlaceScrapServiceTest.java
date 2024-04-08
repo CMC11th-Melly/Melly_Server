@@ -23,7 +23,7 @@ import cmc.mellyserver.domain.scrap.PlaceScrapService;
 import cmc.mellyserver.domain.scrap.dto.request.CreatePlaceScrapRequestDto;
 import cmc.mellyserver.domain.scrap.dto.response.ScrapedPlaceListResponse;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.PlaceFixtures;
 import fixtures.UserFixtures;
@@ -84,7 +84,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
             // then
             assertThatThrownBy(() -> placeScrapService.createScrap(모카.getId(), createPlaceScrapRequestDto))
-                .isInstanceOf(BusinessException.class)
+                .isInstanceOf(CommonException.class)
                 .hasMessage(ErrorCode.DUPLICATE_SCRAP.getMessage());
         }
 
@@ -144,7 +144,7 @@ public class PlaceScrapServiceTest extends IntegrationTestSupport {
 
             // Then
             assertThatThrownBy(() -> placeScrapService.removeScrap(모카.getId(), 스타벅스.getPosition()))
-                .isInstanceOf(BusinessException.class)
+                .isInstanceOf(CommonException.class)
                 .hasMessage(ErrorCode.NOT_EXIST_SCRAP.getMessage());
         }
     }

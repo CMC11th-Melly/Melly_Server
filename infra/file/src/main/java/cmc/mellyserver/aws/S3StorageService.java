@@ -17,13 +17,13 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import cmc.mellyserver.FileDto;
-import cmc.mellyserver.FileService;
+import cmc.mellyserver.FileUploader;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 @Profile(value = {"local", "prod"})
-class S3StorageService implements FileService {
+class S3StorageService implements FileUploader {
 
     private final AmazonS3 amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")

@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.FileDto;
-import cmc.mellyserver.FileService;
+import cmc.mellyserver.FileUploader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 @Profile("test")
-public class MockFileService implements FileService {
+public class MockFileService implements FileUploader {
 
     @Override
     public List<String> saveFiles(Long userId, List<FileDto> multipartFiles) {

@@ -15,7 +15,7 @@ import cmc.mellyserver.dbcore.user.User;
 import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.scrap.PlaceScrapValidator;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.PlaceFixtures;
 import fixtures.UserFixtures;
@@ -47,7 +47,7 @@ public class PlaceScrapValidatorTest extends IntegrationTestSupport {
 
         // then
         assertThatThrownBy(() -> placeScrapValidator.validateDuplicatedScrap(모카.getId(), 스타벅스.getId()))
-            .isInstanceOf(BusinessException.class)
+            .isInstanceOf(CommonException.class)
             .hasMessage(ErrorCode.DUPLICATE_SCRAP.getMessage());
     }
 
@@ -61,7 +61,7 @@ public class PlaceScrapValidatorTest extends IntegrationTestSupport {
 
         // when & then
         assertThatThrownBy(() -> placeScrapValidator.validateExistedScrap(모카.getId(), 스타벅스.getId()))
-            .isInstanceOf(BusinessException.class)
+            .isInstanceOf(CommonException.class)
             .hasMessage(ErrorCode.NOT_EXIST_SCRAP.getMessage());
     }
 }

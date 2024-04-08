@@ -3,8 +3,8 @@ package cmc.mellyserver.config.async;
 import static cmc.mellyserver.config.async.ExecutorConstants.*;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
 
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -30,7 +30,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(5);
         executor.setThreadNamePrefix(IMAGE_EXECUTOR_PREFIX);
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.initialize();
         return executor;
     }
 
@@ -43,7 +43,6 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(1000);
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(5);
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         executor.setThreadNamePrefix(NOTIFICATION_EXECUTOR_PREFIX);
         executor.initialize();
         return executor;
@@ -58,7 +57,6 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(1000);
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(5);
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         executor.setThreadNamePrefix(SEND_EMAIL_EXECUTOR_PREFIX);
         executor.initialize();
         return executor;
@@ -72,9 +70,13 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(1000);
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(5);
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setThreadNamePrefix(ASYNC_DEFAULT_EXECUTOR_PREFIX);
         executor.initialize();
         return executor;
+    }
+
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new AsyncExceptionHandler();
     }
 }

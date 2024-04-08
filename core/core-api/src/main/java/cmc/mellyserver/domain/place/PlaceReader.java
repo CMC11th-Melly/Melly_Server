@@ -12,7 +12,7 @@ import cmc.mellyserver.dbcore.place.Position;
 import cmc.mellyserver.domain.memory.query.dto.FindPlaceByMemoryTitleResponseDto;
 import cmc.mellyserver.domain.place.query.PlaceQueryRepository;
 import cmc.mellyserver.domain.scrap.dto.MarkedPlaceResponseDto;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -26,13 +26,13 @@ public class PlaceReader {
 
     public Place read(Long placeId) {
         return placeRepository.findById(placeId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_PLACE);
+            throw new CommonException(ErrorCode.NO_SUCH_PLACE);
         });
     }
 
     public Place read(Position position) {
         return placeRepository.findByPosition(position)
-            .orElseThrow(() -> new BusinessException(ErrorCode.NO_SUCH_PLACE));
+            .orElseThrow(() -> new CommonException(ErrorCode.NO_SUCH_PLACE));
     }
 
     public List<MarkedPlaceResponseDto> placeUserMemoryExist(Long userId, GroupType groupType) {

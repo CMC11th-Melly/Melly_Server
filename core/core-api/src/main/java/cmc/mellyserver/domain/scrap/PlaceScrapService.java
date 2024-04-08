@@ -33,40 +33,37 @@ public class PlaceScrapService {
 
     private final PlaceReader placeReader;
 
-    private final PlaceScrapReader placeScrapReader;
+    private final PlaceScrapReader scrapReader;
 
-    private final PlaceScrapWriter placeScrapWriter;
+    private final PlaceScrapWriter scrapWriter;
 
-    private final PlaceScrapValidator placeScrapValidator;
+    private final PlaceScrapValidator scrapValidator;
 
     public ScrapedPlaceListResponse findScrapedPlace(Long lastId, Pageable pageable, Long userId, ScrapType scrapType) {
-        Slice<ScrapedPlaceResponseDto> places = placeScrapReader.getUserScrapedPlaces(lastId, pageable, userId,
-            scrapType);
+        Slice<ScrapedPlaceResponseDto> places = scrapReader.getUserScrapedPlaces(lastId, pageable, userId, scrapType);
         return ScrapedPlaceListResponse.of(places.getContent(), places.hasNext());
     }
 
     @Cacheable(cacheNames = CacheNames.SCRAP, key = "#userId")
     public List<PlaceScrapCountResponseDto> countByPlaceScrapType(Long userId) {
-        return placeScrapReader.getScrapedPlaceGrouping(userId);
+        return scrapReader.getScrapedPlaceGrouping(userId);
     }
 
     @CheckPlaceExist
     @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @Transactional
     public void createScrap(Long userId, CreatePlaceScrapRequestDto createPlaceScrapRequestDto) {
-
         Place place = placeReader.read(createPlaceScrapRequestDto.getPosition());
         User user = userReader.findById(userId);
-        placeScrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
-        placeScrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
+        scrapValidator.validateDuplicatedScrap(user.getId(), place.getId());
+        scrapWriter.save(PlaceScrap.createScrap(user, place, createPlaceScrapRequestDto.getScrapType()));
     }
 
     @CacheEvict(cacheNames = CacheNames.SCRAP, key = "#userId")
     @Transactional
     public void removeScrap(Long userId, Position position) {
-
         Place place = placeReader.read(position);
-        placeScrapValidator.validateExistedScrap(userId, place.getId());
-        placeScrapWriter.deleteByUserIdAndPlacePosition(userId, position);
+        scrapValidator.validateExistedScrap(userId, place.getId());
+        scrapWriter.deleteByUserIdAndPlacePosition(userId, position);
     }
 }

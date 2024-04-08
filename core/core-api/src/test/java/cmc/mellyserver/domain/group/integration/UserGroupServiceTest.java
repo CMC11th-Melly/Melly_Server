@@ -23,7 +23,7 @@ import cmc.mellyserver.domain.group.dto.request.UpdateGroupRequestDto;
 import cmc.mellyserver.domain.group.dto.response.UserJoinedGroupsResponse;
 import cmc.mellyserver.domain.group.query.dto.GroupResponseDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.GroupFixtures;
 
@@ -163,7 +163,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
         // when
         Assertions.assertThatThrownBy(() ->
                 groupService.removeGroup(머식.getId(), 친구들.getId()))
-            .isInstanceOf(BusinessException.class).hasMessage(ErrorCode.NO_AUTHORITY_TO_REMOVE.getMessage());
+            .isInstanceOf(CommonException.class).hasMessage(ErrorCode.NO_AUTHORITY_TO_REMOVE.getMessage());
 
     }
 
@@ -202,7 +202,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
     //
     //     Assertions.assertThatThrownBy(() -> {
     //         groupService.joinGroup(마지막_회원.getId(), 친구들.getId());
-    //     }).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE.getMessage());
+    //     }).isInstanceOf(CommonException.class).hasMessage(ErrorCode.PARTICIPATE_GROUP_NOT_POSSIBLE.getMessage());
     // }
 
     @DisplayName("그룹을_탈퇴한다")

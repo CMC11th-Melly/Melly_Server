@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import cmc.mellyserver.auth.service.dto.response.RefreshTokenDto;
 import cmc.mellyserver.dbcore.user.User;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ public class TokenService {
 
     public RefreshToken findRefreshToken(Long userId) {
         return authTokenDao.findRefreshToken(userId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.RELOGIN_REQUIRED);
+            throw new CommonException(ErrorCode.RELOGIN_REQUIRED);
         });
     }
 

@@ -20,7 +20,7 @@ import cmc.mellyserver.dbcore.user.UserRepository;
 import cmc.mellyserver.domain.memory.MemoryService;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.support.IntegrationTestSupport;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import fixtures.MemoryFixtures;
 
@@ -87,7 +87,7 @@ public class MemoryServiceTest extends IntegrationTestSupport {
 
             // when & then
             assertThatThrownBy(() -> memoryService.removeMemory(-1L))
-                .isInstanceOf(BusinessException.class)
+                .isInstanceOf(CommonException.class)
                 .hasMessage(ErrorCode.NO_SUCH_MEMORY.getMessage());
         }
     }

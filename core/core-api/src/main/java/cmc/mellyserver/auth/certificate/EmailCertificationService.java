@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +28,7 @@ class EmailCertificationService implements CertificationService {
     public void verify(EmailCertificationRequest requestDto) {
 
         if (isVerify(requestDto)) {
-            throw new BusinessException(ErrorCode.NOT_VALID_ERROR);
+            throw new CommonException(ErrorCode.NOT_VALID_ERROR);
         }
 
         certificationNumberDao.delete(requestDto.email());

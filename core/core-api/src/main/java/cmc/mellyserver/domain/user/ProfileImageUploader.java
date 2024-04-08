@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import cmc.mellyserver.FileDto;
-import cmc.mellyserver.FileService;
+import cmc.mellyserver.FileUploader;
 import cmc.mellyserver.dbcore.user.User;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfileImageUploader {
 
-    private final FileService fileService;
+    private final FileUploader fileService;
 
     public void update(User user, MultipartFile profileImage, boolean isDeleted) throws IOException {
 

@@ -19,7 +19,7 @@ import cmc.mellyserver.domain.comment.dto.response.CommentDto;
 import cmc.mellyserver.domain.comment.dto.response.CommentResponseDto;
 import cmc.mellyserver.domain.comment.query.CommentQueryRepository;
 import cmc.mellyserver.domain.user.UserReader;
-import cmc.mellyserver.support.exception.BusinessException;
+import cmc.mellyserver.support.exception.CommonException;
 import cmc.mellyserver.support.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +37,7 @@ public class CommentReader {
 
     public Comment findById(final Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() -> {
-            throw new BusinessException(ErrorCode.NO_SUCH_COMMENT);
+            throw new CommonException(ErrorCode.NO_SUCH_COMMENT);
         });
     }
 

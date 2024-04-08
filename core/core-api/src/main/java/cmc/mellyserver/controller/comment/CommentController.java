@@ -35,7 +35,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> removeCommentLike(@CurrentUser LoginUser loginUser,
         @PathVariable Long commentId) {
 
-        commentLikeService.deleteCommentLike(loginUser.getId(), commentId);
+        commentLikeService.delete(loginUser.getId(), commentId);
         return ApiResponse.success(SuccessCode.DELETE_SUCCESS);
     }
 
@@ -43,7 +43,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> saveCommentLike(@CurrentUser LoginUser loginUser,
         @PathVariable Long commentId) {
 
-        commentLikeService.saveCommentLike(loginUser.getId(), commentId);
+        commentLikeService.save(loginUser.getId(), commentId);
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 

@@ -9,7 +9,6 @@ pluginManagement {
 
 rootProject.name = "mellyServer"
 
-
 include ':storage:db-core'
 include ':storage:db-redis'
 include ':core:core-api'
