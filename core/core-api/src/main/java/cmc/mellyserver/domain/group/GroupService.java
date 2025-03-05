@@ -69,12 +69,12 @@ public class GroupService {
         groupAndUserWriter.save(GroupAndUser.of(userId, userGroup));
     }
 
-    @OptimisticLock
     @CacheEvict(cacheNames = CacheNames.GROUP, key = "#updateGroupRequestDto.groupId")
     @Transactional
-    public void updateGroup(UpdateGroupRequestDto updateGroupRequestDto) {
+    public void updateGroup(Long userId, UpdateGroupRequestDto updateGroupRequestDto) {
 
-        UserGroup userGroup = groupReader.readWithLock(updateGroupRequestDto.getGroupId());
+        UserGroup userGroup = groupReader.read(updateGroupRequestDto.getGroupId());
+        groupValidator.checkAuthority(userId, userGroup);
         userGroup.update(updateGroupRequestDto.getGroupName(), updateGroupRequestDto.getGroupType(),
             updateGroupRequestDto.getGroupIcon());
     }
@@ -84,7 +84,7 @@ public class GroupService {
     public void removeGroup(Long userId, Long groupId) {
 
         UserGroup userGroup = groupReader.read(groupId);
-        groupValidator.checkRemoveAuthority(userId, userGroup);
+        groupValidator.checkAuthority(userId, userGroup);
         userGroup.delete();
     }
 

@@ -49,7 +49,7 @@ public class GroupController {
     public ResponseEntity<ApiResponse<Void>> updateGroup(@PathVariable Long groupId, @CurrentUser LoginUser loginUser,
         @Valid @RequestBody GroupUpdateRequest groupUpdateRequest) {
 
-        groupService.updateGroup(GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
+        groupService.updateGroup(loginUser.getId(), GroupAssembler.updateGroupRequestDto(groupId, groupUpdateRequest));
         return ApiResponse.success(SuccessCode.UPDATE_SUCCESS);
     }
 

@@ -128,7 +128,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        groupService.updateGroup(updateGroupRequestDto);
+        groupService.updateGroup(모카.getId(), updateGroupRequestDto);
 
         // then
         UserGroup userGroup = groupRepository.findById(친구들.getId()).get();
@@ -163,7 +163,7 @@ public class UserGroupServiceTest extends IntegrationTestSupport {
         // when
         Assertions.assertThatThrownBy(() ->
                 groupService.removeGroup(머식.getId(), 친구들.getId()))
-            .isInstanceOf(CommonException.class).hasMessage(ErrorCode.NO_AUTHORITY_TO_REMOVE.getMessage());
+            .isInstanceOf(CommonException.class).hasMessage(ErrorCode.NO_AUTHORITY_TO_EDIT_GROUP.getMessage());
 
     }
 

@@ -27,9 +27,9 @@ public class GroupValidator {
         }
     }
 
-    public void checkRemoveAuthority(Long userId, UserGroup userGroup) {
+    public void checkAuthority(Long userId, UserGroup userGroup) {
         if (!userGroup.checkAuthority(userId)) {
-            throw new CommonException(ErrorCode.NO_AUTHORITY_TO_REMOVE);
+            throw new CommonException(ErrorCode.NO_AUTHORITY_TO_EDIT_GROUP);
         }
     }
 }
