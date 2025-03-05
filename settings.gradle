@@ -17,7 +17,6 @@ include ':support:monitoring'
 include ':infra:file'
 include ':infra:notification'
 include ':clients:client-auth'
-include ':infra:mail'
 
 
 
