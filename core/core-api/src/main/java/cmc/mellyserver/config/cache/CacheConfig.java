@@ -77,7 +77,7 @@ public class CacheConfig {
 
         /* Cache TTL 설정 */
         Map<String, RedisCacheConfiguration> redisCacheConfigMap = new ConcurrentHashMap<>();
-        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofMinutes(1))); // 코드 상으로 직접 eviction 가능
+        redisCacheConfigMap.put(CacheNames.USER, defaultConfig.entryTtl(Duration.ofHours(1))); // 코드 상으로 직접 eviction 가능
         redisCacheConfigMap.put(CacheNames.SCRAP, defaultConfig.entryTtl(Duration.ofHours(1))); // 코드 상으로 직접 eviction 가능
         redisCacheConfigMap.put(CacheNames.MEMORY, defaultConfig.entryTtl(Duration.ofMinutes(5)));
         redisCacheConfigMap.put(CacheNames.GROUP, defaultConfig.entryTtl(Duration.ofMinutes(5)));
