@@ -37,8 +37,6 @@ public class MemoryWriter {
 
     private final FileUploader fileUploader;
 
-    private final ThreadPoolTaskExecutor imageUploadTaskExecutor;
-
     @CheckPlaceExist
     public Long save(CreateMemoryRequestDto createMemoryRequestDto) {
 
@@ -49,13 +47,9 @@ public class MemoryWriter {
 
         Memory savedMemory = memoryRepository.save(memory);
 
-        addImages(memory.getId(), createMemoryRequestDto.getUserId(), createMemoryRequestDto.getMultipartFiles());
+        addMemoryImages(memory.getId(), createMemoryRequestDto.getUserId(), createMemoryRequestDto.getMultipartFiles());
 
         return savedMemory.getId();
-    }
-
-    private void addImages(Long id, Long userId, List<MultipartFile> multipartFiles) {
-
     }
 
     public void update(UpdateMemoryRequestDto updateDto) {

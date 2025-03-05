@@ -15,24 +15,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class AsyncConfig implements AsyncConfigurer {
 
-    private static final String IMAGE_EXECUTOR_PREFIX = "image-upload-thread-pool-";
     private static final String NOTIFICATION_EXECUTOR_PREFIX = "notification-thread-pool-";
     private static final String SEND_EMAIL_EXECUTOR_PREFIX = "send-email-thread-pool-";
     private static final String ASYNC_DEFAULT_EXECUTOR_PREFIX = "async-default-thread-pool-";
-
-    @Bean(IMAGE_EXECUTOR_BEAN_NAME)
-    public ThreadPoolTaskExecutor imageUploadTaskExecutor() {
-
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(1000);
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(5);
-        executor.setThreadNamePrefix(IMAGE_EXECUTOR_PREFIX);
-        executor.initialize();
-        return executor;
-    }
 
     @Bean(NOTIFICATION_BEAN_NAME)
     public ThreadPoolTaskExecutor notificationTaskExecutor() {
