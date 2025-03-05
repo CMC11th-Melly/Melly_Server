@@ -17,7 +17,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    private static final Duration COMMAND_TIMEOUT = Duration.ofMillis(200);
+    private static final Duration COMMAND_TIMEOUT = Duration.ofMillis(300);
 
     @Value("${spring.redis.token.host}")
     private String tokenHost;
