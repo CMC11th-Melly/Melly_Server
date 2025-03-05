@@ -11,6 +11,9 @@ import jakarta.persistence.QueryHint;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
+    /**
+     * 락 대기 시간 최대 3초
+     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     @Query("select c from Comment c where c.id = :commentId")
