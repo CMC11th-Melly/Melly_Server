@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-@Order(Ordered.LOWEST_PRECEDENCE - 1)
+@Order(Ordered.LOWEST_PRECEDENCE - 1) // @transactional보다 외부에서 실행시키기 위함
 @RequiredArgsConstructor
 public class OptimisticLockAspect {
 
@@ -40,12 +40,13 @@ public class OptimisticLockAspect {
         for (int i = 0; i < retryCount; i++) {
             try {
                 return joinPoint.proceed();
-            } catch (OptimisticLockingFailureException e) {
+            } catch (OptimisticLockingFailureException e) { // version 충돌 발생 시 일정 시간 대기 후 재시도
                 log.info(OPTIMISTIC_LOCK_RETRY);
                 Thread.sleep(waitTime);
             }
         }
 
+        // 재시도 횟수 한도 초과 시 에러 반환
         log.error(OPTIMISTIC_LOCK_ACQUIRE_FAIL);
         throw new CommonException(ErrorCode.SERVER_ERROR);
     }
