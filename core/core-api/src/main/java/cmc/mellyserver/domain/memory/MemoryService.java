@@ -39,8 +39,6 @@ public class MemoryService {
 
     private final GroupReader groupReader;
 
-    private final ApplicationEventPublisher eventPublisher;
-
     /*
     메모리 상세 정보 조회
      */
