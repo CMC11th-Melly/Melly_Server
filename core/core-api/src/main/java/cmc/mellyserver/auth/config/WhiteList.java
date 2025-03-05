@@ -15,7 +15,8 @@ public abstract class WhiteList {
         "/api/auth/email-certification/sends",
         "/api/auth/email-certification/resends",
         "/api/auth/email-certification/confirms",
-        "/api/auth/social-signup"
+        "/api/auth/social-signup",
+        "/health",
     };
 
 }

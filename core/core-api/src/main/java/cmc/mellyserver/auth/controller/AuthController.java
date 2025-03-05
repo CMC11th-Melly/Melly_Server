@@ -61,7 +61,7 @@ public class AuthController {
 
     // 이메일 회원 가입
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid SignupRequest commonSignupRequest) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> signup(@Valid @RequestBody SignupRequest commonSignupRequest) {
 
         TokenResponseDto signupToken = authService.signup(commonSignupRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, signupToken);
