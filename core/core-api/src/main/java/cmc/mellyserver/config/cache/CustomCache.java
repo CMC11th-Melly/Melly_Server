@@ -35,6 +35,10 @@ public class CustomCache implements Cache {
         return circuitBreaker.run(() -> globalCache.get(key), ((throwable) -> fallback()));
     }
 
+    /**
+     * Fallback 메서드
+     * cache가 null을 반환하면 Spring cache는 기존 로직을 실행해서 DB에서 원본 데이터를 조회
+     */
     private ValueWrapper fallback() {
         log.error("글로벌 캐시 다운, Fallback 메서드 실행");
         return null;
