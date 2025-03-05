@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cmc.mellyserver.auth.certificate.CertificationService;
 import cmc.mellyserver.auth.common.resolver.CurrentUser;
 import cmc.mellyserver.auth.common.resolver.LoginUser;
 import cmc.mellyserver.auth.common.util.HeaderUtil;
@@ -22,7 +21,6 @@ import cmc.mellyserver.auth.controller.dto.request.ReIssueAccessTokenRequest;
 import cmc.mellyserver.auth.controller.dto.request.SignupRequest;
 import cmc.mellyserver.auth.service.AuthService;
 import cmc.mellyserver.auth.service.OAuthService;
-import cmc.mellyserver.auth.service.dto.request.EmailCertificationRequest;
 import cmc.mellyserver.auth.service.dto.response.OAuthResponseDto;
 import cmc.mellyserver.auth.service.dto.response.TokenResponseDto;
 import cmc.mellyserver.support.response.ApiResponse;
@@ -39,8 +37,6 @@ public class AuthController {
     private final OAuthService oAuthService;
 
     private final AuthService authService;
-
-    private final CertificationService certificationService;
 
     // OAuth2를 사용한 소셜 인증
     @PostMapping("/social")
@@ -73,31 +69,6 @@ public class AuthController {
 
         TokenResponseDto loginToken = authService.login(authLoginRequest.toDto());
         return ApiResponse.success(SuccessCode.INSERT_SUCCESS, loginToken);
-    }
-
-    // 이메일 유효성을 파악하기 위해 인증번호 전송
-    @PostMapping("/email-certification/sends")
-    public ResponseEntity<ApiResponse<Void>> sendEmailCertification(@RequestBody EmailCertificationRequest requestDto) {
-
-        certificationService.sendCertification(requestDto.email());
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
-
-    // 인증번호 재전송
-    @PostMapping("/email-certification/resends")
-    public ResponseEntity<ApiResponse<Void>> resendEmailCertification(
-        @RequestBody EmailCertificationRequest requestDto) {
-
-        certificationService.sendCertification(requestDto.email());
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
-    }
-
-    // 인증번호 확인
-    @PostMapping("/email-certification/confirms")
-    public ResponseEntity<ApiResponse<Void>> emailVerification(@RequestBody EmailCertificationRequest requestDto) {
-
-        certificationService.verify(requestDto);
-        return ApiResponse.success(SuccessCode.INSERT_SUCCESS);
     }
 
     // 닉네임 중복 체크

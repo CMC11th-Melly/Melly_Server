@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cmc.mellyserver.auth.common.event.SignupEvent;
 import cmc.mellyserver.auth.controller.dto.request.ChangePasswordRequest;
 import cmc.mellyserver.auth.service.dto.request.AuthLoginRequestDto;
 import cmc.mellyserver.auth.service.dto.request.AuthSignupRequestDto;
@@ -46,7 +45,6 @@ public class AuthService {
         TokenDto tokenDto = tokenService.createToken(user);
 
         notificationTokenDao.save(user.getId().toString(), user.getFcmToken());
-        publisher.publishEvent(new SignupEvent(user.getId()));
 
         return TokenResponseDto.of(tokenDto.accessToken(), tokenDto.refreshToken().token());
     }
