@@ -19,7 +19,6 @@ import cmc.mellyserver.domain.group.GroupReader;
 import cmc.mellyserver.domain.memory.dto.request.CreateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.request.UpdateMemoryRequestDto;
 import cmc.mellyserver.domain.memory.dto.response.MemoryListResponse;
-import cmc.mellyserver.domain.memory.event.MemoryCreatedEvent;
 import cmc.mellyserver.domain.memory.keyword.KeywordReader;
 import cmc.mellyserver.domain.memory.query.dto.MemoryResponseDto;
 import cmc.mellyserver.domain.place.PlaceReader;
@@ -95,8 +94,7 @@ public class MemoryService {
 
     @Transactional
     public void createMemory(CreateMemoryRequestDto createMemoryRequestDto) {
-        Long memoryId = memoryWriter.save(createMemoryRequestDto);
-        eventPublisher.publishEvent(new MemoryCreatedEvent(memoryId));
+        memoryWriter.save(createMemoryRequestDto);
     }
 
     @CacheEvict(cacheNames = CacheNames.MEMORY, key = "#updateMemoryRequestDto.memoryId")

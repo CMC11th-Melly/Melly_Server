@@ -16,7 +16,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class AsyncConfig implements AsyncConfigurer {
 
     private static final String NOTIFICATION_EXECUTOR_PREFIX = "notification-thread-pool-";
-    private static final String SEND_EMAIL_EXECUTOR_PREFIX = "send-email-thread-pool-";
     private static final String ASYNC_DEFAULT_EXECUTOR_PREFIX = "async-default-thread-pool-";
 
     @Bean(NOTIFICATION_BEAN_NAME)
@@ -29,20 +28,6 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(5);
         executor.setThreadNamePrefix(NOTIFICATION_EXECUTOR_PREFIX);
-        executor.initialize();
-        return executor;
-    }
-
-    @Bean(SEND_EMAIL_BEAN_NAME)
-    public ThreadPoolTaskExecutor sendEmailTaskExecutor() {
-
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(1000);
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(5);
-        executor.setThreadNamePrefix(SEND_EMAIL_EXECUTOR_PREFIX);
         executor.initialize();
         return executor;
     }
