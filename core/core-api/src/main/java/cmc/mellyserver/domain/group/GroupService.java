@@ -58,8 +58,8 @@ public class GroupService {
         return groupAndUserWriter.save(GroupAndUser.of(user.getId(), savedGroup)).getId();
     }
 
-    @OptimisticLock
-    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId")
+    @OptimisticLock // 트랜잭션이 롤백되면 예외를 잡아서 처리한다.
+    @CacheEvict(cacheNames = CacheNames.GROUP, key = "#groupId") // Transaction이 커밋되면 동작한다. 낙관적락으로 재시도를 여러번 해도 트랜잭션이 정상 동작할때만 수행됨.
     @Transactional
     public void joinGroup(Long userId, Long groupId) {
 
