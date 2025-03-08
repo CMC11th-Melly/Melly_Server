@@ -28,7 +28,7 @@ public class OptimisticLockAspect {
     @Around("@annotation(cmc.mellyserver.common.aspect.lock.OptimisticLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-        log.info(OPTIMISTIC_LOCK_AOP_ENTRY);
+        log.debug(OPTIMISTIC_LOCK_AOP_ENTRY);
 
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -41,7 +41,7 @@ public class OptimisticLockAspect {
             try {
                 return joinPoint.proceed();
             } catch (OptimisticLockingFailureException e) { // version 충돌 발생 시 일정 시간 대기 후 재시도
-                log.info(OPTIMISTIC_LOCK_RETRY);
+                log.debug(OPTIMISTIC_LOCK_RETRY);
                 Thread.sleep(waitTime);
             }
         }
