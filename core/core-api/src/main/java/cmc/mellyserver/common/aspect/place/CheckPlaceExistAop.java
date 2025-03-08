@@ -54,7 +54,7 @@ public class CheckPlaceExistAop {
             }
         }
 
-        return null;
+        return joinPoint.proceed();
     }
 
 }
